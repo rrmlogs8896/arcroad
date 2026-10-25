@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Weekly re-verification: catches OSM improving and construction changing the map.
+    - cron: "17 2 * * 1"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest ruff
+
+      - name: Lint
+        run: ruff check pipeline tests
+
+      - name: Unit tests
+        run: pytest -q
+
+      - name: Privacy test (must pass or nothing ships)
+        run: pytest -q tests/test_privacy.py
+
+      - name: Reporting-integrity test
+        # Guards the v0.5 failure: a review flag must never censor the headline.
+        run: pytest -q tests/test_metrics.py -k uncensored
+
+      - name: Fixture end-to-end
+        # Exercises the osmium passes on a tiny committed extract, so target
+        # selection is tested on every commit rather than only when a human
+        # remembers to run Colab. This is the gap that let v0.4 ship.
+        run: |
+          if [ -f data/fixtures/tiny.osm.pbf ]; then
+            python -m pipeline.run_fixture
+          else
+            echo "::warning::No fixture extract committed yet — end-to-end not exercised."
+          fi

@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.osm.pbf
+!data/fixtures/*.osm.pbf
+/out/
+.ipynb_checkpoints/
+.venv/
