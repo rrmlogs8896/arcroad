@@ -48,6 +48,21 @@ def main() -> int:
             )
 
     print(f"\n{checked} page(s) checked")
+
+    # B-11, 26 Oct 2026. Run from the wrong directory this printed
+    # "0 page(s) checked / All verifications current." and exited zero. A check
+    # that passes by matching nothing is the B-07 failure in a different hat:
+    # the v1.0 gap export wrote a header and no rows for exactly this reason.
+    # A compliance check that found no pages has not verified compliance, it
+    # has failed to run, and CI must hear the difference.
+    if checked == 0:
+        print(
+            "\nFAIL: the freshness check matched zero pages. Either the page "
+            "glob is wrong or this ran from the wrong directory. A check that "
+            "verifies nothing must not report success."
+        )
+        return 1
+
     if failures:
         print("\nSTALE:")
         for f in failures:
@@ -60,3 +75,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+

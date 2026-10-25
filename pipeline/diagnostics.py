@@ -212,3 +212,73 @@ def decompose_flagged(records, di_review, gap_route_m: float = GAP_ROUTE_M):
         ),
         "median_network_m": _median(nets),
     }
+
+
+# --------------------------------------------------------------------------
+# B-10 / ring structure, 26 Oct 2026.
+# --------------------------------------------------------------------------
+
+def outside_declared_area(records, bbox):
+    """Records that fall outside the area the project SAYS it measured.
+
+    B-10. The v1.0 set of 12,645 points ran from 16.8495 to 17.9681 N and
+    77.8484 to 79.0715 E — 1,549 points (12.2%) outside the HMDA box the
+    project declared, the furthest 85 km from the centre. Their median detour
+    index was 44.83 against 25.67 inside.
+
+    This did NOT inflate the headline. It diluted it: every stray sits in the
+    "beyond the ORR" band, and the strays score LOWER than the true 26-40 km
+    periphery, so including them understated the gradient. The bug is a
+    truthfulness bug rather than an exaggeration bug — the project described an
+    area it had not measured — but it is a bug, and it was found by checking
+    rather than by assuming.
+    """
+    x0, y0, x1, y1 = bbox
+    return [
+        r for r in records
+        if not (x0 <= r["lon"] <= x1 and y0 <= r["lat"] <= y1)
+    ]
+
+
+def ring_profile(records, centre, edges, value_key="detour_index", min_n=30):
+    """Median value per concentric ring, with each ring's n and adequacy.
+
+    `edges` is a sequence of (inner_km, outer_km, label). Rings are declared
+    before the run, never fitted to the result.
+
+    Run on the v1.0 set this showed the gradient is NOT monotonic. It peaks in
+    the peri-urban fringe and falls beyond it:
+
+        core      0-14 km   n=5521   median 18.05
+        ORR      14-26 km   n=3955   median 33.76
+        fringe   26-40 km   n=1045   median 57.52   <- peak
+        rural    40-60 km   n=1589   median 48.10
+        far        60+ km   n=475    median 47.26
+
+    That shape is more coherent than a ramp, and it is checkable: the fringe is
+    where highway-grade divided roads already exist but the local street network
+    has not filled in behind them, so there is severance and nothing to absorb
+    it. Further out there are fewer divided roads, so less severance. Patancheru
+    and Isnapur sit at roughly 36 km, inside the peak ring.
+    """
+    from pipeline.metrics import _median, pct
+
+    out = {}
+    for inner, outer, label in edges:
+        vals = []
+        for r in records:
+            v = r.get(value_key)
+            if v is None:
+                continue
+            d = km_from(r["lon"], r["lat"], centre)
+            if inner < d <= outer:
+                vals.append(v)
+        out[label] = {
+            "n": len(vals),
+            "median": _median(vals),
+            "pct_severe": pct(sum(1 for v in vals if v >= 50.0), len(vals)),
+            "adequate": len(vals) >= min_n,
+            "inner_km": inner,
+            "outer_km": outer,
+        }
+    return out

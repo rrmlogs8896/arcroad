@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-verified="2026-10-25">
+<html lang="en" data-verified="2026-10-26">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -157,6 +157,28 @@ a:hover{color:var(--soft)}
 
 <section style="padding-top:0">
   <div class="wrap">
+    <h2>Severance peaks at the edge of the city, not beyond it</h2>
+    <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:var(--mut);max-width:70ch">The detour index is how far you must drive to reach a point directly across the road. An index of 40 means forty times the straight-line distance. Measured in concentric rings from the centre, the cost does not simply rise with distance. It climbs steeply to a peak between 26 and 40 kilometres out, then falls away.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr>
+          <th>Ring</th><th class="n">Points</th><th class="n">Median index</th><th class="n">Above 50</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Core city, 0–14 km</td><td class="n m">5,521</td><td class="n m">18.05</td><td class="n m">20.5%</td></tr>
+          <tr><td>Ring road band, 14–26 km</td><td class="n m">3,955</td><td class="n m">33.76</td><td class="n m">39.9%</td></tr>
+          <tr><td>Peri-urban fringe, 26–40 km</td><td class="n m" style="color:var(--accent)">1,045</td><td class="n m" style="color:var(--accent)">57.52</td><td class="n m" style="color:var(--accent)">53.8%</td></tr>
+          <tr><td>Rural, 40–60 km</td><td class="n m">1,589</td><td class="n m">48.10</td><td class="n m">49.0%</td></tr>
+          <tr><td>Beyond 60 km</td><td class="n m">475</td><td class="n m">47.26</td><td class="n m">49.1%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin:20px 0 0;font-size:13.5px;line-height:1.7;color:var(--faint);max-width:76ch">A reading, not a conclusion. The fringe is where highway-grade divided roads already exist but the local street network behind them has not filled in, so the severance has nothing to absorb it. Further out there are fewer divided roads and less severance. The shape is consistent with that explanation and has not been tested against it. Patancheru and Isnapur, where this project began, sit at roughly 36 km — inside the peak ring.</p>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
     <h2>The gradient holds under every filter we tried</h2>
     <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:var(--mut);max-width:70ch">The detour index is how far you must drive to reach a point directly across the road. An index of 40 means forty times the straight-line distance. Crossing a road beyond the Outer Ring Road costs between two and four times what it costs in the core city, depending on how severely the data is filtered. It narrows under correction. It never disappears.</p>
     <div class="scroll">
@@ -173,6 +195,7 @@ a:hover{color:var(--soft)}
         </tbody>
       </table>
     </div>
+    <p style="margin:20px 0 0;font-size:13.5px;line-height:1.7;color:var(--faint);max-width:76ch">"Beyond ORR" here means everything past 26 km, including points up to 85 km from the centre. On 26 October 2026 we found that 12.2% of the measured set lay outside the study area this project had declared. Those points score lower than the true fringe, so every ratio in this table understates the fringe rather than overstating it. The ring table above is the corrected view. The next run will be clipped to the declared area and these figures replaced, not revised.</p>
   </div>
 </section>
 

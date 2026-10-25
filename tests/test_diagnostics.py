@@ -209,3 +209,89 @@ def test_decompose_flagged_separates_real_severance_from_map_holes():
 
 def test_crossing_width_constant_matches_what_we_call_a_crossing():
     assert CROSSING_MAX_M == 25.0
+
+
+# --------------------------------------------------------------------------
+# B-09: the v1.0 export recorded one endpoint per measurement, so nothing in
+# it could be re-routed. These lock the schema that makes a record checkable.
+# --------------------------------------------------------------------------
+
+
+def test_a_record_without_the_second_endpoint_is_rejected():
+    """The exact shape of B-09."""
+    from pipeline.provenance import validate_point_record
+
+    v10_shape = {
+        "lat": 17.5274, "lon": 78.2685, "straight_m": 21.0,
+        "network_m": 2344.0, "detour_index": 111.6,
+    }
+    problems = validate_point_record(v10_shape)
+    assert problems, "a record with no b_lat/b_lon must not validate"
+    assert any("b_lat" in p for p in problems)
+
+
+def test_a_complete_record_validates():
+    from pipeline.provenance import validate_point_record
+
+    rec = {
+        "a_lat": 17.5274, "a_lon": 78.2685,
+        "b_lat": 17.5276, "b_lon": 78.2685,
+        "straight_m": 21.0, "network_m": 2344.0, "detour_index": 111.6,
+    }
+    assert validate_point_record(rec) == []
+
+
+def test_a_null_route_must_carry_a_reason():
+    from pipeline.provenance import validate_point_record
+
+    rec = {
+        "a_lat": 17.5, "a_lon": 78.3, "b_lat": 17.5002, "b_lon": 78.3,
+        "straight_m": 22.0, "network_m": None, "detour_index": None,
+    }
+    assert any("null_reason" in p for p in validate_point_record(rec))
+    rec["null_reason"] = "unreachable"
+    assert validate_point_record(rec) == []
+
+
+def test_identical_endpoints_measure_nothing():
+    from pipeline.provenance import validate_point_record
+
+    rec = {
+        "a_lat": 17.5, "a_lon": 78.3, "b_lat": 17.5, "b_lon": 78.3,
+        "straight_m": 0.0, "network_m": 0.0, "detour_index": 0.0,
+    }
+    assert any("identical" in p for p in validate_point_record(rec))
+
+
+# --------------------------------------------------------------------------
+# B-10 and the ring shape.
+# --------------------------------------------------------------------------
+
+
+def test_points_outside_the_declared_area_are_found_not_assumed():
+    from pipeline.diagnostics import outside_declared_area
+
+    records = [
+        {"lon": 78.4, "lat": 17.4},      # inside
+        {"lon": 78.5306, "lat": 16.8495},  # a real v1.0 stray, 60 km south
+        {"lon": 79.0715, "lat": 17.9681},  # a real v1.0 stray, north-east corner
+    ]
+    strays = outside_declared_area(records, HMDA)
+    assert len(strays) == 2
+
+
+def test_ring_profile_does_not_force_a_monotonic_ramp():
+    """The v1.0 shape: the peak is the fringe, not the farthest ring."""
+    from pipeline.diagnostics import ring_profile
+
+    def ring(dist_km, value, n):
+        lat = CITY[1] + dist_km / 110.5
+        return [{"lon": CITY[0], "lat": lat, "detour_index": value} for _ in range(n)]
+
+    records = ring(7, 18.0, 100) + ring(20, 34.0, 100) + ring(33, 57.0, 100) + ring(50, 48.0, 100)
+    edges = [(0, 14, "core"), (14, 26, "ORR"), (26, 40, "fringe"), (40, 60, "rural")]
+    prof = ring_profile(records, CITY, edges)
+    assert prof["fringe"]["median"] > prof["rural"]["median"], (
+        "the measured shape peaks at the fringe; a ring profile must be able to show that"
+    )
+    assert all(prof[k]["adequate"] for k in prof)

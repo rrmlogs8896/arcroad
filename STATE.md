@@ -5,7 +5,7 @@ picture of this project by reading the repository costs the owner real money for
 information this file could have given in one read. Keep it under 150 lines.
 Update it in the same commit as any change that makes a line here wrong.
 
-Last updated: 26 October 2026
+Last updated: 26 October 2026 (02:15 IST)
 
 ## Where things stand
 
@@ -14,7 +14,7 @@ Last updated: 26 October 2026
   `$HOME/mnt/HMA/repo`.
 - Site: `arcroad.org`, DNS on Cloudflare. Staging at `arcroad.pages.dev`,
   behind Cloudflare Access, owner only.
-- Tests: 39 passing. `ruff` pinned at 0.16.9. CI runs lint, tests, freshness.
+- Tests: 45 passing. `ruff` pinned at 0.16.9. CI runs lint, tests, freshness.
 - Published findings: **none.** Nothing is published as a finding until a
   modelled route has been checked against a driven one.
 
@@ -26,12 +26,20 @@ repository is a candidate. Primary verification target: `17.5274, 78.2685`,
 closer than 3,153 m.
 
 First partial corroboration, diagnostic grade only:
-`data/verification/2026-10-26-isnapur-tomtom.md`.
+`data/verification/2026-10-26-isnapur-tomtom.md` — NH-65 at Isnapur, two points
+17 m apart, 1,630 m driven, 3,031 m routed by TomTom. n = 1, unpublishable.
+
+**The planned validation sweep against a second engine cannot run yet.** The
+v1.0 export records only one endpoint per measurement (B-09), so nothing in it
+is re-routable. See `data/verification/2026-10-26-validation-sweep.md`.
 
 ## What is true and robust
 
 - The ring gradient holds across five independent treatments: 2.18x to 3.84x
-  from core to beyond-ORR.
+  from core to beyond-ORR. As of 26 Oct the better reading is a **non-monotonic
+  profile peaking in the 26-40 km fringe** (median 57.52, core 18.05, ratio
+  3.19x), with rural rings scoring LOWER. Not yet tested against the competing
+  explanation that OSM density varies by ring.
 - The flagged third is mostly real severance, not mostly bad data: 79.5% of
   flagged points are under 25 m apart, median route 2,455 m, only 10.8% over
   10 km. This overturned an assumption held since v0.6.
@@ -41,6 +49,10 @@ First partial corroboration, diagnostic grade only:
 | id | item |
 |---|---|
 | B-08 | `TARGETS[:5]` slice in the v1.1 probe skips the control. Fix before rerun. |
+| B-09 | Pairing discards the second endpoint, so no measurement is re-routable. Schema and validator shipped in `pipeline/provenance.py`; **the notebook pairing step still has to be changed and the run redone.** Blocks the TomTom validation sweep. |
+| B-10 | 12.2% of the v1.0 set lies outside the declared HMDA box, up to 85 km out. Clip the next run, or change the declaration. Diluted the headline rather than inflating it. |
+| — | Test the fringe peak against OSM density per ring before it is published as a finding. |
+| — | `web/privacy.html`, `web/cookies.html`, `web/terms.html` do not exist. Required before launch, written from primary sources. |
 | — | Reconnect Cloudflare Pages to Git if pushes stop auto-deploying. |
 | — | Extend Access policy to `*.arcroad.pages.dev`; hash URLs are currently open. |
 | — | Branch protection on `main` requiring CI. |
