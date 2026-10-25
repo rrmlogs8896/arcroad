@@ -1,5 +1,4 @@
-import math
-from pipeline.metrics import detour_index, headline_stats, worst_n, pct
+from pipeline.metrics import detour_index, headline_stats, pct, worst_n
 
 
 def test_detour_index_basic():

@@ -49,7 +49,7 @@ def _quantile(values, q):
     s = sorted(values)
     if not s:
         return None
-    idx = min(len(s) - 1, max(0, int(round(q * (len(s) - 1)))))
+    idx = min(len(s) - 1, max(0, round(q * (len(s) - 1))))
     return s[idx]
 
 

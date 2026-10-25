@@ -1,5 +1,9 @@
 from pipeline.filters import (
-    strip_military, way_level, levels_compatible, oneway_dirs, is_divided_proxy,
+    is_divided_proxy,
+    levels_compatible,
+    oneway_dirs,
+    strip_military,
+    way_level,
 )
 
 

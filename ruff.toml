@@ -1,0 +1,33 @@
+# Pinned lint configuration.
+#
+# CI installs a pinned ruff version and reads this file, so a new ruff release
+# cannot fail an unrelated commit. The rule set is deliberately small:
+# correctness and import hygiene, not style opinions.
+
+line-length = 100
+target-version = "py311"
+
+[lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes - undefined names, unused imports
+    "I",   # isort - import ordering
+    "B",   # flake8-bugbear - likely bugs
+    "UP",  # pyupgrade - outdated idioms
+    "RUF", # ruff's own checks - caught a dead int() cast in metrics.py
+]
+ignore = [
+    "E501",  # line length: reported by the formatter, not failed in CI
+]
+
+# `--select ALL` reports 163 further findings. None are defects. They break
+# down as: 60 S101 (bandit objecting to `assert`, which is how the tests are
+# written), 46 missing type annotations, 28 missing docstrings, 15 PLR2004
+# magic values, 9 missing copyright headers, and a handful of comma and
+# composite-assertion style rules. PLR2004 in particular fires on every
+# numeric assertion in the suite - those literals ARE the test, and moving
+# them into named constants would separate the expected value from the
+# assertion. Rechecked with: ruff check --isolated --select ALL pipeline tests
+
+[lint.per-file-ignores]
+"tests/*" = ["B011"]  # `assert False` is legitimate in a test

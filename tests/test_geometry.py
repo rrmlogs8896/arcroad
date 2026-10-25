@@ -1,6 +1,9 @@
-import math
 from pipeline.geometry import (
-    haversine_m, bearing_deg, angle_between, is_antiparallel, zone_of,
+    angle_between,
+    bearing_deg,
+    haversine_m,
+    is_antiparallel,
+    zone_of,
 )
 
 
