@@ -1,11 +1,32 @@
 # STATE.md — read this first, read nothing else first
 
+> **Session note, 26 Oct 2026 ~04:30 IST — B-09 and B-10 fixed in code; rerun pending.**
+> Changed: `pipeline/pairing.py` (pairing, graph, routing and records ported from
+> the notebooks; both endpoints kept; study box a parameter, clipped and recorded;
+> export refuses invalid records), `tests/test_pairing.py` (7 regression tests),
+> `tools/check_pairing_port.py` (runs the notebook cells verbatim against the port
+> on synthetic networks; all identical; 4 planted mutations all caught), and
+> `notebooks/arcroad_Phase2a_DetourIndex_v08.ipynb` (thin; supersedes v07).
+> Source was `~/Documents/HMA/HMA_Phase2a_DetourIndex_v07.ipynb`, outside git; the
+> producing run's notebook (`arcroad_Phase2e_Diagnostics_v10`) has identical
+> graph/routing/record cells and a pairing cell differing by one `FOCUS_ZONE` guard.
+> What v10 changed was config (stride 4, cap 16,000, limit 25 km): kept as preset
+> `pairing.V10`, the default. (`kept.append` is in v10's `dedupe_worst`, not in pairing.)
+> **Next session:** (1) push — neither the cloud container nor the device bridge
+> reaches GitHub (proxy 403); push from the Mac's own terminal, then check CI.
+> (2) Rohit runs v08 in Colab. Expect 12,645 pairs before the clip, 1,549 outside,
+> 11,096 kept on the same extract; a different count means the extract changed.
+> (3) Then the cloud session runs the TomTom sweep on that validated export.
+> Untested here (no osmium available): `load_network` (verbatim port) and
+> `extract_date` — watch Colab cells 3-4. `osm_way_ids` along the route is not yet
+> emitted; endpoint ways are (`a_way_ids`, `b_way_ids`).
+
 This file exists to make a fresh session cheap. A session that rebuilds its
 picture of this project by reading the repository costs the owner real money for
 information this file could have given in one read. Keep it under 150 lines.
 Update it in the same commit as any change that makes a line here wrong.
 
-Last updated: 26 October 2026 (02:15 IST)
+Last updated: 26 October 2026 (04:30 IST)
 
 ## Where things stand
 
@@ -14,7 +35,7 @@ Last updated: 26 October 2026 (02:15 IST)
   `$HOME/mnt/HMA/repo`.
 - Site: `arcroad.org`, DNS on Cloudflare. Staging at `arcroad.pages.dev`,
   behind Cloudflare Access, owner only.
-- Tests: 45 passing. `ruff` pinned at 0.16.9. CI runs lint, tests, freshness.
+- Tests: 52 passing. `ruff` pinned at 0.16.9. CI runs lint, tests, freshness.
 - Published findings: **none.** Nothing is published as a finding until a
   modelled route has been checked against a driven one.
 
@@ -29,9 +50,10 @@ First partial corroboration, diagnostic grade only:
 `data/verification/2026-10-26-isnapur-tomtom.md` — NH-65 at Isnapur, two points
 17 m apart, 1,630 m driven, 3,031 m routed by TomTom. n = 1, unpublishable.
 
-**The planned validation sweep against a second engine cannot run yet.** The
-v1.0 export records only one endpoint per measurement (B-09), so nothing in it
-is re-routable. See `data/verification/2026-10-26-validation-sweep.md`.
+**The validation sweep against a second engine waits for the v08 rerun.** The
+v1.0 export records one endpoint per measurement (B-09) and cannot be swept; the
+fix is in code, the data is not yet regenerated. See
+`data/verification/2026-10-26-validation-sweep.md`.
 
 ## What is true and robust
 
@@ -49,8 +71,8 @@ is re-routable. See `data/verification/2026-10-26-validation-sweep.md`.
 | id | item |
 |---|---|
 | B-08 | `TARGETS[:5]` slice in the v1.1 probe skips the control. Fix before rerun. |
-| B-09 | Pairing discards the second endpoint, so no measurement is re-routable. Schema and validator shipped in `pipeline/provenance.py`; **the notebook pairing step still has to be changed and the run redone.** Blocks the TomTom validation sweep. |
-| B-10 | 12.2% of the v1.0 set lies outside the declared HMDA box, up to 85 km out. Clip the next run, or change the declaration. Diluted the headline rather than inflating it. |
+| B-09 | **Fixed, rerun pending.** `pipeline/pairing.py` keeps both endpoints, node ids, extract date, commit; null routes name a reason; `write_point_file` refuses invalid records. Needs the v08 Colab run, then unblocks the TomTom sweep. |
+| B-10 | **Fixed, rerun pending.** Study box is a parameter (default declared HMDA), clipped on endpoint A after pairing and before routing, excluded pairs counted, box recorded per record and in `.meta.json`. |
 | — | Test the fringe peak against OSM density per ring before it is published as a finding. |
 | — | `web/privacy.html`, `web/cookies.html`, `web/terms.html` do not exist. Required before launch, written from primary sources. |
 | — | Reconnect Cloudflare Pages to Git if pushes stop auto-deploying. |
