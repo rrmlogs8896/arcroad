@@ -8,7 +8,13 @@ and refuses to silently drop anything.
 
 import math
 
-DI_SEVERE_DEFAULT = 5.0
+# D-12, 25 Oct 2026. This was 5.0, and at that threshold the v1.0 run reported
+# 77.2% of the CORE CITY as severe, against a core median of 18. A measure that
+# labels three quarters of the best-performing zone "severe" carries no
+# information and must not reach a published page. At 50 the same data
+# separates cleanly: 20.4% core against 50.6% beyond the ORR.
+# Every table published with the old threshold is superseded, not revised.
+DI_SEVERE_DEFAULT = 50.0
 DI_REVIEW_DEFAULT = 50.0
 
 
