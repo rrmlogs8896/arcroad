@@ -141,8 +141,68 @@ depends on, it belongs in `pipeline/` with a test before that figure is used.
 
 ## Current state
 
+`STATE.md` carries the live picture: what is open, what is robust, what is a
+dead end. Read that, not this section, for status. Two facts are permanent
+enough to repeat here:
+
 The Detour Index has **zero ground-verified values**. Every figure this
 repository produces is a candidate. The first verification target is
 17.5274, 78.2685 — 21 m apart, modelled at 2,344 m.
 
-Until that exists, nothing is published as a finding.
+Until that exists, nothing is published as a finding. One diagnostic-grade
+corroboration exists (`data/verification/2026-10-26-isnapur-tomtom.md`): on
+NH-65 at Isnapur, two points 17 m apart, 1,630 m driven and 3,031 m routed by
+TomTom. It is n = 1, the two engines disagree by 1.9x, and it is proprietary
+and therefore unpublishable. It raises confidence that the measurement is
+worth taking. It is not the measurement.
+
+---
+
+## Proprietary data — D-02 as amended, 26 October 2026
+
+Google Maps and TomTom are in the same category: **usable in private to check
+our own work, never a source for a published figure, a derived dataset or a
+map tile.**
+
+On 26 October 2026 the owner asked for this boundary to be dropped, on the
+reasoning that he is a private citizen and legal provisions could be found if
+needed. The boundary was kept, and the reasoning is recorded here so it does
+not have to be re-argued:
+
+- This project's only asset is that its numbers are reproducible and legally
+  clean. A single proprietary figure in a published table lets any opponent
+  retire the whole body of work by pointing at a licence, without ever
+  engaging with the measurement.
+- An authority asked to act on a finding is not obliged to defend the finding.
+  It is free to decline on the paperwork alone, and it will.
+- The restriction is not on what we can learn. It is on what we can cite.
+  TomTom can be used to check every number we hold, as it was at Isnapur.
+  Only the citation has to come from open data.
+
+This is a constraint that protects the owner. It is not a constraint that
+limits him.
+
+---
+
+## Token economy
+
+The owner pays for this work out of his own earnings. A session that spends its
+budget re-establishing what it already knew has taken money and returned
+nothing. These are binding:
+
+- **Read `STATE.md` first and little else.** Do not reconstruct project status
+  by reading the repository.
+- **Do not re-read a file to verify an edit.** `Edit` and `Write` fail loudly.
+  A read after a successful write buys nothing.
+- **Compute on the device or in the container; report the number.** Never page
+  a large result set through the conversation.
+- **Batch independent tool calls into one block.**
+- **Hand long mechanical work to a subagent.** Its tool output does not land in
+  the main context; only its conclusion does.
+- **No visualisations, design canvases or decorative artefacts unless asked
+  for.** Standing instruction from the owner, 25 October 2026.
+- **Notebooks are output, not method.** Logic belongs in `pipeline/` with a
+  test. A notebook run through the conversation costs several times what the
+  equivalent function call costs.
+- **One commit per logical change.** No exploratory commits, no re-reads of the
+  diff afterwards.
