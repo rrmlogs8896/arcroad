@@ -6,6 +6,7 @@
 <title>arcroad — staging</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Measuring what road geometry costs the people who live beside it. Staging build — no figure here has been verified against a driven route.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg fill='none' stroke='%23E2743B' stroke-linecap='round'%3E%3Cpath d='M12 25 A 10 10 0 1 1 20 25' stroke-width='2.8'/%3E%3C/g%3E%3Ccircle cx='12' cy='25' r='2.4' fill='%23E2743B'/%3E%3Ccircle cx='20' cy='25' r='2.4' fill='%23E2743B'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -64,11 +65,47 @@ footer{border-top:1px solid var(--line)}
 footer .wrap{padding-block:26px 56px}
 footer p{margin:0 0 9px;font-size:12.5px;line-height:1.7;color:var(--faint);max-width:80ch}
 a{color:#E8A87C}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+.brand svg{width:27px;height:27px;flex:0 0 auto;color:var(--accent);overflow:visible}
+.brand .drive{stroke-dasharray:62;stroke-dashoffset:62;animation:draw 1900ms cubic-bezier(.22,.61,.36,1) 220ms forwards}
+.brand .dot{opacity:0;animation:fade 700ms ease-out forwards}
+.brand .dot.a{animation-delay:180ms}
+.brand .dot.b{animation-delay:1750ms}
+.brand .chord{opacity:0;animation:fadeChord 900ms ease-out 1900ms forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fade{to{opacity:1}}
+.brand .chord{--to:.55}
+@keyframes fadeChord{to{opacity:.55}}
+@media (prefers-reduced-motion:reduce){
+  .brand .drive{animation:none;stroke-dashoffset:0}
+  .brand .dot{animation:none;opacity:1}
+  .brand .chord{animation:none;opacity:.55}
+}
+.skip{position:absolute;left:-9999px;top:0;background:var(--accent);color:#0B0D10;padding:10px 16px;border-radius:0 0 6px 0;font-weight:500;z-index:50}
+.skip:focus{left:0}
+.soon{display:inline-block;margin-left:7px;padding:2px 7px;border-radius:999px;border:1px solid #3A2A1F;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);vertical-align:1px}
+#top{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;width:44px;height:44px;border-radius:50%;border:1px solid var(--line2);background:#161A21;color:var(--fg);cursor:pointer;display:grid;place-items:center;opacity:0;visibility:hidden;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+#top.on{opacity:1;visibility:visible}
+#top:hover{border-color:var(--accent);color:var(--soft)}
+#top svg{width:17px;height:17px}
+.faq{border-top:1px solid var(--line)}
+.q{border-bottom:1px solid var(--line)}
+.q summary{list-style:none;cursor:pointer;padding:15px 0;font-size:15.5px;line-height:1.5;color:var(--fg2);display:flex;gap:14px;align-items:baseline}
+.q summary::-webkit-details-marker{display:none}
+.q summary::before{content:"+";font-family:"JetBrains Mono",monospace;color:var(--accent);flex:0 0 14px;font-size:15px}
+.q[open] summary::before{content:"\2212"}
+.q .a{padding:0 0 17px 28px;font-size:14.5px;line-height:1.72;color:var(--mut);max-width:74ch}
+.q .a p{margin:0 0 10px}
+.q .a p:last-child{margin-bottom:0}
+.q .src{display:block;margin-top:9px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.04em;color:var(--faint)}
+@media (prefers-reduced-motion:no-preference){#top{transition:opacity .18s,visibility .18s,border-color .15s,color .15s}}
 a:hover{color:var(--soft)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 </style>
 </head>
 <body>
+
+<a class="skip" href="#findings">Skip to the findings</a>
 
 <div class="staging">
   <div class="wrap">
@@ -79,11 +116,23 @@ a:hover{color:var(--soft)}
 
 <header>
   <div class="wrap">
-    <div><span class="logo">arcroad</span><span class="place">Hyderabad</span></div>
+    <a class="brand" href="#findings" aria-label="arcroad, Hyderabad">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="currentColor" stroke-linecap="round">
+          <path class="drive" d="M12 25 A 10 10 0 1 1 20 25" stroke-width="2.4"/>
+          <path class="chord" d="M12 25 L20 25" stroke-width="1.5"/>
+        </g>
+        <circle class="dot a" cx="12" cy="25" r="2.1" fill="currentColor"/>
+        <circle class="dot b" cx="20" cy="25" r="2.1" fill="currentColor"/>
+      </svg>
+      <span><span class="logo">arcroad</span><span class="place">Hyderabad</span></span>
+    </a>
     <nav>
       <a href="#findings">Findings</a>
       <a href="#areas">Areas</a>
+      <a href="#city">3D map</a>
       <a href="#method">Method</a>
+      <a href="#help">Help</a>
     </nav>
   </div>
 </header>
@@ -151,6 +200,29 @@ a:hover{color:var(--soft)}
   </div>
 </section>
 
+<section id="city" style="padding-top:0">
+  <div class="wrap">
+    <h2>The city in three dimensions<span class="soon">being built</span></h2>
+    <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:var(--mut);max-width:72ch">A descent from the globe down to a single junction, with severance carried in height and colour, and a click through to any area's own measurements. It is specified and it is not built, and the reason is worth stating rather than hiding behind a spinner.</p>
+    <div class="cols">
+      <div>
+        <h3>What it will show</h3>
+        <p style="margin:0 0 14px;font-size:14.5px;line-height:1.68;color:var(--mut)">Real building heights from open satellite-derived data, so a severed block reads as somewhere people live rather than a shape on a plan. Severance encoded in height and colour together, so the worst places are visible in the opening frame without reading a legend.</p>
+        <h3>What it will not have</h3>
+        <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">Terrain. Hyderabad spans 32 m of elevation across the whole measured area, so relief here would be drama invented in a shader. That was tested before it was designed, and the threshold was written before the test ran.</p>
+      </div>
+      <div>
+        <h3>Street-level imagery</h3>
+        <p style="margin:0 0 14px;font-size:14.5px;line-height:1.68;color:var(--mut)">Street View is Google's and is never used here, at any point, in any form. The open alternatives were checked on 25 October 2026: Panoramax returned one image across the entire 85 by 77 km area. Mapillary is still being probed.</p>
+        <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">If neither has real coverage, there will be no imagery layer and this page will say so, rather than shipping a button that works one time in three.</p>
+      </div>
+    </div>
+    <div class="note" style="margin-top:26px">
+      <p><strong style="color:var(--soft);font-weight:500">Why it is not here yet.</strong> Polish reads as authority. A beautiful model of a number nobody has checked would persuade people of something we do not know, and when it broke it would take the method down with it rather than just the picture. The model comes after a route has been driven.</p>
+    </div>
+  </div>
+</section>
+
 <section id="method">
   <div class="wrap">
     <div class="cols">
@@ -183,6 +255,29 @@ a:hover{color:var(--soft)}
     <div class="lims" id="lims"></div>
   </div>
 </section>
+
+<section id="help" style="padding-top:0">
+  <div class="wrap">
+    <h2>Help, and the questions worth asking</h2>
+    <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:var(--mut);max-width:72ch">Every answer below cites where it comes from, so you can check it rather than take it. If an answer here disagrees with the data, the data is right and this page is out of date — tell us.</p>
+    <div class="faq" id="faq"></div>
+
+    <div class="cols" style="margin-top:34px">
+      <div>
+        <h3>Found a mistake?</h3>
+        <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">That is the most useful thing you can send. Say which area or junction, and what the road actually does. A correction to the underlying map improves every navigation app in the city, not only this one.</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">This is a staging build and has no public contact route yet. When it launches there will be a monitored address and a named person behind it, not a form that goes nowhere.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<button id="top" type="button" aria-label="Back to top" title="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 
 <footer>
   <div class="wrap">
@@ -273,6 +368,90 @@ a:hover{color:var(--soft)}
     t.textContent = l[2];
     row.appendChild(s); row.appendChild(t);
     lw.appendChild(row);
+  });
+
+  // ---- FAQ -------------------------------------------------------------
+  // Each answer carries the source it is derived from. These are the hooks a
+  // build step uses to regenerate this list from the ledger and the limitation
+  // set, so the FAQ cannot drift away from what the project actually holds.
+  // Until that step exists the source line is still useful: it tells a reader
+  // exactly what to check, and it tells us which answers go stale together.
+  var FAQ = [
+    ["Is this official?",
+     ["No. arcroad is an independent citizen project with no affiliation to GHMC, HMDA, NHAI, the Government of Telangana, or any political party. Nobody has endorsed it and nobody funds it."],
+     "project charter, decision D-11"],
+    ["What is a detour index?",
+     ["How far you must drive to reach a point directly across the road, divided by the straight-line distance between them. An index of 40 means forty times further by road than as the crow flies — twenty metres apart becomes eight hundred metres of driving."],
+     "method, step 4"],
+    ["Why are there no final numbers?",
+     ["Because not one figure here has been checked against a route somebody has actually driven. The open map under-records small connections, so every absolute value is inflated by an amount we cannot yet quantify.",
+      "Ratios between areas survive that problem, because it affects all areas alike. Individual values do not. The first verification drive is a crossing twenty-one metres wide that the model says costs 2,344 m."],
+     "known limitations, Phase 2b gate"],
+    ["Why does one area say ‘likely a gap in the map’?",
+     ["Where a typical route runs past ten kilometres to cross twenty metres, a hole in the open map is a likelier explanation than a real detour. Those rows stay in the ranking, labelled, rather than being quietly removed — hiding the weakest row is exactly what we tell everyone else not to do.",
+      "They are also the first places we go back and correct the map."],
+     "gap threshold, 10,000 m"],
+    ["Why nothing about walking?",
+     ["The open map holds 407 pedestrian crossings and 212 footbridges for a metropolitan area of roughly ten million people, and none at all within 400 m of Abids or Secunderabad station. That cannot be true of the ground.",
+      "Absence in the map is not absence in reality, so this project makes no claim about walking. Everything here is about driving."],
+     "probe v1.1, 25 Oct 2026"],
+    ["Why not travel time, when that is what I actually feel?",
+     ["Because congestion changes and geometry does not. A median opening that is four hundred metres away is still four hundred metres away after the roadworks finish and after the traffic clears. Measuring time would produce a figure anyone could wave away by pointing at a bad afternoon."],
+     "method, what this does not measure"],
+    ["Do you track me?",
+     ["No. No accounts, no location permission, no analytics, no cookies that identify you. This page holds no personal data of any kind, and an automated test blocks any commit that would change that."],
+     "tests/test_privacy.py"],
+    ["Can I use this data?",
+     ["Yes. Map data is © OpenStreetMap contributors under ODbL, and arcroad's derived measurements are published under ODbL too. Attribute both. If you build a derived database, share it under the same licence — a chart or an article made from the numbers does not have to be."],
+     "DATA-LICENSE.md"],
+    ["Will there be other cities?",
+     ["The method takes a bounding box and a road network, so it does not care which city it is, and the open map covers all of India. But running fifty unverified cities would multiply the exposure by fifty rather than the value. One city verified first, then a second with different road morphology as a replication test."],
+     "expansion plan"],
+    ["Has this project got anything wrong?",
+     ["Yes, and they are listed on this page rather than quietly fixed. Early versions paired roads with the flyovers above them, treated crossing streets as two sides of one road, and let a review flag remove a third of the points from the published median.",
+      "We also predicted the flagging was an artefact of the study area boundary, and the data said otherwise. All of it is in the limitations above."],
+     "known limitations"]
+  ];
+  var fw = document.getElementById("faq");
+  FAQ.forEach(function (f) {
+    var d = document.createElement("details");
+    d.className = "q";
+    var s = document.createElement("summary");
+    s.textContent = f[0];
+    var a = document.createElement("div");
+    a.className = "a";
+    f[1].forEach(function (para) {
+      var pp = document.createElement("p");
+      pp.textContent = para;
+      a.appendChild(pp);
+    });
+    var src = document.createElement("span");
+    src.className = "src";
+    src.textContent = "source: " + f[2];
+    a.appendChild(src);
+    d.appendChild(s); d.appendChild(a);
+    fw.appendChild(d);
+  });
+
+  // ---- back to top ------------------------------------------------------
+  // Needed because someone arriving on an inline anchor lands mid-document
+  // with no obvious way back to the top.
+  var top = document.getElementById("top");
+  var smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function () {
+      top.classList.toggle("on", window.scrollY > 500);
+      ticking = false;
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  top.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
+    document.querySelector(".skip").focus();
   });
 
   // Provenance. Cloudflare Pages exposes the commit SHA at build time; until the

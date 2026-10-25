@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="arcroad">
+  <title>arcroad</title>
+  <desc>Two points eight units apart, joined by a short straight chord and by a long arc travelling the other way round. The gap between the two is what this project measures.</desc>
+  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <!-- the drive: the long way round -->
+    <path d="M12 25 A 10 10 0 1 1 20 25" stroke-width="2.4"/>
+    <!-- the crossing: what you can see -->
+    <path d="M12 25 L20 25" stroke-width="1.5" opacity="0.55"/>
+  </g>
+  <!-- the two points -->
+  <circle cx="12" cy="25" r="2.1" fill="currentColor"/>
+  <circle cx="20" cy="25" r="2.1" fill="currentColor"/>
+</svg>
