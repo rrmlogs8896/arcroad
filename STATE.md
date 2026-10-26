@@ -1,32 +1,27 @@
 # STATE.md — read this first, read nothing else first
 
-> **Session note, 26 Oct 2026 ~04:30 IST — B-09 and B-10 fixed in code; rerun pending.**
-> Changed: `pipeline/pairing.py` (pairing, graph, routing and records ported from
-> the notebooks; both endpoints kept; study box a parameter, clipped and recorded;
-> export refuses invalid records), `tests/test_pairing.py` (7 regression tests),
-> `tools/check_pairing_port.py` (runs the notebook cells verbatim against the port
-> on synthetic networks; all identical; 4 planted mutations all caught), and
-> `notebooks/arcroad_Phase2a_DetourIndex_v08.ipynb` (thin; supersedes v07).
-> Source was `~/Documents/HMA/HMA_Phase2a_DetourIndex_v07.ipynb`, outside git; the
-> producing run's notebook (`arcroad_Phase2e_Diagnostics_v10`) has identical
-> graph/routing/record cells and a pairing cell differing by one `FOCUS_ZONE` guard.
-> What v10 changed was config (stride 4, cap 16,000, limit 25 km): kept as preset
-> `pairing.V10`, the default. (`kept.append` is in v10's `dedupe_worst`, not in pairing.)
-> **Next session:** (1) push — neither the cloud container nor the device bridge
-> reaches GitHub (proxy 403); push from the Mac's own terminal, then check CI.
-> (2) Rohit runs v08 in Colab. Expect 12,645 pairs before the clip, 1,549 outside,
-> 11,096 kept on the same extract; a different count means the extract changed.
-> (3) Then the cloud session runs the TomTom sweep on that validated export.
-> Untested here (no osmium available): `load_network` (verbatim port) and
-> `extract_date` — watch Colab cells 3-4. `osm_way_ids` along the route is not yet
-> emitted; endpoint ways are (`a_way_ids`, `b_way_ids`).
+> **Session note, 26 Oct 2026 ~11:45 IST — B-09 and B-10 CLOSED; first re-checkable export exists.**
+> `c29d9c1` pushed, CI #16 green. The v08 Colab rerun reproduced v1.0 exactly: same graph
+> (1,234,503 nodes / 2,618,735 edges), 12,645 pairs, 1,549 outside the HMDA box, 11,096 kept,
+> in-box median 25.67, 9 null routes all `unreachable`. File checked independently: 0 invalid
+> records, straight_m recomputes from A/B to 0.05 m, one extract date/commit/box throughout.
+> Output: Drive `AI PROJECTS — MASTER WORKSPACE/Anthropic/Hyderabad Mobility Atlas/phase2a_detour_v08/`
+> `di_points_2026-10-26_c29d9c1.csv` + `.meta.json`. Ledger Doc 03 §36.13–36.16.
+> This commit: B-13 (notebook saved to a stale Drive path and created duplicate folders; now
+> `DRIVE_BASE` in cell 2, mounted and checked up front). B-12 (calculator diesel option)
+> fixed in the artefact, not the repo. Calculator recorded below (P-44).
+> **Next session:** (1) cloud session runs the TomTom sweep on that file, private only (D-02).
+> (2) Mapillary coverage probe with a known-coverage control; use imagery to correct OSM
+> upstream, never import CC-BY-SA into the ODbL set. (3) Dependabot PR #5 (numpy 2.5.4)
+> fails CI — read before merging. Untested in CI: `load_network`/`extract_date` (need
+> osmium) — both ran correctly in Colab on 26 Oct.
 
 This file exists to make a fresh session cheap. A session that rebuilds its
 picture of this project by reading the repository costs the owner real money for
 information this file could have given in one read. Keep it under 150 lines.
 Update it in the same commit as any change that makes a line here wrong.
 
-Last updated: 26 October 2026 (04:30 IST)
+Last updated: 26 October 2026 (11:45 IST)
 
 ## Where things stand
 
@@ -50,10 +45,9 @@ First partial corroboration, diagnostic grade only:
 `data/verification/2026-10-26-isnapur-tomtom.md` — NH-65 at Isnapur, two points
 17 m apart, 1,630 m driven, 3,031 m routed by TomTom. n = 1, unpublishable.
 
-**The validation sweep against a second engine waits for the v08 rerun.** The
-v1.0 export records one endpoint per measurement (B-09) and cannot be swept; the
-fix is in code, the data is not yet regenerated. See
-`data/verification/2026-10-26-validation-sweep.md`.
+**The validation sweep against a second engine can now run.** The v08 export
+(`di_points_2026-10-26_c29d9c1.csv`) carries both endpoints for all 11,096 pairs.
+Background: `data/verification/2026-10-26-validation-sweep.md`.
 
 ## What is true and robust
 
@@ -71,8 +65,11 @@ fix is in code, the data is not yet regenerated. See
 | id | item |
 |---|---|
 | B-08 | `TARGETS[:5]` slice in the v1.1 probe skips the control. Fix before rerun. |
-| B-09 | **Fixed, rerun pending.** `pipeline/pairing.py` keeps both endpoints, node ids, extract date, commit; null routes name a reason; `write_point_file` refuses invalid records. Needs the v08 Colab run, then unblocks the TomTom sweep. |
-| B-10 | **Fixed, rerun pending.** Study box is a parameter (default declared HMDA), clipped on endpoint A after pairing and before routing, excluded pairs counted, box recorded per record and in `.meta.json`. |
+| B-09 | **Closed 26 Oct.** Both endpoints kept; v08 rerun reproduced v1.0 exactly; export validated. |
+| B-10 | **Closed 26 Oct.** Clip removed exactly the 1,549 strays; box recorded per record. |
+| B-13 | **Fixed in this commit.** Notebook Drive path is `DRIVE_BASE` (cell 2), mounted and checked before the run. |
+| P-44 | Cost calculator exists only as the artefact "What the detour costs you" (claude.ai, private; ledger §23). Not in `web/` by design: gates G-1, G-2, G-4, G-6 open, and `*.arcroad.pages.dev` hash URLs are not behind Access, so even a "draft" would be public. B-12 (diesel option broken) fixed in the artefact 26 Oct. |
+| — | Dependabot PR #5 (numpy >=2.5.4) fails CI. Do not merge until read. |
 | — | Test the fringe peak against OSM density per ring before it is published as a finding. |
 | — | `web/privacy.html`, `web/cookies.html`, `web/terms.html` do not exist. Required before launch, written from primary sources. |
 | — | Reconnect Cloudflare Pages to Git if pushes stop auto-deploying. |
