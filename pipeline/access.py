@@ -22,6 +22,7 @@ Rules carried over from M1, each enforced here rather than left to memory:
 
 from __future__ import annotations
 
+import itertools
 import math
 
 from pipeline.geometry import haversine_m
@@ -170,7 +171,7 @@ def nearest_by_line(lon: float, lat: float, dests):
     return best, best_m
 
 
-def access_record(cell: dict, layer: str, dests, road_m: dict, snap_m: float | None):
+def access_record(cell: dict, layer: str, dests, road_m: dict, snap_m: float | None, line=None):
     """One measured row for a cell and a destination layer.
 
     `road_m` maps dest_id to routed driving metres from the cell's snapped node
@@ -279,3 +280,214 @@ def export_problems(rec: dict) -> list[str]:
             if rec.get(k) in (None, ""):
                 probs.append(f"measured row without {k}")
     return probs
+
+
+# --------------------------------------------------------------------------
+# City-scale run. numpy and scipy are imported lazily, so the rules above stay
+# testable without them. The notebook does I/O only; the method lives here.
+# --------------------------------------------------------------------------
+
+DEST_SNAP_MAX_M = 300.0
+ROUTE_LIMIT_M = 40_000.0
+M_PER_DEG = 111_320.0
+
+
+def to_xy(lon, lat, lon0: float, lat0: float):
+    """Local planar metres (equirectangular). Used only to find nearest
+    neighbours; reported distances are always haversine."""
+    import numpy as np
+
+    lon = np.asarray(lon, dtype=float)
+    lat = np.asarray(lat, dtype=float)
+    k = math.cos(math.radians(lat0)) * M_PER_DEG
+    return np.column_stack(((lon - lon0) * k, (lat - lat0) * M_PER_DEG))
+
+
+def assign_population(lon, lat, pop, bbox, steps):
+    """Vectorised add_population: {cell_id: people} and the people outside the grid.
+    Uses exactly cell_of's arithmetic, which tests/test_access.py checks."""
+    import numpy as np
+
+    min_lon, min_lat, max_lon, max_lat = bbox
+    dlon, dlat = steps
+    rows = math.ceil((max_lat - min_lat) / dlat)
+    cols = math.ceil((max_lon - min_lon) / dlon)
+    lon = np.asarray(lon, dtype=float)
+    lat = np.asarray(lat, dtype=float)
+    pop = np.asarray(pop, dtype=float)
+    r = np.floor((lat - min_lat) / dlat).astype(int)
+    c = np.floor((lon - min_lon) / dlon).astype(int)
+    inside = (r >= 0) & (r < rows) & (c >= 0) & (c < cols)
+    out = {}
+    for rr, cc, p in zip(r[inside], c[inside], pop[inside], strict=True):
+        key = f"r{rr}c{cc}"
+        out[key] = out.get(key, 0.0) + float(p)
+    return out, float(pop[~inside].sum())
+
+
+def nearest_reachable(G, dest_nodes, limit_m: float = ROUTE_LIMIT_M):
+    """For every node, the driving metres TO the nearest destination node and
+    which one it is, in one pass: Dijkstra from all destinations at once on the
+    reversed graph, so one-way streets are driven the legal way."""
+    import numpy as np
+    from scipy.sparse.csgraph import dijkstra
+
+    GT = G.T.tocsr()
+    idx = np.unique(np.asarray(dest_nodes, dtype=int))
+    dist, _pred, src = dijkstra(GT, directed=True, indices=idx, min_only=True,
+                                return_predecessors=True, limit=limit_m)
+    return dist, src
+
+
+def measure_layer(cells, layer, dests, node_lon, node_lat, G, eligible=None,
+                  limit_m: float = ROUTE_LIMIT_M):
+    """Every populated cell against one destination layer.
+
+    cells: dicts with cell_id, lon, lat, pop. dests: dicts with dest_id, lon, lat.
+    node_lon/node_lat: graph node coordinates; eligible: boolean mask of nodes a
+    point may snap to (the main connected network), default all.
+
+    Road distance = cell centre to its node + network + node to the hospital.
+    A hospital more than DEST_SNAP_MAX_M from any eligible road node is left out
+    of BOTH the straight-line and road searches (otherwise a hospital no road
+    reaches would make every neighbour look cut off) and returned for checking.
+    """
+    import numpy as np
+    from scipy.spatial import cKDTree
+
+    node_lon = np.asarray(node_lon, dtype=float)
+    node_lat = np.asarray(node_lat, dtype=float)
+    lon0, lat0 = float(np.mean(node_lon)), float(np.mean(node_lat))
+    elig = np.ones(len(node_lon), bool) if eligible is None else np.asarray(eligible, bool)
+    elig_idx = np.flatnonzero(elig)
+    tree = cKDTree(to_xy(node_lon[elig_idx], node_lat[elig_idx], lon0, lat0))
+
+    kept, dropped = [], []
+    if dests:
+        dxy = to_xy([d["lon"] for d in dests], [d["lat"] for d in dests], lon0, lat0)
+        _, dk = tree.query(dxy)
+        for d, k in zip(dests, dk, strict=True):
+            n = int(elig_idx[k])
+            snap = haversine_m(d["lon"], d["lat"], node_lon[n], node_lat[n])
+            (kept if snap <= DEST_SNAP_MAX_M else dropped).append(dict(d, node=n, snap_m=snap))
+
+    by_node = {}
+    for d in kept:
+        if d["node"] not in by_node or d["snap_m"] < by_node[d["node"]]["snap_m"]:
+            by_node[d["node"]] = d
+
+    if kept:
+        dist, src = nearest_reachable(G, list(by_node), limit_m)
+        ltree = cKDTree(to_xy([d["lon"] for d in kept], [d["lat"] for d in kept], lon0, lat0))
+    cxy = to_xy([c["lon"] for c in cells], [c["lat"] for c in cells], lon0, lat0)
+    _, ck = tree.query(cxy)
+    _, lk = ltree.query(cxy) if kept else (None, [None] * len(cells))
+
+    records = []
+    for cell, k, li in zip(cells, ck, lk, strict=True):
+        n = int(elig_idx[k])
+        snap = haversine_m(cell["lon"], cell["lat"], node_lon[n], node_lat[n])
+        line = None
+        road = {}
+        if kept:
+            ld = kept[int(li)]
+            line = (ld, haversine_m(cell["lon"], cell["lat"], ld["lon"], ld["lat"]))
+            if np.isfinite(dist[n]) and src[n] >= 0:
+                d = by_node[int(src[n])]
+                road[d["dest_id"]] = snap + float(dist[n]) + d["snap_m"]
+        rec = access_record(cell, layer, kept, road, snap, line=line)
+        rec["road_dest_node"] = by_node[int(src[n])]["node"] if road else None
+        rec["cell_node"] = n
+        records.append(rec)
+    return records, dropped
+
+
+def densify(lines, step_m: float = 50.0):
+    """Points every step_m along polylines [[(lon, lat), ...], ...], so a long
+    straight arterial with few OSM nodes still has points near every cell."""
+    pts = []
+    for line in lines:
+        for (x0, y0), (x1, y1) in itertools.pairwise(line):
+            seg = haversine_m(x0, y0, x1, y1)
+            n = max(1, math.ceil(seg / step_m))
+            pts.extend((x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n) for i in range(n))
+        if line:
+            pts.append(line[-1])
+    return pts
+
+
+def add_strata(records, arterial_pts, node_lon, node_lat, centre,
+               adj_m: float = 300.0, ring_km: float = 5.0, density_r_m: float = 500.0):
+    """Tag each record for the rule-5 test (design note section 4).
+
+    adjacent: within adj_m of a divided arterial. ring: band of ring_km from the
+    centre. density: tertile, within its ring, of road nodes within density_r_m
+    (a proxy for how well the map covers the place). stratum = ring + density.
+    """
+    import numpy as np
+    from scipy.spatial import cKDTree
+
+    lon0, lat0 = centre
+    xy = to_xy([r["lon"] for r in records], [r["lat"] for r in records], lon0, lat0)
+    if arterial_pts:
+        a = cKDTree(to_xy([p[0] for p in arterial_pts], [p[1] for p in arterial_pts], lon0, lat0))
+        da, _ = a.query(xy)
+    else:
+        da = np.full(len(records), np.inf)
+    ntree = cKDTree(to_xy(node_lon, node_lat, lon0, lat0))
+    dens = np.array([len(x) for x in ntree.query_ball_point(xy, density_r_m)])
+    km = np.hypot(xy[:, 0], xy[:, 1]) / 1000.0
+    ring = np.floor(km / ring_km).astype(int)
+    for i, r in enumerate(records):
+        r["arterial_m"] = float(da[i])
+        r["adjacent"] = bool(da[i] <= adj_m)
+        r["ring"] = f"{int(ring[i] * ring_km)}-{int((ring[i] + 1) * ring_km)} km"
+        r["road_nodes_500m"] = int(dens[i])
+    for g in set(ring.tolist()):
+        idx = np.flatnonzero(ring == g)
+        cut = np.quantile(dens[idx], [1 / 3, 2 / 3]) if len(idx) else [0, 0]
+        for i in idx:
+            t = 0 if dens[i] <= cut[0] else 1 if dens[i] <= cut[1] else 2
+            records[i]["density"] = ("low", "mid", "high")[t]
+            records[i]["stratum"] = f"{records[i]['ring']} | {records[i]['density']} density"
+    return records
+
+
+def rule5_verdict(records, min_people: float = 2000.0, min_cells: int = 30):
+    """Adjacent vs not, inside each matched stratum, people-weighted.
+
+    A stratum is comparable only when both sides hold at least min_cells
+    measured cells and min_people people. The claim is SUPPORTED only if the
+    adjacent side is worse in at least two thirds of at least three comparable
+    strata, REJECTED if it is worse in a third or fewer, otherwise MIXED.
+    """
+    groups = {}
+    for r in records:
+        if r.get("status") != "measured" or not r.get("pop"):
+            continue
+        groups.setdefault(r["stratum"], {True: [], False: []})[r["adjacent"]].append(r)
+    rows = []
+    for name, g in sorted(groups.items()):
+        row = {"stratum": name}
+        for side, key in ((True, "adj"), (False, "not")):
+            rs = g[side]
+            row[f"{key}_cells"] = len(rs)
+            row[f"{key}_people"] = round(sum(r["pop"] for r in rs))
+            row[f"{key}_median_excess_m"] = _weighted_quantile([(r["excess_m"], r["pop"]) for r in rs], 0.5)
+        row["comparable"] = all(
+            row[f"{k}_cells"] >= min_cells and row[f"{k}_people"] >= min_people for k in ("adj", "not")
+        )
+        if row["comparable"]:
+            row["gap_m"] = row["adj_median_excess_m"] - row["not_median_excess_m"]
+        rows.append(row)
+    comp = [r for r in rows if r["comparable"]]
+    worse = sum(1 for r in comp if r["gap_m"] > 0)
+    if len(comp) < 3:
+        verdict = "INSUFFICIENT"
+    elif worse >= 2 * len(comp) / 3:
+        verdict = "SUPPORTED"
+    elif worse <= len(comp) / 3:
+        verdict = "REJECTED"
+    else:
+        verdict = "MIXED"
+    return {"verdict": verdict, "comparable_strata": len(comp), "adjacent_worse_in": worse, "rows": rows}
