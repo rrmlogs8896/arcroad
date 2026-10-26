@@ -62,7 +62,7 @@ def test_fetch_parses_through_injected_opener_without_network():
         seen["auth"] = req.get_header("Authorization")
         return _Resp(json.dumps(payload).encode())
 
-    imgs = m.fetch_images(m.FIXED_TARGETS["isnapur_target_17.5274_78.2685"], "tok", opener=opener)
+    imgs = m.fetch_images(m.FIXED_TARGETS["patancheru_target_17.5274_78.2685"], "tok", opener=opener)
     assert seen["auth"] == "OAuth tok"
     assert imgs == [{"id": "1", "lon": 78.2685, "lat": 17.5274, "captured_at": NOW_MS}]
 

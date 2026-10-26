@@ -71,7 +71,7 @@ CONTROLS = {
 
 # The project's primary verification target and the core-city reference.
 FIXED_TARGETS = {
-    "isnapur_target_17.5274_78.2685": (78.2635, 17.5224, 78.2735, 17.5324),
+    "patancheru_target_17.5274_78.2685": (78.2635, 17.5224, 78.2735, 17.5324),
     "charminar_core": (78.4817, 17.3566, 78.4917, 17.3666),
 }
 
