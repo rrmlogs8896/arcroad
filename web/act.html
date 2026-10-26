@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en" data-verified="2026-10-26">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>arcroad — act on this</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Turn one measured crossing into a letter, an email and a share card. Everything is made in your browser; nothing is sent to arcroad.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg fill='none' stroke='%23E2743B' stroke-linecap='round'%3E%3Cpath d='M12 25 A 10 10 0 1 1 20 25' stroke-width='2.8'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0D10; --surface:#11141A; --field:#161A21; --line:#1C2026; --line2:#2A3038;
+  --fg:#E6E8EB; --fg2:#F5F6F7; --mut:#8B939C; --faint:#6E767F;
+  --accent:#E2743B; --soft:#F0C2A0; --good:#8FA89A; --warm:#C9A188;
+  --paper:#FBFAF7; --ink:#1B1E22; --ink2:#5A6068; --rule:#E4E1DA;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+.m{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.staging{background:#15110D;border-bottom:1px solid #2A2520}
+.staging .wrap{padding-block:11px}
+.staging p{margin:0;font-size:13px;line-height:1.5;color:#B9A594}
+header .wrap{padding-block:26px;display:flex;gap:12px;align-items:baseline;border-bottom:1px solid var(--line)}
+.logo{font-size:20px;font-weight:600;letter-spacing:-0.02em;color:var(--fg2);text-decoration:none}
+.place{font-size:13px;color:var(--faint)}
+main .wrap{padding-block:40px 80px;display:flex;flex-direction:column;gap:56px}
+h1{font-size:clamp(30px,6vw,46px);line-height:1.08;letter-spacing:-0.025em;font-weight:600;color:var(--fg2);margin:0;text-wrap:balance}
+h1 .by{color:var(--accent)}
+h2{font-size:clamp(15px,2.4vw,18px);font-weight:500;color:var(--fg2);margin:0}
+p{font-size:15px;line-height:1.6;color:var(--mut);margin:0;max-width:62ch}
+.k{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.lede{display:flex;flex-direction:column;gap:18px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.fact{background:var(--surface);padding:16px 18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fact .v{font-size:15px;color:var(--fg)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;border:1px solid currentColor;font-size:12.5px;width:max-content}
+.pill.sample,.pill.under_review{color:var(--soft)} .pill.candidate{color:var(--warm)} .pill.verified{color:var(--good)}
+.mark{font-size:13px;color:var(--soft)}
+/* progress: filled check for done, hollow ring for current, thin rule between */
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:22px 1fr;column-gap:18px}
+.dot{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line2);display:grid;place-items:center;margin-top:1px}
+.step.cur .dot{border-color:var(--accent)}
+.step.done .dot{background:var(--accent);border-color:var(--accent)}
+.step.done .dot::after{content:"";width:8px;height:4px;border-left:2px solid var(--bg);border-bottom:2px solid var(--bg);transform:rotate(-45deg) translate(1px,-1px)}
+.rail{grid-column:1;width:1px;background:var(--line2);justify-self:center;min-height:24px}
+.body{grid-column:2;padding-bottom:36px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.step:last-child .rail{display:none}
+.ack{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;background:var(--surface);border-radius:14px}
+.ack input{margin-top:3px;width:18px;height:18px;accent-color:var(--accent);flex:none}
+.ack ul{margin:8px 0 0;padding-left:18px;color:var(--mut);font-size:14.5px;line-height:1.6}
+.ack label{font-size:15px;color:var(--fg);line-height:1.5}
+.draftnote{font-size:12.5px;color:var(--faint)}
+.fields{display:grid;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12.5px;color:var(--faint)}
+.field input,.field textarea{background:var(--field);border:0;border-radius:12px;padding:14px 16px;color:var(--fg);font:inherit;font-size:15px;outline:none;width:100%}
+.field textarea{min-height:76px;resize:vertical}
+.field input:focus-visible,.field textarea:focus-visible{box-shadow:0 0 0 2px var(--accent)}
+.outs{display:flex;flex-wrap:wrap;gap:10px}
+.btn{appearance:none;border:1px solid var(--line2);background:transparent;color:var(--fg);border-radius:999px;padding:11px 18px;font:inherit;font-size:14.5px;cursor:pointer}
+.btn:hover{border-color:var(--mut)}
+.btn.primary{background:var(--fg2);color:var(--bg);border-color:var(--fg2);font-weight:500}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{font-size:13px;color:var(--faint)}
+.status{font-size:13px;color:var(--good);min-height:1.5em}
+.preview{display:flex;flex-direction:column;gap:14px}
+.paper{background:var(--paper);color:var(--ink);border-radius:6px;padding:clamp(20px,5vw,48px);font-size:14.5px;line-height:1.6;box-shadow:0 1px 0 var(--line2)}
+.paper .wm{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:#9A4A1E;border:1px solid #E7C3AE;border-radius:6px;padding:8px 10px;margin-bottom:22px}
+.paper .blk{margin:0 0 16px}
+.paper .lab{color:var(--ink2)}
+.paper table{border-collapse:collapse;width:100%;margin:6px 0 18px;font-size:13.5px}
+.paper td{border:1px solid var(--rule);padding:7px 9px;vertical-align:top}
+.paper td:first-child{width:36%;color:var(--ink2)}
+.paper ol{margin:6px 0 16px;padding-left:22px}
+.paper .foot{margin-top:28px;padding-top:12px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink2)}
+.paper .subj{font-weight:600}
+.cardbox{background:var(--surface);border-radius:14px;padding:16px;display:flex;justify-content:center}
+canvas{width:min(100%,360px);height:auto;border-radius:10px}
+.off{padding:28px;background:var(--surface);border-radius:14px}
+footer .wrap{padding-block:28px;border-top:1px solid var(--line)}
+footer p{font-size:12.5px;color:var(--faint)}
+@media (prefers-reduced-motion:no-preference){.btn{transition:border-color .15s,opacity .15s}}
+@media print{
+  @page{size:A4;margin:18mm}
+  body{background:#fff}
+  .staging,header,footer,.lede,.steps,.cardbox,.outs,.hint,.status,.prev-head{display:none!important}
+  main .wrap{padding:0;max-width:none}
+  .paper{box-shadow:none;padding:0;border-radius:0;background:#fff}
+}
+</style>
+</head>
+<body>
+<div class="staging"><div class="wrap"><p><span class="m">Staging</span> · Behind a feature flag. No figure here has been checked against a driven route, and nothing on this page is for submission yet.</p></div></div>
+<header><div class="wrap"><a class="logo" href="./">arcroad</a><span class="place">Hyderabad</span></div></header>
+
+<main><div class="wrap" id="app">
+  <div class="off" id="off" hidden><h2>Not available yet</h2><p style="margin-top:8px">The representation kit opens after the verification gate.</p></div>
+
+  <section class="lede" id="lede" hidden>
+    <span class="k">Act on this</span>
+    <h1><span id="across">—</span><br><span class="by" id="byroad">—</span></h1>
+    <p id="where">—</p>
+    <div class="facts" aria-label="The figures">
+      <div class="fact"><span class="k">Road</span><span class="v m" id="f-road">—</span></div>
+      <div class="fact"><span class="k">Map extract</span><span class="v m" id="f-extract">—</span></div>
+      <div class="fact"><span class="k">Status</span><span id="f-status" class="pill">—</span></div>
+    </div>
+    <p class="mark" id="mark" hidden></p>
+    <p>Everything below is made in your browser. arcroad does not receive, store or send anything you type. <a href="./#method" style="color:var(--soft)">How the figures are measured</a>.</p>
+  </section>
+
+  <section class="steps" id="steps" hidden aria-label="Steps">
+    <div class="step cur" id="s1">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="body">
+        <h2>Read and agree</h2>
+        <div class="ack">
+          <input type="checkbox" id="ack">
+          <div>
+            <label for="ack">I understand and agree:</label>
+            <ul>
+              <li>arcroad is an independent citizen project, not linked to any government authority or political party.</li>
+              <li>The figures are estimates of road distance from open map data, marked candidate or verified. They are not legal or engineering findings.</li>
+              <li>Anything I send is sent in my own name, and I am responsible for what I add to it.</li>
+              <li>arcroad does not receive or store what I type here.</li>
+              <li>I will use official channels and respectful language.</li>
+              <li>This is not legal advice.</li>
+            </ul>
+          </div>
+        </div>
+        <span class="draftnote">Draft wording, pending legal review before launch.</span>
+      </div>
+      <span class="rail" aria-hidden="true"></span>
+    </div>
+
+    <div class="step" id="s2">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="body">
+        <h2>Your details <span class="hint">· optional</span></h2>
+        <p class="hint">Leave these blank to write them by hand on the printout. They stay on this page only and are gone when you close it.</p>
+        <div class="fields">
+          <div class="field"><label for="who-name">Name</label><input id="who-name" autocomplete="off"></div>
+          <div class="field"><label for="who-addr">Address</label><textarea id="who-addr" autocomplete="off"></textarea></div>
+          <div class="field"><label for="who-phone">Phone</label><input id="who-phone" inputmode="tel" autocomplete="off"></div>
+        </div>
+      </div>
+      <span class="rail" aria-hidden="true"></span>
+    </div>
+
+    <div class="step" id="s3">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="body">
+        <h2>Make your letter, email or card</h2>
+        <div class="outs">
+          <button class="btn primary" id="b-letter" disabled>Show the letter</button>
+          <button class="btn" id="b-email" disabled>Open an email</button>
+          <button class="btn" id="b-card" disabled>Make a share card</button>
+        </div>
+        <p class="hint" id="authnote"></p>
+        <p class="status" id="msg" role="status" aria-live="polite"></p>
+      </div>
+      <span class="rail" aria-hidden="true"></span>
+    </div>
+  </section>
+
+  <section class="preview" id="pv-letter" hidden>
+    <div class="prev-head outs">
+      <button class="btn primary" id="b-print">Save as PDF or print</button>
+      <button class="btn" id="b-copy">Copy the text</button>
+    </div>
+    <p class="hint prev-head">In the print dialog, choose "Save as PDF". The address of the office is left blank: confirm it on the authority's official website.</p>
+    <article class="paper" id="letter"></article>
+  </section>
+
+  <section class="preview" id="pv-card" hidden>
+    <div class="cardbox"><canvas id="card" width="1080" height="1350" aria-label="Share card"></canvas></div>
+    <div class="outs"><a class="btn primary" id="b-save" href="#" download="arcroad-card.png">Save the card</a></div>
+  </section>
+</div></main>
+
+<footer><div class="wrap"><p>Map data © OpenStreetMap contributors (ODbL). Measurements by arcroad (ODbL).</p></div></footer>
+
+<script src="kit/pairs.js"></script>
+<script src="kit/core.js"></script>
+<script src="kit/act.js"></script>
+</body>
+</html>

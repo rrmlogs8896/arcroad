@@ -21,6 +21,7 @@ ALLOWANCE = {
     "web/cookies.html": 90,
     "web/terms.html": 180,
     "web/index.html": 180,
+    "web/act.html": 90,
 }
 
 TODAY = dt.date.today()
