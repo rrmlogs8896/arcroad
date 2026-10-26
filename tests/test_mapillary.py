@@ -116,14 +116,18 @@ def _http_error(code, body=b'{"error":{"message":"x"}}'):
     return urllib.error.HTTPError("https://graph.mapillary.com/images", code, "err", {}, io.BytesIO(body))
 
 
-def test_server_error_on_dense_box_retries_with_smaller_limit():
-    """The 26 Oct live failure: HTTP 500 on the Amsterdam control at limit 2000.
-    Hypothesis: a lighter request succeeds. Competing: the retry hides a real outage.
-    Separates: 500 then success must return images and record that limit=500 was used;
-    500 at every limit must raise with every attempt listed, never return []."""
-    limits_seen = []
+def test_server_error_on_dense_box_retries_with_a_smaller_box_not_just_a_smaller_limit():
+    """Live runs 1 and 2, 26 Oct: HTTP 500 "Please reduce the amount of data" at
+    limits 2000, 500 and 100 on the SAME box. Lowering the limit alone could not
+    separate "too much area" from "service down".
+    Hypothesis: a smaller box succeeds. Competing: only the limit matters.
+    Separates: the fake API fails while the box side exceeds 0.003 deg whatever the
+    limit, so success requires the box to shrink; the retry must also never shrink
+    a pair box below the 50 m test radius, and a total failure must raise with the
+    API's message, never claim a cause, and never return []."""
+    seen = []
     payload = json.dumps({"data": [{"id": 9, "captured_at": NOW_MS,
-                                    "geometry": {"coordinates": [4.89, 52.37]}}]}).encode()
+                                    "geometry": {"coordinates": [4.892, 52.373]}}]}).encode()
 
     class _Resp(io.BytesIO):
         def __enter__(self):
@@ -132,25 +136,34 @@ def test_server_error_on_dense_box_retries_with_smaller_limit():
         def __exit__(self, *a):
             return False
 
-    def flaky(req, timeout):
-        limit = int(req.full_url.split("limit=")[1].split("&")[0])
-        limits_seen.append(limit)
-        if limit == 2000:
-            raise _http_error(500)
+    def area_limited(req, timeout):
+        q = req.full_url
+        x0, _, x1, _ = (float(v) for v in q.split("bbox=")[1].split("&")[0].replace("%2C", ",").split(","))
+        limit = int(q.split("limit=")[1].split("&")[0])
+        seen.append((round(x1 - x0, 4), limit))
+        if x1 - x0 > 0.003:
+            raise _http_error(500, b'{"error":{"message":"Please reduce the amount of data"}}')
         return _Resp(payload)
 
-    imgs = m.fetch_images(m.CONTROLS["amsterdam_centre"], "tok", opener=flaky, pause=0)
-    assert len(imgs) == 1 and limits_seen == [2000, 500]
+    imgs = m.fetch_images(m.CONTROLS["amsterdam_centre"], "tok", opener=area_limited, pause=0)
+    assert len(imgs) == 1
+    assert seen[0] == (0.004, 2000) and seen[-1][0] <= 0.003, seen
+
+    side = lambda b: b[2] - b[0]  # noqa: E731
+    pair_box = m.bbox_around(78.3, 17.5)
+    assert side(m.shrink(pair_box, 0.1, m.MIN_HALF_DEG)) >= 2 * m.MIN_HALF_DEG - 1e-12
 
     def down(req, timeout):
-        raise _http_error(500)
+        raise _http_error(500, b'{"error":{"message":"Please reduce the amount of data"}}')
 
     try:
         m.fetch_images(m.CONTROLS["amsterdam_centre"], "tok", opener=down, pause=0)
     except m.ProbeError as e:
-        assert "limit=2000" in str(e) and "limit=100" in str(e)
+        msg = str(e)
+        assert "Please reduce the amount of data" in msg and "limit=100" in msg
+        assert "service" not in msg.lower(), "must not assert a cause it has not shown"
     else:
-        raise AssertionError("an outage must raise, not return no images")
+        raise AssertionError("a failure must raise, not return no images")
 
 
 def test_auth_error_is_raised_at_once_with_the_api_message():

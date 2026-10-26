@@ -46,11 +46,14 @@ SAFE_BBOX_AREA_DEG2 = 0.009        # what we allow: a 0.1 x 0.1 box computes as 
                                    # in floating point, so a check AT the limit lets it through
 FIELDS = "id,captured_at,geometry"
 LIMIT = 2000                       # API maximum, documented
-# 26 Oct: the first live run got HTTP 500 on the Amsterdam control at limit 2000.
-# Dense boxes with large limits are a known way to make this API fail server-side,
-# so a 5xx is retried with a smaller limit before it is reported. Counts only need
-# to clear CONTROL_MIN_IMAGES, and pair boxes are small, so 100 loses nothing.
-RETRY_LIMITS = (2000, 500, 100)
+# 26 Oct, live runs 1 and 2: HTTP 500 on the Amsterdam control with the API's own
+# message "Please reduce the amount of data you're asking for". Run 2 lowered only
+# the limit (2000, 500, 100) and failed identically, so the limit is not what the
+# API counts; the AREA is. Each retry therefore shrinks the box about its centre
+# AND lowers the limit. (scale of the side length, limit).
+RETRY_STEPS = ((1.0, 2000), (0.5, 500), (0.25, 200), (0.1, 100))
+MIN_HALF_DEG = 0.0005              # never shrink below ~55 m half-width: the 50 m
+                                   # coverage test needs the whole 50 m circle in the box
 
 CONTROL_MIN_IMAGES = 20
 NEAR_M = 50.0
@@ -59,11 +62,11 @@ USEFUL_SHARE = 0.25
 PAIR_HALF_DEG = 0.0008             # ~90 m each way: covers the 50 m test with margin,
                                    # and keeps each request light (26 Oct HTTP 500)
 
-# Control boxes: places with dense, long-standing Mapillary coverage. Each is a
-# 0.01 x 0.01 degree box (area 0.0001, well under the limit).
+# Control boxes: places with dense, long-standing Mapillary coverage. Kept small
+# because dense areas are exactly where the API refuses large requests.
 CONTROLS = {
-    "amsterdam_centre": (4.885, 52.367, 4.895, 52.377),
-    "london_trafalgar": (-0.133, 51.503, -0.123, 51.513),
+    "amsterdam_centre": (4.890, 52.371, 4.894, 52.375),    # ~0.004 deg: dense even when small
+    "london_trafalgar": (-0.130, 51.506, -0.126, 51.510),
 }
 
 # The project's primary verification target and the core-city reference.
@@ -124,15 +127,31 @@ def parse_images(payload) -> list[dict]:
     return out
 
 
-def fetch_images(bbox, token, opener=None, timeout=30, limits=RETRY_LIMITS, pause=1.0):
-    """Images in ``bbox``. On a server error (5xx) retry with the next, smaller limit;
+def shrink(bbox, scale, min_half_deg=0.0):
+    """The box scaled about its centre, never below ``min_half_deg`` half-width."""
+    x0, y0, x1, y1 = bbox
+    cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+    hx = max((x1 - x0) / 2 * scale, min(min_half_deg, (x1 - x0) / 2))
+    hy = max((y1 - y0) / 2 * scale, min(min_half_deg, (y1 - y0) / 2))
+    return (cx - hx, cy - hy, cx + hx, cy + hy)
+
+
+def fetch_images(bbox, token, opener=None, timeout=30, steps=RETRY_STEPS,
+                 min_half_deg=MIN_HALF_DEG, pause=1.0):
+    """Images in ``bbox``. On a server error (5xx) retry with a smaller box and limit;
     a client error (4xx: bad token, bad box) is raised at once with the API's own
-    message. ``opener`` is injectable so tests never touch the network."""
+    message. A failure is never returned as an empty list. ``opener`` is injectable
+    so tests never touch the network."""
     import urllib.error
     opener = opener or urllib.request.urlopen
-    errors = []
-    for i, limit in enumerate(limits):
-        url, headers = build_request(bbox, token, limit=limit)
+    errors, tried = [], set()
+    for scale, limit in steps:
+        box = shrink(bbox, scale, min_half_deg)
+        key = (tuple(round(v, 7) for v in box), limit)
+        if key in tried:
+            continue
+        tried.add(key)
+        url, headers = build_request(box, token, limit=limit)
         req = urllib.request.Request(url, headers=headers)
         try:
             with opener(req, timeout=timeout) as resp:
@@ -140,16 +159,18 @@ def fetch_images(bbox, token, opener=None, timeout=30, limits=RETRY_LIMITS, paus
         except urllib.error.HTTPError as e:
             body = ""
             try:
-                body = e.read().decode("utf-8", "replace")[:300]
+                body = e.read().decode("utf-8", "replace")[:200]
             except Exception:
                 pass
-            errors.append(f"limit={limit}: HTTP {e.code} {body}".strip())
+            side = box[2] - box[0]
+            errors.append(f"side={side:.4f} deg, limit={limit}: HTTP {e.code} {body}".strip())
             if e.code < 500:
                 raise ProbeError(f"Mapillary refused the request: {errors[-1]}") from e
-            if i + 1 < len(limits) and pause:
+            if pause:
                 time.sleep(pause)
-    raise ProbeError("Mapillary server error at every limit tried; the service, not the "
-                     "query, is failing. Try later. " + " | ".join(errors))
+    raise ProbeError("Mapillary returned a server error at every box size and limit tried. "
+                     "Read its message below before concluding anything: "
+                     + " | ".join(errors))
 
 
 def nearest(images, lon, lat, now_ms=None, max_age_years=MAX_AGE_YEARS):
