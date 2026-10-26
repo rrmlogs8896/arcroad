@@ -11,7 +11,7 @@
 > `DRIVE_BASE` in cell 2, mounted and checked up front). B-12 (calculator diesel option)
 > fixed in the artefact, not the repo. Calculator recorded below (P-44).
 > **Next session:** (1) cloud session runs the TomTom sweep on that file, private only (D-02).
-> (2) Mapillary coverage probe with a known-coverage control; use imagery to correct OSM
+> (2) Mapillary probe is BUILT (this commit); run it in Colab once the token is in Secrets. Use imagery to correct OSM
 > upstream, never import CC-BY-SA into the ODbL set. (3) Dependabot PR #5 (numpy 2.5.4)
 > fails CI — read before merging. Untested in CI: `load_network`/`extract_date` (need
 > osmium) — both ran correctly in Colab on 26 Oct.
@@ -30,7 +30,7 @@ Last updated: 26 October 2026 (11:45 IST)
   `$HOME/mnt/HMA/repo`.
 - Site: `arcroad.org`, DNS on Cloudflare. Staging at `arcroad.pages.dev`,
   behind Cloudflare Access, owner only.
-- Tests: 52 passing. `ruff` pinned at 0.16.9. CI runs lint, tests, freshness.
+- Tests: 60 passing. `ruff` pinned at 0.16.9. CI runs lint, tests, freshness.
 - Published findings: **none.** Nothing is published as a finding until a
   modelled route has been checked against a driven one.
 
@@ -76,7 +76,7 @@ Background: `data/verification/2026-10-26-validation-sweep.md`.
 | — | Extend Access policy to `*.arcroad.pages.dev`; hash URLs are currently open. |
 | — | Branch protection on `main` requiring CI. |
 | — | Cloudflare Web Analytics (cookieless) and Email Routing for `hello@arcroad.org`. |
-| — | Mapillary returns zero even for central London: the query is broken, not the data. Retry with an `Authorization: OAuth <token>` header. |
+| — | Mapillary probe **built, not yet run** (`pipeline/mapillary.py`, 8 tests, `notebooks/arcroad_Probe_Mapillary_v01.ipynb`). Token in header; boxes capped at 0.009 deg² (a box exactly at the 0.01 limit computes as 0.00999… and slipped past a check at the limit); controls (Amsterdam, London) must return ≥ 20 images or the run stops; 100 flagged + 100 unflagged pairs, seed 26; thresholds fixed in the module. Needs Rohit's token in Colab Secrets as `MAPILLARY_TOKEN`. Runs in Colab only: neither the container nor the Mac reaches graph.mapillary.com. |
 | — | NH-65 Vijayawada baseline capture. Works begin January; the pre-works state is lost permanently once they start. Harness must record per-segment OSM version ids and a control corridor before it runs. |
 | P-17 | GitHub PAT expires 23 Jan 2027. |
 | P-19 | Legal entity required before any Stage B (citizen photo) work. |
