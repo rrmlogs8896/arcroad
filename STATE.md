@@ -28,8 +28,14 @@ Last updated: 26 October 2026 (11:45 IST)
 - Repo: `github.com/rrmlogs8896/arcroad`, public. Local clone on the owner's Mac
   at `~/Documents/HMA/repo`, reachable through the device bridge at
   `$HOME/mnt/HMA/repo`.
-- Site: `arcroad.org`, DNS on Cloudflare. Staging at `arcroad.pages.dev`,
-  behind Cloudflare Access, owner only.
+- Site: **arcroad.org serves nothing yet: the zone is active on Cloudflare but has no DNS records**
+  (read via the Cloudflare API connector, 26 Oct). Staging is `arcroad.pages.dev`.
+  **It is PUBLIC**: the Access app protects `arcroad.arcroad.pages.dev` (project name doubled),
+  not `arcroad.pages.dev`; an anonymous fetch on 26 Oct returned the full page, including an
+  individual DI value. `noindex` is set, but the content has been copied by at least one crawler.
+- **Pages has never deployed from Git.** Source is linked (rrmlogs8896/arcroad, deployments
+  enabled) but its only deployments are three manual uploads of `62b48fd` on 25 Oct. None of
+  the 26 Oct pushes reached the site.
 - Tests: 62 passing. `ruff` pinned at 0.16.9. CI runs lint, tests, freshness.
 - Published findings: **none.** Nothing is published as a finding until a
   modelled route has been checked against a driven one.
@@ -72,8 +78,8 @@ Background: `data/verification/2026-10-26-validation-sweep.md`.
 | — | Dependabot PR #5 (numpy >=2.5.4) fails CI. Do not merge until read. |
 | — | Test the fringe peak against OSM density per ring before it is published as a finding. |
 | — | `web/privacy.html`, `web/cookies.html`, `web/terms.html` do not exist. Required before launch, written from primary sources. |
-| — | Reconnect Cloudflare Pages to Git if pushes stop auto-deploying. |
-| — | Extend Access policy to `*.arcroad.pages.dev`; hash URLs are currently open. |
+| — | Pages Git auto-deploy has never fired (only manual uploads of `62b48fd`). Check Cloudflare's GitHub app installation on the repo, then confirm a push produces a `github:push` deployment. |
+| — | **URGENT: fix the Access app hostname** from `arcroad.arcroad.pages.dev` to `arcroad.pages.dev` plus `*.arcroad.pages.dev`. Until then the whole staging site is public. Verify with an anonymous fetch afterwards. |
 | — | Branch protection on `main` requiring CI. |
 | — | Cloudflare Web Analytics (cookieless) and Email Routing for `hello@arcroad.org`. |
 | — | Mapillary probe **built; live runs 1–2 (26 Oct) got HTTP 500 "Please reduce the amount of data" on the Amsterdam control and stopped as designed. Run 2 lowered only the limit and failed identically, so the API counts AREA, not limit. Retries now shrink the box about its centre (never below ~55 m half-width) and lower the limit; failures carry the API's own message.** (`pipeline/mapillary.py`, 9 tests, `notebooks/arcroad_Probe_Mapillary_v01.ipynb`). Controls (Amsterdam, London, ~0.004°) must return ≥ 20 images or the run stops; 100 flagged + 100 unflagged pairs, seed 26; thresholds fixed in the module. Token in Colab Secrets as `MAPILLARY_TOKEN`; runs in Colab only. |
