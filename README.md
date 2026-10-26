@@ -39,6 +39,8 @@ pipeline/     importable code — the source of truth
   filters.py    defence-attribute stripper, grade levels, oneway, divided proxy
   metrics.py    detour index, headline statistics, worst-N
   diagnostics.py  rings, sectors, gap export, clustering, stratified comparison
+  directory.py  road ownership and the officials directory
+  access.py     M2 access to essentials: grid, hospital layers, excess metres
 tests/        unit tests, including regressions for every shipped bug
 notebooks/    thin wrappers that import pipeline/ and display results
 web/          front end
