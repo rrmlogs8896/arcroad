@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" data-verified="2026-10-27">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>arcroad — access to hospitals</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="How much further the nearest hospital is by road than it looks on a map, and how many people carry that extra distance.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg fill='none' stroke='%23E2743B' stroke-linecap='round'%3E%3Cpath d='M12 25 A 10 10 0 1 1 20 25' stroke-width='2.8'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0D10; --surface:#11141A; --field:#161A21; --line:#1C2026; --line2:#2A3038;
+  --fg:#E6E8EB; --fg2:#F5F6F7; --mut:#8B939C; --faint:#6E767F;
+  --accent:#E2743B; --soft:#F0C2A0; --good:#8FA89A; --warm:#C9A188;
+  --b0:#1A1F25; --b1:#3A2C24; --b2:#6A3D27; --b3:#A3532B; --b4:#E2743B;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+.m{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.staging{background:#15110D;border-bottom:1px solid #2A2520}
+.staging .wrap{padding-block:11px}
+.staging p{margin:0;font-size:13px;line-height:1.5;color:#B9A594}
+header .wrap{padding-block:26px;display:flex;gap:12px;align-items:baseline;border-bottom:1px solid var(--line)}
+.logo{font-size:20px;font-weight:600;letter-spacing:-0.02em;color:var(--fg2);text-decoration:none}
+.place{font-size:13px;color:var(--faint)}
+main .wrap{padding-block:40px 80px;display:flex;flex-direction:column;gap:56px}
+h1{font-size:clamp(30px,6vw,46px);line-height:1.08;letter-spacing:-0.025em;font-weight:600;color:var(--fg2);margin:0;text-wrap:balance}
+h1 .by{color:var(--accent)}
+h2{font-size:clamp(15px,2.4vw,18px);font-weight:500;color:var(--fg2);margin:0}
+p{font-size:15px;line-height:1.6;color:var(--mut);margin:0;max-width:62ch}
+.k{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+section{display:flex;flex-direction:column;gap:18px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.fact{background:var(--surface);padding:16px 18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fact .v{font-size:15px;color:var(--fg)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;border:1px solid currentColor;font-size:12.5px;width:max-content;color:var(--soft)}
+.mark{font-size:13px;color:var(--soft)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:999px;padding:3px;width:max-content;max-width:100%}
+.seg button{appearance:none;border:0;background:transparent;color:var(--mut);font:inherit;font-size:14px;padding:8px 16px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg2);color:var(--bg);font-weight:500}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mapbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:12px}
+svg.map{width:100%;height:auto;display:block;border-radius:8px;touch-action:manipulation}
+svg.map:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.cell{cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:12.5px;color:var(--faint);padding:0 4px 4px}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+.hint{font-size:13px;color:var(--faint)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.tile{background:var(--surface);padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.tile .n{font-size:26px;letter-spacing:-0.02em;color:var(--fg2)}
+.tile .s{font-size:12.5px;color:var(--faint);line-height:1.45}
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar{display:grid;grid-template-columns:7.5rem 1fr 3.5rem;gap:12px;align-items:center;font-size:13px;color:var(--mut)}
+.bar .t{height:8px;background:var(--line);border-radius:999px;overflow:hidden}
+.bar .f{height:100%;background:var(--accent);border-radius:999px}
+.bar .p{text-align:right;color:var(--fg)}
+ul.notes{margin:0;padding-left:18px;color:var(--mut);font-size:14.5px;line-height:1.65;max-width:62ch}
+@media (max-width:560px){.tiles{grid-template-columns:1fr 1fr}.tile:nth-child(3){grid-column:1/-1}}
+.off{padding:28px;background:var(--surface);border-radius:14px}
+footer .wrap{padding-block:28px;border-top:1px solid var(--line)}
+footer p{font-size:12.5px;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="staging"><div class="wrap"><p><span class="m">Staging</span> · Behind a feature flag. Every figure on this page is an invented sample that shows how the measure will read. No real data has been loaded.</p></div></div>
+<header><div class="wrap"><a class="logo" href="./">arcroad</a><span class="place">Hyderabad</span></div></header>
+
+<main><div class="wrap">
+  <div class="off" id="off" hidden><h2>Not available yet</h2><p style="margin-top:8px">Access to hospitals opens after the verification gate.</p></div>
+
+  <section id="lede" hidden>
+    <span class="k">Access to hospitals</span>
+    <h1><span id="h-line">—</span><br><span class="by" id="h-road">—</span></h1>
+    <p id="h-where">—</p>
+    <div class="seg" role="group" aria-label="Which hospitals">
+      <button type="button" id="l-gov" aria-pressed="true">Government</button>
+      <button type="button" id="l-pri" aria-pressed="false">Private</button>
+    </div>
+    <div class="facts" aria-label="This square">
+      <div class="fact"><span class="k">On the map</span><span class="v m" id="f-line">—</span></div>
+      <div class="fact"><span class="k">By road</span><span class="v m" id="f-road">—</span></div>
+      <div class="fact"><span class="k">Extra by road</span><span class="v m" id="f-extra">—</span></div>
+      <div class="fact"><span class="k">People here</span><span class="v m" id="f-pop">—</span></div>
+    </div>
+    <p class="mark">Sample · invented figures, not a measurement</p>
+  </section>
+
+  <section id="map" hidden>
+    <h2>Every 250 m square, coloured by the extra distance</h2>
+    <div class="mapbox">
+      <svg class="map" id="svg" role="application" tabindex="0" aria-label="Map of squares. Use the arrow keys to move between squares." viewBox="0 0 3500 2250"></svg>
+      <div class="legend" id="legend"></div>
+    </div>
+    <p class="hint">Tap a square, or use the arrow keys. The divided road can only be crossed at its two openings, so squares on the far side reach the hospital the long way round.</p>
+  </section>
+
+  <section id="sum" hidden>
+    <h2>Across the whole area</h2>
+    <div class="tiles">
+      <div class="tile"><span class="k">People measured</span><span class="n m" id="t-pop">—</span><span class="s" id="t-pop-s">—</span></div>
+      <div class="tile"><span class="k">Typical extra</span><span class="n m" id="t-med">—</span><span class="s">Half of people have more than this, half less</span></div>
+      <div class="tile"><span class="k">2 km or more extra</span><span class="n m" id="t-2k">—</span><span class="s">Share of people</span></div>
+    </div>
+    <div class="bars" id="bars" aria-label="Share of people by extra distance"></div>
+  </section>
+
+  <section id="how" hidden>
+    <h2>What this measures, and what it does not</h2>
+    <ul class="notes">
+      <li>Distance only, never travel time, by the shortest legal driving route on the open map.</li>
+      <li>Driving only. The open map holds no usable walking network for Hyderabad yet.</li>
+      <li>Squares, never homes. People per square come from an open population estimate, so no one is located.</li>
+      <li>Government and private hospitals are kept apart. A private hospital next door does not serve someone who depends on free government care.</li>
+      <li>Squares the map cannot reach by road are shown hatched and counted, never left out.</li>
+      <li>A high figure is a place to check on the ground, not a finding, until it passes verification.</li>
+    </ul>
+  </section>
+</div></main>
+
+<footer><div class="wrap"><p>Map data © OpenStreetMap contributors (ODbL). Population: GHSL, European Commission JRC. Hospital list: Government of Telangana (GODL-India). Sample figures on this page are invented.</p></div></footer>
+
+<script src="m2/access.js"></script>
+</body>
+</html>

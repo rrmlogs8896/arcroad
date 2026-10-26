@@ -176,9 +176,12 @@ def access_record(cell: dict, layer: str, dests, road_m: dict, snap_m: float | N
     `road_m` maps dest_id to routed driving metres from the cell's snapped node
     (missing or None means unreachable within the routing limit). The nearest
     by road may be a different hospital from the nearest by straight line;
-    both are recorded. Excess is measured against the straight-line distance
-    to the hospital actually reached by road, so it is the extra the road adds
-    to that trip, and never negative by more than rounding.
+    both are recorded. Excess is the road distance to the nearest hospital by
+    road minus the straight-line distance to the nearest hospital on the map,
+    as approved in the design (27 Oct): it is the gap a resident sees between
+    "the hospital looks this close" and "this is how far I must drive". It is
+    never negative, because no road trip is shorter than the nearest straight
+    line. The straight line to the hospital actually reached is kept too.
     """
     near, s_line = nearest_by_line(cell["lon"], cell["lat"], dests)
     rec = {
@@ -214,8 +217,8 @@ def access_record(cell: dict, layer: str, dests, road_m: dict, snap_m: float | N
         road_dest_id=dest_id,
         road_m=reachable[dest_id],
         road_dest_line_m=straight,
-        excess_m=max(0.0, reachable[dest_id] - straight),
-        ratio=(reachable[dest_id] / straight) if straight > 0 else None,
+        excess_m=max(0.0, reachable[dest_id] - s_line),
+        ratio=(reachable[dest_id] / s_line) if s_line > 0 else None,
     )
     return rec
 

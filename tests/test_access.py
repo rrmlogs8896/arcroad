@@ -87,14 +87,16 @@ def test_nearest_by_line():
     assert d["dest_id"] == "near" and 100 < m < 110
 
 
-def test_excess_is_against_the_hospital_actually_reached_by_road():
+def test_excess_is_road_to_the_reachable_hospital_minus_the_nearest_on_the_map():
     # The nearest by line is across a median (3 km by road); the far one is 600 m by road.
     rec = access_record(CELL, "government", DESTS, {"near": 3000.0, "far": 600.0}, snap_m=20)
     assert rec["status"] == "measured"
     assert rec["line_dest_id"] == "near"
     assert rec["road_dest_id"] == "far"
     assert rec["road_m"] == 600.0
-    assert rec["excess_m"] == pytest.approx(600.0 - rec["road_dest_line_m"])
+    assert rec["excess_m"] == pytest.approx(600.0 - rec["line_m"])
+    assert rec["road_dest_line_m"] > rec["line_m"]
+    assert rec["ratio"] == pytest.approx(600.0 / rec["line_m"])
 
 
 def test_unmeasured_is_none_never_zero():
@@ -127,3 +129,26 @@ def test_a_measured_row_without_provenance_cannot_be_exported():
     rec.update(extract_date="2026-10-25", graph_hash="abc", population_source="GHS-POP",
                destination_source="TG health centres")
     assert export_problems(rec) == []
+
+
+# The staging page (web/access.html, web/m2/access.js) is held to the kit's rules.
+def _page_files():
+    import pathlib
+    web = pathlib.Path(__file__).resolve().parents[1] / "web"
+    return [web / "access.html", web / "m2" / "access.js"]
+
+
+def test_access_page_makes_no_network_or_storage_call():
+    import re
+
+    from tests.test_kit import FORBIDDEN
+    for path in _page_files():
+        hits = [pat for pat in FORBIDDEN if re.search(pat, path.read_text())]
+        assert not hits, f"{path.name} uses {hits}"
+
+
+def test_access_page_is_flagged_and_labelled_sample():
+    html, js = (p.read_text() for p in _page_files())
+    assert "get('m2') !== '1'" in js, "page must stay closed without ?m2=1"
+    assert "noindex" in html
+    assert "invented sample" in html and "Sample · invented figures" in html
