@@ -1,5 +1,5 @@
 osmium>=3.6
 numpy>=1.24
 pandas>=2.0
-scipy>=1.11
+scipy>=1.18.1
 tabulate>=0.9
