@@ -30,7 +30,7 @@ Last updated: 26 October 2026 (11:45 IST)
   `$HOME/mnt/HMA/repo`.
 - Site: `arcroad.org`, DNS on Cloudflare. Staging at `arcroad.pages.dev`,
   behind Cloudflare Access, owner only.
-- Tests: 60 passing. `ruff` pinned at 0.16.9. CI runs lint, tests, freshness.
+- Tests: 62 passing. `ruff` pinned at 0.16.9. CI runs lint, tests, freshness.
 - Published findings: **none.** Nothing is published as a finding until a
   modelled route has been checked against a driven one.
 
@@ -76,7 +76,7 @@ Background: `data/verification/2026-10-26-validation-sweep.md`.
 | — | Extend Access policy to `*.arcroad.pages.dev`; hash URLs are currently open. |
 | — | Branch protection on `main` requiring CI. |
 | — | Cloudflare Web Analytics (cookieless) and Email Routing for `hello@arcroad.org`. |
-| — | Mapillary probe **built, not yet run** (`pipeline/mapillary.py`, 8 tests, `notebooks/arcroad_Probe_Mapillary_v01.ipynb`). Token in header; boxes capped at 0.009 deg² (a box exactly at the 0.01 limit computes as 0.00999… and slipped past a check at the limit); controls (Amsterdam, London) must return ≥ 20 images or the run stops; 100 flagged + 100 unflagged pairs, seed 26; thresholds fixed in the module. Needs Rohit's token in Colab Secrets as `MAPILLARY_TOKEN`. Runs in Colab only: neither the container nor the Mac reaches graph.mapillary.com. |
+| — | Mapillary probe **built; first live run 26 Oct hit HTTP 500 on the Amsterdam control at limit 2000 and stopped as designed (no Hyderabad number read). Now retries 5xx at limits 2000 → 500 → 100 and reports the API's own message; pair boxes ±0.0008°.** (`pipeline/mapillary.py`, 8 tests, `notebooks/arcroad_Probe_Mapillary_v01.ipynb`). Token in header; boxes capped at 0.009 deg² (a box exactly at the 0.01 limit computes as 0.00999… and slipped past a check at the limit); controls (Amsterdam, London) must return ≥ 20 images or the run stops; 100 flagged + 100 unflagged pairs, seed 26; thresholds fixed in the module. Needs Rohit's token in Colab Secrets as `MAPILLARY_TOKEN`. Runs in Colab only: neither the container nor the Mac reaches graph.mapillary.com. |
 | — | NH-65 Vijayawada baseline capture. Works begin January; the pre-works state is lost permanently once they start. Harness must record per-segment OSM version ids and a control corridor before it runs. |
 | P-17 | GitHub PAT expires 23 Jan 2027. |
 | P-19 | Legal entity required before any Stage B (citizen photo) work. |

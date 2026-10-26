@@ -46,12 +46,18 @@ SAFE_BBOX_AREA_DEG2 = 0.009        # what we allow: a 0.1 x 0.1 box computes as 
                                    # in floating point, so a check AT the limit lets it through
 FIELDS = "id,captured_at,geometry"
 LIMIT = 2000                       # API maximum, documented
+# 26 Oct: the first live run got HTTP 500 on the Amsterdam control at limit 2000.
+# Dense boxes with large limits are a known way to make this API fail server-side,
+# so a 5xx is retried with a smaller limit before it is reported. Counts only need
+# to clear CONTROL_MIN_IMAGES, and pair boxes are small, so 100 loses nothing.
+RETRY_LIMITS = (2000, 500, 100)
 
 CONTROL_MIN_IMAGES = 20
 NEAR_M = 50.0
 MAX_AGE_YEARS = 5.0
 USEFUL_SHARE = 0.25
-PAIR_HALF_DEG = 0.0015             # ~165 m each way: a 0.003 x 0.003 box
+PAIR_HALF_DEG = 0.0008             # ~90 m each way: covers the 50 m test with margin,
+                                   # and keeps each request light (26 Oct HTTP 500)
 
 # Control boxes: places with dense, long-standing Mapillary coverage. Each is a
 # 0.01 x 0.01 degree box (area 0.0001, well under the limit).
@@ -118,13 +124,32 @@ def parse_images(payload) -> list[dict]:
     return out
 
 
-def fetch_images(bbox, token, opener=None, timeout=30):
-    """One API call. ``opener`` is injectable so tests never touch the network."""
-    url, headers = build_request(bbox, token)
-    req = urllib.request.Request(url, headers=headers)
+def fetch_images(bbox, token, opener=None, timeout=30, limits=RETRY_LIMITS, pause=1.0):
+    """Images in ``bbox``. On a server error (5xx) retry with the next, smaller limit;
+    a client error (4xx: bad token, bad box) is raised at once with the API's own
+    message. ``opener`` is injectable so tests never touch the network."""
+    import urllib.error
     opener = opener or urllib.request.urlopen
-    with opener(req, timeout=timeout) as resp:
-        return parse_images(json.loads(resp.read().decode("utf-8")))
+    errors = []
+    for i, limit in enumerate(limits):
+        url, headers = build_request(bbox, token, limit=limit)
+        req = urllib.request.Request(url, headers=headers)
+        try:
+            with opener(req, timeout=timeout) as resp:
+                return parse_images(json.loads(resp.read().decode("utf-8")))
+        except urllib.error.HTTPError as e:
+            body = ""
+            try:
+                body = e.read().decode("utf-8", "replace")[:300]
+            except Exception:
+                pass
+            errors.append(f"limit={limit}: HTTP {e.code} {body}".strip())
+            if e.code < 500:
+                raise ProbeError(f"Mapillary refused the request: {errors[-1]}") from e
+            if i + 1 < len(limits) and pause:
+                time.sleep(pause)
+    raise ProbeError("Mapillary server error at every limit tried; the service, not the "
+                     "query, is failing. Try later. " + " | ".join(errors))
 
 
 def nearest(images, lon, lat, now_ms=None, max_age_years=MAX_AGE_YEARS):

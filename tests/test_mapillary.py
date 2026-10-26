@@ -109,3 +109,60 @@ def test_every_fixed_box_is_inside_the_api_limit():
     for name, bbox in {**m.CONTROLS, **m.FIXED_TARGETS}.items():
         m.check_bbox(bbox), name
     m.check_bbox(m.bbox_around(78.3, 17.5))
+
+
+def _http_error(code, body=b'{"error":{"message":"x"}}'):
+    import urllib.error
+    return urllib.error.HTTPError("https://graph.mapillary.com/images", code, "err", {}, io.BytesIO(body))
+
+
+def test_server_error_on_dense_box_retries_with_smaller_limit():
+    """The 26 Oct live failure: HTTP 500 on the Amsterdam control at limit 2000.
+    Hypothesis: a lighter request succeeds. Competing: the retry hides a real outage.
+    Separates: 500 then success must return images and record that limit=500 was used;
+    500 at every limit must raise with every attempt listed, never return []."""
+    limits_seen = []
+    payload = json.dumps({"data": [{"id": 9, "captured_at": NOW_MS,
+                                    "geometry": {"coordinates": [4.89, 52.37]}}]}).encode()
+
+    class _Resp(io.BytesIO):
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    def flaky(req, timeout):
+        limit = int(req.full_url.split("limit=")[1].split("&")[0])
+        limits_seen.append(limit)
+        if limit == 2000:
+            raise _http_error(500)
+        return _Resp(payload)
+
+    imgs = m.fetch_images(m.CONTROLS["amsterdam_centre"], "tok", opener=flaky, pause=0)
+    assert len(imgs) == 1 and limits_seen == [2000, 500]
+
+    def down(req, timeout):
+        raise _http_error(500)
+
+    try:
+        m.fetch_images(m.CONTROLS["amsterdam_centre"], "tok", opener=down, pause=0)
+    except m.ProbeError as e:
+        assert "limit=2000" in str(e) and "limit=100" in str(e)
+    else:
+        raise AssertionError("an outage must raise, not return no images")
+
+
+def test_auth_error_is_raised_at_once_with_the_api_message():
+    calls = []
+
+    def unauthorised(req, timeout):
+        calls.append(1)
+        raise _http_error(401, b'{"error":{"message":"Invalid OAuth access token"}}')
+
+    try:
+        m.fetch_images(m.CONTROLS["london_trafalgar"], "bad", opener=unauthorised, pause=0)
+    except m.ProbeError as e:
+        assert "Invalid OAuth access token" in str(e) and len(calls) == 1
+    else:
+        raise AssertionError("a 401 must raise")
