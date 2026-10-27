@@ -125,13 +125,20 @@ def ghsl_tile(r: int, c: int, cache: pathlib.Path):
     return f"zip://{z}!{tifs[0]}" if tifs else None
 
 
-# JRC's WGS84 tiling scheme for the 4326_3ss products: 10 x 10 degree tiles,
-# R1_C1 at the top-left corner of the world (lon -180, lat +90). R grows southward,
-# C eastward. Hard-coded (it is a published, fixed scheme) so that a throttled
-# JRC server can no longer break the job before the first real tile is read;
-# the old approach calibrated the grid from a live download and failed twice
-# on four cities with "Could not calibrate the GHSL tile grid".
-GHSL_GRID = {"dx": 10.0, "dy": 10.0, "ox": -180.0, "oy": 90.0}
+# JRC's WGS84 tile grid for the 4326_3ss products, measured from the real tile
+# R8_C26 on 28 Oct 2026 (bounds left=69.99208, top=19.09958, 10 x 10 degrees).
+# The grid is NOT aligned to whole degrees: R1_C1 starts at lon -180.0079,
+# lat +89.0996. R grows southward, C eastward.
+# Hard-coded so a throttled JRC server can no longer break the job before the
+# first tile is read (four cities failed twice with "Could not calibrate the
+# GHSL tile grid"). ghsl_check_grid still compares every downloaded tile against
+# these numbers and stops the run on any mismatch.
+GHSL_GRID = {
+    "dx": 9.999999960392188,
+    "dy": 9.999999959754087,
+    "ox": -180.0079159313004,
+    "oy": 89.0995831776456,
+}
 
 
 def ghsl_tiles_for(bbox, grid: dict = GHSL_GRID) -> list[tuple[int, int]]:
