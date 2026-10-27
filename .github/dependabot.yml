@@ -8,6 +8,10 @@ updates:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 3
+    # requirements.txt holds minimum versions (>=) on purpose. Only propose a
+    # change when a new release falls outside that range, never a floor bump
+    # (those failed CI and were closed: #3-#7).
+    versioning-strategy: "increase-if-necessary"
     commit-message:
       prefix: "deps"
 
