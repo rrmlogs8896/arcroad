@@ -42,7 +42,7 @@ jobs:
     timeout-minutes: 300
     strategy:
       fail-fast: false        # one city failing never stops the others
-      max-parallel: 4
+      max-parallel: 2         # the JRC GHSL server throttles parallel downloads
       matrix:
         city: ${{ fromJson(needs.plan.outputs.cities) }}
     steps:

@@ -23,6 +23,8 @@ import pathlib
 import shutil
 import subprocess
 import sys
+import time
+import urllib.error
 import urllib.request
 import zipfile
 
@@ -51,6 +53,7 @@ GHSL_TILES = (
     "GHS_POP_E2020_GLOBE_R2023A_4326_3ss/V1-0/tiles/"
 )
 GHSL_NAME = "GHS_POP_E2020_GLOBE_R2023A_4326_3ss_V1_0_R{r}_C{c}"
+LAST_FETCH_ERROR = [""]  # most recent download failure, for the error message
 STATUS = "CANDIDATE - UNVERIFIED, NOT FOR PUBLICATION"
 
 
@@ -59,14 +62,23 @@ def fetch(url: str, dest: pathlib.Path) -> pathlib.Path | None:
     if dest.exists() and dest.stat().st_size > 1000:
         return dest
     tmp = dest.with_suffix(dest.suffix + ".part")
-    try:
-        urllib.request.urlretrieve(url, tmp)
-    except Exception as exc:
-        print(f"  fetch failed: {url} ({exc})")
-        tmp.unlink(missing_ok=True)
-        return None
-    os.replace(tmp, dest)
-    return dest
+    for attempt in range(5):
+        try:
+            urllib.request.urlretrieve(url, tmp)
+            os.replace(tmp, dest)
+            return dest
+        except urllib.error.HTTPError as exc:
+            tmp.unlink(missing_ok=True)
+            LAST_FETCH_ERROR[0] = f"{url} -> HTTP {exc.code}"
+            if exc.code == 404:  # a tile that does not exist: not worth retrying
+                return None
+        except Exception as exc:
+            tmp.unlink(missing_ok=True)
+            LAST_FETCH_ERROR[0] = f"{url} -> {exc}"
+        wait = 15 * 2**attempt  # 15s, 30s, 60s, 120s, 240s: servers throttle parallel jobs
+        print(f"  fetch retry {attempt + 1}/5 in {wait}s: {LAST_FETCH_ERROR[0]}")
+        time.sleep(wait)
+    return None
 
 
 def zones_for(bbox, cache: pathlib.Path):
@@ -124,7 +136,7 @@ def ghsl_grid(cache: pathlib.Path) -> dict:
                 b = ds.bounds
             dx, dy = b.right - b.left, b.top - b.bottom
             return {"dx": dx, "dy": dy, "ox": b.left - (c - 1) * dx, "oy": b.top + (r - 1) * dy}
-    raise SystemExit("Could not calibrate the GHSL tile grid.")
+    raise SystemExit(f"Could not calibrate the GHSL tile grid. Last download error: {LAST_FETCH_ERROR[0]}")
 
 
 def ghsl_clip(bbox, out_tif: pathlib.Path, cache: pathlib.Path):
