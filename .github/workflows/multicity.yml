@@ -1,0 +1,73 @@
+name: Multi-city collection
+
+# Replaces the Colab catch-up notebook. Runs on GitHub's machines, so no browser,
+# no Colab backend and no Drive mount can stop it. Monthly on its own; any time
+# from the Actions tab (Run workflow).
+#
+# Outputs are CANDIDATE, UNVERIFIED workflow artifacts kept for 90 days. This repo
+# is public, so signed-in GitHub users can download them; every file says
+# CANDIDATE in its MANIFEST. Nothing here publishes a figure.
+on:
+  schedule:
+    - cron: "41 21 1 * *"   # 21:41 UTC on the 1st = 03:11 IST on the 2nd
+  workflow_dispatch:
+    inputs:
+      cities:
+        description: "Comma-separated cities, or 'all'"
+        default: "all"
+      detour:
+        description: "Also compute Phase 2a candidate Detour Index points"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      cities: ${{ steps.pick.outputs.cities }}
+    steps:
+      - id: pick
+        run: |
+          ALL='["bengaluru","chennai","mumbai_mmr","delhi_ncr","pune","kolkata","ahmedabad","hyderabad"]'
+          IN="${{ github.event.inputs.cities || 'all' }}"
+          if [ "$IN" = "all" ]; then echo "cities=$ALL" >> "$GITHUB_OUTPUT"
+          else echo "cities=$(python3 -c "import json,sys;print(json.dumps([c.strip() for c in sys.argv[1].split(',') if c.strip()]))" "$IN")" >> "$GITHUB_OUTPUT"; fi
+
+  collect:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false        # one city failing never stops the others
+      max-parallel: 4
+      matrix:
+        city: ${{ fromJson(needs.plan.outputs.cities) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Install
+        run: |
+          sudo apt-get -qq update && sudo apt-get -qq install -y osmium-tool
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt rasterio shapely
+
+      - name: Collect ${{ matrix.city }}
+        run: |
+          DETOUR="${{ github.event.inputs.detour || 'true' }}"
+          FLAG=""; [ "$DETOUR" = "true" ] && FLAG="--detour"
+          python tools/multicity_collect.py "${{ matrix.city }}" --out out --cache cache $FLAG
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: arcroad-${{ matrix.city }}-candidate
+          path: out/
+          retention-days: 90
+          if-no-files-found: warn
