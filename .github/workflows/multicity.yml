@@ -36,13 +36,53 @@ jobs:
           if [ "$IN" = "all" ]; then echo "cities=$ALL" >> "$GITHUB_OUTPUT"
           else echo "cities=$(python3 -c "import json,sys;print(json.dumps([c.strip() for c in sys.argv[1].split(',') if c.strip()]))" "$IN")" >> "$GITHUB_OUTPUT"; fi
 
-  collect:
+  # Fetch every GHSL tile ONCE, serially, and hand them to the city jobs through
+  # actions/cache. The JRC server throttles parallel downloads; four cities failed
+  # twice when each city job fetched its own tiles. Tiles are ~static (R2023A,
+  # E2020), so the cache prefix is reused across runs and only gaps are refetched.
+  ghsl:
     needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt rasterio shapely
+
+      - name: Restore GHSL tiles
+        uses: actions/cache/restore@v4
+        with:
+          path: cache/ghsl
+          key: ghsl-pop-e2020-r2023a-3ss-${{ github.run_id }}
+          restore-keys: ghsl-pop-e2020-r2023a-3ss-
+
+      - name: Prefetch GHSL tiles (serial)
+        run: |
+          for c in $(echo '${{ needs.plan.outputs.cities }}' | python3 -c "import json,sys;print(' '.join(json.load(sys.stdin)))"); do
+            python tools/multicity_collect.py "$c" --cache cache/ghsl --prefetch-ghsl
+          done
+          ls -la cache/ghsl
+
+      - name: Save GHSL tiles
+        uses: actions/cache/save@v4
+        with:
+          path: cache/ghsl
+          key: ghsl-pop-e2020-r2023a-3ss-${{ github.run_id }}
+
+  collect:
+    needs: [plan, ghsl]
     runs-on: ubuntu-latest
     timeout-minutes: 300
     strategy:
       fail-fast: false        # one city failing never stops the others
-      max-parallel: 2         # the JRC GHSL server throttles parallel downloads
+      max-parallel: 2         # GHSL now comes from the prefetch cache; this only paces Geofabrik
       matrix:
         city: ${{ fromJson(needs.plan.outputs.cities) }}
     steps:
@@ -58,11 +98,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt rasterio shapely
 
+      - name: Restore GHSL tiles from the prefetch job
+        uses: actions/cache/restore@v4
+        with:
+          path: cache/ghsl
+          key: ghsl-pop-e2020-r2023a-3ss-${{ github.run_id }}
+          restore-keys: ghsl-pop-e2020-r2023a-3ss-
+
       - name: Collect ${{ matrix.city }}
         run: |
           DETOUR="${{ github.event.inputs.detour || 'true' }}"
           FLAG=""; [ "$DETOUR" = "true" ] && FLAG="--detour"
-          python tools/multicity_collect.py "${{ matrix.city }}" --out out --cache cache $FLAG
+          python tools/multicity_collect.py "${{ matrix.city }}" --out out --cache cache $FLAG --ghsl-cache cache/ghsl
 
       - uses: actions/upload-artifact@v7
         if: always()
