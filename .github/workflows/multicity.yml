@@ -43,7 +43,7 @@ jobs:
   ghsl:
     needs: plan
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 180     # JRC is slow; tiles fetched so far are saved even if this times out
     steps:
       - uses: actions/checkout@v7
 
@@ -64,6 +64,7 @@ jobs:
           restore-keys: ghsl-pop-e2020-r2023a-3ss-
 
       - name: Prefetch GHSL tiles (serial)
+        timeout-minutes: 170
         run: |
           for c in $(echo '${{ needs.plan.outputs.cities }}' | python3 -c "import json,sys;print(' '.join(json.load(sys.stdin)))"); do
             python tools/multicity_collect.py "$c" --cache cache/ghsl --prefetch-ghsl
@@ -71,6 +72,7 @@ jobs:
           ls -la cache/ghsl
 
       - name: Save GHSL tiles
+        if: always()           # keep partial progress so a rerun resumes instead of starting over
         uses: actions/cache/save@v4
         with:
           path: cache/ghsl
