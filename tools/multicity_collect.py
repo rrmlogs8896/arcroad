@@ -265,6 +265,9 @@ def main(argv=None) -> int:
                         "GHSL (c) European Union, JRC (CC BY 4.0)."),
     }
 
+    # Save collection results first, so a detour failure never loses them.
+    (out / "MANIFEST.json").write_text(json.dumps(manifest, indent=2, default=str))
+
     if args.detour:
         g = pairing.load_network(str(clip_path))
         graph = pairing.build_graph(g.ways, g.coords)
@@ -290,5 +293,25 @@ def main(argv=None) -> int:
     return 0
 
 
+def _report(exc: BaseException) -> None:
+    """Surface the failure as a GitHub annotation, readable through the API even
+    where the full job log is not."""
+    import traceback
+
+    tb = "".join(traceback.format_exception(exc))[-3000:]
+    print(tb, file=sys.stderr)
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        enc = tb.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+        print(f"::error title=multicity_collect failed::{enc}")
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except SystemExit as stop:
+        if isinstance(stop.code, str) and os.environ.get("GITHUB_ACTIONS") == "true":
+            print(f"::error title=multicity_collect stopped::{stop.code}")
+        raise
+    except BaseException as exc:
+        _report(exc)
+        raise SystemExit(1) from exc
