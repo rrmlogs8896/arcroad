@@ -4,7 +4,7 @@ Read this first; it replaces reconstructing status from the history. Update it i
 the same commit as any change that makes it wrong. Longer history and decisions
 live in the ledger (Drive: Anthropic / Hyderabad Mobility Atlas, Doc 03).
 
-Last updated: 28 Oct 2026.
+Last updated: 29 Oct 2026.
 
 ## Where things stand
 
@@ -31,11 +31,17 @@ is planned for the week of 28 Oct.
   the scoring step.
 - Still needed before scoring: the model's A -> B `network_m` for each stop,
   exported from v08 as `id,network_m` and kept off the field page.
+  `tools/export_network.py` matches the stops to the v08 point export
+  (`di_points_2026-10-26_c29d9c1.csv`, Drive: phase2a_detour_v08) and writes
+  `out/model_network.csv`; it cannot run in the cloud shell (the CSV lives in
+  Drive and OpenStreetMap hosts are blocked there), so run it locally.
 
 ## Next, in order
 
 1. Score Field Day 1 when the track arrives; publish nothing until the
-   results are reviewed against the gate.
+   results are reviewed against the gate. Route sheet for Sunday 1 Nov:
+   `docs/field/field_day_1_route.md`; a recce ride on 29 Oct covered T2 and S04
+   both carriageways but not as crossings (all stops NOT_DRIVEN).
 2. NH-65 Vijayawada baseline capture: the pre-works state disappears when
    works start in January.
 3. B-08: the v1.1 street-level probe slices `TARGETS[:5]` and skips the
