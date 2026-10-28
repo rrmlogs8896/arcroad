@@ -125,31 +125,60 @@ def ghsl_tile(r: int, c: int, cache: pathlib.Path):
     return f"zip://{z}!{tifs[0]}" if tifs else None
 
 
-def ghsl_grid(cache: pathlib.Path) -> dict:
-    """Tile grid calibrated from a real tile's bounds rather than assumed."""
+# JRC's WGS84 tile grid for the 4326_3ss products, measured from the real tile
+# R8_C26 on 28 Oct 2026 (bounds left=69.99208, top=19.09958, 10 x 10 degrees).
+# The grid is NOT aligned to whole degrees: R1_C1 starts at lon -180.0079,
+# lat +89.0996. R grows southward, C eastward.
+# Hard-coded so a throttled JRC server can no longer break the job before the
+# first tile is read (four cities failed twice with "Could not calibrate the
+# GHSL tile grid"). ghsl_check_grid still compares every downloaded tile against
+# these numbers and stops the run on any mismatch.
+GHSL_GRID = {
+    "dx": 9.999999960392188,
+    "dy": 9.999999959754087,
+    "ox": -180.0079159313004,
+    "oy": 89.0995831776456,
+}
+
+
+def ghsl_tiles_for(bbox, grid: dict = GHSL_GRID) -> list[tuple[int, int]]:
+    """(row, col) of every GHSL tile touching the box, from the fixed grid."""
+    x0, y0, x1, y1 = bbox
+    rows = range(int((grid["oy"] - y1) // grid["dy"]) + 1, int((grid["oy"] - y0) // grid["dy"]) + 2)
+    cols = range(int((x0 - grid["ox"]) // grid["dx"]) + 1, int((x1 - grid["ox"]) // grid["dx"]) + 2)
+    return [(r, c) for r in rows for c in cols]
+
+
+def ghsl_check_grid(path: str, r: int, c: int, grid: dict = GHSL_GRID, tol: float = 0.01) -> None:
+    """Fail loudly if a real tile's bounds disagree with the hard-coded grid.
+    Guards the assumption rather than hiding it (reporting rule 4)."""
     import rasterio
 
-    for r, c in [(8, 26), (7, 26), (8, 25), (7, 25)]:
-        t = ghsl_tile(r, c, cache)
-        if t:
-            with rasterio.open(t) as ds:
-                b = ds.bounds
-            dx, dy = b.right - b.left, b.top - b.bottom
-            return {"dx": dx, "dy": dy, "ox": b.left - (c - 1) * dx, "oy": b.top + (r - 1) * dy}
-    raise SystemExit(f"Could not calibrate the GHSL tile grid. Last download error: {LAST_FETCH_ERROR[0]}")
+    with rasterio.open(path) as ds:
+        b = ds.bounds
+    want_left = grid["ox"] + (c - 1) * grid["dx"]
+    want_top = grid["oy"] - (r - 1) * grid["dy"]
+    if abs(b.left - want_left) > tol or abs(b.top - want_top) > tol:
+        raise SystemExit(
+            f"GHSL tile R{r}_C{c} bounds {b} do not match the hard-coded grid "
+            f"(expected left={want_left}, top={want_top}). Fix GHSL_GRID before trusting output.")
 
 
 def ghsl_clip(bbox, out_tif: pathlib.Path, cache: pathlib.Path):
     import rasterio
     from rasterio.merge import merge
 
-    g = ghsl_grid(cache)
-    x0, y0, x1, y1 = bbox
-    rows = range(int((g["oy"] - y1) // g["dy"]) + 1, int((g["oy"] - y0) // g["dy"]) + 2)
-    cols = range(int((x0 - g["ox"]) // g["dx"]) + 1, int((x1 - g["ox"]) // g["dx"]) + 2)
-    tiles = [t for r in rows for c in cols if (t := ghsl_tile(r, c, cache))]
+    wanted = ghsl_tiles_for(bbox)
+    tiles = []
+    for r, c in wanted:
+        t = ghsl_tile(r, c, cache)
+        if t:
+            ghsl_check_grid(t, r, c)
+            tiles.append(t)
     if not tiles:
-        raise SystemExit("No GHSL tile covers this box.")
+        raise SystemExit(
+            f"No GHSL tile downloaded for {[f'R{r}_C{c}' for r, c in wanted]}. "
+            f"Last download error: {LAST_FETCH_ERROR[0]}")
     srcs = [rasterio.open(t) for t in tiles]
     arr, transform = merge(srcs, bounds=bbox)
     meta = srcs[0].meta.copy()
@@ -231,13 +260,48 @@ def coverage(pbf: pathlib.Path) -> dict:
     }
 
 
+def prefetch_ghsl(cities: list[str], cache: pathlib.Path) -> int:
+    """Download, one at a time, every GHSL tile the given cities need.
+
+    Run once in the plan job and shared with the city jobs through actions/cache,
+    so the throttled JRC server sees one serial client instead of N parallel ones.
+    Returns the number of tiles that could not be fetched (0 = all present)."""
+    cache.mkdir(parents=True, exist_ok=True)
+    wanted = sorted({rc for c in cities for rc in ghsl_tiles_for(CITIES[c])})
+    print(f"GHSL prefetch: {[f'R{r}_C{c}' for r, c in wanted]}")
+    missing = 0
+    for r, c in wanted:
+        t = ghsl_tile(r, c, cache)
+        if t:
+            ghsl_check_grid(t, r, c)
+            print(f"  ok   R{r}_C{c}")
+        else:
+            missing += 1
+            print(f"  FAIL R{r}_C{c}: {LAST_FETCH_ERROR[0]}")
+            if os.environ.get("GITHUB_ACTIONS") == "true":
+                print(f"::warning title=GHSL prefetch::R{r}_C{c} not fetched: {LAST_FETCH_ERROR[0]}")
+    return missing
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("city", choices=sorted(CITIES))
+    ap.add_argument("city", choices=[*sorted(CITIES), "all"])
     ap.add_argument("--out", default="out")
     ap.add_argument("--cache", default="cache")
     ap.add_argument("--detour", action="store_true", help="also run Phase 2a candidate points")
+    ap.add_argument("--ghsl-cache", default=None,
+                    help="GHSL tile folder (default: --cache); the workflow shares it via actions/cache")
+    ap.add_argument("--prefetch-ghsl", action="store_true",
+                    help="only download the GHSL tiles for CITY (or 'all') into --cache")
     args = ap.parse_args(argv)
+
+    if args.prefetch_ghsl:
+        cities = sorted(CITIES) if args.city == "all" else [args.city]
+        # Missing tiles are not fatal here: the city job retries from the cache state.
+        prefetch_ghsl(cities, pathlib.Path(args.ghsl_cache or args.cache))
+        return 0
+    if args.city == "all":
+        raise SystemExit("'all' is only valid with --prefetch-ghsl; collect one city at a time.")
 
     city, bbox = args.city, CITIES[args.city]
     stamp = dt.date.today().isoformat()
@@ -261,7 +325,9 @@ def main(argv=None) -> int:
                      out / f"{city}_buffered.osm.pbf", cache)
     print(f"  OSM {[z for z, _ in zones]}: {clip_path.stat().st_size / 1e6:.1f} MB, dated {extract_date}")
 
-    pop, ntiles = ghsl_clip(bbox, out / f"{city}_ghs_pop_e2020_3ss.tif", cache)
+    ghsl_cache = pathlib.Path(args.ghsl_cache) if args.ghsl_cache else cache
+    ghsl_cache.mkdir(parents=True, exist_ok=True)
+    pop, ntiles = ghsl_clip(bbox, out / f"{city}_ghs_pop_e2020_3ss.tif", ghsl_cache)
     print(f"  GHSL: {ntiles} tile(s), population in box ~ {pop:,}")
 
     cov = coverage(clip_path)
