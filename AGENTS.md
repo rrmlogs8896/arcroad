@@ -104,6 +104,7 @@ pipeline/     importable code — the source of truth
   filters.py      defence-attribute stripper, grade levels, oneway, divided proxy
   metrics.py      detour index, headline statistics, worst-N
   diagnostics.py  rings, sectors, gap export, clustering, stratified comparison
+  groundtruth.py  scores a driven GPS track against the model (Phase 2b gate)
 tests/        unit tests, including a regression for every shipped bug
 notebooks/    thin wrappers that import pipeline/ and display results
 web/          front end
