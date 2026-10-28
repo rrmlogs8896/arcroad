@@ -84,7 +84,7 @@ jobs:
     timeout-minutes: 300
     strategy:
       fail-fast: false        # one city failing never stops the others
-      max-parallel: 4         # GHSL comes from the prefetch cache; this only paces Geofabrik zone downloads
+      max-parallel: 6         # was 4; run 40637057361 (29 cities) green in 40 min. Paces Geofabrik zone downloads, so stay polite: raise to 8 only after a green run at 6
       matrix:
         city: ${{ fromJson(needs.plan.outputs.cities) }}
     steps:
