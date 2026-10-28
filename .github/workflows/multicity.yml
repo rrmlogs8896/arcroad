@@ -31,7 +31,7 @@ jobs:
     steps:
       - id: pick
         run: |
-          ALL='["bengaluru","chennai","mumbai_mmr","delhi_ncr","pune","kolkata","ahmedabad","hyderabad"]'
+          ALL='["hyderabad", "bengaluru", "chennai", "mumbai_mmr", "delhi_ncr", "pune", "kolkata", "ahmedabad", "amaravati", "guwahati_dispur", "patna", "raipur", "panaji", "gandhinagar", "chandigarh", "ranchi", "thiruvananthapuram", "bhopal", "imphal", "bhubaneswar", "jaipur", "agartala", "lucknow", "port_blair", "daman", "srinagar", "jammu", "kavaratti", "puducherry"]'
           IN="${{ github.event.inputs.cities || 'all' }}"
           if [ "$IN" = "all" ]; then echo "cities=$ALL" >> "$GITHUB_OUTPUT"
           else echo "cities=$(python3 -c "import json,sys;print(json.dumps([c.strip() for c in sys.argv[1].split(',') if c.strip()]))" "$IN")" >> "$GITHUB_OUTPUT"; fi
@@ -84,7 +84,7 @@ jobs:
     timeout-minutes: 300
     strategy:
       fail-fast: false        # one city failing never stops the others
-      max-parallel: 2         # GHSL now comes from the prefetch cache; this only paces Geofabrik
+      max-parallel: 4         # GHSL comes from the prefetch cache; this only paces Geofabrik zone downloads
       matrix:
         city: ${{ fromJson(needs.plan.outputs.cities) }}
     steps:

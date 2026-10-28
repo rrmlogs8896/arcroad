@@ -44,6 +44,48 @@ CITIES = {
     "pune": (73.600, 18.350, 74.100, 18.750),
     "kolkata": (88.150, 22.350, 88.600, 22.800),
     "ahmedabad": (72.400, 22.850, 72.800, 23.200),
+    # --- State and UT capitals (added 28 Oct 2026). Boxes are approximate urban extents
+    # around each capital, drawn from its centre; they are collection boxes, not boundaries.
+    "amaravati": (80.300, 16.300, 80.750, 16.700),        # Andhra Pradesh (capital region, still being built)
+    "guwahati_dispur": (91.550, 26.000, 92.050, 26.300),  # Assam (Dispur lies within Guwahati)
+    "patna": (84.950, 25.450, 85.350, 25.720),            # Bihar
+    "raipur": (81.450, 21.050, 81.950, 21.400),           # Chhattisgarh (incl. Nava Raipur)
+    "panaji": (73.700, 15.350, 74.050, 15.650),           # Goa
+    "gandhinagar": (72.500, 23.100, 72.800, 23.350),      # Gujarat
+    "chandigarh": (76.600, 30.600, 77.000, 30.850),       # Punjab, Haryana and the UT of Chandigarh (tricity)
+    "ranchi": (85.150, 23.200, 85.500, 23.500),           # Jharkhand
+    "thiruvananthapuram": (76.800, 8.350, 77.100, 8.700), # Kerala
+    "bhopal": (77.250, 23.100, 77.600, 23.400),           # Madhya Pradesh
+    "imphal": (93.800, 24.650, 94.100, 24.950),           # Manipur (valley floor)
+    "bhubaneswar": (85.650, 20.150, 86.000, 20.450),      # Odisha
+    "jaipur": (75.600, 26.750, 76.000, 27.050),           # Rajasthan
+    "agartala": (91.180, 23.720, 91.400, 23.950),         # Tripura
+    "lucknow": (80.750, 26.700, 81.150, 27.000),          # Uttar Pradesh
+    "port_blair": (92.650, 11.550, 92.800, 11.750),       # Andaman and Nicobar Islands
+    "daman": (72.780, 20.350, 72.950, 20.500),            # Dadra and Nagar Haveli and Daman and Diu
+    "srinagar": (74.650, 33.950, 74.950, 34.200),         # Jammu and Kashmir (summer capital)
+    "jammu": (74.750, 32.620, 75.000, 32.820),            # Jammu and Kashmir (winter capital)
+    "kavaratti": (72.600, 10.530, 72.660, 10.590),        # Lakshadweep
+    "puducherry": (79.720, 11.850, 79.880, 12.050),       # Puducherry
+}
+
+# Every state and UT capital, so none is silently forgotten (tests check this).
+# Value: the CITIES key that covers it, or "EXCLUDED: <reason>".
+HILL = "EXCLUDED: hill capital; terrain forces detours this method does not model (decision 28 Oct 2026)"
+CAPITALS = {
+    "Andhra Pradesh": "amaravati", "Arunachal Pradesh (Itanagar)": HILL, "Assam": "guwahati_dispur",
+    "Bihar": "patna", "Chhattisgarh": "raipur", "Goa": "panaji", "Gujarat": "gandhinagar",
+    "Haryana": "chandigarh", "Himachal Pradesh (Shimla)": HILL, "Jharkhand": "ranchi",
+    "Karnataka": "bengaluru", "Kerala": "thiruvananthapuram", "Madhya Pradesh": "bhopal",
+    "Maharashtra": "mumbai_mmr", "Manipur": "imphal", "Meghalaya (Shillong)": HILL,
+    "Mizoram (Aizawl)": HILL, "Nagaland (Kohima)": HILL, "Odisha": "bhubaneswar",
+    "Punjab": "chandigarh", "Rajasthan": "jaipur", "Sikkim (Gangtok)": HILL, "Tamil Nadu": "chennai",
+    "Telangana": "hyderabad", "Tripura": "agartala", "Uttar Pradesh": "lucknow",
+    "Uttarakhand (Dehradun)": HILL, "West Bengal": "kolkata",
+    "Andaman and Nicobar Islands": "port_blair", "Chandigarh (UT)": "chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu": "daman", "Delhi": "delhi_ncr",
+    "Jammu and Kashmir (summer)": "srinagar", "Jammu and Kashmir (winter)": "jammu",
+    "Ladakh (Leh)": HILL, "Lakshadweep": "kavaratti", "Puducherry": "puducherry",
 }
 
 CLIP_BUFFER_DEG = 0.20  # F-3: graph clipped wider than we measure
