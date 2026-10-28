@@ -5,3 +5,6 @@ __pycache__/
 /out/
 .ipynb_checkpoints/
 .venv/
+
+# Raw GPS tracks show where the driver lives and goes: never committed (pipeline/groundtruth.py)
+*.gpx
