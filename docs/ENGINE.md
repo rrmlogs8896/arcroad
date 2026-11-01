@@ -2,6 +2,33 @@
 
 Set 1 Nov 2026 from Rohit's brief: the engine combines citizen behaviour, civic sense, vehicle behaviour, potholes, ad-hoc cut-ins, temporary stops, barricades and construction stages, mapped against official government data, plus the fixed things in the road that obstruct daily life (structures of any kind, trees, poles, kiosks). Everything is combined into one model per stretch of road, which drives the score, the immersive ride and the public record.
 
+## Triangulation rule (added 1 Nov 2026; Rohit: "cross reference triangulation are most important")
+
+A finding is only as strong as the number of **independent kinds** of evidence that agree on it. Repeating the same kind of evidence adds count, not independence.
+
+| Kind | Examples |
+|---|---|
+| S. Sensor | GPS trace (detour, waits, hard brakes), accelerometer (jolts), gyroscope |
+| P. Photo | Dated and geotagged photo showing the thing itself |
+| R. Repeat | Another pass on a different day, or in the other direction, that shows the same thing |
+| O. Official | Government record: works order, tender, court order, MoRTH or police data, building sanction |
+| X. External open data | OSM, Mapillary, other public datasets, credible news reporting |
+| M. Model | arcroad's own prediction, made before the drive |
+
+**Levels**
+- **Candidate:** one kind only. Never published.
+- **Corroborated:** two independent kinds agree. For example, a sensor jolt plus a photo of the pothole, or a sensor brake plus a repeat on another day. Published with the evidence listed.
+- **Triangulated:** three or more kinds agree, and at least one of them is P or O. This is the standard for any public claim about a named place or agency.
+- **Contradicted:** two kinds disagree. Both are shown with their dates, and nothing is claimed until a further pass settles it.
+
+**Rules**
+1. The model's prediction (M) never counts as evidence for itself. It is what the other kinds test.
+2. Two photos from the same pass are one P, not two. Two passes on the same day count as R only if they are at least 30 minutes apart and in a different direction.
+3. Every finding record lists its evidence kinds, for example "S+R+P", so a reader can see exactly why it is believed.
+4. Field day 1 status:
+   - The brake hotspot near the NH-65 Muthangi U-turn and the NH-65 rough stretch are S+R. They are corroborated, and photos (P) would make them triangulated.
+   - The detours at S16, S18 and S24 are S+M. They are corroborated, and an official road-network check (O/X) is next.
+
 ## Layers
 
 | Layer | What it captures | How it is measured | Code |
