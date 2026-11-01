@@ -84,3 +84,24 @@ only; every measured number stays in code.
 6. Photo pipeline: EXIF (time, GPS, heading, altitude) read in place on the iMac; originals private; web copies ~200 KB with faces/plates blurred and metadata stripped.
 7. Colab: read secrets in the first cell while Rohit is present (v04 Mapillary step timed out on a locked screen).
 8. Claude's own ideas to add after ingesting the drive data (to be proposed for yes/no).
+
+## Field day 1 lessons (1 Nov 2026; detail in the private field report, not in git)
+
+- **Confirmed passes:** T2 (both directions), S16, S18 (both directions), S23, S24.
+- **Not confirmed under the fixed rule:** S01 and S04. The B side was reached within 15 m, but the rule is 10 m. This is kept as is; the threshold is not changed.
+- **Not recorded:** S11 and S12. Both apps stopped at 18:19 and restarted at 19:36.
+- **Road class:** S23 and S24 are on the ORR mainline (access-controlled). Their detours go via an interchange by design. Tag road class before scoring, and never present access-controlled detours as civic failures.
+- **Surface:** the repeat-confirmed rough stretch is on NH-65 Isnapur–Chitkul (about 2 km, 3 passes). It needs photos and a pass with the phone mounted. A phone handheld for photos inflates jolts.
+- **Behaviour:** a hard-brake hotspot near the NH-65 Muthangi U-turn repeats across 31 Oct and 1 Nov (3 passes). It is the first behaviour candidate confirmed by repeat passes.
+- **Fieldkit fixes to make, with tests:**
+  - photo EXIF fallback when exiftool is missing;
+  - try both pass directions and keep every pass;
+  - one primary GPS source with gap fill only (two interleaved sources make false brakes);
+  - swerve v2 with smoothing and event spacing, declared as a method change; the 1 Nov swerves are not used;
+  - flag passes that contain a personal stop;
+  - tag road class.
+- **Next drives:**
+  - mount the phone;
+  - Sensor Logger at 50 Hz, with the camera, orientation, magnetometer and uncalibrated sensors off;
+  - a fresh GPX file per day;
+  - use the annotation tap for potholes and barricades.
