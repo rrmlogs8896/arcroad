@@ -96,6 +96,49 @@ These are all to verify. Nothing from them is published before the terms are che
 
 Each item follows the same rules as above: dated, aggregate, an estimate is labelled as one, and the official record is shown first.
 
+## Spillover parking (layer 9; added 1 Nov 2026 at Rohit's request)
+
+**The issue:** in Telangana, a commercial building is approved on the condition that it provides its own parking. When that parking is missing, too small, converted to shops or storage, or charged for, the cars go onto the road instead. The road is public, so the cost moves from the owner to everyone who uses the road: narrower lanes, slower traffic, pedestrians pushed into the carriageway, and longer waits at signals.
+
+### What the rules say (to verify against the primary texts before publishing)
+
+| Rule | What it requires | Grade | Source |
+|---|---|---|---|
+| Building Rules 2012 (G.O. Ms. 168), parking table and cellar clause | Commercial buildings must provide off-street parking to the required standard. A cellar is to be used only for parking. | B | G.O. Ms. 168 (MA&UD), the AP Building Rules 2012 parking section (Indian Kanoon), and HMDA's published copy |
+| G.O. Ms. 63 (20 Mar 2018), parking fees | Commercial establishments must meet the parking demand of their staff and visitors from their own space. The order regulates parking fees (the first 30 minutes are free, as widely reported). | B | MA&UD order. A later modification (G.O. Ms. 121, 2021) was challenged and decided by the High Court on 18 Mar 2026. The outcome must be read before citing. |
+| Telangana Municipalities Act 2019 | Parking is mandatory according to building use, and for commercial complexes it is free of charge to users (as reported; to verify the section). | B | Act text |
+| High Court of Telangana, *Ch. Madan Mohan v. MCH* (2003) and later orders | Commercial establishments must provide parking to visitors, free of cost. GHMC has been directed to clear cellar parking that was converted to other uses. | B | Reported judgments, e.g. Davinder Singh v. GHMC (13 Dec 2021); Prathibha Apartments RA v. GHMC (2014) |
+
+### What it costs everyone else (evidence base)
+
+| Finding | Grade | Source |
+|---|---|---|
+| In Varanasi, more on-street parking, slow vehicles and pedestrian crossings all reduced traffic flow on urban arterials. The study reports a capacity loss of about a third at its highest side-friction level. | A | ETASR (Varanasi arterials) |
+| On four-lane divided roads in Patna and Bhubaneswar, capacity generally fell as more of the kerb was occupied by parked vehicles. | A | Springer LNCE vol 45 (Transportation Research) |
+| A review of 1995–2022 studies found that lost effective road width is directly related to lost capacity. | A | ETASR 13(2) 2023 (NIT Patna) |
+| At signalised junctions in Hyderabad and three other cities, encroaching vehicles reduced saturation flow, meaning fewer vehicles get through each green. | A | Sushmitha, Srikanth, Ravi Shankar (U.Porto J. Eng.) |
+
+### How the engine measures it (aggregate, never personal)
+
+1. **Lane lost:** from photos and passes, how much of the carriageway is taken by parked vehicles, as a share of width, at what times, and how often (repeat passes).
+2. **Speed and delay:** the speed drop along that frontage, compared with the same road away from it (fieldkit passes).
+3. **Pedestrian push-out:** footpath blocked by parked vehicles, so walkers move into the carriageway.
+4. **Cluster, not shop:** the stretch is reported as "commercial frontage, 120 m, about 40% of the left lane lost 6–10 pm". It is not reported as a named business.
+5. **Official check (planned):** where a building's sanctioned plan and parking requirement are public, the record compares the required parking with what is visibly available. A named building appears only when an official record, such as a GHMC notice, court order or sanction document, states the violation. The record cites that document.
+6. **Cost:** the economics layer turns the delay into "estimated cost to people" (time and fuel), shown as a range and labelled as an estimate.
+
+### What the citizen sees (info button on a spillover stretch)
+
+- What the building rules require, in plain words, with links to the G.O. and the court orders.
+- What this stretch loses: lanes, speed, extra minutes at peak, and an estimated daily cost to people.
+- The citizen's rights, as stated in the official orders: parking is to be provided by the establishment, and fee rules apply. Current fee rules are shown only after the 2026 High Court judgment has been read.
+- Who to write to: the GHMC town planning wing and the GHMC EVDM wing, which enforces the parking-fee order. Contacts come from the layer 7 directory.
+
+### Rules
+1. Wording is "parking shifted onto the public road". "Exploitation" or any other accusation is never used against a named party unless an official finding says so.
+2. The evidence is always the vehicles on the road and the official documents, never assumptions about a specific owner.
+3. No plates, faces or identifiable vehicles. This is the same rule as every other layer.
+
 ## Economics layer (added 1 Nov 2026 from Rohit's brief: charges, taxes, fuel, current Brent, impact on GDP)
 
 The chain, each link sourced and dated:
