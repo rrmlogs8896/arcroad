@@ -46,6 +46,13 @@ SHORTER_REL = 0.5        # half the modelled distance: a real missing link, not 
 VISIT_RADIUS_M = 40.0    # phone GPS on a divided road; A and B sit 12-60 m apart
 MAX_PASS_S = 1800.0      # an A -> B pass longer than 30 minutes is not one crossing
 MAX_SAMPLE_GAP_S = 15.0  # OsmAnd records every 1 s; a 15 s hole can hide a turn
+# B-15 (1 Nov 2026): "nearer to B than to A" is not "at B". The 31 Oct remote run produced
+# 25 false passes (3-21 m "driven" against 13-58 m straight): a vehicle on one carriageway
+# drifted from nearer-A to nearer-B without ever crossing, because A and B are often offset
+# along the road. A pass now has to come within END_REACH_M of both points. Added after
+# seeing that run, as a bug fix, before any further run; it can only drop passes (no
+# evidence), never create a SHORTER, so it errs on the safe side.
+END_REACH_M = 10.0       # a car on the right carriageway passes A or B within a lane plus GPS error
 
 VERDICTS = ("MATCH", "SHORTER", "LONGER", "BETWEEN", "NOT_DRIVEN", "POOR_TRACK")
 
@@ -102,18 +109,35 @@ def _runs(labels, min_run):
     return runs
 
 
-def find_pass(track, a, b, radius=VISIT_RADIUS_M, max_pass_s=MAX_PASS_S, min_run=MIN_RUN):
+def find_pass(track, a, b, radius=VISIT_RADIUS_M, max_pass_s=MAX_PASS_S, min_run=MIN_RUN, accept=None):
     """Indices (i, j) of the shortest A-then-B pass, or None.
 
     i is the LAST sample of a stay at A, j the FIRST sample of the next stay at
     B, so time parked at either end is not counted as driving. a and b are
     (lat, lon).
+
+    accept(pt, side) -> bool, optional: a further test that a sample really is on
+    that side, e.g. that it lies on side B's carriageway in the road network and
+    not merely nearer to B (B-15). A pass must also come within END_REACH_M of A
+    during its stay at A, and of B during its stay at B.
     """
-    runs = _runs([_side(pt, a, b, radius) for pt in track], min_run)
+    labels = []
+    for pt in track:
+        side = _side(pt, a, b, radius)
+        if side is not None and accept is not None and not accept(pt, side):
+            side = None
+        labels.append(side)
+    runs = _runs(labels, min_run)
+
+    def reaches(lo, hi, p):
+        return min(haversine_m(track[k][2], track[k][1], p[1], p[0]) for k in range(lo, hi + 1)) <= END_REACH_M
+
     best = None
-    for (l1, _, i), (l2, j, _) in pairwise(runs):
+    for (l1, i0, i), (l2, j, j1) in pairwise(runs):
         if (l1, l2) != ("A", "B"):
             continue
+        if not (reaches(i0, i, a) and reaches(j, j1, b)):
+            continue  # B-15: never actually at A, or never actually at B
         ti, tj = track[i][0], track[j][0]
         if ti is not None and tj is not None and tj - ti > max_pass_s:
             continue
