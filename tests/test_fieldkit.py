@@ -75,3 +75,27 @@ def test_sensor_logger_zip_reads_nanosecond_times():
     assert s["location"][0][:3] == (1793500000.0, 17.5, 78.3)
     assert s["accel"][0] == (1793500000.01, 0.3, 0.2, 0.1)
     json.dumps(s)
+
+
+def test_hard_brake_from_speed_is_caught_and_gentle_slowdown_is_not():
+    t, lat, pts = 1_793_500_000.0, 17.5, []
+    lon = 78.3
+    for v in [50, 50, 50, 30, 30, 28, 26, 24]:       # km/h each second; 50 -> 30 is ~5.6 m/s^2
+        lon += v / 3.6 / 106_000
+        pts.append((t, lat, lon))
+        t += 1
+    ev = fk.hard_brakes(pts)
+    assert len(ev) == 1 and ev[0]["from_kmh"] >= 45
+
+
+def test_short_jink_at_speed_is_a_swerve_but_a_slow_long_turn_is_not():
+    track, _ = _loop_track()                           # ~34 km/h on the out leg
+    t0 = track[20][0]
+    grav = [(t0 + i * 0.01, 0.0, 0.0, -9.8) for i in range(1000)]
+    gyro = [(t, 0.0, 0.0, 0.0) for t, *_ in grav]
+    for i in range(100, 160):                          # 0.6 s jink
+        gyro[i] = (gyro[i][0], 0.0, 0.0, 1.0)
+    for i in range(400, 900):                          # 5 s steady turn: not a swerve
+        gyro[i] = (gyro[i][0], 0.0, 0.0, 0.8)
+    ev = fk.swerves({"gyro": gyro, "gravity": grav}, track)
+    assert len(ev) == 1 and ev[0]["seconds"] < 1

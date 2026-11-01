@@ -52,6 +52,11 @@ JOLT_MERGE_S = 1.0            # spikes closer than this are one event
 HANDLING_GYRO_RADS = 2.5      # big rotation at the same moment = phone handling, not road
 STOP_SPEED_KMH = 3.0          # a wait (queue, U-turn gap) = slower than this
 STOP_MIN_S = 15.0             # for at least this long
+HARD_BRAKE_MS2 = 3.0          # GPS speed falling faster than this (about 0.3 g) = a sudden brake
+BRAKE_FROM_KMH = 20.0         # only counted when braking from at least this speed
+SWERVE_YAW_RADS = 0.6         # turn rate about the vertical, rad/s, for a short jink at speed
+SWERVE_MIN_KMH = 20.0         # below this, turning is ordinary manoeuvring
+SWERVE_MAX_S = 2.5            # a swerve is short: in and back out within this
 
 
 # ---------------------------------------------------------------- readers
@@ -214,6 +219,47 @@ def jolts(sensors: dict, track) -> list[dict]:
     return events
 
 
+def hard_brakes(track) -> list[dict]:
+    """Sudden decelerations: a cut-in, a pedestrian, an animal, a hidden barricade. Candidates, not causes."""
+    sp, out, last = speeds_kmh(track), [], -1e18
+    for k in range(1, len(track)):
+        t0, t1 = track[k - 1][0], track[k][0]
+        if not t0 or not t1 or t1 <= t0:
+            continue
+        dec = (sp[k - 1] - sp[k]) / 3.6 / (t1 - t0)
+        if dec >= HARD_BRAKE_MS2 and sp[k - 1] >= BRAKE_FROM_KMH and t1 - last > 3:
+            out.append({"t": t1, "lat": track[k][1], "lon": track[k][2], "decel_ms2": round(dec, 1),
+                        "from_kmh": round(sp[k - 1]), "kind": "hard_brake", "status": "candidate"})
+            last = t1
+    return out
+
+
+def swerves(sensors: dict, track) -> list[dict]:
+    """Short sideways jinks at speed (avoiding a cut-in, a pothole, a parked vehicle). Turns at junctions are slow and long."""
+    gyro, grav = sensors.get("gyro") or [], sensors.get("gravity") or []
+    if not gyro or not track:
+        return []
+    yaw = _vertical(gyro, grav)                      # rotation rate about the vertical axis
+    sp, tt = speeds_kmh(track), [p[0] for p in track]
+    out, k, n = [], 0, len(yaw)
+    while k < n:
+        t, w = yaw[k]
+        if w is None or abs(w) < SWERVE_YAW_RADS:
+            k += 1
+            continue
+        m = k
+        while m + 1 < n and yaw[m + 1][1] is not None and abs(yaw[m + 1][1]) >= SWERVE_YAW_RADS * 0.5:
+            m += 1
+        dur = yaw[m][0] - t
+        i = min(max(bisect_left(tt, t), 0), len(track) - 1)
+        if dur <= SWERVE_MAX_S and sp[i] >= SWERVE_MIN_KMH:
+            lat, lon = _interp_pos(track, t)
+            out.append({"t": t, "lat": lat, "lon": lon, "peak_rads": round(max(abs(y[1] or 0) for y in yaw[k:m + 1]), 2),
+                        "seconds": round(dur, 1), "speed_kmh": round(sp[i]), "kind": "swerve", "status": "candidate"})
+        k = m + 1
+    return out
+
+
 # ---------------------------------------------------------------- scenes
 def photos_for_spot(photos, spot) -> list[dict]:
     a, b = spot["a"], spot.get("b") or spot["a"]
@@ -227,7 +273,7 @@ def photos_for_spot(photos, spot) -> list[dict]:
     return sorted(out, key=lambda p: p["t"] or 0)
 
 
-def scene(spot, track, photos, jolt_events, network_m=None) -> dict:
+def scene(spot, track, photos, jolt_events, network_m=None, behaviour=None) -> dict:
     """Everything the immersive ride, the score and the road record need for one spot."""
     a, b = tuple(spot["a"]), tuple(spot["b"])          # places.json order: [lon, lat]
     sc = {"spot": spot["id"], "a": spot["a"], "b": spot["b"],
@@ -244,6 +290,7 @@ def scene(spot, track, photos, jolt_events, network_m=None) -> dict:
             "waits": stops(track, i, j),
             "path_1hz": [[round(p[0] - (t0 or 0), 1), round(p[1], 6), round(p[2], 6)] for p in track[i:j + 1]],
             "jolts": [e for e in jolt_events if t0 and t1 and t0 <= e["t"] <= t1],
+            "behaviour": [e for e in (behaviour or []) if t0 and t1 and t0 <= e["t"] <= t1],
         }
     return sc
 
@@ -269,15 +316,17 @@ def build_day(folder: str, spots: list[dict], network: dict | None = None) -> di
     pics = [os.path.join(folder, n) for n in names if n.lower().endswith((".heic", ".jpg", ".jpeg", ".png", ".dng"))]
     photos = read_photo_meta(pics)
     jl = jolts(sensors, track)
+    beh = sorted(hard_brakes(track) + swerves(sensors, track), key=lambda e: e["t"])
     outdir = os.path.join(folder, "scenes")
     os.makedirs(outdir, exist_ok=True)
     summary = {"made": datetime.now(UTC).isoformat(timespec="seconds"), "track_points": len(track),
                "photos": len(photos), "photos_without_gps": sum(p["lat"] is None for p in photos),
-               "jolts": len(jl), "spots": []}
+               "jolts": len(jl), "hard_brakes": sum(e["kind"] == "hard_brake" for e in beh),
+               "swerves": sum(e["kind"] == "swerve" for e in beh), "spots": []}
     for s in spots:
         if not s.get("b"):
             continue
-        sc = scene(s, track, photos, jl, network.get(s["id"]))
+        sc = scene(s, track, photos, jl, network.get(s["id"]), beh)
         with open(os.path.join(outdir, f"{s['id']}.json"), "w", encoding="utf-8") as fh:
             json.dump(sc, fh, ensure_ascii=False)
         summary["spots"].append({"id": s["id"], "driven": bool(sc["driven"]), "photos": len(sc["photos"]),
