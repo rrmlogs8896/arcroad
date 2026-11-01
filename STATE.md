@@ -105,3 +105,18 @@ only; every measured number stays in code.
   - Sensor Logger at 50 Hz, with the camera, orientation, magnetometer and uncalibrated sensors off;
   - a fresh GPX file per day;
   - use the annotation tap for potholes and barricades.
+
+## Field day 1 published (2 Nov 2026)
+
+- **Scoring:** `pipeline/fieldscore.py` (tests in `tests/test_fieldscore.py`) scores public-safe pass summaries with the unchanged groundtruth thresholds, evidence levels and triangulation kinds.
+- **Results:** `data/field/2026-11-01-results.json`.
+- **Public page:** `web/field/` (built by `tools/build_field_page.py`).
+- **Globe:** `web/globe/` is now in the repo, with the driven places marked.
+- **What the drive showed:**
+  - 5 of 5 comparable directions matched the model: S16 B→A, S18 both directions, S24 both directions. That is 3 places at evidence level 1.
+  - S18 B→A is corroborated (S+P). Every other drive so far is a single kind (candidate) until repeated.
+- **Gate:** the AGENTS.md gate ("no absolute value until a modelled route is checked against a driven one") is now met for the model as a whole. Candidate values may be shown labelled as candidates, per docs/METHOD-evidence.md.
+- **Still open:**
+  - tag road class (S23 and S24 are ORR mainline);
+  - repeat passes on other days;
+  - the site is still noindex until the home page copy moves off "staging".
