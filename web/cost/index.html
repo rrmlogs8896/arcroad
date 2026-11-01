@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>arcroad · what crossing your own road costs: you, the city, the state</title>
+<meta name="description" content="A calculator: the fuel, the tax inside that fuel, and the time a detour costs per trip, per person, per city, and as a share of Telangana's GSDP. Every assumption shown and adjustable.">
+<style>
+:root{--bg:#0B0D10;--fg:#E8EAED;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0;--card:#11151A}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:980px;margin:0 auto;padding:48px 22px 80px}a{color:var(--accent)}
+.top{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-bottom:28px}.top a{color:var(--mute);text-decoration:none}.top a:hover{color:var(--fg)}
+.eyebrow{font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 10px}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.12;margin:0 0 14px;font-weight:600;letter-spacing:-.01em}
+h2{font-size:20px;margin:44px 0 10px;font-weight:600}p.lead{font-size:18px;color:#C9CDD2;max-width:720px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+label{display:block;font-size:13px;color:var(--mute);margin:10px 0 4px}
+input,select{width:100%;background:#0B0D10;color:var(--fg);border:1px solid #2A3038;border-radius:8px;padding:8px 10px;font:15px ui-monospace,SFMono-Regular,monospace}
+.out b{display:block;font:600 26px/1.15 ui-monospace,SFMono-Regular,monospace}.out span{color:var(--mute);font-size:13px}
+.out .r{color:var(--accent)}
+.bar{display:flex;height:26px;border-radius:6px;overflow:hidden;margin:10px 0 6px;font:12px/26px ui-monospace,monospace}
+.bar div{padding:0 8px;white-space:nowrap;overflow:hidden;color:#0B0D10}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mute);font-weight:500;font-size:12px}
+td.n{text-align:right;font-family:ui-monospace,monospace}
+.note{color:var(--mute);font-size:13px}.tag{display:inline-block;font:500 11px ui-monospace,monospace;border:1px solid #2A3038;border-radius:20px;padding:1px 8px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+</style>
+</head>
+<body>
+<main>
+<nav class="top"><a href="../">arcroad home</a><a href="../field/">Driven results</a><a href="../roads/">What else the road costs</a><a href="../evidence/">Civic-sense evidence</a><a href="../globe/">Globe</a></nav>
+<p class="eyebrow">arcroad · economics · estimate, every input adjustable</p>
+<h1>What crossing your own road costs: you, the city, the state.</h1>
+<p class="lead">When a median gap is closed, or a barricade goes up, people drive round. This page turns that extra distance and time into rupees: fuel, the tax inside that fuel, and time. Then it scales up to the city and sets the total beside Telangana's economy. It is an <b>estimated cost to people</b>, not a "GDP loss": GDP counts what is produced, not time wasted.</p>
+
+<h2>1 · One trip</h2>
+<div class="grid">
+<div class="card">
+<label for="veh">Vehicle</label>
+<select id="veh"><option value="tw">Two-wheeler (45 km/L)</option><option value="car" selected>Car (15 km/L)</option><option value="auto">Auto-rickshaw, petrol (25 km/L)</option></select>
+<label for="kmpl">Fuel use, km per litre</label><input id="kmpl" type="number" step="1" value="15">
+<label for="km">Extra distance per crossing, km</label><input id="km" type="number" step="0.05" value="1.75">
+<p class="note">Default 1.75 km: the middle of arcroad's four matched city passes on 1 Nov 2026 (1.53 to 2.28 km beyond the straight line). The Outer Ring Road pass (11.6 km) is left out.</p>
+<label for="min">Extra time per crossing, minutes</label><input id="min" type="number" step="0.5" value="9">
+<p class="note">Default 9 min: the middle of the same passes (3.2 to 11.5 min, Sunday, waits included).</p>
+</div>
+<div class="card">
+<label for="price">Petrol, Hyderabad, ₹ per litre</label><input id="price" type="number" step="0.01" value="116.15">
+<p class="note">Price on 16 Oct 2026. Refreshed from the oil companies' published price before each release.</p>
+<label for="vat">State VAT on petrol, %</label><input id="vat" type="number" step="0.1" value="35.2">
+<p class="note">Telangana's rate since Feb 2015, levied on the price before VAT.</p>
+<label for="exc">Central excise, ₹ per litre</label><input id="exc" type="number" step="0.1" value="21.9">
+<p class="note">₹21.90 in the oil companies' build-up of Apr 2025. <b>Not yet re-verified for Oct 2026</b>; change it here if it has moved.</p>
+<label for="vot">Value of time, ₹ per hour (low – high)</label>
+<div style="display:flex;gap:8px"><input id="votl" type="number" step="10" value="60" aria-label="low"><input id="voth" type="number" step="10" value="600" aria-label="high"></div>
+<p class="note">Indian studies span about ₹50/h (two-wheeler, Delhi, 2013 prices) to about ₹600/h (Bengaluru car commuters, 2017 field experiment). We show both ends rather than pick one.</p>
+</div>
+<div class="card out" id="tripout"></div>
+</div>
+<div class="card" style="margin-top:14px">
+<p class="eyebrow" style="margin:0">Where each litre's money goes (estimate)</p>
+<div class="bar" id="bar"></div>
+<p class="note" id="barnote"></p>
+</div>
+
+<h2>2 · One person, one year</h2>
+<div class="grid">
+<div class="card">
+<label for="perday">Crossings per working day</label><input id="perday" type="number" step="1" value="2">
+<label for="days">Working days per year</label><input id="days" type="number" step="1" value="300">
+</div>
+<div class="card out" id="personout"></div>
+</div>
+
+<h2>3 · The city, and the state</h2>
+<div class="grid">
+<div class="card">
+<label for="xl">Detour crossings per day across Hyderabad (low – high)</label>
+<div style="display:flex;gap:8px"><input id="xl" type="number" step="10000" value="200000" aria-label="low"><input id="xh" type="number" step="10000" value="1000000" aria-label="high"></div>
+<p class="note"><span class="tag">assumption</span> No official count of median-gap detours exists. These are placeholders, to be replaced by traffic counts as arcroad finds them. Change them and watch the total move.</p>
+<label for="gsdp">Telangana GSDP, ₹ crore</label><input id="gsdp" type="number" step="1000" value="1782198">
+<p class="note">2025-26 at current prices, from the state budget speech. 2026-27 budget estimate: ₹19,61,701 crore.</p>
+</div>
+<div class="card out" id="cityout"></div>
+</div>
+
+<h2>How this is worked out</h2>
+<div class="wrap"><table>
+<thead><tr><th>Step</th><th>Arithmetic</th><th>Source, grade</th></tr></thead>
+<tbody>
+<tr><td>Fuel per trip</td><td>extra km ÷ km per litre × pump price</td><td>Distance: arcroad's own driven passes (measured). Price: oil company retail price (B).</td></tr>
+<tr><td>Tax inside that fuel</td><td>VAT part = price × VAT ÷ (100 + VAT). Excise = ₹/L as entered. Dealer commission and the refinery price are the rest.</td><td>Telangana VAT notification of Feb 2015, widely reported since (B). Excise: oil company build-up, Apr 2025 (B, to re-verify).</td></tr>
+<tr><td>Time per trip</td><td>extra minutes ÷ 60 × value of time, low and high</td><td>Delhi congestion-cost study, values for 2013 (A, arXiv 1708.08984); Bengaluru congestion-pricing experiment (A, Kreindler, J-PAL/IGC).</td></tr>
+<tr><td>City per year</td><td>per-trip cost × crossings per day × 365, low and high</td><td>Crossings per day: <b>assumption</b>, shown as a range until official counts exist.</td></tr>
+<tr><td>Against the state</td><td>city total ÷ GSDP</td><td>Telangana budget speech 2025-26; PRS Legislative Research (B).</td></tr>
+</tbody></table></div>
+<ul class="note">
+<li>Brent crude does not enter this arithmetic. A change in Brent reaches you only through the pump price, so the pump price is the input. Brent is shown on the site only once it can be taken daily from a public-domain series (US EIA).</li>
+<li>Tolls, wear on the vehicle, extra emissions and the safety cost of U-turns are not included yet, so these totals are on the low side.</li>
+<li>Diesel (27% VAT) and CNG vehicles are not modelled yet.</li>
+<li>arcroad never says a named party "caused" these costs. The road design and the official record are shown, with who is responsible for them.</li>
+</ul>
+<footer>Measurements by arcroad (ODbL). Map data © OpenStreetMap contributors. No Google Maps data is used anywhere. The calculator runs in your browser; nothing you type is sent anywhere.</footer>
+</main>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var KMPL={tw:45,car:15,auto:25};
+  var inr=function(x){
+    if(!isFinite(x))return '—';
+    var a=Math.abs(x);
+    if(a>=1e7)return '₹'+(x/1e7).toLocaleString('en-IN',{maximumFractionDigits:1})+' crore';
+    if(a>=1e5)return '₹'+(x/1e5).toLocaleString('en-IN',{maximumFractionDigits:1})+' lakh';
+    if(a>=100)return '₹'+Math.round(x).toLocaleString('en-IN');
+    return '₹'+x.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+  };
+  var v=function(id){var n=parseFloat($(id).value);return isFinite(n)?n:0};
+  $('veh').addEventListener('change',function(){$('kmpl').value=KMPL[this.value];calc()});
+  function calc(){
+    var km=v('km'),kmpl=Math.max(v('kmpl'),1),p=v('price'),vat=v('vat'),exc=v('exc');
+    var litres=km/kmpl,fuel=litres*p;
+    var vatL=p*vat/(100+vat),taxL=vatL+exc,rest=Math.max(p-taxL,0);
+    var tax=litres*taxL;
+    var tl=v('min')/60*v('votl'),th=v('min')/60*v('voth');
+    var lo=fuel+tl,hi=fuel+th;
+    $('tripout').innerHTML='<p class="eyebrow" style="margin:0 0 8px">One crossing</p>'+
+      '<b>'+inr(fuel)+'</b><span>fuel ('+litres.toFixed(3)+' L)</span>'+
+      '<b style="margin-top:12px">'+inr(tax)+'</b><span>of that is tax ('+Math.round(taxL/p*100)+'% of the pump price)</span>'+
+      '<b class="r" style="margin-top:12px">'+inr(lo)+' – '+inr(hi)+'</b><span>fuel plus time, low to high value of time</span>';
+    var pct=function(x){return (x/p*100).toFixed(1)};
+    $('bar').innerHTML='<div style="width:'+pct(vatL)+'%;background:#E8A87C">VAT</div><div style="width:'+pct(exc)+'%;background:#C9A0DC">Excise</div><div style="width:'+pct(rest)+'%;background:#7CC5A0">Fuel, refining, dealer</div>';
+    $('barnote').textContent='Of ₹'+p.toFixed(2)+': state VAT about ₹'+vatL.toFixed(2)+', central excise ₹'+exc.toFixed(2)+', everything else ₹'+rest.toFixed(2)+'. Estimate from published rates, not an official split for this date.';
+    var n=v('perday')*v('days');
+    $('personout').innerHTML='<p class="eyebrow" style="margin:0 0 8px">'+n.toLocaleString('en-IN')+' crossings a year</p>'+
+      '<b>'+inr(fuel*n)+'</b><span>fuel, of which '+inr(tax*n)+' tax</span>'+
+      '<b style="margin-top:12px">'+Math.round(v('min')*n/60).toLocaleString('en-IN')+' hours</b><span>spent driving round</span>'+
+      '<b class="r" style="margin-top:12px">'+inr(lo*n)+' – '+inr(hi*n)+'</b><span>fuel plus time</span>';
+    var cl=lo*v('xl')*365,ch=hi*v('xh')*365,g=v('gsdp')*1e7;
+    var fy=fuel*365,share=function(x){return g>0?(x/g*100).toFixed(3)+'%':'—'};
+    $('cityout').innerHTML='<p class="eyebrow" style="margin:0 0 8px">Hyderabad, per year</p>'+
+      '<b>'+inr(fy*v('xl'))+' – '+inr(fy*v('xh'))+'</b><span>fuel burnt on detours</span>'+
+      '<b style="margin-top:12px">'+inr(tax*365*v('xl'))+' – '+inr(tax*365*v('xh'))+'</b><span>tax collected on that fuel</span>'+
+      '<b class="r" style="margin-top:12px">'+inr(cl)+' – '+inr(ch)+'</b><span>estimated cost to people, fuel plus time</span>'+
+      '<b style="margin-top:12px">'+share(cl)+' – '+share(ch)+'</b><span>of Telangana\'s GSDP</span>';
+  }
+  document.querySelectorAll('input').forEach(function(i){i.addEventListener('input',calc)});
+  calc();
+})();
+</script>
+</body>
+</html>
