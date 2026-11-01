@@ -4,7 +4,7 @@ Read this first; it replaces reconstructing status from the history. Update it i
 the same commit as any change that makes it wrong. Longer history and decisions
 live in the ledger (Drive: Anthropic / Hyderabad Mobility Atlas, Doc 03).
 
-Last updated: 28 Oct 2026.
+Last updated: 1 Nov 2026.
 
 ## Where things stand
 
@@ -31,6 +31,21 @@ is planned for the week of 28 Oct.
   the scoring step.
 - Still needed before scoring: the model's A -> B `network_m` for each stop,
   exported from v08 as `id,network_m` and kept off the field page.
+
+## Remote verification, 31 Oct to 1 Nov 2026 (notebook v02, results in Drive)
+
+- 96 checks (24 flagged stops + 24 generated controls, both directions).
+- Public OSM traces: no passes anywhere. Microsoft imagery and Overture: failed to load
+  (notebook bugs; Overture geometry must be read back with `ST_AsWKB`).
+- Mapillary: 25 "SHORTER" passes, all physically impossible (3-21 m "driven" against
+  13-58 m straight). Cause **B-15**: `find_pass` took "nearer to B" for "at B", so a car
+  on one carriageway, with A and B offset along the road, made a false pass. Fixed: a
+  pass must come within `END_REACH_M` (10 m) of both points, and callers can veto a side
+  with `accept` (the notebook checks the sample sits on side B's carriageway in the
+  graph). Added after seeing the run, as a bug fix that can only remove passes.
+- Net: zero independent confirmations. Every value stays a **candidate**.
+- Rohit is driving 8 stops (S04, S01, S24, S23, S11, S12, S18, S16) on 1 Nov; those
+  drives also measure how often the fixed remote check agrees with a real drive.
 
 ## Next, in order
 

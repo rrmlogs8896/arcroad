@@ -132,3 +132,25 @@ def test_parked_phone_flickering_towards_b_is_not_a_crossing():
     # turn a parked phone into a 10 m "drive" that would wrongly read SHORTER.
     jitter = [A, A, A, B, A, A, A, B, A, A, A]
     assert g.find_pass(g.parse_gpx(gpx(jitter)), A, B) is None
+
+
+def test_drifting_along_one_carriageway_is_not_a_crossing():
+    # B-15: A and B on opposite carriageways but offset along the road. A vehicle that only
+    # drives along A's side passes "nearer A" then "nearer B" without ever crossing.
+    a, b = (17.5000, 78.2000), (17.5001, 78.2004)       # ~11 m across, ~42 m along
+    along_a_side = line((17.49995, 78.1995), (17.49995, 78.2010), 30)
+    track = g.parse_gpx(gpx([along_a_side[0]] * 4 + along_a_side + [along_a_side[-1]] * 4))
+    assert g.find_pass(track, a, b) is None
+    row = g.score_stop(track, {"id": "S99", "a": list(a), "b": list(b)}, network_m=2800.0)
+    assert row["verdict"] == "NOT_DRIVEN"
+
+
+def test_a_real_straight_over_crossing_still_counts_after_b15():
+    over = g.parse_gpx(gpx([A] * 5 + line(A, B, 9) + [B] * 5))
+    assert g.find_pass(over, A, B) is not None
+
+
+def test_accept_filter_can_veto_a_side():
+    track = g.parse_gpx(gpx(loop_track(1000)))
+    assert g.find_pass(track, A, B) is not None
+    assert g.find_pass(track, A, B, accept=lambda pt, side: side == "A") is None
