@@ -62,6 +62,25 @@ These are outside numbers the behaviour and civic layers are checked against. Th
 - Rachakonda Traffic Police issued about 1.6 lakh wrong-side challans in 2025.
 - Challans measure where police looked, not where people break the rule, so they are never used as a prior for prevalence.
 
+### Headlight glare on the oncoming driver (layer 4 and the immersive ride; added 1 Nov 2026 at Rohit's request)
+
+**Why it matters:** the person facing the light pays for it, not the driver who switched it on. Glare is a behaviour that harms someone else, the same as a cut-in.
+
+| Fact | Grade | Source |
+|---|---|---|
+| Rule 106 of the Central Motor Vehicles Rules requires headlamps that can be dipped so they do not dazzle the driver of an approaching vehicle. Fines are under MVA s.177 (₹500 first offence, up to ₹1,000 after), and in some places s.184 (dangerous driving). | B (law, wording to verify from the CMVR text) | CMVR 1989 r.106; MVA 1988 ss.177, 184 |
+| The Centre told Parliament it keeps no separate data on crashes caused by high-beam glare. About 2.24 lakh of the 4.61 lakh crashes in 2022 happened between 6 pm and 6 am, and over 94,000 between 6 pm and 9 pm alone. | B | MoRTH reply in Parliament, via The Tribune |
+| Disability glare (a real loss of vision) is a different thing from discomfort glare (annoyance). After passing a bright oncoming lamp, the eye needs time to recover. Recovery takes longer with more light, for objects at the edge of view, and for older drivers. How uncomfortable a light feels does not predict how much it blinds. | A | Skinner & Bullough, SAE 2009-01-0546 (LRC/NHTSA field study); NHTSA DOT HS 811 043 / 811 007 |
+| Glare shortens how far you can see, slows reaction and lengthens recovery. A NHTSA pilot found about two-thirds of headlights were aimed wrongly. | A/B | NHTSA glare reports to Congress (SAFETEA-LU s.2015) |
+| In 2016 night tests on Punjab and Haryana highways, about 74% of car and SUV drivers kept high beam on continuously. About 77% of truck drivers dipped for oncoming traffic. | C (NGO, not peer-reviewed) | ArriveSAFE, as reported by 91trucks. Primary report to find. |
+| Hyderabad reporting describes aftermarket LED headlamps becoming a trend, including on some municipal tippers. Karnataka and Gujarat ran state drives against "dazzling" LED retrofits in 2025–26. | D | Hans India; Deccan Herald; Ahmedabad Mirror |
+
+**How the engine uses it**
+1. **Immersive ride (night mode):** an oncoming high beam fills the view. The scene then stays dimmer for a recovery window that scales with how bright the light was and how long it lasted. Edge objects (a pedestrian, a parked truck, a pothole) reappear last. The caption cites the field study. It never claims a fixed number of seconds as a measurement.
+2. **Field kit (planned, candidate only):** night photos and phone light-sensor spikes can flag "glare events" per stretch. They stay candidates until a second pass and a photo confirm them. They are aggregate only: no plates, and no vehicle is ever identifiable.
+3. **Design side:** stretches without median screens or street lighting force high beam. The record shows lighting and median condition beside glare events, so the stretch is not blamed on drivers alone.
+4. **Public wording:** "night crashes" and "glare" stay separate claims. The official data does not link them, so arcroad never says glare caused a number of crashes.
+
 ### Pedestrians and signals (future layer, and the immersive ride)
 
 | Finding | Grade | Source |
