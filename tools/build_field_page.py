@@ -51,7 +51,6 @@ def render(day: dict) -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>arcroad · driven results, {e(day["day"])}</title>
-<meta name="robots" content="noindex, nofollow">
 <meta name="description" content="arcroad drove its modelled detours in Hyderabad. Every pass, matched or not, with the method and the limits.">
 <style>
 :root{{--bg:#0B0D10;--fg:#E8EAED;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0}}
