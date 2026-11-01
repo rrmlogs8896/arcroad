@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>arcroad · from orbit to your street</title>
+<link rel="stylesheet" href="vendor/maplibre/maplibre-gl.css">
+<link rel="stylesheet" href="globe.css">
+</head>
+<body>
+<div class="scrim" aria-hidden="true"></div>
+<div id="map" role="application" aria-label="Interactive globe. Use the list below the map for the same information as text."></div>
+
+<header class="top">
+  <p class="eyebrow">arcroad · first driven results, 1 Nov 2026</p>
+  <h1>From orbit to your street</h1>
+  <p class="sub">29 Indian cities measured from open map data. In Hyderabad, 24 places where crossing the road takes a long way round.</p>
+</header>
+
+<nav class="ctl" aria-label="View controls">
+  <button type="button" id="tour">Start the journey</button>
+  <button type="button" id="home">Back to the globe</button>
+  <button type="button" id="spin" aria-pressed="true">Turning: on</button>
+</nav>
+
+<aside class="key" aria-label="What the marks mean">
+  <p class="kt">What the marks mean</p>
+  <div><i class="dot"></i><b>A city we have measured</b><span>tap to fly there</span></div>
+  <div><i class="ring"></i><b>A place with a long way round</b><span>modelled, not yet confirmed</span></div>
+  <div><i class="line"></i><b>Straight across</b><span>the distance if you could cross</span></div>
+</aside>
+
+<section class="panel" id="panel" aria-live="polite" hidden>
+  <button type="button" class="x" id="close" aria-label="Close">×</button>
+  <p class="eyebrow" id="p-eyebrow"></p>
+  <h2 id="p-title"></h2>
+  <p class="hook" id="p-hook"></p>
+  <dl id="p-facts"></dl>
+  <div class="cost" id="p-cost" hidden>
+    <p class="eyebrow">What it costs you</p>
+    <div class="seg" role="group" aria-label="Vehicle"><button type="button" data-v="tw" aria-pressed="true">Two-wheeler</button><button type="button" data-v="car" aria-pressed="false">Car</button></div>
+    <label class="trips">Round trips a week <button type="button" data-d="-1" aria-label="Fewer">−</button><output id="c-trips">10</output><button type="button" data-d="1" aria-label="More">+</button></label>
+    <dl id="c-out"></dl>
+    <p class="assume" id="c-assume"></p>
+  </div>
+  <p class="caveat" id="p-caveat"></p>
+</section>
+
+<section class="cap" id="cap" aria-live="polite" hidden>
+  <p class="eyebrow"></p>
+  <h2></h2>
+  <p></p>
+  <button type="button" id="cap-stop" class="cap-x">End journey</button>
+</section>
+
+<p class="status" id="status" role="status"></p>
+
+<details class="list">
+  <summary>All places as a list</summary>
+  <div id="list"></div>
+  <p class="src">Map data © OpenStreetMap contributors (ODbL). Map tiles: OpenFreeMap © OpenMapTiles. Country borders: Natural Earth (public domain), drawn as officially depicted by India, including all of Jammu and Kashmir and Ladakh. Model: OpenStreetMap extract of 25 Oct 2026, checked 1 Nov 2026. Every road distance here is a model value and has not yet been confirmed by a drive.</p>
+</details>
+
+<script type="module" src="globe.js"></script>
+</body>
+</html>
