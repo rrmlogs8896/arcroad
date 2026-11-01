@@ -82,6 +82,20 @@ The engine identifies what stage any construction or infrastructure work is at, 
 
 These are all to verify. Nothing from them is published before the terms are checked.
 
+### Also tracked per work (added when completing Rohit's "etc")
+
+- **Work type:** flyover, metro, road widening, stormwater drain, water or sewer line, power or telecom cable, footpath, or a private dig. Utility digs are short but frequent.
+- **Repeat digging:** the same stretch dug again within 12 months of resurfacing, often by a different agency. This is shown as "re-dug N times since <date>".
+- **Restoration quality:** after a trench is closed, whether the patch is level (jolts on later passes) or left as a hump or dip.
+- **Missing works board:** a site with no board showing the agency, value and dates. The board is required on public works; checking that rule is still to verify.
+- **Footpath and pedestrian loss:** footpath blocked or diverted into the carriageway, and whether a safe walkway is provided.
+- **Working hours:** whether work and lane closures happen at peak hours or at night (from dated photos and passes).
+- **Night safety:** barricades with no reflectors or lights. This links to the glare and night-mode sections.
+- **Monsoon risk:** an open trench or a half-built drain before or during the rains.
+- **Dust and debris:** debris left on the carriageway (from photos), with no dust or air-quality claim made from them.
+
+Each item follows the same rules as above: dated, aggregate, an estimate is labelled as one, and the official record is shown first.
+
 ## Economics layer (added 1 Nov 2026 from Rohit's brief: charges, taxes, fuel, current Brent, impact on GDP)
 
 The chain, each link sourced and dated:
