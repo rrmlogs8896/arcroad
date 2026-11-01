@@ -74,3 +74,13 @@ only; every measured number stays in code.
 - Spending: one shared USD 100/month across Rohit's projects, funded by the
   Max plan's monthly API credit (auto-reload off, so requests stop at zero);
   each project's Worker cap sits inside it.
+
+## Build backlog from the 1 Nov 2026 field day (Rohit approved "add them to the build")
+1. Ground-truth lock: every driven spot becomes a fixed CI fixture (MATCH/SHORTER/LONGER + driven distance); a model change that flips one fails the build.
+2. Evidence: driven spots shown as level 1 "Driven by arcroad" with date; model-vs-driven gap used to correct similar spots, labelled as estimate.
+3. Commute campaign: scheduled morning message (Mon-Fri 07:47 IST) batches 4 spots per leg; D1-D2 cover the remaining 16 of 24; later batches added as "QUEUE D<n>" lines in Drive doc "arcroad commute drives", including no-detour control spots (rule 5).
+4. Potholes: 100 Hz accelerometer + GPS -> speed-normalised vertical-jolt events; pothole vs speed-breaker classifier; candidate until a second pass or photo; routed to the road owner (NHAI / ORR operator / corporation).
+5. Immersive detour ride: driver's-eye 3D replay of a real drive (GPS path + timing + bumps), procedural original vehicles (trucks, buses, autos, two-wheelers), road rebuilt from photos as reference only (no faces/plates/brands shown); end card with distance, time, fuel vs "walk across in 15 s"; first prototype S01 Patancheru.
+6. Photo pipeline: EXIF (time, GPS, heading, altitude) read in place on the iMac; originals private; web copies ~200 KB with faces/plates blurred and metadata stripped.
+7. Colab: read secrets in the first cell while Rohit is present (v04 Mapillary step timed out on a locked screen).
+8. Claude's own ideas to add after ingesting the drive data (to be proposed for yes/no).
