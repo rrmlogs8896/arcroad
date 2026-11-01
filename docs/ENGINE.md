@@ -180,6 +180,18 @@ Rules: fuel prices are refreshed daily from the official source and carry their 
 
 Sources to verify before ingest: PPAC (Ministry of Petroleum) price build-up and the Indian basket; US EIA daily Brent series (public domain); Telangana's VAT rate on petrol and diesel (state notification); NHAI fee plazas and the ORR toll schedule; MoSPI/RBI GDP and Telangana GSDP; PLFS wages for the value of time.
 
+## Temporary dividers and barricades (layer 5b; added 2 Nov 2026 at Rohit's request)
+
+Movable barriers (plastic, water-filled, steel or concrete blocks) that close a median gap, a turn or a lane. Many outlast their reason, and each can turn a 20 m crossing into a 2 km loop.
+
+Recorded per divider: location and what it closes; date first and last seen (dated photos); the detour it creates (driven passes, layer 2); whether an official notice exists (traffic police advisory, works order, stated end date; if none is found the record says "no notice found", never "illegal"); night safety (reflectors, lights, advance signs); whether people cross anyway (gaps forced between blocks, wrong-side riding nearby, aggregate only); daily cost to people while it stands (economics layer, a range). Public page: `web/roads/`.
+
+## Public pages for these layers (2 Nov 2026)
+
+- `web/cost/`: the economics calculator. Per trip, per person per year, per city per year, and share of Telangana GSDP. Defaults: extra 1.75 km and 9 min (middle of the four matched city passes, 1 Nov), petrol ₹116.15 (16 Oct 2026), VAT 35.2%, excise ₹21.90 (Apr 2025, to re-verify), value of time ₹60–600/h (Delhi 2013 values; Bengaluru 2017 experiment), city crossings 2–10 lakh/day (labelled assumption), GSDP 2025-26 ₹17,82,198 crore. Brent does not enter the arithmetic.
+- `web/roads/`: dividers, works stage and info button, spillover parking, surface, sudden-stop hotspots, glare, pedestrians, fixed obstructions, each with status (first findings / measuring / designed).
+- `web/evidence/`: grade A and B evidence only.
+
 ## Evidence base: independent studies on behaviour and civic sense (gathered 1 Nov 2026)
 
 These are outside numbers the behaviour and civic layers are checked against. They are **priors and context, not our findings**. Our own numbers come only from driven passes. Each line is a paraphrase with its source. No text, tables or charts are copied. Every link is re-checked before anything is published.
