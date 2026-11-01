@@ -26,6 +26,62 @@ Set 1 Nov 2026 from Rohit's brief: the engine combines citizen behaviour, civic 
 4. **Official data wins on facts, measurement wins on conditions.** A works order says what was planned and when. A dated photo says what is there today. Where they disagree, both are shown with their dates.
 5. **Every published item keeps its provenance:** source, date observed, pass count, method version.
 
+## Works stage and the info button (layer 5; added 1 Nov 2026 at Rohit's request)
+
+The engine identifies what stage any construction or infrastructure work is at, and gives every work on the map an **info button**. Where official data doesn't give a figure, the button shows an estimate. Each estimate is labelled as one and shows the method behind it.
+
+### Stages (one label per work, per dated observation)
+
+| Stage | What it looks like on the road | Typical evidence |
+|---|---|---|
+| 0. Announced | Nothing on the ground yet | Tender or works order, news of the sanction |
+| 1. Mobilised | Barricades up, signboard, machinery parked, no digging | Photo, works board |
+| 2. Dug or demolished | Open trench, road cut, utility shifting, debris | Photo, jolt cluster, lane loss |
+| 3. Structure rising | Piers, pillars, girders, culvert boxes, retaining walls | Photo (vertical elements), barricade length steady |
+| 4. Surfacing or finishing | Road laid, kerbs, medians, markings missing | Photo, jolts gone, speed recovering |
+| 5. Open | Traffic flowing, barricades gone | Speeds back to the stretch's normal |
+| 6. Stalled | No visible change across 2+ passes at least 30 days apart | Two dated photo sets that match |
+| 7. Abandoned or left half-done | Stalled for 6+ months, or the contract marked closed with the work unfinished | Photos plus the official record |
+
+**How it is decided**
+1. **Photos:** each photo is tagged with what's visible (barricade, trench, pier, girder, machinery, fresh surface). A first version is a rules pass over these tags; a small classifier comes later, trained only on Rohit's own labelled photos. The stage is the highest stage clearly seen.
+2. **Sensors:** a cluster of jolts plus lost lanes plus slow speed points to stage 2. When the jolts go and speeds recover, that points to stage 4 or 5.
+3. **Repeat passes:** the commute campaign revisits the same stretches, so the stage is tracked over time. Two passes with no change, 30 or more days apart, mark it stage 6.
+4. **Official record:** the tender or works order gives what was planned and when (agency, value, start, promised finish). Rule 4 applies: the record says what was planned, the dated photo says what is there today, and both are shown.
+5. **Confidence:** high = photo plus official record agree; medium = photo only, from 2+ passes; low = one pass, or sensor only. Low-confidence stages are never published.
+
+### Info button (per work)
+
+| Field | Source | Shown as |
+|---|---|---|
+| What is being built | Works order or tender title | Official (with link) |
+| Agency responsible and contractor | Works order, tender award | Official |
+| Sanctioned value | Tender or award | Official, ₹ |
+| Start date and promised finish | Works order or agreement | Official |
+| Current stage and the date it was last seen | Engine (above) | Measured, dated |
+| Estimated % complete | Stage scale (0, 10, 30, 60, 85, 100%), refined by the length of barricade cleared | **Estimate**, shown as a range, method linked |
+| Estimated delay | Today minus promised finish, if not open; otherwise actual minus promised | **Estimate** if dates are uncertain |
+| Lanes lost and extra detour | Driven passes (layer 2) | Measured |
+| Daily cost to people while it lasts | Economics layer: extra km × fuel use × pump price, plus time valued with official wage data, times traffic volume where an official count exists | **Estimate**, range, "estimated cost to people" |
+| Cost so far to people | Daily cost × days since mobilised | **Estimate** |
+| Safety notes | Unlit barricades, no diversion signs, trench edges (from photos) | Observed, dated |
+| Who to write to | Layer 7 directory | Official contact |
+
+### Rules for estimates
+1. Every estimate shows a range, not one number, plus a "how we estimated this" link.
+2. An estimate never replaces an official figure. When the official figure exists, it is shown first.
+3. "Stalled" and "abandoned" are claims about a work, not about people. They need two dated photo sets and a check of the official record before they are published. The agency's own explanation, if any, is shown next to them.
+4. No faces or plates, and no worker is ever identifiable. Photos are blurred before publishing, as with all arcroad photos.
+
+### Official sources to check (licence and terms before ingest)
+- Telangana e-procurement tenders (works by GHMC, HMDA, R&B, HMWSSB)
+- GHMC works and SRDP project lists
+- HMRL and Hyderabad Metro phase 2 notices
+- NHAI project status and the MoRTH project dashboards
+- Traffic police diversion advisories
+
+These are all to verify. Nothing from them is published before the terms are checked.
+
 ## Economics layer (added 1 Nov 2026 from Rohit's brief: charges, taxes, fuel, current Brent, impact on GDP)
 
 The chain, each link sourced and dated:
