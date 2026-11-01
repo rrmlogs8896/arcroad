@@ -120,3 +120,12 @@ only; every measured number stays in code.
   - tag road class (S23 and S24 are ORR mainline);
   - repeat passes on other days;
   - the site is still noindex until the home page copy moves off "staging".
+
+- **Notebook v05** (2 Nov 2026): notebooks/arcroad_Verify_Remote_v05.ipynb. Changes from v04:
+  - secrets are read in cell 1;
+  - Mapillary sanity rules: reject passes shorter than the straight line or with no heading reversal, and cap the match radius at half the A–B gap;
+  - Mapillary U-turn signs (Evidence E) and OSM turn restrictions (F) added;
+  - own drives read in from data/field;
+  - road class per place;
+  - KartaView stub, off by default.
+  - Not yet run.
