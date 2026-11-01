@@ -12,6 +12,7 @@ Set 1 Nov 2026 from Rohit's brief: the engine combines citizen behaviour, civic 
 | 4. Behaviour | Sudden stops, cut-ins and jinks, wrong-side driving, stops in the carriageway | Hard braking (GPS), short yaw spikes at speed (gyro), photos | `fieldkit.hard_brakes`, `fieldkit.swerves` |
 | 5. Works | Barricades, diversions, construction stage (dug, half-built, finished, abandoned) | Photos dated by EXIF, matched to official works records | planned |
 | 6. Fixed obstructions | Anything permanent in the carriageway or footpath: a structure, a tree, a transformer, a pole, a kiosk | OSM tags and photos, checked against official encroachment and works lists | planned |
+| 8. Economics | What the detours and road conditions cost: fuel, tolls, taxes inside the fuel price, time, and the total for a city | Driven extra km × fuel use × live pump price; price build-up from official data; time valued with official wage data | planned |
 | 7. Civic | Who is responsible for this stretch, and what they have said or promised | Road owner (NHAI, ORR operator, corporation), works orders, court directions | `directory.py` |
 
 ## Rules that make the combination trustworthy
@@ -24,6 +25,20 @@ Set 1 Nov 2026 from Rohit's brief: the engine combines citizen behaviour, civic 
    - Trees are recorded the same way, and never with a suggestion to cut them: the city's tree and works authorities decide.
 4. **Official data wins on facts, measurement wins on conditions.** A works order says what was planned and when. A dated photo says what is there today. Where they disagree, both are shown with their dates.
 5. **Every published item keeps its provenance:** source, date observed, pass count, method version.
+
+## Economics layer (added 1 Nov 2026 from Rohit's brief: charges, taxes, fuel, current Brent, impact on GDP)
+
+The chain, each link sourced and dated:
+
+1. **Brent crude** (international benchmark, US$/barrel, daily) → **Indian basket** of crude the refiners actually buy.
+2. **Pump price build-up** of petrol and diesel: refinery and dealer price, Central excise duty, dealer commission, and the state's VAT. It shows how much of each litre is tax.
+3. **Per trip:** the extra km of a detour × the vehicle's fuel use × today's Hyderabad pump price, plus any toll. Split into fuel cost, the tax part of that fuel, and time (at an official average wage).
+4. **Per city, per year:** per-trip cost × estimated crossings per day (from traffic counts where official ones exist; otherwise a labelled range) × 365.
+5. **Against the economy:** the city total shown next to Telangana's GSDP and India's GDP as a share. It is called an estimated cost to people, never a "GDP loss", because GDP measures output, not wasted time. Every assumption is shown and adjustable.
+
+Rules: fuel prices are refreshed daily from the official source and carry their date. Brent moves the estimate only through the published pump price, never by an assumed pass-through. Ranges are shown wherever the traffic count is estimated.
+
+Sources to verify before ingest: PPAC (Ministry of Petroleum) price build-up and the Indian basket; US EIA daily Brent series (public domain); Telangana's VAT rate on petrol and diesel (state notification); NHAI fee plazas and the ORR toll schedule; MoSPI/RBI GDP and Telangana GSDP; PLFS wages for the value of time.
 
 ## Official data to map against (licence check before ingest)
 
