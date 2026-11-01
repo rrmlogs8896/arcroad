@@ -1,11 +1,10 @@
 <!doctype html>
-<html lang="en" data-verified="2026-10-26">
+<html lang="en" data-verified="2026-11-02">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>arcroad — staging</title>
-<meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Measuring what road geometry costs the people who live beside it. Staging build — no figure here has been verified against a driven route.">
+<title>arcroad — what it costs to cross your own road</title>
+<meta name="description" content="Measuring what road geometry costs the people who live beside it, from open data, with every claim checkable. First drive results: 5 of 5 directions matched the model.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg fill='none' stroke='%23E2743B' stroke-linecap='round'%3E%3Cpath d='M12 25 A 10 10 0 1 1 20 25' stroke-width='2.8'/%3E%3C/g%3E%3Ccircle cx='12' cy='25' r='2.4' fill='%23E2743B'/%3E%3Ccircle cx='20' cy='25' r='2.4' fill='%23E2743B'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,6 +29,8 @@ header .wrap{padding-block:26px;display:flex;flex-wrap:wrap;gap:20px;align-items
 .place{font-size:13px;color:var(--faint);margin-left:12px}
 nav{display:flex;gap:24px;font-size:14px}
 nav a{color:var(--mut);text-decoration:none}
+nav a{white-space:nowrap}
+@media (max-width:720px){nav{gap:18px;overflow-x:auto;max-width:100%;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}nav::-webkit-scrollbar{display:none}}
 nav a:hover{color:var(--fg2)}
 h1{margin:0 0 18px;font-size:clamp(30px,6vw,46px);line-height:1.1;letter-spacing:-0.03em;font-weight:600;color:var(--fg2);text-wrap:balance;max-width:17ch}
 .lede{margin:0;font-size:clamp(15px,2.4vw,18px);line-height:1.6;color:var(--mut);max-width:58ch}
@@ -109,8 +110,8 @@ a:hover{color:var(--soft)}
 
 <div class="staging">
   <div class="wrap">
-    <p><strong style="color:var(--soft);font-weight:500">Staging.</strong> Not published. No figure on this page has been checked against a route anyone has driven.</p>
-    <span class="m">0 of 3 verification drives</span>
+    <p><strong style="color:var(--soft);font-weight:500">v0 · first drive results.</strong> On 1 Nov 2026 we drove the model's detours: 5 of 5 comparable directions matched. Area figures below are still model values. <a href="field/" style="color:var(--accent)">See every pass</a></p>
+    <span class="m">3 places driven · 1 day</span>
   </div>
 </div>
 
@@ -152,7 +153,7 @@ a:hover{color:var(--soft)}
       <div class="cell"><p class="v">12,585</p><p class="k">Points measured</p></div>
       <div class="cell"><p class="v hot">2.2–3.8×</p><p class="k">Beyond the ring road vs the core city</p></div>
       <div class="cell"><p class="v">94</p><p class="k">Areas ranked</p></div>
-      <div class="cell"><p class="v hot">0</p><p class="k">Routes verified on the ground</p></div>
+      <div class="cell"><p class="v hot">5 / 5</p><p class="k">Driven directions that matched the model (1 Nov 2026)</p></div>
     </div>
   </div>
 </section>
@@ -294,7 +295,7 @@ a:hover{color:var(--soft)}
       </div>
       <div>
         <h3>Contact</h3>
-        <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">This is a staging build and has no public contact route yet. When it launches there will be a monitored address and a named person behind it, not a form that goes nowhere.</p>
+        <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">A monitored email address is being set up. Until then, write to us through the project's public issue tracker on <a href="https://github.com/rrmlogs8896/arcroad/issues" rel="noopener" style="color:var(--accent)">GitHub</a>; every message is read.</p>
       </div>
     </div>
   </div>
@@ -377,7 +378,7 @@ a:hover{color:var(--soft)}
 
   var LIMS = [
     ["open", "s-open", "The open map under-records median openings and service roads, so absolute figures come out longer than the real drive. Ratios between areas hold; individual values do not."],
-    ["in progress", "s-prog", "Ground verification against routes people actually drive. Two crossings driven so far, neither yet a pass. No figure here is final until this passes."],
+    ["in progress", "s-prog", "Ground verification against routes people actually drive. First field day, 1 Nov 2026: 5 of 5 comparable directions at 3 places matched the model; one pass was rejected and five places could not be scored. Repeat drives on other days are under way. Area figures remain model values until more places are driven."],
     ["open", "s-open", "Map lag. Openings in medians are built and closed faster than any map updates. Every figure is true for the map of its extract date, shown at the foot of this page. One driven crossing found a new opening the map did not yet have: there the real drive was a fraction of the modelled one."],
     ["corrected", "s-fix", "We assumed the third of points flagged as extreme were mostly bad data. They are not. Four in five are crossings under 25 m apart and the typical one needs 2.5 km of driving — the thing we set out to measure."],
     ["wrong", "s-fix", "We predicted the flagging was an artefact of the study area boundary. The data says otherwise: the points furthest from the boundary are the worst. The test could not answer its own question, and that is recorded rather than quietly dropped."],

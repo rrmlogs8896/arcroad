@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /globe/
+Disallow: /kit/
+Disallow: /m2/
+Sitemap: https://arcroad.org/sitemap.xml
