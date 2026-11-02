@@ -83,7 +83,16 @@ only; every measured number stays in code.
 5. Immersive detour ride: driver's-eye 3D replay of a real drive (GPS path + timing + bumps), procedural original vehicles (trucks, buses, autos, two-wheelers), road rebuilt from photos as reference only (no faces/plates/brands shown); end card with distance, time, fuel vs "walk across in 15 s"; first prototype S01 Patancheru.
 6. Photo pipeline: EXIF (time, GPS, heading, altitude) read in place on the iMac; originals private; web copies ~200 KB with faces/plates blurred and metadata stripped.
 7. Colab: read secrets in the first cell while Rohit is present (v04 Mapillary step timed out on a locked screen).
-8. Claude's own ideas to add after ingesting the drive data (to be proposed for yes/no).
+8. Claude's own ideas: proposed 2 Nov 2026 after the first commute recording; Rohit approved "all that is necessary" (Claude's call). Order, after v0.2 goes live:
+   a. Drop-and-forget drive uploads (smaller Sensor Logger export: Location, Barometer, Accelerometer, Gravity, Gyroscope; processed on the iMac; one short message afterwards).
+   b. NH-65 before/after: commute drives are the baseline before the January works (time-limited).
+   c. Measured time cost per stretch and time of day (feeds the cost calculator; Patancheru crawl 2 Nov: ~300 m in 4 min).
+   d. Detour minutes on driven places (queues included), beside the model distance.
+   e. Wait-time map: stops over 15 s split into signal waits and jams.
+   f. Waterlogging watch: barometer low points (2 Nov: a ~13 m dip on the Isnapur-Patancheru stretch) + dated rain reports.
+   g. Road roughness map once the phone is mounted; feeds the letters.
+   h. Private weekly commute card (later, shareable pattern once volunteers join).
+   Drive 2 Nov 2026 17:48-18:45 IST Isnapur -> Hafeezpet, 20.4 km, avg ~21 km/h; no crossings driven (pass-by only at S01, S04, S06, S11, S12); S11 needs a deliberate U-turn check; motion sensors unusable (phone handled); scorer pass-by fix 6a3199a.
 
 ## Field day 1 lessons (1 Nov 2026; detail in the private field report, not in git)
 
