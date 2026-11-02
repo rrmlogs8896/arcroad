@@ -347,6 +347,18 @@ function renderCost() {
   }
   $('c-trips').textContent = costTrips;
   $('c-assume').textContent = `Estimate. Assumes petrol at ₹${COST.petrol}/litre (Hyderabad, ${COST.priceDate}), ${COST.kmpl[costVehicle]} km per litre for a ${costVehicle === 'tw' ? 'two-wheeler' : 'car'}, ${COST.kmh} km/h in traffic, and the model's road distances, which are not yet confirmed.`;
+  const calc = $('c-calc'); calc.textContent = '';
+  calc.append('Work it out with your own numbers, one direction at a time: ');
+  const dv = s.driven || {};
+  [['ab', 'A → B'], ['ba', 'B → A']].forEach(([d, label], i) => {
+    if (s[d] == null) return;
+    const m = dv[d] ? dv[d].m : s[d], extra = Math.max(0, m - s.straight) / 1000;
+    let href = `../cost/?place=${encodeURIComponent(s.id + ' ' + label.replace(' → ', ' to '))}&veh=${costVehicle}&km=${extra.toFixed(2)}`;
+    if (dv[d] && dv[d].s) href += `&min=${Math.max(1, Math.round(dv[d].s / 60))}`;
+    const a = document.createElement('a'); a.href = href; a.textContent = `${label}, ${extra.toFixed(2)} km extra${dv[d] ? ' (driven)' : ' (modelled)'}`;
+    if (i && calc.lastChild && calc.lastChild.tagName === 'A') calc.append(' · ');
+    calc.append(a);
+  });
   box.hidden = false;
 }
 document.querySelectorAll('#p-cost .seg button').forEach((b) => b.addEventListener('click', () => {

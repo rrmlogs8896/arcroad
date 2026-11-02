@@ -75,3 +75,6 @@ button:focus-visible,summary:focus-visible{outline:2px solid var(--soft);outline
 @media (prefers-reduced-motion:reduce){button{transition:none}}
 .panel .write{margin:12px 0 0}.panel .write a{display:inline-block;padding:10px 16px;border-radius:999px;background:var(--accent,#E2743B);color:#0B0D10;font-weight:500;font-size:14px;text-decoration:none}
 .panel .write a:hover{filter:brightness(1.08)}
+
+.cost .calc{margin:10px 0 0;font-size:12.5px;line-height:1.6;color:var(--mut,#9aa3ad)}
+.cost .calc a{color:var(--accent,#E8743B)}

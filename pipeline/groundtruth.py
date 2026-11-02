@@ -30,8 +30,8 @@ committed to this repository.
 """
 
 from __future__ import annotations
-import math
 
+import math
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from itertools import pairwise
