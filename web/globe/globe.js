@@ -40,6 +40,7 @@ map.on('error', (e) => { if (!styleOk && !usingFallback) useFallback(); else con
 function useFallback() {
   usingFallback = true;
   $('status').textContent = 'The detailed map could not load, so this shows simple outlines. Street-level 3D needs the detailed map.';
+  requestAnimationFrame(layoutPhone);
   map.setStyle(FALLBACK);
 }
 
@@ -65,7 +66,7 @@ const LABEL_RULES = {
   place_other: { minzoom: 15, color: '#6E767F' }, place_suburb: { minzoom: 13, color: '#6E767F' },
   place_village: { minzoom: 12, color: '#6E767F' }, place_town: { minzoom: 9, color: '#8B939C' },
   place_city: { minzoom: 6, color: '#C9CED4' }, place_city_large: { minzoom: 4, color: '#E6E8EB' },
-  place_country_other: { minzoom: 3, color: '#AEB4BB' }, place_country_minor: { minzoom: 2.6, color: '#AEB4BB' }, place_country_major: { color: '#C9CED4' },
+  place_country_other: { minzoom: 3, color: '#AEB4BB' }, place_country_minor: { minzoom: 2.6, color: '#AEB4BB' }, place_country_major: { minzoom: 1.6, color: '#C9CED4' },   // B: at whole-globe zoom on phones, labels near the limb were drawn outside the sphere
   water_name: { color: '#4E6A85' }, highway_name_other: { color: '#7C858F' }
 };
 function restyle() {
@@ -368,3 +369,27 @@ function buildList() {
   });
   host.append(p);
 }
+
+// Phones: stack the bottom controls, the key and the map credit so none overlaps another (Safari, Chrome, Firefox),
+// whatever the wrap of the buttons or the browser's toolbars. Measured, not guessed.
+function layoutPhone() {
+  const phone = window.innerWidth <= 700;
+  const ctl = document.querySelector('.ctl'), key = document.querySelector('.key'), list = document.querySelector('.list');
+  const top = document.querySelector('header.top'), attrib = document.querySelector('.maplibregl-ctrl-bottom-right');
+  if (!phone) { [key, list, attrib, document.getElementById('status')].forEach((e) => e && e.style.removeProperty(e === key || e === attrib ? 'bottom' : 'top')); return; }
+  const gap = 8;
+  const ctlTop = ctl ? ctl.getBoundingClientRect().top : window.innerHeight;
+  const keyBottom = window.innerHeight - ctlTop + gap;
+  if (key) key.style.bottom = keyBottom + 'px';
+  const keyTop = key ? key.getBoundingClientRect().top : ctlTop;
+  if (attrib) attrib.style.bottom = (window.innerHeight - keyTop + gap) + 'px';
+  const status = document.getElementById('status');
+  let below = top ? top.getBoundingClientRect().bottom + gap : 96;
+  if (status) { status.style.top = Math.round(below) + 'px'; if (status.textContent.trim()) below = status.getBoundingClientRect().bottom + gap; }
+  if (list) list.style.top = Math.round(below) + 'px';
+}
+['resize', 'orientationchange'].forEach((ev) => window.addEventListener(ev, () => requestAnimationFrame(layoutPhone)));
+if (window.visualViewport) window.visualViewport.addEventListener('resize', () => requestAnimationFrame(layoutPhone));
+map.on('load', layoutPhone);
+requestAnimationFrame(layoutPhone);
+setTimeout(layoutPhone, 600);
