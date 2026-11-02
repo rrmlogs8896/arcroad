@@ -71,6 +71,17 @@ CITIES = {
 
 # Every state and UT capital, so none is silently forgotten (tests check this).
 # Value: the CITIES key that covers it, or "EXCLUDED: <reason>".
+WORLD_FILE = pathlib.Path(__file__).resolve().parents[1] / "data" / "world" / "sample_cities.json"
+
+
+def world_cities(path: pathlib.Path = WORLD_FILE) -> dict:
+    """World sample cities (groundwork): id -> (bbox, geofabrik scope). Desk-only; never published."""
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text())
+    return {c["id"]: (tuple(c["bbox"]), c["geofabrik_scope"]) for c in data["cities"]}
+
+
 HILL = "EXCLUDED: hill capital; terrain forces detours this method does not model (decision 28 Oct 2026)"
 CAPITALS = {
     "Andhra Pradesh": "amaravati", "Arunachal Pradesh (Itanagar)": HILL, "Assam": "guwahati_dispur",
@@ -123,8 +134,12 @@ def fetch(url: str, dest: pathlib.Path) -> pathlib.Path | None:
     return None
 
 
-def zones_for(bbox, cache: pathlib.Path):
-    """Geofabrik India zones intersecting the box, from Geofabrik's own index."""
+def zones_for(bbox, cache: pathlib.Path, scope: str = "/asia/india/"):
+    """Geofabrik zones under SCOPE intersecting the box, from Geofabrik's own index.
+
+    SCOPE defaults to India. World sample cities pass their own scope from
+    data/world/sample_cities.json (groundwork, 2 Nov 2026).
+    """
     from shapely.geometry import box, shape
 
     idx = fetch(GEOFABRIK_INDEX, cache / "geofabrik_index-v1.json")
@@ -135,10 +150,10 @@ def zones_for(bbox, cache: pathlib.Path):
     hits = []
     for f in feats:
         url = f["properties"].get("urls", {}).get("pbf", "")
-        if "/asia/india/" in url and shape(f["geometry"]).intersects(b):
+        if scope in url and shape(f["geometry"]).intersects(b):
             hits.append((f["properties"]["id"], url))
     if not hits:
-        raise SystemExit(f"No Geofabrik India zone intersects {bbox}.")
+        raise SystemExit(f"No Geofabrik zone under {scope} intersects {bbox}.")
     return hits
 
 
@@ -327,7 +342,7 @@ def prefetch_ghsl(cities: list[str], cache: pathlib.Path) -> int:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("city", choices=[*sorted(CITIES), "all"])
+    ap.add_argument("city", choices=[*sorted(CITIES), *sorted(world_cities()), "all"])
     ap.add_argument("--out", default="out")
     ap.add_argument("--cache", default="cache")
     ap.add_argument("--detour", action="store_true", help="also run Phase 2a candidate points")
@@ -345,7 +360,14 @@ def main(argv=None) -> int:
     if args.city == "all":
         raise SystemExit("'all' is only valid with --prefetch-ghsl; collect one city at a time.")
 
-    city, bbox = args.city, CITIES[args.city]
+    world = world_cities()
+    if args.city in world:
+        bbox, scope = world[args.city]
+        if args.detour:
+            raise SystemExit("World sample cities are desk-only groundwork: collect coverage and population only, no --detour yet.")
+    else:
+        bbox, scope = CITIES[args.city], "/asia/india/"
+    city = args.city
     stamp = dt.date.today().isoformat()
     sha = pairing.commit_sha(str(pathlib.Path(__file__).resolve().parents[1]))
     out = pathlib.Path(args.out) / city / stamp
@@ -354,7 +376,7 @@ def main(argv=None) -> int:
     cache.mkdir(parents=True, exist_ok=True)
     print(f"[{city}] box {bbox} | pipeline {sha}")
 
-    zones = zones_for(bbox, cache)
+    zones = zones_for(bbox, cache, scope)
     srcs = []
     for zid, url in zones:
         p = fetch(url, cache / f"{zid}-latest.osm.pbf")
