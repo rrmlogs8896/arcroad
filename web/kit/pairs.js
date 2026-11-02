@@ -37,7 +37,64 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Patancheru; Lok Sabha: Medak; Cyberabad Municipal Corporation - Serilingampally zone",
+  "recipients": {
+   "to": [],
+   "cc": [
+    {
+     "designation": "Regional Office, Hyderabad (Telangana State)",
+     "office": "National Highways Authority of India",
+     "mailbox": "",
+     "postal": "D.No.8-2-269/S/94, Plot No.94, 3rd & 4th Floors, Road No.2, Sagar Society, Banjara Hills, Hyderabad-500034",
+     "source": "https://nhai.gov.in/nhai/taxonomy/term/24"
+    },
+    {
+     "designation": "Secretary to Government (R&B) (Sri Ilambarithi K., IAS)",
+     "office": "Government of Telangana, Transport, Roads & Buildings Department",
+     "mailbox": "splcs-trb@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/roads-and-buildings/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Gudem Mahipal Reddy)",
+     "office": "Patancheru Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Madhavaneni Raghunandan Rao)",
+     "office": "Medak Parliamentary Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    },
+    {
+     "name": "National Highways Authority of India · National Highway helpline 1033 (toll-free, 24x7) · 1033",
+     "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2265867&reg=3&lang=2"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S02": {
   "id": "S02",
@@ -62,7 +119,53 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Patancheru; Lok Sabha: Medak",
+  "recipients": {
+   "to": [],
+   "cc": [
+    {
+     "designation": "Secretary to Government (R&B) (Sri Ilambarithi K., IAS)",
+     "office": "Government of Telangana, Transport, Roads & Buildings Department",
+     "mailbox": "splcs-trb@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/roads-and-buildings/"
+    },
+    {
+     "designation": "Chief Engineer (State Roads), Office of the Engineer-in-Chief (R&B), Erramanzil, Hyderabad (Sri B. Venkateshwar Rao)",
+     "office": "Government of Telangana, Roads & Buildings Department",
+     "mailbox": "",
+     "postal": "Office of the Engineer-in-Chief (R&B), Erramanzil, Hyderabad",
+     "source": "https://www.telangana.gov.in/departments/roads-and-buildings/"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Gudem Mahipal Reddy)",
+     "office": "Patancheru Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Madhavaneni Raghunandan Rao)",
+     "office": "Medak Parliamentary Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S03": {
   "id": "S03",
@@ -87,7 +190,39 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Patancheru; Lok Sabha: Medak",
+  "recipients": {
+   "to": [],
+   "cc": [
+    {
+     "designation": "Member of Legislative Assembly (Sri Gudem Mahipal Reddy)",
+     "office": "Patancheru Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Madhavaneni Raghunandan Rao)",
+     "office": "Medak Parliamentary Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S04": {
   "id": "S04",
@@ -112,7 +247,57 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Patancheru; Lok Sabha: Medak",
+  "recipients": {
+   "to": [],
+   "cc": [
+    {
+     "designation": "Regional Office, Hyderabad (Telangana State)",
+     "office": "National Highways Authority of India",
+     "mailbox": "",
+     "postal": "D.No.8-2-269/S/94, Plot No.94, 3rd & 4th Floors, Road No.2, Sagar Society, Banjara Hills, Hyderabad-500034",
+     "source": "https://nhai.gov.in/nhai/taxonomy/term/24"
+    },
+    {
+     "designation": "Secretary to Government (R&B) (Sri Ilambarithi K., IAS)",
+     "office": "Government of Telangana, Transport, Roads & Buildings Department",
+     "mailbox": "splcs-trb@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/roads-and-buildings/"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Gudem Mahipal Reddy)",
+     "office": "Patancheru Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Madhavaneni Raghunandan Rao)",
+     "office": "Medak Parliamentary Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    },
+    {
+     "name": "National Highways Authority of India · National Highway helpline 1033 (toll-free, 24x7) · 1033",
+     "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2265867&reg=3&lang=2"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S05": {
   "id": "S05",
@@ -137,7 +322,61 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Patancheru; Lok Sabha: Medak; Cyberabad Municipal Corporation - Serilingampally zone",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Gudem Mahipal Reddy)",
+     "office": "Patancheru Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Madhavaneni Raghunandan Rao)",
+     "office": "Medak Parliamentary Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S06": {
   "id": "S06",
@@ -162,7 +401,64 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Patancheru; Lok Sabha: Medak; Cyberabad Municipal Corporation - Serilingampally zone",
+  "recipients": {
+   "to": [],
+   "cc": [
+    {
+     "designation": "Regional Office, Hyderabad (Telangana State)",
+     "office": "National Highways Authority of India",
+     "mailbox": "",
+     "postal": "D.No.8-2-269/S/94, Plot No.94, 3rd & 4th Floors, Road No.2, Sagar Society, Banjara Hills, Hyderabad-500034",
+     "source": "https://nhai.gov.in/nhai/taxonomy/term/24"
+    },
+    {
+     "designation": "Secretary to Government (R&B) (Sri Ilambarithi K., IAS)",
+     "office": "Government of Telangana, Transport, Roads & Buildings Department",
+     "mailbox": "splcs-trb@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/roads-and-buildings/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Gudem Mahipal Reddy)",
+     "office": "Patancheru Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Madhavaneni Raghunandan Rao)",
+     "office": "Medak Parliamentary Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    },
+    {
+     "name": "National Highways Authority of India · National Highway helpline 1033 (toll-free, 24x7) · 1033",
+     "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2265867&reg=3&lang=2"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S07": {
   "id": "S07",
@@ -187,7 +483,47 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Cyberabad Municipal Corporation - Serilingampally zone",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S08": {
   "id": "S08",
@@ -212,7 +548,61 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Serilingampally; Lok Sabha: Chevella; Cyberabad Municipal Corporation - Serilingampally zone",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Arekapudi Gandhi)",
+     "office": "Serilingampally Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Shri Konda Vishweshwar Reddy)",
+     "office": "Chevella Parliamentary Constituency",
+     "mailbox": "kvishweshwar.reddy@mpls.sansad.in",
+     "postal": "18, G.R.G. Road, New Delhi - 110001 (Delhi address as published)",
+     "source": "https://sansad.in/api_ls/member/4800"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S09": {
   "id": "S09",
@@ -237,7 +627,61 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Serilingampally; Lok Sabha: Chevella; Cyberabad Municipal Corporation - Serilingampally zone",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Arekapudi Gandhi)",
+     "office": "Serilingampally Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Shri Konda Vishweshwar Reddy)",
+     "office": "Chevella Parliamentary Constituency",
+     "mailbox": "kvishweshwar.reddy@mpls.sansad.in",
+     "postal": "18, G.R.G. Road, New Delhi - 110001 (Delhi address as published)",
+     "source": "https://sansad.in/api_ls/member/4800"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S10": {
   "id": "S10",
@@ -262,7 +706,61 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Serilingampally; Lok Sabha: Chevella; Cyberabad Municipal Corporation - Serilingampally zone",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Arekapudi Gandhi)",
+     "office": "Serilingampally Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Shri Konda Vishweshwar Reddy)",
+     "office": "Chevella Parliamentary Constituency",
+     "mailbox": "kvishweshwar.reddy@mpls.sansad.in",
+     "postal": "18, G.R.G. Road, New Delhi - 110001 (Delhi address as published)",
+     "source": "https://sansad.in/api_ls/member/4800"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S11": {
   "id": "S11",
@@ -287,7 +785,61 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Serilingampally; Lok Sabha: Chevella; Cyberabad Municipal Corporation - Serilingampally zone",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Arekapudi Gandhi)",
+     "office": "Serilingampally Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Shri Konda Vishweshwar Reddy)",
+     "office": "Chevella Parliamentary Constituency",
+     "mailbox": "kvishweshwar.reddy@mpls.sansad.in",
+     "postal": "18, G.R.G. Road, New Delhi - 110001 (Delhi address as published)",
+     "source": "https://sansad.in/api_ls/member/4800"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S12": {
   "id": "S12",
@@ -312,7 +864,61 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Serilingampally; Lok Sabha: Chevella; Cyberabad Municipal Corporation - Serilingampally zone",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Arekapudi Gandhi)",
+     "office": "Serilingampally Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Shri Konda Vishweshwar Reddy)",
+     "office": "Chevella Parliamentary Constituency",
+     "mailbox": "kvishweshwar.reddy@mpls.sansad.in",
+     "postal": "18, G.R.G. Road, New Delhi - 110001 (Delhi address as published)",
+     "source": "https://sansad.in/api_ls/member/4800"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S13": {
   "id": "S13",
@@ -337,7 +943,64 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Serilingampally; Lok Sabha: Chevella; Cyberabad Municipal Corporation",
+  "recipients": {
+   "to": [],
+   "cc": [
+    {
+     "designation": "Regional Office, Hyderabad (Telangana State)",
+     "office": "National Highways Authority of India",
+     "mailbox": "",
+     "postal": "D.No.8-2-269/S/94, Plot No.94, 3rd & 4th Floors, Road No.2, Sagar Society, Banjara Hills, Hyderabad-500034",
+     "source": "https://nhai.gov.in/nhai/taxonomy/term/24"
+    },
+    {
+     "designation": "Secretary to Government (R&B) (Sri Ilambarithi K., IAS)",
+     "office": "Government of Telangana, Transport, Roads & Buildings Department",
+     "mailbox": "splcs-trb@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/roads-and-buildings/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Arekapudi Gandhi)",
+     "office": "Serilingampally Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Shri Konda Vishweshwar Reddy)",
+     "office": "Chevella Parliamentary Constituency",
+     "mailbox": "kvishweshwar.reddy@mpls.sansad.in",
+     "postal": "18, G.R.G. Road, New Delhi - 110001 (Delhi address as published)",
+     "source": "https://sansad.in/api_ls/member/4800"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    },
+    {
+     "name": "National Highways Authority of India · National Highway helpline 1033 (toll-free, 24x7) · 1033",
+     "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2265867&reg=3&lang=2"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S14": {
   "id": "S14",
@@ -362,7 +1025,61 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Serilingampally; Lok Sabha: Chevella; Cyberabad Municipal Corporation - Serilingampally zone",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Arekapudi Gandhi)",
+     "office": "Serilingampally Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Shri Konda Vishweshwar Reddy)",
+     "office": "Chevella Parliamentary Constituency",
+     "mailbox": "kvishweshwar.reddy@mpls.sansad.in",
+     "postal": "18, G.R.G. Road, New Delhi - 110001 (Delhi address as published)",
+     "source": "https://sansad.in/api_ls/member/4800"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S15": {
   "id": "S15",
@@ -387,7 +1104,61 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Serilingampally; Lok Sabha: Chevella; Cyberabad Municipal Corporation - Serilingampally zone",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Arekapudi Gandhi)",
+     "office": "Serilingampally Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Shri Konda Vishweshwar Reddy)",
+     "office": "Chevella Parliamentary Constituency",
+     "mailbox": "kvishweshwar.reddy@mpls.sansad.in",
+     "postal": "18, G.R.G. Road, New Delhi - 110001 (Delhi address as published)",
+     "source": "https://sansad.in/api_ls/member/4800"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S16": {
   "id": "S16",
@@ -417,7 +1188,61 @@ window.ARCROAD_PAIRS = {
   },
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Serilingampally; Lok Sabha: Chevella; Cyberabad Municipal Corporation",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Arekapudi Gandhi)",
+     "office": "Serilingampally Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Shri Konda Vishweshwar Reddy)",
+     "office": "Chevella Parliamentary Constituency",
+     "mailbox": "kvishweshwar.reddy@mpls.sansad.in",
+     "postal": "18, G.R.G. Road, New Delhi - 110001 (Delhi address as published)",
+     "source": "https://sansad.in/api_ls/member/4800"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S17": {
   "id": "S17",
@@ -442,7 +1267,47 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Cyberabad Municipal Corporation",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S18": {
   "id": "S18",
@@ -476,7 +1341,47 @@ window.ARCROAD_PAIRS = {
   },
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Cyberabad Municipal Corporation",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S19": {
   "id": "S19",
@@ -501,7 +1406,50 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Cyberabad Municipal Corporation",
+  "recipients": {
+   "to": [],
+   "cc": [
+    {
+     "designation": "Regional Office, Hyderabad (Telangana State)",
+     "office": "National Highways Authority of India",
+     "mailbox": "",
+     "postal": "D.No.8-2-269/S/94, Plot No.94, 3rd & 4th Floors, Road No.2, Sagar Society, Banjara Hills, Hyderabad-500034",
+     "source": "https://nhai.gov.in/nhai/taxonomy/term/24"
+    },
+    {
+     "designation": "Secretary to Government (R&B) (Sri Ilambarithi K., IAS)",
+     "office": "Government of Telangana, Transport, Roads & Buildings Department",
+     "mailbox": "splcs-trb@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/roads-and-buildings/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    },
+    {
+     "name": "National Highways Authority of India · National Highway helpline 1033 (toll-free, 24x7) · 1033",
+     "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2265867&reg=3&lang=2"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S20": {
   "id": "S20",
@@ -526,7 +1474,61 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Quthbullapur; Lok Sabha: Malkajgiri; Cyberabad Municipal Corporation - Quthbullapur zone",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri K.P. Vivekanand)",
+     "office": "Quthbullapur Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Eatala Rajender)",
+     "office": "Malkajgiri Parliamentary Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S21": {
   "id": "S21",
@@ -551,7 +1553,61 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Quthbullapur; Lok Sabha: Malkajgiri; Cyberabad Municipal Corporation - Quthbullapur zone",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Commissioner (Smt. G. Srijana, IAS)",
+     "office": "Cyberabad Municipal Corporation",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri K.P. Vivekanand)",
+     "office": "Quthbullapur Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Eatala Rajender)",
+     "office": "Malkajgiri Parliamentary Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S22": {
   "id": "S22",
@@ -576,7 +1632,53 @@ window.ARCROAD_PAIRS = {
   "driven": {},
   "extract_date": "2026-11-02",
   "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/"
+  "evidence_url": "https://arcroad.org/field/",
+  "where": "Assembly: Quthbullapur; Lok Sabha: Malkajgiri; Cyberabad Municipal Corporation - Quthbullapur zone",
+  "recipients": {
+   "to": [],
+   "cc": [
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri K.P. Vivekanand)",
+     "office": "Quthbullapur Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Eatala Rajender)",
+     "office": "Malkajgiri Parliamentary Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S23": {
   "id": "S23",
@@ -602,7 +1704,60 @@ window.ARCROAD_PAIRS = {
   "extract_date": "2026-11-02",
   "commit": "v05.1",
   "evidence_url": "https://arcroad.org/field/",
-  "tw_note": "the model finds almost no detour for two-wheelers here while cars go the long way; not yet checked on the ground"
+  "tw_note": "the model finds almost no detour for two-wheelers here while cars go the long way; not yet checked on the ground",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Project Director & Special Collector, ORR",
+     "office": "Hyderabad Metropolitan Development Authority",
+     "mailbox": "pdorr@hmda.gov.in",
+     "postal": "HMDA, Swarna Jayanti Complex, Sanjeeva Reddy Nagar, Srinivasa Nagar, Ameerpet, Hyderabad - 500038",
+     "source": "https://www.hmda.gov.in/contact/"
+    },
+    {
+     "designation": "Chief General Manager, HGCL",
+     "office": "Hyderabad Growth Corridor Limited (HMDA)",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.hmda.gov.in/contact/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Metropolitan Commissioner (Sri Sarfaraz Ahmad, I.A.S)",
+     "office": "Hyderabad Metropolitan Development Authority",
+     "mailbox": "mc@hmda.gov.in",
+     "postal": "HMDA, Swarna Jayanti Complex, Sanjeeva Reddy Nagar, Srinivasa Nagar, Ameerpet, Hyderabad - 500038",
+     "source": "https://www.hmda.gov.in/contact/"
+    },
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  },
  "S24": {
   "id": "S24",
@@ -637,6 +1792,74 @@ window.ARCROAD_PAIRS = {
   "extract_date": "2026-11-02",
   "commit": "v05.1",
   "evidence_url": "https://arcroad.org/field/",
-  "tw_note": "the model finds almost no detour for two-wheelers here while cars go the long way; not yet checked on the ground"
+  "tw_note": "the model finds almost no detour for two-wheelers here while cars go the long way; not yet checked on the ground",
+  "where": "Assembly: Patancheru; Lok Sabha: Medak; Cyberabad Municipal Corporation - Serilingampally zone",
+  "recipients": {
+   "to": [
+    {
+     "designation": "Project Director & Special Collector, ORR",
+     "office": "Hyderabad Metropolitan Development Authority",
+     "mailbox": "pdorr@hmda.gov.in",
+     "postal": "HMDA, Swarna Jayanti Complex, Sanjeeva Reddy Nagar, Srinivasa Nagar, Ameerpet, Hyderabad - 500038",
+     "source": "https://www.hmda.gov.in/contact/"
+    },
+    {
+     "designation": "Chief General Manager, HGCL",
+     "office": "Hyderabad Growth Corridor Limited (HMDA)",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.hmda.gov.in/contact/"
+    }
+   ],
+   "cc": [
+    {
+     "designation": "Metropolitan Commissioner (Sri Sarfaraz Ahmad, I.A.S)",
+     "office": "Hyderabad Metropolitan Development Authority",
+     "mailbox": "mc@hmda.gov.in",
+     "postal": "HMDA, Swarna Jayanti Complex, Sanjeeva Reddy Nagar, Srinivasa Nagar, Ameerpet, Hyderabad - 500038",
+     "source": "https://www.hmda.gov.in/contact/"
+    },
+    {
+     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
+     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
+     "mailbox": "secy-hma-maud@telangana.gov.in",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
+    },
+    {
+     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+     "office": "Cyberabad Police - Traffic",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
+    },
+    {
+     "designation": "Member of Legislative Assembly (Sri Gudem Mahipal Reddy)",
+     "office": "Patancheru Assembly Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
+    },
+    {
+     "designation": "Member of Parliament (Madhavaneni Raghunandan Rao)",
+     "office": "Medak Parliamentary Constituency",
+     "mailbox": "",
+     "postal": "",
+     "source": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm"
+    }
+   ],
+   "portals": [
+    {
+     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+     "url": "https://pgportal.gov.in/"
+    },
+    {
+     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
+     "url": "http://cpgrams.ts.nic.in"
+    }
+   ],
+   "rti": null,
+   "checked": "2026-11-02"
+  }
  }
 };

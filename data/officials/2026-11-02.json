@@ -1,0 +1,1073 @@
+{
+ "generated": "2026-11-02",
+ "notes": [
+  "Network limits: cmc.telangana.gov.in, ghmc.gov.in, legislature.telangana.gov.in member pages, hmda.gov.in ORR pages, ceotelangana.nic.in RWA/polling lists and most sansad.in member pages could not be fetched. Gaps follow from this, not from absence of data.",
+  "Boundaries were determined from locality names against statutory mandal-level AC extents (AP Reorganisation Act 2014, Sch. XXVII) - not from polygon boundary files. Points near AC/district lines are left null.",
+  "Since 11 Feb 2026 the points inside the ORR fall under the Cyberabad Municipal Corporation (CMC), not GHMC; zone/circle placements rely on press reports of CMC's ward list, so 'ward' is null everywhere.",
+  "Police commissionerate assignments rely on press; a 1 Oct 2026 redraw of 76 police stations was reported without a station list.",
+  "No official source states who maintains any NH65 stretch here; road_owner is null for S01, S04, S06, S13, S19.",
+  "City-road owners are inferred (CMC) and marked confirmed=false.",
+  "MLA party affiliations deliberately omitted (several elected on BRS tickets later associated with Congress; Speaker dismissed disqualification petitions in Dec 2025).",
+  "No RTI PIO (L5) contact was obtained for any owning office.",
+  "Districts reflect the current mandal-district mapping; any 2026 district reorganisation was not checked."
+ ],
+ "places": {
+  "S01": {
+   "assembly": "Patancheru",
+   "lok_sabha": "Medak",
+   "local_body": "Cyberabad Municipal Corporation - Serilingampally zone (Patancheruvu circle per press)",
+   "ward": null,
+   "district": "Sangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": null,
+    "confirmed": false,
+    "source_url": null,
+    "note": "NH65. No official page found stating which agency maintains this stretch. Press reports NHAI executing NH65 widening between Patancheru and Sangareddy (https://telanganatoday.com/nh-65-traffic-diversion-between-patancheru-and-sangareddy-from-september-26); PIB 5 Mar 2024 records foundation for six-laning of a 29 km Pune-Hyderabad section of NH-65 near Patancheru without naming the agency (https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2011518&reg=48&lang=2). Candidate offices (NHAI RO Hyderabad, Telangana R&B) listed at L2 for routing only."
+   },
+   "office_ids": {
+    "L1": [],
+    "L2": [
+     "nhai_ro_hyderabad",
+     "tgrb_secretary",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_patancheru",
+     "mp_medak"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams",
+     "nhai_1033"
+    ],
+    "L5": []
+   },
+   "how": "Patancheru town is in Patancheru mandal -> Patancheru AC/Medak LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php); Patancheru ward listed in CMC Patancheruvu circle (https://www.siasat.com/which-cyberabad-municipal-corporation-ward-is-your-area-in-check-here-3385219/, press). Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S02": {
+   "assembly": "Patancheru",
+   "lok_sabha": "Medak",
+   "local_body": null,
+   "ward": null,
+   "district": "Sangareddy",
+   "police": null,
+   "road_owner": {
+    "office_id": null,
+    "confirmed": false,
+    "source_url": null,
+    "note": "Patancheru-Shankarpalli road: owner (R&B state road vs municipal) not established from an official source."
+   },
+   "office_ids": {
+    "L1": [],
+    "L2": [
+     "tgrb_secretary",
+     "tgrb_ce_state_roads"
+    ],
+    "L3": [
+     "mla_patancheru",
+     "mp_medak"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "West of Patancheru town on Patancheru-Shankarpalli road, within Patancheru mandal -> Patancheru AC/Medak LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php). Local body left null: point may be in Patancheru (CMC) or in Pocharam/Muthangi GPs merged into Tellapur->CMC (https://prsindia.org/files/bills_acts/bills_states/telangana/2025/Ord11of2025TS.pdf) or outside both; boundary not verified. Police null: PS jurisdiction not verified."
+  },
+  "S03": {
+   "assembly": "Patancheru",
+   "lok_sabha": "Medak",
+   "local_body": null,
+   "ward": null,
+   "district": "Sangareddy",
+   "police": null,
+   "road_owner": {
+    "office_id": null,
+    "confirmed": false,
+    "source_url": null,
+    "note": "Unnamed road in OSM; owner unknown."
+   },
+   "office_ids": {
+    "L1": [],
+    "L2": [],
+    "L3": [
+     "mla_patancheru",
+     "mp_medak"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Nandigama village is in Patancheru mandal -> Patancheru AC/Medak LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php). Not among GPs merged into GHMC/CMC in Ord. 11/2025 (https://prsindia.org/files/bills_acts/bills_states/telangana/2025/Ord11of2025TS.pdf); press (2024) lists Nandigama in a proposed Bhanur municipality (https://telanganatoday.com/five-more-new-municipalities-in-patancheru-constituency) - status unverified, so local body null. Police jurisdiction unverified."
+  },
+  "S04": {
+   "assembly": "Patancheru",
+   "lok_sabha": "Medak",
+   "local_body": null,
+   "ward": null,
+   "district": "Sangareddy",
+   "police": null,
+   "road_owner": {
+    "office_id": null,
+    "confirmed": false,
+    "source_url": null,
+    "note": "NH65. No official page found stating which agency maintains this stretch. Press reports NHAI executing NH65 widening between Patancheru and Sangareddy (https://telanganatoday.com/nh-65-traffic-diversion-between-patancheru-and-sangareddy-from-september-26); PIB 5 Mar 2024 records foundation for six-laning of a 29 km Pune-Hyderabad section of NH-65 near Patancheru without naming the agency (https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2011518&reg=48&lang=2). Candidate offices (NHAI RO Hyderabad, Telangana R&B) listed at L2 for routing only."
+   },
+   "office_ids": {
+    "L1": [],
+    "L2": [
+     "nhai_ro_hyderabad",
+     "tgrb_secretary"
+    ],
+    "L3": [
+     "mla_patancheru",
+     "mp_medak"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams",
+     "nhai_1033"
+    ],
+    "L5": []
+   },
+   "how": "Isnapur is in Patancheru mandal -> Patancheru AC/Medak LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php). Isnapur Municipality exists (formed 2025, elections Feb 2026; https://en.wikipedia.org/wiki/Isnapur) but its boundary vs the Tellapur-merged Muthangi GP was not verified, so local body null (candidate: Isnapur Municipality). Police unverified (Cyberabad vs Sangareddy district police)."
+  },
+  "S05": {
+   "assembly": "Patancheru",
+   "lok_sabha": "Medak",
+   "local_body": "Cyberabad Municipal Corporation - Serilingampally zone (Ameenpur circle, inferred)",
+   "ward": null,
+   "district": "Sangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. "
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_patancheru",
+     "mp_medak"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Krishna Reddy Pet = Kistareddypet, a GP merged with Ameenpur municipality into GHMC (Ord. 11/2025 Sch. X, https://prsindia.org/files/bills_acts/bills_states/telangana/2025/Ord11of2025TS.pdf), now CMC Ameenpur circle; area formerly Patancheru mandal -> Patancheru AC (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php). Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S06": {
+   "assembly": "Patancheru",
+   "lok_sabha": "Medak",
+   "local_body": "Cyberabad Municipal Corporation - Serilingampally zone (Ameenpur circle per press)",
+   "ward": null,
+   "district": "Sangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": null,
+    "confirmed": false,
+    "source_url": null,
+    "note": "NH65. No official page found stating which agency maintains this stretch. Press reports NHAI executing NH65 widening between Patancheru and Sangareddy (https://telanganatoday.com/nh-65-traffic-diversion-between-patancheru-and-sangareddy-from-september-26); PIB 5 Mar 2024 records foundation for six-laning of a 29 km Pune-Hyderabad section of NH-65 near Patancheru without naming the agency (https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2011518&reg=48&lang=2). Candidate offices (NHAI RO Hyderabad, Telangana R&B) listed at L2 for routing only."
+   },
+   "office_ids": {
+    "L1": [],
+    "L2": [
+     "nhai_ro_hyderabad",
+     "tgrb_secretary",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_patancheru",
+     "mp_medak"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams",
+     "nhai_1033"
+    ],
+    "L5": []
+   },
+   "how": "Beeramguda (RC Puram/Ameenpur area, formerly Ramachandrapuram/Patancheru mandals) -> Patancheru AC (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php); Beeramguda ward listed in CMC Ameenpur circle (https://www.siasat.com/which-cyberabad-municipal-corporation-ward-is-your-area-in-check-here-3385219/, press). Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S07": {
+   "assembly": null,
+   "lok_sabha": null,
+   "local_body": "Cyberabad Municipal Corporation - Serilingampally zone (inferred)",
+   "ward": null,
+   "district": null,
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Nallagandla Road."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Rail Vihar near Lingampally/BHEL lies close to the Sangareddy (RC Puram mandal, Patancheru AC) / Rangareddy (Serilingampally mandal, Serilingampally AC) line; Wikipedia also lists BHEL Township under Serilingampally AC (https://en.wikipedia.org/wiki/Serilingampally_Assembly_constituency), contradicting the statutory mandal extent. AC, LS and district left null. Both candidate localities are CMC Serilingampally zone. Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S08": {
+   "assembly": "Serilingampally",
+   "lok_sabha": "Chevella",
+   "local_body": "Cyberabad Municipal Corporation - Serilingampally zone",
+   "ward": null,
+   "district": "Rangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Old Bombay Road."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_serilingampally",
+     "mp_chevella"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Lingampally/Adarsh Nagar (east of Lingampally station) is in Serilingampally mandal (Rangareddy) -> Serilingampally AC/Chevella LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php; locality list on https://en.wikipedia.org/wiki/Serilingampally_Assembly_constituency). Medium confidence: point is ~1.5 km from the district line. Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S09": {
+   "assembly": "Serilingampally",
+   "lok_sabha": "Chevella",
+   "local_body": "Cyberabad Municipal Corporation - Serilingampally zone (Serilingampally circle per press)",
+   "ward": null,
+   "district": "Rangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Masjid Banda link."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_serilingampally",
+     "mp_chevella"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Masjid Banda / Sudarshan Nagar (Kondapur) is in Serilingampally mandal (Rangareddy) -> Serilingampally AC/Chevella LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php; locality list on https://en.wikipedia.org/wiki/Serilingampally_Assembly_constituency). Masjid Banda ward in CMC Serilingampally circle (https://www.siasat.com/which-cyberabad-municipal-corporation-ward-is-your-area-in-check-here-3385219/, press). Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S10": {
+   "assembly": "Serilingampally",
+   "lok_sabha": "Chevella",
+   "local_body": "Cyberabad Municipal Corporation - Serilingampally zone (Serilingampally circle per press)",
+   "ward": null,
+   "district": "Rangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Nallagandla Road."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_serilingampally",
+     "mp_chevella"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Nallagandla/Gachibowli (old GHMC ward 105 Gachibowli in OSM) is in Serilingampally mandal (Rangareddy) -> Serilingampally AC/Chevella LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php; locality list on https://en.wikipedia.org/wiki/Serilingampally_Assembly_constituency). Nallagandla and Gachibowli wards in CMC Serilingampally circle (https://www.siasat.com/which-cyberabad-municipal-corporation-ward-is-your-area-in-check-here-3385219/, press). Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S11": {
+   "assembly": "Serilingampally",
+   "lok_sabha": "Chevella",
+   "local_body": "Cyberabad Municipal Corporation - Serilingampally zone (Miyapur circle per press)",
+   "ward": null,
+   "district": "Rangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Gachibowli-Miyapur Road."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_serilingampally",
+     "mp_chevella"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Hafeezpet/Vinayak Nagar is in Serilingampally mandal (Rangareddy) -> Serilingampally AC/Chevella LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php; locality list on https://en.wikipedia.org/wiki/Serilingampally_Assembly_constituency). Hafeezpet ward in CMC Miyapur circle (https://www.siasat.com/which-cyberabad-municipal-corporation-ward-is-your-area-in-check-here-3385219/, press). Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S12": {
+   "assembly": "Serilingampally",
+   "lok_sabha": "Chevella",
+   "local_body": "Cyberabad Municipal Corporation - Serilingampally zone (Miyapur circle per press)",
+   "ward": null,
+   "district": "Rangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Hafeezpet flyover - flyover builder/maintainer not verified."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_serilingampally",
+     "mp_chevella"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Hafeezpet is in Serilingampally mandal (Rangareddy) -> Serilingampally AC/Chevella LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php; locality list on https://en.wikipedia.org/wiki/Serilingampally_Assembly_constituency). Hafeezpet ward in CMC Miyapur circle (https://www.siasat.com/which-cyberabad-municipal-corporation-ward-is-your-area-in-check-here-3385219/, press). Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S13": {
+   "assembly": "Serilingampally",
+   "lok_sabha": "Chevella",
+   "local_body": "Cyberabad Municipal Corporation",
+   "ward": null,
+   "district": "Rangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": null,
+    "confirmed": false,
+    "source_url": null,
+    "note": "NH65. No official page found stating which agency maintains this stretch. Press reports NHAI executing NH65 widening between Patancheru and Sangareddy (https://telanganatoday.com/nh-65-traffic-diversion-between-patancheru-and-sangareddy-from-september-26); PIB 5 Mar 2024 records foundation for six-laning of a 29 km Pune-Hyderabad section of NH-65 near Patancheru without naming the agency (https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2011518&reg=48&lang=2). Candidate offices (NHAI RO Hyderabad, Telangana R&B) listed at L2 for routing only."
+   },
+   "office_ids": {
+    "L1": [],
+    "L2": [
+     "nhai_ro_hyderabad",
+     "tgrb_secretary",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_serilingampally",
+     "mp_chevella"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams",
+     "nhai_1033"
+    ],
+    "L5": []
+   },
+   "how": "Miyapur and Allwyn Colony are both listed in Serilingampally AC (https://en.wikipedia.org/wiki/Serilingampally_Assembly_constituency); statutory extent includes Serilingampally mandal + Kukatpally (M) wards 1-4 (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php) -> Serilingampally AC/Chevella LS. Zone left out: Miyapur is Serilingampally zone, Allwyn Colony is Kukatpally zone (press). District Rangareddy assumes the point is in Miyapur (Serilingampally mandal), medium confidence. Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S14": {
+   "assembly": "Serilingampally",
+   "lok_sabha": "Chevella",
+   "local_body": "Cyberabad Municipal Corporation - Serilingampally zone",
+   "ward": null,
+   "district": "Rangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Gachibowli-Miyapur Highway."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_serilingampally",
+     "mp_chevella"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Marthanda Nagar (Kondapur/Hafeezpet) is in Serilingampally mandal (Rangareddy) -> Serilingampally AC/Chevella LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php; locality list on https://en.wikipedia.org/wiki/Serilingampally_Assembly_constituency). Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S15": {
+   "assembly": "Serilingampally",
+   "lok_sabha": "Chevella",
+   "local_body": "Cyberabad Municipal Corporation - Serilingampally zone (Serilingampally circle per press)",
+   "ward": null,
+   "district": "Rangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Gachibowli-Miyapur Highway."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_serilingampally",
+     "mp_chevella"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Jubilee Gardens (Kondapur) is in Serilingampally mandal (Rangareddy) -> Serilingampally AC/Chevella LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php; locality list on https://en.wikipedia.org/wiki/Serilingampally_Assembly_constituency). Kondapur ward in CMC Serilingampally circle (https://www.siasat.com/which-cyberabad-municipal-corporation-ward-is-your-area-in-check-here-3385219/, press). Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S16": {
+   "assembly": "Serilingampally",
+   "lok_sabha": "Chevella",
+   "local_body": "Cyberabad Municipal Corporation",
+   "ward": null,
+   "district": "Rangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Hitec-Kukatpally Main Road."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_serilingampally",
+     "mp_chevella"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "HITEC City (Madhapur) is in Serilingampally mandal (Rangareddy) -> Serilingampally AC/Chevella LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php; locality list on https://en.wikipedia.org/wiki/Serilingampally_Assembly_constituency). Madhapur is listed in Serilingampally AC (https://en.wikipedia.org/wiki/Serilingampally_Assembly_constituency); in CMC, Madhapur circle sits in Kukatpally zone (press), so zone omitted. Medium confidence: point is south of the KPHB side. Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S17": {
+   "assembly": null,
+   "lok_sabha": null,
+   "local_body": "Cyberabad Municipal Corporation",
+   "ward": null,
+   "district": null,
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Hitec-Kukatpally Main Road / 4th Phase Road."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Point is on the HITEC-KPHB corridor near the Serilingampally AC / Kukatpalle AC line (and Rangareddy/Medchal-Malkajgiri line). KPHB division is listed in Kukatpally AC (https://en.wikipedia.org/wiki/Kukatpally_Assembly_constituency) but Kukatpally (M) wards 1-4 belong to Serilingampally AC (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php), and the line at this point was not verified -> AC, LS, district null (candidates: Kukatpalle AC/Malkajgiri LS or Serilingampally AC/Chevella LS). Both candidates are within CMC. Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S18": {
+   "assembly": null,
+   "lok_sabha": null,
+   "local_body": "Cyberabad Municipal Corporation",
+   "ward": null,
+   "district": null,
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Hitec-Kukatpally Main Road."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Point is on the HITEC-KPHB corridor near the Serilingampally AC / Kukatpalle AC line (and Rangareddy/Medchal-Malkajgiri line). KPHB division is listed in Kukatpally AC (https://en.wikipedia.org/wiki/Kukatpally_Assembly_constituency) but Kukatpally (M) wards 1-4 belong to Serilingampally AC (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php), and the line at this point was not verified -> AC, LS, district null (candidates: Kukatpalle AC/Malkajgiri LS or Serilingampally AC/Chevella LS). Both candidates are within CMC. Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S19": {
+   "assembly": null,
+   "lok_sabha": null,
+   "local_body": "Cyberabad Municipal Corporation",
+   "ward": null,
+   "district": null,
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": null,
+    "confirmed": false,
+    "source_url": null,
+    "note": "NH65. No official page found stating which agency maintains this stretch. Press reports NHAI executing NH65 widening between Patancheru and Sangareddy (https://telanganatoday.com/nh-65-traffic-diversion-between-patancheru-and-sangareddy-from-september-26); PIB 5 Mar 2024 records foundation for six-laning of a 29 km Pune-Hyderabad section of NH-65 near Patancheru without naming the agency (https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2011518&reg=48&lang=2). Candidate offices (NHAI RO Hyderabad, Telangana R&B) listed at L2 for routing only."
+   },
+   "office_ids": {
+    "L1": [],
+    "L2": [
+     "nhai_ro_hyderabad",
+     "tgrb_secretary",
+     "cyberabad_traffic"
+    ],
+    "L3": [],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams",
+     "nhai_1033"
+    ],
+    "L5": []
+   },
+   "how": "Satavahana Nagar near JNTU/Nizampet road: candidates Kukatpalle AC, Serilingampally AC (Kukatpally M wards 1-4) or Quthbullapur AC (Nizampet side); boundary not verified -> AC/LS/district null. Within CMC (Kukatpally or Quthbullapur zone). Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  },
+  "S20": {
+   "assembly": "Quthbullapur",
+   "lok_sabha": "Malkajgiri",
+   "local_body": "Cyberabad Municipal Corporation - Quthbullapur zone (Nizampet circle per press)",
+   "ward": null,
+   "district": "Medchal-Malkajgiri",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Unnamed road in OSM."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_quthbullapur",
+     "mp_malkajgiri"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Nizampet lies in the former Quthbullapur mandal (Medchal-Malkajgiri) -> Quthbullapur AC/Malkajgiri LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php; https://en.wikipedia.org/wiki/Quthbullapur_Assembly_constituency; https://en.wikipedia.org/wiki/Bachupally). Nizampet Municipal Corporation (incl. Bachupally) merged into GHMC by Ord. 11/2025 (https://prsindia.org/files/bills_acts/bills_states/telangana/2025/Ord11of2025TS.pdf), now CMC Quthbullapur zone (Nizampet circle per press). Police: Bachupally PS named in Cyberabad July 2026 transfers (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/) although press on the Dec 2025 reorg put 'Quthbullapur' in Malkajgiri commissionerate (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate) - flag. "
+  },
+  "S21": {
+   "assembly": "Quthbullapur",
+   "lok_sabha": "Malkajgiri",
+   "local_body": "Cyberabad Municipal Corporation - Quthbullapur zone (Nizampet circle per press)",
+   "ward": null,
+   "district": "Medchal-Malkajgiri",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "cmc_commissioner",
+    "confirmed": false,
+    "source_url": null,
+    "note": "Inferred only: local/arterial road inside Cyberabad Municipal Corporation limits; no official road-inventory or maintenance list was consulted. Unnamed road in OSM."
+   },
+   "office_ids": {
+    "L1": [
+     "cmc_commissioner"
+    ],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_quthbullapur",
+     "mp_malkajgiri"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Bachupally (OSM places the point in Bachupally mandal; Bachupally mandal HQ per Wikipedia) lies in the former Quthbullapur mandal (Medchal-Malkajgiri) -> Quthbullapur AC/Malkajgiri LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php; https://en.wikipedia.org/wiki/Quthbullapur_Assembly_constituency; https://en.wikipedia.org/wiki/Bachupally). Nizampet Municipal Corporation (incl. Bachupally) merged into GHMC by Ord. 11/2025 (https://prsindia.org/files/bills_acts/bills_states/telangana/2025/Ord11of2025TS.pdf), now CMC Quthbullapur zone (Nizampet circle per press). Police: Bachupally PS named in Cyberabad July 2026 transfers (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/) although press on the Dec 2025 reorg put 'Quthbullapur' in Malkajgiri commissionerate (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate) - flag. "
+  },
+  "S22": {
+   "assembly": "Quthbullapur",
+   "lok_sabha": "Malkajgiri",
+   "local_body": "Cyberabad Municipal Corporation - Quthbullapur zone",
+   "ward": null,
+   "district": "Medchal-Malkajgiri",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": null,
+    "confirmed": false,
+    "source_url": null,
+    "note": "OSM name 'Medak Road' - may be a national highway (Hyderabad-Medak) or a municipal road; owner not established."
+   },
+   "office_ids": {
+    "L1": [],
+    "L2": [
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_quthbullapur",
+     "mp_malkajgiri"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Anand Naidu Nagar (east of Bachupally), medium confidence, lies in the former Quthbullapur mandal (Medchal-Malkajgiri) -> Quthbullapur AC/Malkajgiri LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php; https://en.wikipedia.org/wiki/Quthbullapur_Assembly_constituency; https://en.wikipedia.org/wiki/Bachupally). Nizampet Municipal Corporation (incl. Bachupally) merged into GHMC by Ord. 11/2025 (https://prsindia.org/files/bills_acts/bills_states/telangana/2025/Ord11of2025TS.pdf), now CMC Quthbullapur zone (Nizampet circle per press). Police: Bachupally PS named in Cyberabad July 2026 transfers (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/) although press on the Dec 2025 reorg put 'Quthbullapur' in Malkajgiri commissionerate (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate) - flag. "
+  },
+  "S23": {
+   "assembly": null,
+   "lok_sabha": null,
+   "local_body": null,
+   "ward": null,
+   "district": null,
+   "police": null,
+   "road_owner": {
+    "office_id": "hmda_pd_orr",
+    "confirmed": true,
+    "source_url": "https://nsearchives.nseindia.com/corporate/IRB_28052023195708_IntimationCAIRBG.pdf",
+    "note": "Outer Ring Road: IRB Golconda Expressway Pvt Ltd holds a 30-year Tolling, Operation, Maintenance & Transfer concession from HMDA for ORR km 0-158 (signed 28 May 2023, IRB stock-exchange filing https://nsearchives.nseindia.com/corporate/IRB_28052023195708_IntimationCAIRBG.pdf). HMDA lists a 'Project Director & Special Collector, ORR' and CGM HGCL on https://www.hmda.gov.in/contact/. Owner/authority = HMDA (HGCL is its ORR SPV); day-to-day maintenance by the concessionaire. hmda.gov.in ORR pages blocked fetching, so HGCL's exact role not read from an official page."
+   },
+   "office_ids": {
+    "L1": [
+     "hmda_pd_orr",
+     "hgcl_cgm"
+    ],
+    "L2": [
+     "hmda_mc",
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "ORR between Sultanpur and Dundigal: OSM area label 'Maheshwaram' is wrong for this location (Maheshwaram is south of the city), and the point is near the Sangareddy (Bollaram, Patancheru AC) / Medchal-Malkajgiri (Bowrampet/Mallampet, Quthbullapur AC) line -> AC, LS, district, local body and police left null."
+  },
+  "S24": {
+   "assembly": "Patancheru",
+   "lok_sabha": "Medak",
+   "local_body": "Cyberabad Municipal Corporation - Serilingampally zone (Ameenpur circle, inferred)",
+   "ward": null,
+   "district": "Sangareddy",
+   "police": "Cyberabad",
+   "road_owner": {
+    "office_id": "hmda_pd_orr",
+    "confirmed": true,
+    "source_url": "https://nsearchives.nseindia.com/corporate/IRB_28052023195708_IntimationCAIRBG.pdf",
+    "note": "Outer Ring Road: IRB Golconda Expressway Pvt Ltd holds a 30-year Tolling, Operation, Maintenance & Transfer concession from HMDA for ORR km 0-158 (signed 28 May 2023, IRB stock-exchange filing https://nsearchives.nseindia.com/corporate/IRB_28052023195708_IntimationCAIRBG.pdf). HMDA lists a 'Project Director & Special Collector, ORR' and CGM HGCL on https://www.hmda.gov.in/contact/. Owner/authority = HMDA (HGCL is its ORR SPV); day-to-day maintenance by the concessionaire. hmda.gov.in ORR pages blocked fetching, so HGCL's exact role not read from an official page."
+   },
+   "office_ids": {
+    "L1": [
+     "hmda_pd_orr",
+     "hgcl_cgm"
+    ],
+    "L2": [
+     "hmda_mc",
+     "maud_secy_hma",
+     "cyberabad_traffic"
+    ],
+    "L3": [
+     "mla_patancheru",
+     "mp_medak"
+    ],
+    "L4": [
+     "cpgrams",
+     "tg_prajavani_cpgrams"
+    ],
+    "L5": []
+   },
+   "how": "Sultanpur GP (Ameenpur mandal, formerly Patancheru mandal) -> Patancheru AC/Medak LS (https://www.advocatekhoj.com/library/bareacts/apreorganisation/schedule2.php); Sultanpur GP merged with Ameenpur municipality into GHMC (Ord. 11/2025 Sch. X, https://prsindia.org/files/bills_acts/bills_states/telangana/2025/Ord11of2025TS.pdf) -> CMC. Medium confidence: relies on OSM area label 'Sultanpur'. Police: Cyberabad per press - 29 Dec 2025 reorg lists Patancheru, RC Puram, Ameenpur, Gachibowli, Madhapur in Cyberabad (https://www.thenewsminute.com/telangana/telangana-rejigs-hyderabad-police-creates-future-city-commissionerate); 16 Jul 2026 Cyberabad transfer list names Miyapur, KPHB, Kukatpally, Chandanagar, Bachupally, Dundigal, Jeedimetla PS (https://www.siasat.com/cyberabad-police-transfer-55-inspectors-in-major-reshuffle-3508147/); traffic PS list on https://www.cyberabadpolice.gov.in/Preview?page_id=57. A 1 Oct 2026 jurisdiction redraw (76 PS) was reported without a station list, so not re-verified."
+  }
+ },
+ "directory": {
+  "nhai_ro_hyderabad": {
+   "id": "nhai_ro_hyderabad",
+   "level": "L2",
+   "body": "National Highways Authority of India",
+   "designation": "Regional Office, Hyderabad (Telangana State)",
+   "jurisdiction": "NHAI projects in Telangana",
+   "mailbox": null,
+   "phone": null,
+   "postal_address": "D.No.8-2-269/S/94, Plot No.94, 3rd & 4th Floors, Road No.2, Sagar Society, Banjara Hills, Hyderabad-500034",
+   "portal_url": null,
+   "name_as_published": null,
+   "source_url": "https://nhai.gov.in/nhai/taxonomy/term/24",
+   "last_verified": "2026-11-02",
+   "note": "Candidate only: NHAI not confirmed as maintainer of the NH65 stretches here. Current page publishes no email/landline; an older nhai.gov.in list (2017, https://nhai.gov.in/nhai/Doc/3aug17/List%20of%20Regional%20Offices.pdf) shows an RO mailbox and an old address - not used because that list is superseded. NHAI PIU Hyderabad / PIU Sangareddy pages not found."
+  },
+  "tgrb_secretary": {
+   "id": "tgrb_secretary",
+   "level": "L2",
+   "body": "Government of Telangana, Transport, Roads & Buildings Department",
+   "designation": "Secretary to Government (R&B)",
+   "jurisdiction": "State roads and R&B (incl. NH wing) - department level",
+   "mailbox": "splcs-trb@telangana.gov.in",
+   "phone": "040-24422022, 040-24422033",
+   "postal_address": null,
+   "portal_url": null,
+   "name_as_published": "Sri Ilambarithi K., IAS",
+   "source_url": "https://www.telangana.gov.in/departments/roads-and-buildings/",
+   "last_verified": "2026-11-02",
+   "note": "No NH-wing (Chief Engineer NH) contact is published on this page."
+  },
+  "tgrb_ce_state_roads": {
+   "id": "tgrb_ce_state_roads",
+   "level": "L2",
+   "body": "Government of Telangana, Roads & Buildings Department",
+   "designation": "Chief Engineer (State Roads), Office of the Engineer-in-Chief (R&B), Erramanzil, Hyderabad",
+   "jurisdiction": "State roads, Telangana",
+   "mailbox": null,
+   "phone": "040-23287323/28",
+   "postal_address": "Office of the Engineer-in-Chief (R&B), Erramanzil, Hyderabad",
+   "portal_url": null,
+   "name_as_published": "Sri B. Venkateshwar Rao",
+   "source_url": "https://www.telangana.gov.in/departments/roads-and-buildings/",
+   "last_verified": "2026-11-02",
+   "note": "Only email published is webmail - not recorded."
+  },
+  "cmc_commissioner": {
+   "id": "cmc_commissioner",
+   "level": "L1",
+   "body": "Cyberabad Municipal Corporation",
+   "designation": "Commissioner",
+   "jurisdiction": "Cyberabad Municipal Corporation (Serilingampally, Kukatpally, Quthbullapur zones)",
+   "mailbox": null,
+   "phone": null,
+   "postal_address": null,
+   "portal_url": null,
+   "name_as_published": "Smt. G. Srijana, IAS",
+   "source_url": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/",
+   "last_verified": "2026-11-02",
+   "note": "Official CMC website (cmc.telangana.gov.in per Wikipedia) could not be fetched; no official mailbox, landline, zonal-commissioner or RTI PIO contacts were obtained. Press places the office in the NAC building near HITEX, Madhapur (not from an official page, so postal_address left null)."
+  },
+  "maud_secy_hma": {
+   "id": "maud_secy_hma",
+   "level": "L2",
+   "body": "Government of Telangana, Municipal Administration & Urban Development Department",
+   "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits",
+   "jurisdiction": "Urban bodies within HMDA limits (incl. CMC, HMDA)",
+   "mailbox": "secy-hma-maud@telangana.gov.in",
+   "phone": "040-23453965, 040-23450075",
+   "postal_address": null,
+   "portal_url": null,
+   "name_as_published": "Sri Sarfaraz Ahmad, IAS",
+   "source_url": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/",
+   "last_verified": "2026-11-02"
+  },
+  "hmda_pd_orr": {
+   "id": "hmda_pd_orr",
+   "level": "L1",
+   "body": "Hyderabad Metropolitan Development Authority",
+   "designation": "Project Director & Special Collector, ORR",
+   "jurisdiction": "Nehru Outer Ring Road",
+   "mailbox": "pdorr@hmda.gov.in",
+   "phone": "27002746",
+   "postal_address": "HMDA, Swarna Jayanti Complex, Sanjeeva Reddy Nagar, Srinivasa Nagar, Ameerpet, Hyderabad - 500038",
+   "portal_url": null,
+   "name_as_published": null,
+   "source_url": "https://www.hmda.gov.in/contact/",
+   "last_verified": "2026-11-02",
+   "note": "Phone as published (Hyderabad STD code 040). ORR O&M is under a TOT concession to IRB Golconda Expressway Pvt Ltd (per IRB filing)."
+  },
+  "hgcl_cgm": {
+   "id": "hgcl_cgm",
+   "level": "L1",
+   "body": "Hyderabad Growth Corridor Limited (HMDA)",
+   "designation": "Chief General Manager, HGCL",
+   "jurisdiction": "Nehru Outer Ring Road",
+   "mailbox": null,
+   "phone": null,
+   "postal_address": null,
+   "portal_url": null,
+   "name_as_published": null,
+   "source_url": "https://www.hmda.gov.in/contact/",
+   "last_verified": "2026-11-02",
+   "note": "HMDA contact page lists only an X/Twitter handle (CGM_HGCL) for this office; no mailbox, landline or address published."
+  },
+  "hmda_mc": {
+   "id": "hmda_mc",
+   "level": "L2",
+   "body": "Hyderabad Metropolitan Development Authority",
+   "designation": "Metropolitan Commissioner",
+   "jurisdiction": "HMDA area",
+   "mailbox": "mc@hmda.gov.in",
+   "phone": "27003313",
+   "postal_address": "HMDA, Swarna Jayanti Complex, Sanjeeva Reddy Nagar, Srinivasa Nagar, Ameerpet, Hyderabad - 500038",
+   "portal_url": null,
+   "name_as_published": "Sri Sarfaraz Ahmad, I.A.S",
+   "source_url": "https://www.hmda.gov.in/contact/",
+   "last_verified": "2026-11-02",
+   "note": "Name from the MA&UD page (https://www.telangana.gov.in/departments/municipal-administration-urban-development/); phone as published on HMDA contact page (STD 040)."
+  },
+  "cyberabad_traffic": {
+   "id": "cyberabad_traffic",
+   "level": "L2",
+   "body": "Cyberabad Police - Traffic",
+   "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
+   "jurisdiction": "Cyberabad traffic police (traffic PS include Madhapur, Gachibowli, Miyapur, Patancheru, Kollur, RC-Puram, Kukatpally, KPHB, Balanagar, Medchal, Jeedimetla)",
+   "mailbox": null,
+   "phone": "040-23002424",
+   "postal_address": null,
+   "portal_url": null,
+   "name_as_published": null,
+   "source_url": "https://www.cyberabadpolice.gov.in/Preview?page_id=57",
+   "last_verified": "2026-11-02",
+   "note": "Landline is the published 'Traffic Control Room' number. No official email published on the page; a mobile number shown there is not recorded. Placed at L2 because traffic police manage median openings/U-turns jointly with the road owner."
+  },
+  "mla_patancheru": {
+   "id": "mla_patancheru",
+   "level": "L3",
+   "body": "Telangana Legislative Assembly",
+   "designation": "Member of Legislative Assembly",
+   "jurisdiction": "Patancheru Assembly Constituency",
+   "mailbox": null,
+   "phone": null,
+   "postal_address": null,
+   "portal_url": null,
+   "name_as_published": "Sri Gudem Mahipal Reddy",
+   "source_url": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/",
+   "last_verified": "2026-11-02",
+   "note": "Page publishes no email, phone or address. Same name in ECI 2023 list of successful candidates."
+  },
+  "mla_serilingampally": {
+   "id": "mla_serilingampally",
+   "level": "L3",
+   "body": "Telangana Legislative Assembly",
+   "designation": "Member of Legislative Assembly",
+   "jurisdiction": "Serilingampally Assembly Constituency",
+   "mailbox": null,
+   "phone": null,
+   "postal_address": null,
+   "portal_url": null,
+   "name_as_published": "Sri Arekapudi Gandhi",
+   "source_url": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/",
+   "last_verified": "2026-11-02",
+   "note": "Page publishes no email, phone or address."
+  },
+  "mla_kukatpally": {
+   "id": "mla_kukatpally",
+   "level": "L3",
+   "body": "Telangana Legislative Assembly",
+   "designation": "Member of Legislative Assembly",
+   "jurisdiction": "Kukatpalle Assembly Constituency",
+   "mailbox": null,
+   "phone": null,
+   "postal_address": null,
+   "portal_url": null,
+   "name_as_published": "Sri Madhavaram Krishna Rao",
+   "source_url": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/",
+   "last_verified": "2026-11-02",
+   "note": "Page publishes no email, phone or address. Not yet linked to any place (S17-S19 AC unresolved)."
+  },
+  "mla_quthbullapur": {
+   "id": "mla_quthbullapur",
+   "level": "L3",
+   "body": "Telangana Legislative Assembly",
+   "designation": "Member of Legislative Assembly",
+   "jurisdiction": "Quthbullapur Assembly Constituency",
+   "mailbox": null,
+   "phone": null,
+   "postal_address": null,
+   "portal_url": null,
+   "name_as_published": "Sri K.P. Vivekanand",
+   "source_url": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/",
+   "last_verified": "2026-11-02",
+   "note": "Page publishes no email, phone or address."
+  },
+  "mp_medak": {
+   "id": "mp_medak",
+   "level": "L3",
+   "body": "Lok Sabha",
+   "designation": "Member of Parliament",
+   "jurisdiction": "Medak Parliamentary Constituency",
+   "mailbox": null,
+   "phone": null,
+   "postal_address": null,
+   "portal_url": null,
+   "name_as_published": "MADHAVANENI RAGHUNANDAN RAO",
+   "source_url": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm",
+   "last_verified": "2026-11-02",
+   "note": "Name as on ECI 2024 results page; sansad.in member page could not be reached, so no contact details recorded."
+  },
+  "mp_chevella": {
+   "id": "mp_chevella",
+   "level": "L3",
+   "body": "Lok Sabha",
+   "designation": "Member of Parliament",
+   "jurisdiction": "Chevella Parliamentary Constituency",
+   "mailbox": "kvishweshwar.reddy@mpls.sansad.in",
+   "phone": null,
+   "postal_address": "18, G.R.G. Road, New Delhi - 110001 (Delhi address as published)",
+   "portal_url": null,
+   "name_as_published": "Shri Konda Vishweshwar Reddy",
+   "source_url": "https://sansad.in/api_ls/member/4800",
+   "last_verified": "2026-11-02",
+   "note": "sansad.in also lists a private-domain email, a residence address and phones; mobiles and non-official email not recorded; 040 landlines omitted as they are tied to the residence address."
+  },
+  "mp_malkajgiri": {
+   "id": "mp_malkajgiri",
+   "level": "L3",
+   "body": "Lok Sabha",
+   "designation": "Member of Parliament",
+   "jurisdiction": "Malkajgiri Parliamentary Constituency",
+   "mailbox": null,
+   "phone": null,
+   "postal_address": null,
+   "portal_url": null,
+   "name_as_published": "EATALA RAJENDER",
+   "source_url": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm",
+   "last_verified": "2026-11-02",
+   "note": "Name as on ECI 2024 results page; sansad.in member page could not be reached, so no contact details recorded."
+  },
+  "cpgrams": {
+   "id": "cpgrams",
+   "level": "L4",
+   "body": "Government of India, DARPG",
+   "designation": "CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
+   "jurisdiction": "Central government bodies incl. NHAI/MoRTH",
+   "mailbox": null,
+   "phone": null,
+   "postal_address": null,
+   "portal_url": "https://pgportal.gov.in/",
+   "name_as_published": null,
+   "source_url": "https://pgportal.gov.in/",
+   "last_verified": "2026-11-02",
+   "note": "Lodging requires registration (https://pgportal.gov.in/Home/LodgeGrievance)."
+  },
+  "tg_prajavani_cpgrams": {
+   "id": "tg_prajavani_cpgrams",
+   "level": "L4",
+   "body": "Government of Telangana (district administration)",
+   "designation": "PRAJAVANI/CPGRAMS - online grievance redressal system",
+   "jurisdiction": "Telangana state/district grievances",
+   "mailbox": null,
+   "phone": null,
+   "postal_address": null,
+   "portal_url": "http://cpgrams.ts.nic.in",
+   "name_as_published": null,
+   "source_url": "https://rangareddy.telangana.gov.in/service/how-to-lodge-a-grievance/",
+   "last_verified": "2026-11-02",
+   "note": "Portal URL is http (as published on the district page). Same mechanism is linked from other district sites."
+  },
+  "nhai_1033": {
+   "id": "nhai_1033",
+   "level": "L4",
+   "body": "National Highways Authority of India",
+   "designation": "National Highway helpline 1033 (toll-free, 24x7)",
+   "jurisdiction": "National Highways",
+   "mailbox": null,
+   "phone": "1033",
+   "postal_address": null,
+   "portal_url": null,
+   "name_as_published": null,
+   "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2265867&reg=3&lang=2",
+   "last_verified": "2026-11-02",
+   "note": "Only relevant if the NH65 stretch is an NHAI/MoRTH-administered NH; maintaining agency unconfirmed for these stretches."
+  }
+ }
+}

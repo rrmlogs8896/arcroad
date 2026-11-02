@@ -13,6 +13,7 @@ The invented sample pair is kept for tests and layout.
 """
 import datetime as dt
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -36,6 +37,14 @@ def main(today=None):
     O = json.loads(op.read_text()) if op.exists() else {"places": {}, "directory": {}}
     directory = O.get("directory", {})
     withheld = 0
+    REACH = "no official way to reach the office (mailbox, postal address or portal)"
+
+    def usable_or_named(e):
+        # An office or representative named on its official page, with no published mailbox, may still be
+        # named in "To" or "Copy to": a designation and name are not an address. Anything else stays withheld.
+        if D.usable(e, today):
+            return True
+        return D.validate(e) == [REACH] and D.is_fresh(e, today)
     pairs = {"sample": SAMPLE}
     for s in places["spots"]:
         n = names.get(s["id"], {})
@@ -53,7 +62,7 @@ def main(today=None):
         meta = (O.get("places") or {}).get(s["id"]) or {}
         where = [x for x in (("Assembly: " + meta["assembly"]) if meta.get("assembly") else None,
                              ("Lok Sabha: " + meta["lok_sabha"]) if meta.get("lok_sabha") else None,
-                             meta.get("local_body"), ("Ward " + str(meta["ward"])) if meta.get("ward") else None) if x]
+                             re.sub(r"\s*\([^)]*\)", "", meta["local_body"]).strip() if meta.get("local_body") else None, ("Ward " + str(meta["ward"])) if meta.get("ward") else None) if x]
         if where:
             p["where"] = "; ".join(where)
         ids = meta.get("office_ids") or {}
@@ -66,16 +75,21 @@ def main(today=None):
                     e = directory.get(i)
                     if not e:
                         continue
-                    if not D.usable(e, today):
+                    if not usable_or_named(e):
                         withheld += 1
                         continue
-                    out.append({"designation": (e.get("designation") or "") + ((" (" + e["name_as_published"] + ")") if e.get("name_as_published") else ""),
-                                "office": e.get("body") + (", " + e["jurisdiction"] if e.get("jurisdiction") else ""),
+                    nm = e.get("name_as_published") or ""
+                    if nm.isupper():
+                        nm = nm.title()
+                    out.append({"designation": (e.get("designation") or "") + ((" (" + nm + ")") if nm else ""),
+                                # constituency for representatives; the body alone for offices (jurisdiction notes stay in the data)
+                                "office": (e.get("jurisdiction") or e.get("body")) if lv == "L3" else e.get("body"),
                                 "mailbox": e.get("mailbox") or "", "postal": e.get("postal_address") or "", "source": e["source_url"]})
             return out
         to, cc = entries(["L1"]), entries(["L2", "L3"])
-        portals = [{"name": (directory[i].get("body") or "") + " · " + (directory[i].get("designation") or ""), "url": directory[i].get("portal_url") or directory[i].get("source_url")}
-                   for i in ids.get("L4", []) if i in directory and D.usable(directory[i], today)]
+        portals = [{"name": (directory[i].get("body") or "") + " · " + (directory[i].get("designation") or "") + ((" · " + directory[i]["phone"]) if directory[i].get("phone") else ""),
+                    "url": directory[i].get("portal_url") or directory[i].get("source_url")}
+                   for i in ids.get("L4", []) if i in directory and usable_or_named(directory[i])]
         rti = next(({"office": directory[i].get("body"), "designation": directory[i].get("designation"), "source": directory[i]["source_url"]}
                     for i in ids.get("L5", []) if i in directory and D.usable(directory[i], today)), None)
         if to or cc or portals:
