@@ -128,4 +128,5 @@ only; every measured number stays in code.
   - own drives read in from data/field;
   - road class per place;
   - KartaView stub, off by default.
-  - Not yet run.
+  - Run 2 Nov 2026 as v05.1 (results 09:17Z), scored in data/verify/2026-11-02-v05_1/SCORE.md: controls 46/48 clean (C01 placement), all 5 driven directions MATCH, S03 and S20 show no meaningful detour, outside evidence empty this run.
+- **Street search** (2 Nov 2026): web/search.js + web/search.css on the home page and the globe list; road and area names from OpenStreetMap via tools/road_names.py (run on any machine with internet; writes web/globe/data/road_names.json); results link to the globe (?spot=) and the cost calculator (prefilled km, and minutes for driven places); no match points to Volunteer.

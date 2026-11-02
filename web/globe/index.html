@@ -32,6 +32,7 @@ img,svg,canvas,video{max-width:100%}
 @media (pointer:coarse){nav a,.top a{padding-block:10px;display:inline-block} .srcbtn{padding:10px 0}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
+<link rel="stylesheet" href="../search.css">
 </head>
 <body>
 <div class="scrim" aria-hidden="true"></div>
@@ -83,10 +84,16 @@ img,svg,canvas,video{max-width:100%}
 
 <details class="list">
   <summary>All places as a list</summary>
+  <form class="rs" data-base="../" role="search" autocomplete="off" style="margin:8px 0 18px">
+    <label for="rs-globe">Find your road</label>
+    <input class="rs-in" id="rs-globe" type="search" inputmode="search" enterkeyhint="search" placeholder="A road or area">
+    <div class="rs-out" aria-live="polite"></div>
+  </form>
   <div id="list"></div>
   <p class="src">Map data © OpenStreetMap contributors (ODbL). Map tiles: OpenFreeMap © OpenMapTiles. Country borders: Natural Earth (public domain), drawn as officially depicted by India, including all of Jammu and Kashmir and Ladakh. Model: OpenStreetMap extract of 25 Oct 2026, checked 1 Nov 2026. Every road distance here is a model value and has not yet been confirmed by a drive.</p>
 </details>
 
+<script src="../search.js" defer></script>
 <script type="module" src="globe.js"></script>
 </body>
 </html>

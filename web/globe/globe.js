@@ -56,7 +56,9 @@ map.on('style.load', async () => {
   if (!DATA) DATA = await fetch('data/places.json').then((r) => r.json());
   addOurLayers();
   buildList();
-  setTimeout(spinStep, 4000);
+  const want = new URLSearchParams(location.search).get('spot');
+  if (want && DATA.spots.some((s) => s.id === want)) { spinOn = false; $('spin').setAttribute('aria-pressed', 'false'); $('spin').textContent = 'Turning: off'; setTimeout(() => selectSpot(want), 600); }
+  else setTimeout(spinStep, 4000);
 });
 
 // arcroad's own map look: our palette and label hierarchy, English names, fewer labels as you zoom out.
@@ -304,6 +306,12 @@ function spotHook(s) {
   return `About ${Math.round(worst(s) / s.straight)} times the distance straight across.`;
 }
 
+let ROADS = null;
+async function roadNames() {
+  if (!ROADS) ROADS = await fetch('data/road_names.json').then((r) => (r.ok ? r.json() : {})).then((d) => d.spots || {}).catch(() => ({}));
+  return ROADS;
+}
+
 async function selectSpot(id, move = true) {
   const s = DATA.spots.find((x) => x.id === id); if (!s) return;
   if (move) { touring = false; await fly({ center: s.a, zoom: 17.2, pitch: 62, bearing: 25 }); }
@@ -311,8 +319,9 @@ async function selectSpot(id, move = true) {
   const dv = s.driven || {};
   const way = (d) => (dv[d] ? `${km(dv[d].m)} driven (model ${km(s[d])})` : (s[d] == null ? 'no legal route found' : km(s[d])));
   startPulse(s);
+  const rn = await roadNames(), road = rn[s.id] && ((rn[s.id].roads || [])[0] || (rn[s.id].refs || [])[0]);
   showPanel({
-    eyebrow: `Hyderabad · place ${s.id} · ${s.driven ? 'driven 1 Nov 2026' : 'candidate'}`, title: `${km(s.straight)} across, ${km(worst)} around`,
+    eyebrow: `${road ? road + ' · ' : 'Hyderabad · '}place ${s.id} · ${s.driven ? 'driven 1 Nov 2026' : 'candidate'}`, title: `${km(s.straight)} across, ${km(worst)} around`,
     hook: spotHook(s),
     facts: [['Straight across', km(s.straight)], ['By road, one way', way('ab')], ['By road, the other way', way('ba')], ['Times longer than crossing', '×' + Math.round(worst / s.straight)]],
     spot: s,
