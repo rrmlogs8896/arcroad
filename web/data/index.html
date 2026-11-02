@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>arcroad · open data: what the map records, city by city</title>
+<meta name="description" content="Free to download: open-map counts of roads, divided main roads, crossings and footbridges per city, with population. ODbL.">
+<style>
+:root{--bg:#0B0D10;--fg:#E8EAED;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0;--card:#11151A}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:980px;margin:0 auto;padding:48px 22px 80px}a{color:var(--accent)}
+.top{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-bottom:28px}.top a{color:var(--mute);text-decoration:none}.top a:hover{color:var(--fg)}
+.eyebrow{font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 10px}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.12;margin:0 0 14px;font-weight:600;letter-spacing:-.01em}
+h2{font-size:20px;margin:44px 0 10px;font-weight:600}p.lead{font-size:18px;color:#C9CDD2;max-width:720px}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;min-width:680px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mute);font-weight:500;font-size:12px}
+td.g{font:600 13px ui-monospace,monospace;white-space:nowrap}
+.lesson{border-left:3px solid var(--ok);padding:4px 0 4px 14px;margin:14px 0;color:#C9CDD2}
+.note{color:var(--mute);font-size:13px}details.more{margin:8px 0 0;border-top:1px solid var(--line)}details.more>summary{list-style:none;cursor:pointer;padding:12px 0;font-size:14px;color:var(--mute);display:flex;gap:10px}details.more>summary::-webkit-details-marker{display:none}details.more>summary::before{content:"+";font-family:ui-monospace,monospace;color:var(--accent)}details.more[open]>summary::before{content:"\2212"}details.more>summary:hover{color:var(--fg)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+</style>
+<meta name="theme-color" content="#0B0D10">
+<meta name="color-scheme" content="dark">
+<meta name="format-detection" content="telephone=no">
+<style id="mobile-base">
+/* Shared mobile and cross-browser base (Safari iOS, Chrome/Samsung Android, Firefox) */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{overflow-wrap:break-word;padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+a,button,summary,select,label{-webkit-tap-highlight-color:rgba(232,168,124,.22);touch-action:manipulation}
+details>summary{cursor:pointer;min-height:44px;box-sizing:border-box;align-items:center}
+details>summary::-webkit-details-marker{display:none}
+input[type=range]{min-height:36px;touch-action:pan-y;cursor:pointer}
+table{font-variant-numeric:tabular-nums}
+.wrap,.scroll{-webkit-overflow-scrolling:touch}
+img,svg,canvas,video{max-width:100%}
+@media (max-width:720px){
+  input,select,textarea{font-size:16px!important}
+  h1{overflow-wrap:anywhere}
+  .top,header nav{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;white-space:nowrap;margin-left:0!important;max-width:100%}
+  .top::-webkit-scrollbar,header nav::-webkit-scrollbar,.presets::-webkit-scrollbar{display:none}
+  .presets{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
+  .presets .reset{margin-left:0!important}
+}
+@media (pointer:coarse){nav a,.top a{padding-block:10px;display:inline-block} .srcbtn{padding:10px 0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+<style>
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:22px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.card h3{margin:0 0 6px;font-size:17px}.card p{margin:0;color:#C9CDD2;font-size:15px}
+.card .who{display:block;margin-top:10px;color:var(--mute);font-size:13px}
+.btn{display:inline-block;margin-top:14px;padding:10px 16px;border-radius:999px;background:var(--accent);color:#0B0D10;text-decoration:none;font-weight:500;font-size:14px}
+table{min-width:760px}td.n,th.n{text-align:right;font-family:ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.empty{border:1px dashed #2A3038;border-radius:12px;padding:22px;color:var(--mute)}
+</style>
+</head>
+<body>
+<main>
+<nav class="top"><a href="../">arcroad home</a><a href="../field/">Results</a><a href="../cost/">Your cost</a><a href="../roads/">Road costs</a><a href="../data/">Open data</a><a href="../volunteer/">Volunteer</a></nav>
+<p class="eyebrow">arcroad · open data · ODbL</p>
+<h1>Open data, free to use.</h1>
+<p class="lead">What the open map records for each city: roads, divided main roads, pedestrian crossings and footbridges, with the population living there. Download it, check it, build on it.</p>
+<div id="table"><div class="empty">The first release is being collected now: the 8 largest Indian cities, then a world sample. It will appear here once checked.</div></div>
+<p id="dl" class="note"></p>
+<details class="more"><summary>What these numbers are, and are not</summary>
+<ul class="note">
+<li>Counts of what OpenStreetMap records inside an approximate box around each city, with GHSL 2020 population for the same box.</li>
+<li>They show how well the map records a city as much as the city itself: a city with few mapped crossings may simply be under-mapped. That is where volunteers help most.</li>
+<li>Not an official boundary, not a measurement of the ground, and not a ranking of cities.</li>
+<li>Detour figures are published only for places checked on the ground. See <a href="../field/">driven results</a>.</li>
+</ul></details>
+<details class="more"><summary>Licence and how to credit</summary>
+<p class="note">Map data &copy; OpenStreetMap contributors, ODbL 1.0. Population: GHSL &copy; European Union, JRC, CC BY 4.0. This table: arcroad, ODbL 1.0. Credit "arcroad, OpenStreetMap contributors and GHSL". If you build a database from it, share it under the same licence; a chart or an article made from the numbers does not have to be.</p>
+</details>
+<p style="margin-top:34px"><a class="btn" href="../volunteer/">Help check your city</a></p>
+<footer>No Google Maps data is used anywhere. arcroad is an independent citizen project.</footer>
+<script>
+(function(){
+  var fmt=function(n){return n==null?'—':Number(n).toLocaleString('en-IN')};
+  var esc=function(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+  fetch('cities.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
+    if(!d.cities||!d.cities.length)return;
+    var h='<div class="wrap"><table><thead><tr><th>City</th><th>Country</th><th class="n">Population</th><th class="n">Road km</th><th class="n">Main roads divided</th><th class="n">Crossings</th><th class="n">Footbridges</th><th class="n">Crossings per 1 lakh people</th></tr></thead><tbody>';
+    d.cities.forEach(function(c){h+='<tr><td>'+esc(c.city.replace(/_/g,' '))+'</td><td>'+esc(c.country)+'</td><td class="n">'+fmt(c.population_in_box)+'</td><td class="n">'+fmt(Math.round(c.road_km))+'</td><td class="n">'+esc(c.arterial_divided_pct)+'%</td><td class="n">'+fmt(c.crossings)+'</td><td class="n">'+fmt(c.footbridges)+'</td><td class="n">'+(c.crossings_per_100k==null?'—':esc(c.crossings_per_100k))+'</td></tr>'});
+    h+='</tbody></table></div>';
+    document.getElementById('table').innerHTML=h;
+    document.getElementById('dl').innerHTML='Released '+esc(d.generated)+'. Download: <a href="cities.json">JSON</a>'+(d.csv?' · <a href="'+esc(d.csv)+'">CSV</a>':'')+'.';
+  }).catch(function(){});
+})();
+</script>
+</main>
+</body>
+</html>

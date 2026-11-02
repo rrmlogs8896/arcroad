@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>arcroad · volunteer: help measure what crossing the road costs</title>
+<meta name="description" content="Check a place near you, fix the open map, or run a city. How to help arcroad safely, without sharing personal data.">
+<style>
+:root{--bg:#0B0D10;--fg:#E8EAED;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0;--card:#11151A}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:980px;margin:0 auto;padding:48px 22px 80px}a{color:var(--accent)}
+.top{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-bottom:28px}.top a{color:var(--mute);text-decoration:none}.top a:hover{color:var(--fg)}
+.eyebrow{font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 10px}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.12;margin:0 0 14px;font-weight:600;letter-spacing:-.01em}
+h2{font-size:20px;margin:44px 0 10px;font-weight:600}p.lead{font-size:18px;color:#C9CDD2;max-width:720px}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;min-width:680px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mute);font-weight:500;font-size:12px}
+td.g{font:600 13px ui-monospace,monospace;white-space:nowrap}
+.lesson{border-left:3px solid var(--ok);padding:4px 0 4px 14px;margin:14px 0;color:#C9CDD2}
+.note{color:var(--mute);font-size:13px}details.more{margin:8px 0 0;border-top:1px solid var(--line)}details.more>summary{list-style:none;cursor:pointer;padding:12px 0;font-size:14px;color:var(--mute);display:flex;gap:10px}details.more>summary::-webkit-details-marker{display:none}details.more>summary::before{content:"+";font-family:ui-monospace,monospace;color:var(--accent)}details.more[open]>summary::before{content:"\2212"}details.more>summary:hover{color:var(--fg)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+</style>
+<meta name="theme-color" content="#0B0D10">
+<meta name="color-scheme" content="dark">
+<meta name="format-detection" content="telephone=no">
+<style id="mobile-base">
+/* Shared mobile and cross-browser base (Safari iOS, Chrome/Samsung Android, Firefox) */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{overflow-wrap:break-word;padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+a,button,summary,select,label{-webkit-tap-highlight-color:rgba(232,168,124,.22);touch-action:manipulation}
+details>summary{cursor:pointer;min-height:44px;box-sizing:border-box;align-items:center}
+details>summary::-webkit-details-marker{display:none}
+input[type=range]{min-height:36px;touch-action:pan-y;cursor:pointer}
+table{font-variant-numeric:tabular-nums}
+.wrap,.scroll{-webkit-overflow-scrolling:touch}
+img,svg,canvas,video{max-width:100%}
+@media (max-width:720px){
+  input,select,textarea{font-size:16px!important}
+  h1{overflow-wrap:anywhere}
+  .top,header nav{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;white-space:nowrap;margin-left:0!important;max-width:100%}
+  .top::-webkit-scrollbar,header nav::-webkit-scrollbar,.presets::-webkit-scrollbar{display:none}
+  .presets{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
+  .presets .reset{margin-left:0!important}
+}
+@media (pointer:coarse){nav a,.top a{padding-block:10px;display:inline-block} .srcbtn{padding:10px 0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+<style>
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:22px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.card h3{margin:0 0 6px;font-size:17px}.card p{margin:0;color:#C9CDD2;font-size:15px}
+.card .who{display:block;margin-top:10px;color:var(--mute);font-size:13px}
+.btn{display:inline-block;margin-top:14px;padding:10px 16px;border-radius:999px;background:var(--accent);color:#0B0D10;text-decoration:none;font-weight:500;font-size:14px}
+table{min-width:760px}td.n,th.n{text-align:right;font-family:ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.empty{border:1px dashed #2A3038;border-radius:12px;padding:22px;color:var(--mute)}
+</style>
+</head>
+<body>
+<main>
+<nav class="top"><a href="../">arcroad home</a><a href="../field/">Results</a><a href="../cost/">Your cost</a><a href="../roads/">Road costs</a><a href="../data/">Open data</a><a href="../volunteer/">Volunteer</a></nav>
+<p class="eyebrow">arcroad · volunteer</p>
+<h1>Help measure your city.</h1>
+<p class="lead">arcroad started with one city and one car. To cover the rest of India and the world, it needs people who know their own roads.</p>
+<div class="cards">
+<div class="card"><h3>Check a place near you</h3><p>Drive or walk one crossing the map flags, with a GPS app recording, and take a few photos. About twenty minutes.</p><span class="who">Anyone with a phone</span></div>
+<div class="card"><h3>Fix the open map</h3><p>Add a missing median opening, crossing or footbridge to OpenStreetMap. Every navigation app that uses it gets better.</p><span class="who">Anyone with a computer</span></div>
+<div class="card"><h3>Run a city</h3><p>Run arcroad's free notebook for a city not covered yet, and send the result to be checked.</p><span class="who">Comfortable with Google Colab</span></div>
+</div>
+<h2 id="how">How to join</h2>
+<p>Sign-up opens when arcroad's email address goes live, very soon. It will appear here.</p>
+<details class="more"><summary>Safety rules for field checks</summary>
+<ul class="note">
+<li>Never use the phone while driving. A passenger records, or the phone is mounted and left alone.</li>
+<li>Never stop on the carriageway, or turn where it is not allowed, to "test" a gap.</li>
+<li>Walk only where it is safe to walk. No crossing is worth a risk.</li>
+</ul></details>
+<details class="more"><summary>Privacy rules</summary>
+<ul class="note">
+<li>No faces or number plates in what you send. Photos are blurred before anything is published, and raw photos stay private.</li>
+<li>Record the road, never a person. Nothing is ever said about a group of people, a faith or a community.</li>
+<li>Your name is never published unless you ask for credit.</li>
+</ul></details>
+<details class="more"><summary>What happens to what you send</summary>
+<p class="note">Every check is a candidate until a second check, a photo or an official record agrees with it. Only checked places appear on the site, with the date and the number of checks. arcroad never accuses a named person or business.</p>
+</details>
+<footer>arcroad is an independent citizen project. No Google Maps data is used anywhere.</footer>
+</main>
+</body>
+</html>

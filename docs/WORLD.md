@@ -62,3 +62,10 @@ Rohit's brief: expand arcroad to major world cities as a sample in a future rele
 - RHD median U-turn closures, Matuail–Sanarpar, Dhaka (The Business Standard).
 - NTSA hazard mapping and 2024 crash data, Nairobi (Eastleigh Voice, The Star, Business Daily).
 - US DOT Reconnecting Communities and Neighborhoods programme (Streetsblog USA, Planetizen, 2024–25).
+
+## Open data and volunteers (added 2 Nov 2026, Rohit: "publish publicly available data and invite volunteers")
+
+- **Notebook:** `notebooks/arcroad_Cities_OpenData_v01.ipynb` (standalone; code built in). Collects Indian major cities, all capitals, or the world sample. Writes to Drive `Anthropic/Hyderabad Mobility Atlas/cities/`.
+- **Public table:** `tools/open_data_export.py` writes `cities.json` and a CSV. It contains open-map counts and population inside the same box: roads, divided arterials, crossings, footbridges, signals and turn restrictions. It never contains a detour figure. The table is checked by Claude, then copied to `web/data/` and published under ODbL at arcroad.org/data.
+- **Why counts and not detours:** detour figures stay behind the ground-truth gate. Counts are facts about the open map. They also point volunteers at under-mapped cities.
+- **Volunteers:** arcroad.org/volunteer offers three ways to help: check a place, fix the open map, run a city. There are safety and privacy rules. Sign-up opens when hello@arcroad.org is live.
