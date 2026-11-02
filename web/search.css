@@ -1,0 +1,20 @@
+/* arcroad street search */
+.rs{margin-top:34px;max-width:560px}
+.rs label{display:block;margin:0 0 8px;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:#6E767F}
+.rs-in{width:100%;box-sizing:border-box;padding:13px 16px;border-radius:12px;border:1px solid #2A3038;background:#11141A;color:#F5F6F7;font:inherit;font-size:16px;outline:none;-webkit-appearance:none;appearance:none}
+.rs-in:focus{border-color:#E2743B}
+.rs-in::placeholder{color:#6E767F}
+.rs-out ul{list-style:none;margin:0;padding:0}
+.rs-c{margin:14px 0 4px;font-size:12.5px;color:#6E767F}
+.rs-r{padding:14px 0;border-bottom:1px solid #1C2026}
+.rs-r p{margin:0}
+.rs-t{font-size:16px;font-weight:500;color:#F5F6F7;letter-spacing:-.01em}
+.rs-a{font-weight:400;color:#8B939C;font-size:14px;margin-left:6px}
+.rs-l{margin-top:4px!important;font-size:14.5px;color:#E6E8EB}
+.rs-m{margin-top:4px!important;font-size:12.5px;color:#6E767F}
+.rs-s.d{color:#8FA89A}
+.rs-k{margin-top:8px!important;display:flex;flex-wrap:wrap;gap:18px;font-size:14px}
+.rs-k a,.rs-n a{color:#E2743B;text-decoration:none}
+.rs-k a:hover,.rs-n a:hover{text-decoration:underline}
+.rs-n{margin:14px 0 0;font-size:14px;line-height:1.6;color:#8B939C}
+@media (pointer:coarse){.rs-k a{padding:8px 0}}

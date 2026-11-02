@@ -139,6 +139,7 @@ img,svg,canvas,video{max-width:100%}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
+<link rel="stylesheet" href="search.css">
 </head>
 <body>
 
@@ -181,6 +182,11 @@ img,svg,canvas,video{max-width:100%}
     <h1>A place you can see, four kilometres away</h1>
     <p class="lede">Divided roads cut neighbours off from each other. arcroad measures what crossing your own road costs, then drives the detours to check.</p>
     <div class="cta"><a class="p" href="cost/">What does it cost you?</a><a href="field/">What we drove</a><a href="roads/">What else the road costs</a></div>
+    <form class="rs" data-base="./" role="search" autocomplete="off">
+      <label for="rs-home">Find your road</label>
+      <input class="rs-in" id="rs-home" type="search" inputmode="search" enterkeyhint="search" placeholder="A road or area, e.g. Mumbai Highway, Kondapur" aria-describedby="rs-home-out">
+      <div class="rs-out" id="rs-home-out" aria-live="polite"></div>
+    </form>
   </div>
 </section>
 
@@ -496,5 +502,6 @@ img,svg,canvas,video{max-width:100%}
 })();
 </script>
 
+<script src="search.js" defer></script>
 </body>
 </html>

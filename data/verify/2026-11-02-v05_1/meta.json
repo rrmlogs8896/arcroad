@@ -1,0 +1,39 @@
+{
+ "run": "2026-11-02",
+ "commit": "v05.1-standalone",
+ "osm": "2026-11-02T07:06Z (Overpass via OSMnx)",
+ "source": "data/field/field_day_1_stops.json",
+ "B_usable": false,
+ "B2_usable": false,
+ "overture_release": "2026-10-21.0",
+ "classes": [
+  "two_wheeler",
+  "car",
+  "heavy"
+ ],
+ "gate": {
+  "MATCH_ABS_M": 150.0,
+  "MATCH_REL": 0.25,
+  "SHORTER_REL": 0.5,
+  "MAX_GAP_M": 60.0
+ },
+ "attribution": [
+  "© OpenStreetMap contributors, ODbL",
+  "Contains road detections from Microsoft, mined from Bing Maps imagery, licensed under ODbL",
+  "Street-level imagery © Mapillary contributors, CC BY-SA 4.0",
+  "Overture Maps Foundation data, per-source licences (overturemaps.org/attribution)"
+ ],
+ "environment": {
+  "python": "3.13.18",
+  "osmnx": "2.1.1",
+  "networkx": "3.7",
+  "shapely": "2.2.0",
+  "duckdb": "1.3.2"
+ },
+ "study_box": [
+  78.182776,
+  17.431402,
+  78.428973,
+  17.594467
+ ]
+}
