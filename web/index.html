@@ -89,6 +89,17 @@ a{color:#E8A87C}
 #top.on{opacity:1;visibility:visible}
 #top:hover{border-color:var(--accent);color:var(--soft)}
 #top svg{width:17px;height:17px}
+.more{margin-top:14px;border-top:1px solid var(--line)}
+.more summary{list-style:none;cursor:pointer;padding:12px 0;font-size:13.5px;color:var(--mut);display:flex;gap:10px;align-items:baseline}
+.more summary::-webkit-details-marker{display:none}
+.more summary::before{content:"+";font-family:"JetBrains Mono",monospace;color:var(--accent);flex:0 0 12px}
+.more[open] summary::before{content:"\2212"}
+.more summary:hover{color:var(--fg2)}
+.more>div{padding:2px 0 8px 22px}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.cta a{display:inline-block;padding:11px 18px;border-radius:999px;border:1px solid var(--line2);color:var(--fg);text-decoration:none;font-size:14.5px}
+.cta a.p{background:var(--accent);border-color:var(--accent);color:#0B0D10;font-weight:500}
+.cta a:hover{border-color:var(--accent)}
 .faq{border-top:1px solid var(--line)}
 .q{border-bottom:1px solid var(--line)}
 .q summary{list-style:none;cursor:pointer;padding:15px 0;font-size:15.5px;line-height:1.5;color:var(--fg2);display:flex;gap:14px;align-items:baseline}
@@ -129,15 +140,11 @@ a:hover{color:var(--soft)}
       <span><span class="logo">arcroad</span><span class="place">Hyderabad</span></span>
     </a>
     <nav>
-      <a href="#findings">Findings</a>
-      <a href="field/">Driven results</a>
-      <a href="cost/">Cost</a>
+      <a href="field/">Results</a>
+      <a href="cost/">Your cost</a>
       <a href="roads/">Road costs</a>
       <a href="evidence/">Evidence</a>
       <a href="globe/">Globe</a>
-      <a href="#areas">Areas</a>
-      <a href="#city">3D map</a>
-      <a href="#method">Method</a>
       <a href="#help">Help</a>
     </nav>
   </div>
@@ -146,7 +153,8 @@ a:hover{color:var(--soft)}
 <section>
   <div class="wrap">
     <h1>A place you can see, four kilometres away</h1>
-    <p class="lede">Divided roads move traffic along a corridor and cut the people beside it off from each other. Nobody measures that cost. This does — from open data, with the method published so any claim can be checked, including the parts still wrong.</p>
+    <p class="lede">Divided roads cut neighbours off from each other. arcroad measures what crossing your own road costs, then drives the detours to check.</p>
+    <div class="cta"><a class="p" href="cost/">What does it cost you?</a><a href="field/">What we drove</a><a href="roads/">What else the road costs</a></div>
   </div>
 </section>
 
@@ -163,8 +171,8 @@ a:hover{color:var(--soft)}
 
 <section style="padding-top:0">
   <div class="wrap">
-    <h2>Severance peaks at the edge of the city, not beyond it</h2>
-    <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:var(--mut);max-width:70ch">The detour index is how far you must drive to reach a point directly across the road. An index of 40 means forty times the straight-line distance. Measured in concentric rings from the centre, the cost does not simply rise with distance. It climbs steeply to a peak between 26 and 40 kilometres out, then falls away.</p>
+    <h2>It's worst at the edge of the city</h2>
+    <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:var(--mut);max-width:70ch">The detour index is how far you drive to reach the point straight across the road: 40 means forty times the distance. It peaks 26–40 km from the centre, where Patancheru and Isnapur sit.</p>
     <div class="scroll">
       <table>
         <thead><tr>
@@ -179,14 +187,8 @@ a:hover{color:var(--soft)}
         </tbody>
       </table>
     </div>
-    <p style="margin:20px 0 0;font-size:13.5px;line-height:1.7;color:var(--faint);max-width:76ch">A reading, not a conclusion. The fringe is where highway-grade divided roads already exist but the local street network behind them has not filled in, so the severance has nothing to absorb it. Further out there are fewer divided roads and less severance. The shape is consistent with that explanation and has not been tested against it. Patancheru and Isnapur, where this project began, sit at roughly 36 km — inside the peak ring.</p>
-  </div>
-</section>
-
-<section style="padding-top:0">
-  <div class="wrap">
-    <h2>The gradient holds under every filter we tried</h2>
-    <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:var(--mut);max-width:70ch">The detour index is how far you must drive to reach a point directly across the road. An index of 40 means forty times the straight-line distance. Crossing a road beyond the Outer Ring Road costs between two and four times what it costs in the core city, depending on how severely the data is filtered. It narrows under correction. It never disappears.</p>
+    <details class="more"><summary>Does it hold up? Five ways of filtering the data</summary><div>
+    <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:var(--mut);max-width:74ch">Crossing a road beyond the Outer Ring Road costs two to four times what it costs in the core city, depending on the filter. It narrows under correction; it never disappears.</p>
     <div class="scroll">
       <table>
         <thead><tr>
@@ -201,7 +203,9 @@ a:hover{color:var(--soft)}
         </tbody>
       </table>
     </div>
-    <p style="margin:20px 0 0;font-size:13.5px;line-height:1.7;color:var(--faint);max-width:76ch">"Beyond ORR" here means everything past 26 km, including points up to 85 km from the centre. On 26 October 2026 we found that 12.2% of the measured set lay outside the study area this project had declared. Those points score lower than the true fringe, so every ratio in this table understates the fringe rather than overstating it. The ring table above is the corrected view. The next run will be clipped to the declared area and these figures replaced, not revised.</p>
+    <p style="margin:16px 0 12px;font-size:14px;line-height:1.7;color:var(--mut);max-width:74ch">A reading, not a conclusion. The fringe is where highway-grade divided roads already exist but the local street network behind them has not filled in, so the severance has nothing to absorb it. Further out there are fewer divided roads and less severance. The shape is consistent with that explanation and has not been tested against it. Patancheru and Isnapur, where this project began, sit at roughly 36 km — inside the peak ring.</p>
+    <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:var(--mut);max-width:74ch">"Beyond ORR" here means everything past 26 km, including points up to 85 km from the centre. On 26 October 2026 we found that 12.2% of the measured set lay outside the study area this project had declared. Those points score lower than the true fringe, so every ratio in this table understates the fringe rather than overstating it. The ring table above is the corrected view. The next run will be clipped to the declared area and these figures replaced, not revised.</p>
+    </div></details>
   </div>
 </section>
 
@@ -216,39 +220,10 @@ a:hover{color:var(--soft)}
         <tbody id="areas-body"></tbody>
       </table>
     </div>
-    <p style="margin:20px 0 0;font-size:13.5px;line-height:1.7;color:var(--faint);max-width:76ch">Areas with fewer than thirty measured points are computed but excluded, because a median over a handful of points is noise rather than a finding.</p>
-  </div>
-</section>
-
-<section style="padding-top:0">
-  <div class="wrap">
-    <div class="note">
-      <p><strong style="color:var(--soft);font-weight:500">Read the ranking, not the numbers.</strong> The open map under-records small connections — median openings and service roads drivers use daily are often missing. That inflates every absolute figure here by an unknown amount. It affects all areas alike, so comparing one to another holds, while individual values do not yet.</p>
-      <p>Where a typical route runs past ten kilometres to cross twenty metres, a hole in the map is the likelier explanation than a real detour, and the row says so. Those are the first places we go back and correct the map.</p>
-    </div>
-  </div>
-</section>
-
-<section id="city" style="padding-top:0">
-  <div class="wrap">
-    <h2>The city in three dimensions<span class="soon">being built</span></h2>
-    <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:var(--mut);max-width:72ch">A descent from the globe down to a single junction, with severance carried in height and colour, and a click through to any area's own measurements. It is specified and it is not built, and the reason is worth stating rather than hiding behind a spinner.</p>
-    <div class="cols">
-      <div>
-        <h3>What it will show</h3>
-        <p style="margin:0 0 14px;font-size:14.5px;line-height:1.68;color:var(--mut)">Real building heights from open satellite-derived data, so a severed block reads as somewhere people live rather than a shape on a plan. Severance encoded in height and colour together, so the worst places are visible in the opening frame without reading a legend.</p>
-        <h3>What it will not have</h3>
-        <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">Terrain. Hyderabad spans 32 m of elevation across the whole measured area, so relief here would be drama invented in a shader. That was tested before it was designed, and the threshold was written before the test ran.</p>
-      </div>
-      <div>
-        <h3>Street-level imagery</h3>
-        <p style="margin:0 0 14px;font-size:14.5px;line-height:1.68;color:var(--mut)">Street View is Google's and is never used here, at any point, in any form. The open alternatives were checked on 25 October 2026: Panoramax returned one image across the entire 85 by 77 km area. Mapillary is still being probed.</p>
-        <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">If neither has real coverage, there will be no imagery layer and this page will say so, rather than shipping a button that works one time in three.</p>
-      </div>
-    </div>
-    <div class="note" style="margin-top:26px">
-      <p><strong style="color:var(--soft);font-weight:500">Why it is not here yet.</strong> Polish reads as authority. A beautiful model of a number nobody has checked would persuade people of something we do not know, and when it broke it would take the method down with it rather than just the picture. The model comes after a route has been driven.</p>
-    </div>
+    <p style="margin:16px 0 0;font-size:14px;color:var(--mut)">Compare areas with each other; the exact numbers are still model values.</p>
+    <details class="more"><summary>Why the numbers run high</summary><div><p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:var(--mut);max-width:74ch">The open map under-records small connections — median openings and service roads drivers use daily are often missing. That inflates every absolute figure here by an unknown amount. It affects all areas alike, so comparing one to another holds, while individual values do not yet.</p>
+      <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:var(--mut);max-width:74ch">Where a typical route runs past ten kilometres to cross twenty metres, a hole in the map is the likelier explanation than a real detour, and the row says so. Those are the first places we go back and correct the map.</p>
+    <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:var(--mut);max-width:74ch">Areas with fewer than thirty measured points are left out: a median over a handful of points is noise.</p></div></details>
   </div>
 </section>
 
@@ -265,13 +240,16 @@ a:hover{color:var(--soft)}
         </ol>
       </div>
       <div>
-        <h2>What it does not measure</h2>
+        <h2>What it leaves out</h2>
+        <p style="margin:0 0 6px;font-size:14.5px;line-height:1.68;color:var(--mut)">Travel time, walking, and anyone's motives.</p>
+        <details class="more"><summary>Why</summary><div>
         <h3>Travel time</h3>
         <p style="margin:0 0 16px;font-size:14.5px;line-height:1.68;color:var(--mut)">Distance and geometry only. Congestion and roadworks are deliberately excluded — a median still stands when the construction ends, and that is the claim worth making.</p>
         <h3>Walking</h3>
         <p style="margin:0 0 16px;font-size:14.5px;line-height:1.68;color:var(--mut)">The open map holds 407 pedestrian crossings and 212 footbridges for a metropolitan area of roughly ten million, and none within 400 m of Abids or Secunderabad station. Absence in the map is not absence on the ground, so every claim here is about driving.</p>
         <h3>Intent or blame</h3>
         <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">We publish what an authority recorded and what we measured. Never what we think that means about anyone's motives.</p>
+      </div></details>
       </div>
     </div>
   </div>
@@ -279,26 +257,24 @@ a:hover{color:var(--soft)}
 
 <section style="padding-top:0">
   <div class="wrap">
-    <h2>Known limitations</h2>
-    <p style="margin:0 0 18px;font-size:14.5px;line-height:1.7;color:var(--mut);max-width:72ch">Kept current, in public, because a limitation found by a reader is worse than one we published ourselves.</p>
-    <div class="lims" id="lims"></div>
+    <details class="more" style="border-top:0"><summary style="font-size:18px;color:var(--fg2)">Known limitations, kept in public</summary><div style="padding-left:0">
+    <div class="lims" id="lims"></div></div></details>
   </div>
 </section>
 
 <section id="help" style="padding-top:0">
   <div class="wrap">
-    <h2>Help, and the questions worth asking</h2>
-    <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:var(--mut);max-width:72ch">Every answer below cites where it comes from, so you can check it rather than take it. If an answer here disagrees with the data, the data is right and this page is out of date — tell us.</p>
+    <h2>Questions</h2>
     <div class="faq" id="faq"></div>
 
     <div class="cols" style="margin-top:34px">
       <div>
         <h3>Found a mistake?</h3>
-        <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">That is the most useful thing you can send. Say which area or junction, and what the road actually does. A correction to the underlying map improves every navigation app in the city, not only this one.</p>
+        <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">Tell us which junction and what the road actually does. It's the most useful thing you can send.</p>
       </div>
       <div>
         <h3>Contact</h3>
-        <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">A monitored email address is being set up. Until then, write to us through the project's public issue tracker on <a href="https://github.com/rrmlogs8896/arcroad/issues" rel="noopener" style="color:var(--accent)">GitHub</a>; every message is read.</p>
+        <p style="margin:0;font-size:14.5px;line-height:1.68;color:var(--mut)">A contact email is being set up and will appear here shortly.</p>
       </div>
     </div>
   </div>
@@ -431,10 +407,10 @@ a:hover{color:var(--soft)}
      "method, what this does not measure"],
     ["Do you track me?",
      ["No. No accounts, no location permission, no analytics, no cookies that identify you. This page holds no personal data of any kind, and an automated test blocks any commit that would change that."],
-     "tests/test_privacy.py"],
+     "an automated privacy check on every change"],
     ["Can I use this data?",
      ["Yes. Map data is © OpenStreetMap contributors under ODbL, and arcroad's derived measurements are published under ODbL too. Attribute both. If you build a derived database, share it under the same licence — a chart or an article made from the numbers does not have to be."],
-     "DATA-LICENSE.md"],
+     "data licence: ODbL"],
     ["Will there be other cities?",
      ["The method takes a bounding box and a road network, so it does not care which city it is, and the open map covers all of India. But running fifty unverified cities would multiply the exposure by fifty rather than the value. One city verified first, then a second with different road morphology as a replication test."],
      "expansion plan"],

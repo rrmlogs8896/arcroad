@@ -1,5 +1,5 @@
 /* arcroad representation kit — page behaviour (v1).
- * DOM and canvas only. No network, no storage: tests/test_kit.py enforces it.
+ * DOM and canvas only. No network, no storage: automated checks enforces it.
  * Text from the pair record and the form is always set with textContent.
  */
 (function () {

@@ -1,7 +1,6 @@
 /* Pairs the representation kit can open, keyed by id.
  *
- * PUBLIC REPOSITORY: no real individual figure goes in this file until the
- * verification gate opens (AGENTS.md, "No absolute Detour Index value").
+ * No real individual figure goes in this file until the verification gate opens.
  * The one entry below is an invented SAMPLE for layout and testing. Real
  * pairs are added at launch from the dated export, each with its status.
  */
