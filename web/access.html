@@ -26,7 +26,8 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-
 .staging{background:#15110D;border-bottom:1px solid #2A2520}
 .staging .wrap{padding-block:11px}
 .staging p{margin:0;font-size:13px;line-height:1.5;color:#B9A594}
-header .wrap{padding-block:26px;display:flex;gap:12px;align-items:baseline;border-bottom:1px solid var(--line)}
+header .wrap{padding-block:26px;display:flex;gap:12px;align-items:center}
+header .wrap{position:relative}header .wrap::after{content:"";position:absolute;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:0;height:1px;background:var(--line)}
 .logo{font-size:20px;font-weight:600;letter-spacing:-0.02em;color:var(--fg2);text-decoration:none}
 .place{font-size:13px;color:var(--faint)}
 main .wrap{padding-block:40px 80px;display:flex;flex-direction:column;gap:56px}

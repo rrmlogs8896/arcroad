@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+"""Build web/kit/pairs.js for the "Write to the people responsible" kit (v0.2).
+
+Inputs (all in the repo):
+  web/globe/data/places.json       model figures and drives per place
+  web/globe/data/road_names.json   OpenStreetMap road and area names
+  data/officials/latest.json       officials directory (official sources only), optional
+
+Every directory entry is checked with pipeline.directory.usable(): an entry
+that is unsourced, stale, carries a mobile number or a webmail address is
+withheld, and the letter falls back to the blank address lines it already prints.
+The invented sample pair is kept for tests and layout.
+"""
+import datetime as dt
+import json
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from pipeline import directory as D  # noqa: E402
+
+SAMPLE = {"id": "sample", "status": "sample", "ref": "NH65", "area": "Sample Nagar", "lat": None, "lon": None,
+          "straight_m": 24, "network_m": 2100, "extract_date": "2026-10-25", "commit": "c29d9c1",
+          "evidence_url": "https://arcroad.org/#method"}
+# Findings from the v05.1 scoring (data/verify/2026-11-02-v05_1/SCORE.md)
+TW_NOTE = {"S23": "the model finds almost no detour for two-wheelers here while cars go the long way; not yet checked on the ground",
+           "S24": "the model finds almost no detour for two-wheelers here while cars go the long way; not yet checked on the ground"}
+
+
+def main(today=None):
+    today = today or dt.date.today()
+    places = json.loads((ROOT / "web/globe/data/places.json").read_text())
+    names = json.loads((ROOT / "web/globe/data/road_names.json").read_text()).get("spots", {})
+    op = ROOT / "data/officials/latest.json"
+    O = json.loads(op.read_text()) if op.exists() else {"places": {}, "directory": {}}
+    directory = O.get("directory", {})
+    withheld = 0
+    REACH = "no official way to reach the office (mailbox, postal address or portal)"
+
+    def usable_or_named(e):
+        # An office or representative named on its official page, with no published mailbox, may still be
+        # named in "To" or "Copy to": a designation and name are not an address. Anything else stays withheld.
+        if D.usable(e, today):
+            return True
+        return D.validate(e) == [REACH] and D.is_fresh(e, today)
+    pairs = {"sample": SAMPLE}
+    for s in places["spots"]:
+        n = names.get(s["id"], {})
+        road = (n.get("roads") or [None])[0]
+        ref = (n.get("refs") or [""])[0]
+        lon, lat = (s["a"][0] + s["b"][0]) / 2, (s["a"][1] + s["b"][1]) / 2
+        p = {"id": s["id"], "status": "driven" if s.get("driven") else "modelled", "road": road or ref or None, "ref": ref,
+             "area": n.get("area"), "lat": round(lat, 6), "lon": round(lon, 6), "a": s["a"], "b": s["b"],
+             "straight_m": s["straight"], "ab": s.get("ab"), "ba": s.get("ba"),
+             "network_m": max(x for x in (s.get("ab"), s.get("ba")) if x is not None),
+             "driven": {k: {"m": v["m"], "date": v["date"]} for k, v in (s.get("driven") or {}).items()},
+             "extract_date": "2026-11-02", "commit": "v05.1", "evidence_url": "https://arcroad.org/field/"}
+        if s["id"] in TW_NOTE:
+            p["tw_note"] = TW_NOTE[s["id"]]
+        meta = (O.get("places") or {}).get(s["id"]) or {}
+        where = [x for x in (("Assembly: " + meta["assembly"]) if meta.get("assembly") else None,
+                             ("Lok Sabha: " + meta["lok_sabha"]) if meta.get("lok_sabha") else None,
+                             re.sub(r"\s*\([^)]*\)", "", meta["local_body"]).strip() if meta.get("local_body") else None, ("Ward " + str(meta["ward"])) if meta.get("ward") else None) if x]
+        if where:
+            p["where"] = "; ".join(where)
+        ids = meta.get("office_ids") or {}
+
+        def entries(levels):
+            nonlocal withheld
+            out = []
+            for lv in levels:
+                for i in ids.get(lv, []):
+                    e = directory.get(i)
+                    if not e:
+                        continue
+                    if not usable_or_named(e):
+                        withheld += 1
+                        continue
+                    nm = e.get("name_as_published") or ""
+                    if nm.isupper():
+                        nm = nm.title()
+                    out.append({"designation": (e.get("designation") or "") + ((" (" + nm + ")") if nm else ""),
+                                # constituency for representatives; the body alone for offices (jurisdiction notes stay in the data)
+                                "office": (e.get("jurisdiction") or e.get("body")) if lv == "L3" else e.get("body"),
+                                "mailbox": e.get("mailbox") or "", "postal": e.get("postal_address") or "", "source": e["source_url"]})
+            return out
+        to, cc = entries(["L1"]), entries(["L2", "L3"])
+        portals = [{"name": (directory[i].get("body") or "") + " · " + (directory[i].get("designation") or "") + ((" · " + directory[i]["phone"]) if directory[i].get("phone") else ""),
+                    "url": directory[i].get("portal_url") or directory[i].get("source_url")}
+                   for i in ids.get("L4", []) if i in directory and usable_or_named(directory[i])]
+        rti = next(({"office": directory[i].get("body"), "designation": directory[i].get("designation"), "source": directory[i]["source_url"]}
+                    for i in ids.get("L5", []) if i in directory and D.usable(directory[i], today)), None)
+        if to or cc or portals:
+            p["recipients"] = {"to": to, "cc": cc, "portals": portals, "rti": rti, "checked": O.get("generated", "")}
+        pairs[s["id"]] = p
+    out = ("/* Generated by tools/build_kit_data.py: do not edit by hand. Places, road names (OpenStreetMap, ODbL)\n"
+           " * and official office addresses (official websites only, each with its source and check date). */\n"
+           "window.ARCROAD_PAIRS = " + json.dumps(pairs, ensure_ascii=False, indent=1) + ";\n")
+    (ROOT / "web/kit/pairs.js").write_text(out)
+    print("pairs.js: %d places, %d with sourced recipients, %d directory entries withheld" % (
+        len(pairs) - 1, sum(1 for p in pairs.values() if p.get("recipients")), withheld))
+
+
+if __name__ == "__main__":
+    main()

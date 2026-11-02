@@ -31,6 +31,7 @@ committed to this repository.
 
 from __future__ import annotations
 
+import math
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from itertools import pairwise
@@ -132,12 +133,16 @@ def find_pass(track, a, b, radius=VISIT_RADIUS_M, max_pass_s=MAX_PASS_S, min_run
     def reaches(lo, hi, p):
         return min(haversine_m(track[k][2], track[k][1], p[1], p[0]) for k in range(lo, hi + 1)) <= END_REACH_M
 
+    # A run that never comes within END_REACH_M of its own point is passing on the other
+    # carriageway (B-15), so it is dropped before pairing: it must not be counted as being
+    # there, and must not stand between a real stay at A and a real stay at B. Declared
+    # method change of 2 Nov 2026 (before: only adjacent runs were paired, so such a run
+    # blocked the Hafeezpet flyover loop); applied to every drive, not one.
+    runs = [r for r in runs if reaches(r[1], r[2], a if r[0] == "A" else b)]
     best = None
-    for (l1, i0, i), (l2, j, j1) in pairwise(runs):
+    for (l1, _i0, i), (l2, j, _j1) in pairwise(runs):
         if (l1, l2) != ("A", "B"):
             continue
-        if not (reaches(i0, i, a) and reaches(j, j1, b)):
-            continue  # B-15: never actually at A, or never actually at B
         ti, tj = track[i][0], track[j][0]
         if ti is not None and tj is not None and tj - ti > max_pass_s:
             continue
@@ -189,6 +194,20 @@ def score_stop(track, stop: dict, network_m: float | None) -> dict:
         return row
     i, j = found
     row["driven_m"] = round(path_length_m(track, i, j), 1)
+    # A short pass that moves ALONG the road, not across it, went past both points on one carriageway
+    # (2 Nov 2026 commute; the same artefact B-15 removes from Mapillary). A real straight-over crossing
+    # moves across, in the direction from A to B, and still counts (it is the evidence of map lag).
+    if row["driven_m"] < row["straight_m"] * 0.9:
+        (_, la1, lo1), (_, la2, lo2) = track[i][:3], track[j][:3]
+        k = math.cos(math.radians((a[0] + b[0]) / 2))
+        mv = ((lo2 - lo1) * k, la2 - la1)
+        ab = ((b[1] - a[1]) * k, b[0] - a[0])
+        nmv, nab = math.hypot(*mv), math.hypot(*ab)
+        across = (mv[0] * ab[0] + mv[1] * ab[1]) / (nmv * nab) if nmv and nab else 0.0
+        if across < 0.5:
+            row["driven_m"] = None
+            row["passed_by"] = True
+            return row
     gap = max_gap_s(track, i, j)
     row["max_gap_s"] = gap
     if track[i][0] is not None and track[j][0] is not None:

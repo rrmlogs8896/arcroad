@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>arcroad · blinded by the light: what an oncoming high beam does to your eyes</title>
+<meta name="description" content="Sit in the driver's seat at night as an oncoming car keeps its high beam on. Built on the CIE disability glare equations: see how much of the road disappears, how long your eyes take to recover, and why dipping matters.">
+<meta name="theme-color" content="#05070B"><meta name="color-scheme" content="dark"><meta name="format-detection" content="telephone=no">
+<style>
+:root{--bg:#05070B;--fg:#E8EAED;--mute:#9AA0A6;--faint:#6E767F;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0;--warn:#E5C07B;--card:#0E1116}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:1180px;margin:0 auto;padding:40px 22px 80px}a{color:var(--accent)}
+.top{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-bottom:26px}.top a{color:var(--mute);text-decoration:none}.top a:hover{color:var(--fg)}
+.eyebrow{font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+h1{font-size:clamp(30px,5.4vw,54px);line-height:1.05;margin:0 0 14px;font-weight:600;letter-spacing:-.02em}
+p.lead{font-size:clamp(16px,2.2vw,19px);color:#C9CDD2;max-width:720px;margin:0}
+.stage{position:relative;margin:28px 0 0;border-radius:18px;overflow:hidden;background:#000;aspect-ratio:16/9;border:1px solid var(--line);outline:none;isolation:isolate}
+@media (max-width:640px){.stage{aspect-ratio:4/5;border-radius:14px}.result{left:12px;right:12px;top:auto;bottom:76px;max-width:none}.hud{left:12px;right:12px;top:10px;font-size:9px;letter-spacing:.06em}.hud b{font-size:17px}.hud .vis{min-width:0;flex:1}.hud .r{flex:1}.dash{padding:10px 12px}.result{padding:14px 16px;max-height:calc(100% - 150px);overflow:auto}.result h2{font-size:17px}.result p{font-size:13.5px}#r-glare{display:none}.b{white-space:nowrap}.result .b{white-space:normal}.dash .btns{flex-wrap:nowrap}.b{padding:10px 14px;font-size:14px}.spd{font-size:26px}}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}.hud,.dash,.result{z-index:1}
+.hud{position:absolute;left:16px;right:16px;top:14px;display:flex;justify-content:space-between;gap:12px;pointer-events:none;font:500 11px/1.3 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,234,237,.78);text-shadow:0 1px 6px #000}
+.hud b{display:block;font:600 22px/1.1 Inter,system-ui,sans-serif;letter-spacing:-.01em;text-transform:none;color:#fff}
+.hud .vis{min-width:170px}
+.vbar{height:4px;border-radius:2px;background:rgba(255,255,255,.14);margin-top:6px;overflow:hidden}.vbar i{display:block;height:100%;width:var(--v,100%);background:linear-gradient(90deg,#E07A5F,#E5C07B 50%,#7CC5A0);transition:width .15s linear}
+.hud .r{text-align:right}
+.dash{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:linear-gradient(transparent,rgba(0,0,0,.72))}
+.spd{font:600 34px/1 Inter,system-ui,sans-serif;color:#fff;text-shadow:0 1px 8px #000}.spd small{font:500 11px ui-monospace,monospace;letter-spacing:.12em;color:rgba(232,234,237,.7);margin-left:6px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.b{appearance:none;border:1px solid rgba(255,255,255,.22);background:rgba(10,12,16,.6);color:#fff;border-radius:999px;padding:12px 18px;font:500 14.5px Inter,system-ui,sans-serif;cursor:pointer;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:transform .15s,border-color .2s,background .2s}
+.b:hover{border-color:var(--accent)}.b:active{transform:scale(.97)}
+.b.p{background:var(--accent);color:#0B0D10;border-color:var(--accent)}
+.b:disabled{opacity:.55;cursor:default}
+.stage.done canvas{filter:saturate(.7)}
+.result{position:absolute;left:16px;top:84px;max-width:440px;background:rgba(8,10,14,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px 20px;animation:up .35s cubic-bezier(.2,.7,.2,1)}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+.result h2{margin:0 0 6px;font-size:20px}.result p{margin:6px 0 0;color:#C9CDD2;font-size:14.5px}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:16px 0 0}
+.ctl .g{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.ctl .k{font:500 11px ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:8px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}.seg button{appearance:none;border:1px solid var(--line);background:transparent;color:var(--mute);border-radius:999px;padding:8px 13px;font:inherit;font-size:13.5px;cursor:pointer;transition:color .2s,border-color .2s}
+.seg button:hover{color:var(--fg)}.seg button[aria-pressed=true]{color:#fff;border-color:var(--accent);background:rgba(232,168,124,.1)}
+h2.sec{font-size:22px;margin:48px 0 10px;font-weight:600}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:14px}
+.facts div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}.facts b{display:block;font-size:26px;letter-spacing:-.01em;margin-bottom:4px}.facts span{color:#C9CDD2;font-size:14.5px}
+.note{color:var(--mute);font-size:13.5px}
+details.more{margin:12px 0 0;border-top:1px solid var(--line)}details.more>summary{list-style:none;cursor:pointer;padding:12px 0;font-size:14px;color:var(--mute);display:flex;gap:10px}details.more>summary::before{content:"+";font-family:ui-monospace,monospace;color:var(--accent)}details.more[open]>summary::before{content:"\2212"}
+code{font:13px ui-monospace,monospace;color:#E5C07B}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+.hud .sm{display:none}@media (max-width:640px){.hud .lg{display:none}.hud .sm{display:inline}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+<style id="mobile-base">
+/* Shared mobile and cross-browser base (Safari iOS, Chrome/Samsung Android, Firefox) */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{overflow-wrap:break-word;padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+a,button,summary,select,label{-webkit-tap-highlight-color:rgba(232,168,124,.22);touch-action:manipulation}
+details>summary{cursor:pointer;min-height:44px;box-sizing:border-box;align-items:center}
+details>summary::-webkit-details-marker{display:none}
+input[type=range]{min-height:36px;touch-action:pan-y;cursor:pointer}
+table{font-variant-numeric:tabular-nums}
+.wrap,.scroll{-webkit-overflow-scrolling:touch}
+img,svg,canvas,video{max-width:100%}
+@media (max-width:720px){
+  input,select,textarea{font-size:16px!important}
+  h1{overflow-wrap:anywhere}
+  .top,header nav{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;white-space:nowrap;margin-left:0!important;max-width:100%}
+  .top::-webkit-scrollbar,header nav::-webkit-scrollbar,.presets::-webkit-scrollbar{display:none}
+  .presets{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
+  .presets .reset{margin-left:0!important}
+}
+@media (pointer:coarse){nav a,.top a{padding-block:10px;display:inline-block} .srcbtn{padding:10px 0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<nav class="top"><a href="../../">arcroad home</a><a href="../../field/">Driven results</a><a href="../../cost/">Cost calculator</a><a href="../../evidence/">Civic-sense evidence</a><a href="../../globe/">Globe</a></nav>
+<p class="eyebrow">arcroad · night driving</p>
+<h1>Blinded by the light.</h1>
+<p class="lead">Take the driver's seat on a divided road at night. Someone is about to step out of the median gap ahead. An oncoming car keeps its high beam on. Tap "I see someone" the moment you see them.</p>
+
+<div class="stage" id="stage" tabindex="0" aria-label="Night drive. Use the I see someone button, or the space bar, when you see a person on the road.">
+  <div class="hud" aria-hidden="true">
+    <div class="vis"><span class="lg">What you can see of the person</span><span class="sm">Person visible</span><b id="h-vis">100%</b><div class="vbar" id="h-visbar"><i></i></div></div>
+    <div class="r"><span class="lg">Glare in your eye</span><span class="sm">Glare</span><b><span id="h-veil">0</span> <small>cd/m²</small></b><span class="lg">Oncoming car · </span><span class="sm">Car </span><span id="h-car">—</span><br><span class="lg">Person ahead · </span><span class="sm">Person </span><span id="h-dist">—</span></div>
+  </div>
+  <div class="result" id="result" hidden role="status" aria-live="polite">
+    <h2 id="r-head"></h2><p id="r-body"></p><p id="r-glare"></p>
+    <div class="btns" style="margin-top:12px"><button class="b p" id="r-again" type="button"></button></div>
+  </div>
+  <div class="dash"><div class="spd"><span id="h-spd">60</span><small>km/h</small></div>
+    <div class="btns"><button class="b" id="spot" type="button">I see someone</button><button class="b p" id="play" type="button">Drive</button></div></div>
+</div>
+
+<div class="ctl" aria-label="Settings">
+  <div class="g"><span class="k">Oncoming car's lights</span><div class="seg" id="c-beam"><button type="button" data-v="high" aria-pressed="true">High beam</button><button type="button" data-v="low" aria-pressed="false">Dipped, as the law asks</button></div></div>
+  <div class="g"><span class="k">Your age</span><div class="seg" id="c-age"><button type="button" data-v="25" aria-pressed="false">25</button><button type="button" data-v="35" aria-pressed="true">35</button><button type="button" data-v="50" aria-pressed="false">50</button><button type="button" data-v="65" aria-pressed="false">65</button></div></div>
+  <div class="g"><span class="k">Your speed</span><div class="seg" id="c-speed"><button type="button" data-v="40" aria-pressed="false">40</button><button type="button" data-v="60" aria-pressed="true">60</button><button type="button" data-v="80" aria-pressed="false">80 km/h</button></div></div>
+  <div class="g"><span class="k">Road</span><div class="seg" id="c-road"><button type="button" data-v="dry" aria-pressed="true">Dry</button><button type="button" data-v="wet" aria-pressed="false">After rain</button></div></div>
+</div>
+
+<h2 class="sec">What just happened to your eyes</h2>
+<div class="facts">
+  <div><b>Scattered light</b><span>Light from a bright lamp scatters inside the eye and lays a veil over everything near it. A dark figure against a dark road loses its contrast first.</span></div>
+  <div><b>Worse with age</b><span>The scattered veil grows with the fourth power of age: at 65 it is about twice as strong as at 25 for the same lamp.</span></div>
+  <div><b>Slow to recover</b><span>After the lamp passes, the eye stays dazzled for seconds. At 60 km/h every second is almost 17 metres.</span></div>
+  <div><b>Rain makes it worse</b><span>A wet road mirrors each headlamp into a long streak, and the road markings vanish under it.</span></div>
+</div>
+
+<h2 class="sec">The rule</h2>
+<p>Rule 106 of the Central Motor Vehicles Rules requires headlamps that can be dipped so they do not dazzle the driver of an oncoming vehicle. Fines are under section 177 of the Motor Vehicles Act. A median screen or hedge on divided roads blocks the beam altogether.</p>
+
+<details class="more"><summary>How this is built, and its limits</summary>
+<p class="note">The glare is computed, not painted. For every pixel, every frame, the veil of light scattered in the eye is worked out with the CIE General Disability Glare Equation (CIE 146:2002): <code>Lveil/E = 10/θ³ + (5/θ² + 0.1p/θ)(1 + (A/62.5)⁴) + 0.0025p</code>, with θ the angle in degrees between your line of sight and each lamp, A your age and p = 0.5 for brown eyes. The light reaching your eye from each lamp is its intensity divided by the distance squared, using typical values: 30,000 cd a lamp on high beam and 500 cd a lamp on dipped beam towards an oncoming driver.</p>
+<p class="note">"What you can see of the person" is their luminance contrast with the glare, (Lo − Lb)/(Lb + Lveil), as a share of the same contrast without it, with dark clothing at 35% of the road's brightness. Recovery after the lamp passes, the stopping distance (1.5 s to react, 7 m/s² braking) and the wet-road streaks are simplified for illustration. This is a teaching model built on published equations, not a measurement of any road, and it does not claim how many crashes glare causes.</p>
+</details>
+
+<footer>Three.js (MIT), self-hosted. Nothing is stored or sent. <a href="../">Back to what else the road costs</a></footer>
+</main>
+<script src="vendor/three.min.js"></script>
+<script src="glare.js"></script>
+</body>
+</html>

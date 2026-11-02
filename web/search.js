@@ -56,6 +56,7 @@
     var m = h("p", "rs-m"); m.append(h("span", "rs-s" + (s.driven ? " d" : ""), s.driven ? "Driven by arcroad" : "Modelled, not yet driven")); m.append(" · place " + s.id);
     var k = h("p", "rs-k");
     if (extra != null && !small) k.append(link(href, "What it costs you"));
+    if (extra != null && !small) k.append(link(base + "act.html?pair=" + encodeURIComponent(s.id), "Write to the people responsible"));
     k.append(link(base + "globe/?spot=" + encodeURIComponent(s.id), "See it on the globe"));
     li.append(t, h("p", "rs-l", line), m, k);
     return li;

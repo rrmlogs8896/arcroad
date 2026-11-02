@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>arcroad — act on this</title>
+<title>arcroad — write to the people responsible</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Turn one measured crossing into a letter, an email and a share card. Everything is made in your browser; nothing is sent to arcroad.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg fill='none' stroke='%23E2743B' stroke-linecap='round'%3E%3Cpath d='M12 25 A 10 10 0 1 1 20 25' stroke-width='2.8'/%3E%3C/g%3E%3C/svg%3E">
@@ -26,7 +26,8 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-
 .staging{background:#15110D;border-bottom:1px solid #2A2520}
 .staging .wrap{padding-block:11px}
 .staging p{margin:0;font-size:13px;line-height:1.5;color:#B9A594}
-header .wrap{padding-block:26px;display:flex;gap:12px;align-items:baseline;border-bottom:1px solid var(--line)}
+header .wrap{padding-block:26px;display:flex;gap:12px;align-items:center}
+header .wrap{position:relative}header .wrap::after{content:"";position:absolute;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:0;height:1px;background:var(--line)}
 .logo{font-size:20px;font-weight:600;letter-spacing:-0.02em;color:var(--fg2);text-decoration:none}
 .place{font-size:13px;color:var(--faint)}
 main .wrap{padding-block:40px 80px;display:flex;flex-direction:column;gap:56px}
@@ -72,7 +73,7 @@ p{font-size:15px;line-height:1.6;color:var(--mut);margin:0;max-width:62ch}
 .hint{font-size:13px;color:var(--faint)}
 .status{font-size:13px;color:var(--good);min-height:1.5em}
 .preview{display:flex;flex-direction:column;gap:14px}
-.paper{background:var(--paper);color:var(--ink);border-radius:6px;padding:clamp(20px,5vw,48px);font-size:14.5px;line-height:1.6;box-shadow:0 1px 0 var(--line2)}
+.paper{font-family:Inter,system-ui,-apple-system,"Noto Sans Telugu","Noto Sans Devanagari","Kohinoor Telugu","Kohinoor Devanagari",sans-serif;background:var(--paper);color:var(--ink);border-radius:6px;padding:clamp(20px,5vw,48px);font-size:14.5px;line-height:1.6;box-shadow:0 1px 0 var(--line2)}
 .paper .wm{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:#9A4A1E;border:1px solid #E7C3AE;border-radius:6px;padding:8px 10px;margin-bottom:22px}
 .paper .blk{margin:0 0 16px}
 .paper .lab{color:var(--ink2)}
@@ -85,6 +86,11 @@ p{font-size:15px;line-height:1.6;color:var(--mut);margin:0;max-width:62ch}
 .cardbox{background:var(--surface);border-radius:14px;padding:16px;display:flex;justify-content:center}
 canvas{width:min(100%,360px);height:auto;border-radius:10px}
 .off{padding:28px;background:var(--surface);border-radius:14px}
+.who{display:flex;flex-direction:column;gap:8px;padding:18px 20px;background:var(--surface);border-radius:14px}
+.wholist{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14.5px;color:var(--mut)}
+.wholist b{color:var(--fg);font-weight:500}.wholist .mb{color:var(--soft);font-size:13px}.wholist .src{color:var(--faint);font-size:12.5px}
+.share .btn{text-decoration:none}
+.langs{display:flex;gap:8px;flex-wrap:wrap}.btn.sm{padding:7px 14px;font-size:13.5px}.btn.sm[aria-pressed=true]{border-color:var(--accent);color:var(--fg2)}
 footer .wrap{padding-block:28px;border-top:1px solid var(--line)}
 footer p{font-size:12.5px;color:var(--faint)}
 @media (prefers-reduced-motion:no-preference){.btn{transition:border-color .15s,opacity .15s}}
@@ -123,14 +129,14 @@ img,svg,canvas,video{max-width:100%}
 </style>
 </head>
 <body>
-<div class="staging"><div class="wrap"><p><span class="m">Staging</span> · Behind a feature flag. No figure here has been checked against a driven route, and nothing on this page is for submission yet.</p></div></div>
+<div class="staging"><div class="wrap"><p><span class="m">Preview · v0.2</span> · Every letter says how its figure was made: driven by arcroad, or modelled from open map data and not yet driven.</p></div></div>
 <header><div class="wrap"><a class="logo" href="./">arcroad</a><span class="place">Hyderabad</span></div></header>
 
 <main><div class="wrap" id="app">
   <div class="off" id="off" hidden><h2>Not available yet</h2><p style="margin-top:8px">The representation kit opens after the verification gate.</p></div>
 
   <section class="lede" id="lede" hidden>
-    <span class="k">Act on this</span>
+    <span class="k">Write to the people responsible</span>
     <h1><span id="across">—</span><br><span class="by" id="byroad">—</span></h1>
     <p id="where">—</p>
     <div class="facts" aria-label="The figures">
@@ -139,6 +145,7 @@ img,svg,canvas,video{max-width:100%}
       <div class="fact"><span class="k">Status</span><span id="f-status" class="pill">—</span></div>
     </div>
     <p class="mark" id="mark" hidden></p>
+    <div class="who" id="who" hidden aria-label="Who receives it"></div>
     <p>Everything below is made in your browser. arcroad does not receive, store or send anything you type. <a href="./#method" style="color:var(--soft)">How the figures are measured</a>.</p>
   </section>
 
@@ -184,11 +191,14 @@ img,svg,canvas,video{max-width:100%}
       <span class="dot" aria-hidden="true"></span>
       <div class="body">
         <h2>Make your letter, email or card</h2>
+        <div class="langs" role="group" aria-label="Language of the letter"><button class="btn sm" type="button" data-l="en" aria-pressed="true">English</button><button class="btn sm" type="button" data-l="hi" aria-pressed="false">हिन्दी</button><button class="btn sm" type="button" data-l="te" aria-pressed="false">తెలుగు</button></div>
+        <p class="hint" id="langnote" hidden>Draft translation, being reviewed by a native speaker. Check the wording before you send it.</p>
         <div class="outs">
           <button class="btn primary" id="b-letter" disabled>Show the letter</button>
           <button class="btn" id="b-email" disabled>Open an email</button>
           <button class="btn" id="b-card" disabled>Make a share card</button>
         </div>
+        <div class="outs share"><a class="btn" id="b-wa" href="#" target="_blank" rel="noopener noreferrer">Share on WhatsApp</a><a class="btn" id="b-x" href="#" target="_blank" rel="noopener noreferrer">Share on X</a></div>
         <p class="hint" id="authnote"></p>
         <p class="status" id="msg" role="status" aria-live="polite"></p>
       </div>

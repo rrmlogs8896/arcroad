@@ -24,7 +24,8 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-
 .staging .wrap{padding-block:11px;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between}
 .staging p{margin:0;font-size:13px;line-height:1.5;color:#B9A594}
 .staging .m{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
-header .wrap{padding-block:26px;display:flex;flex-wrap:wrap;gap:20px;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--line)}
+header .wrap{padding-block:26px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+header .wrap{position:relative}header .wrap::after{content:"";position:absolute;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:0;height:1px;background:var(--line)}
 .logo{font-size:20px;font-weight:600;letter-spacing:-0.02em;color:var(--fg2)}
 .place{font-size:13px;color:var(--faint);margin-left:12px}
 nav{display:flex;gap:24px;font-size:14px}
@@ -37,9 +38,11 @@ h1{margin:0 0 18px;font-size:clamp(30px,6vw,46px);line-height:1.1;letter-spacing
 section{padding-block:46px}
 h2{margin:0 0 16px;font-size:20px;font-weight:600;letter-spacing:-0.02em;color:var(--fg2)}
 h3{margin:0 0 8px;font-size:15.5px;font-weight:500;color:#D4D9DE}
-.band{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;border-top:1px solid var(--line2);border-bottom:1px solid var(--line)}
-.cell{padding:22px 24px 22px 0;border-right:1px solid var(--line);min-width:0}
+.band{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--line2);border-bottom:1px solid var(--line)}
+.cell{padding:22px 20px;border-right:1px solid var(--line);min-width:0}
+.cell:first-child{padding-left:0}
 .cell:last-child{border-right:0}
+@media (max-width:720px){.band{grid-template-columns:repeat(2,minmax(0,1fr))}.cell:nth-child(odd){padding-left:0}.cell:nth-child(2){border-right:0}.cell:nth-child(-n+2){border-bottom:1px solid var(--line)}}
 .cell .v{margin:0 0 6px;font-size:clamp(24px,4.5vw,32px);font-weight:500;letter-spacing:-0.03em;color:var(--fg2)}
 .cell .v.hot{color:var(--accent)}
 .cell .k{margin:0;font-size:12.5px;line-height:1.45;color:var(--faint)}
@@ -97,6 +100,16 @@ a{color:#E8A87C}
 .more[open] summary::before{content:"\2212"}
 .more summary:hover{color:var(--fg2)}
 .more>div{padding:2px 0 8px 22px}
+.why{margin:18px 0 0;max-width:68ch;font-size:14px;line-height:1.65;color:var(--mut)}
+.why summary{cursor:pointer;color:var(--fg2);font-size:13.5px;list-style:none}
+.why summary::-webkit-details-marker{display:none}
+.why summary::before{content:"+ ";color:var(--accent)}
+.why[open] summary::before{content:"\2212  "}
+.why dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:14px 0 0}
+.why dt{color:var(--faint);font-size:12.5px}
+.why dd{margin:0}
+.why p{margin:12px 0 0}
+@media (max-width:560px){.why dl{grid-template-columns:1fr}.why dd{margin-bottom:6px}}
 .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
 .cta a{display:inline-block;padding:11px 18px;border-radius:999px;border:1px solid var(--line2);color:var(--fg);text-decoration:none;font-size:14.5px}
 .cta a.p{background:var(--accent);border-color:var(--accent);color:#0B0D10;font-weight:500}
@@ -179,8 +192,20 @@ img,svg,canvas,video{max-width:100%}
 
 <section>
   <div class="wrap">
-    <h1>A place you can see, four kilometres away</h1>
+    <h1>A place you can see, 1.5 km away</h1>
     <p class="lede">Divided roads cut neighbours off from each other. arcroad measures what crossing your own road costs, then drives the detours to check.</p>
+    <details class="why">
+      <summary>Which place is this, and how we picked it</summary>
+      <dl>
+        <dt>Place</dt><dd>HITEC City–Kukatpally Main Road at APHB Colony (arcroad place S18). <a href="globe/?spot=S18" style="color:var(--accent)">See it on the globe</a></dd>
+        <dt>Straight across</dt><dd>13 m, measured on OpenStreetMap (extract of 2 Nov 2026)</dd>
+        <dt>Model said</dt><dd>1.57 km one way, 1.38 km the other</dd>
+        <dt>We drove</dt><dd>1.58 km and 1.55 km, on 1 Nov 2026, phone GPS once a second (about ±50 m)</dd>
+        <dt>Your cost</dt><dd><a href="cost/?place=S18%20west%20to%20east&amp;veh=tw&amp;km=1.57&amp;min=3" style="color:var(--accent)">West to east, 1.57 km extra</a> · <a href="cost/?place=S18%20east%20to%20west&amp;veh=tw&amp;km=1.53&amp;min=12" style="color:var(--accent)">East to west, 1.53 km extra</a>. Opens the calculator with this crossing filled in; change anything.</dd>
+        <dt>Evidence</dt><dd>Both directions driven and matched the model; one direction also photographed</dd>
+      </dl>
+      <p>How it was chosen, by a rule fixed before choosing: of every direction we have driven that matched the model, leave out access-controlled roads like the Outer Ring Road, where a long way round is by design; then take the place with the strongest evidence. It is not our biggest number: S16 on the same drive was 2.3 km for 19 m. <a href="field/" style="color:var(--accent)">Every pass we drove</a></p>
+    </details>
     <div class="cta"><a class="p" href="cost/">What does it cost you?</a><a href="field/">What we drove</a><a href="roads/">What else the road costs</a></div>
     <form class="rs" data-base="./" role="search" autocomplete="off">
       <label for="rs-home">Find your road</label>

@@ -8,26 +8,50 @@
   var $ = function (id) { return document.getElementById(id); };
   var params = new URLSearchParams(location.search);
 
-  // Feature flag: the kit stays closed unless the staging flag is set.
-  if (params.get('kit') !== '1') { $('off').hidden = false; return; }
-
   var pairs = window.ARCROAD_PAIRS || {};
   var pair = pairs[params.get('pair') || 'sample'];
-  if (!pair) { $('off').hidden = false; $('off').querySelector('p').textContent = 'That location is not in the kit yet.'; return; }
+  // Real places (driven or modelled) open for everyone; the sample needs the staging flag.
+  var open = pair && (pair.status === 'driven' || pair.status === 'modelled' || params.get('kit') === '1');
+  if (!pair || !open) { $('off').hidden = false; $('off').querySelector('p').textContent = pair ? 'The representation kit opens after the verification gate.' : 'That place is not in the kit yet. Find your road on the home page.'; return; }
 
   var st = K.status(pair);
   var a = K.authority(pair.ref);
   $('lede').hidden = false; $('steps').hidden = false;
   $('across').textContent = K.formatDistance(pair.straight_m) + ' across.';
   $('byroad').textContent = K.formatDistance(pair.network_m) + ' by road.';
-  $('where').textContent = 'Two points on opposite sides of ' + [pair.ref, pair.area ? 'at ' + pair.area : ''].join(' ').trim() +
+  $('where').textContent = 'Two points on opposite sides of ' + [pair.road || pair.ref || 'the road', pair.area ? 'at ' + pair.area : ''].join(' ').trim() +
     '. Getting from one to the other on the mapped road network takes the longer distance.';
-  $('f-road').textContent = pair.ref || '—';
+  $('f-road').textContent = pair.road || pair.ref || '—';
   $('f-extract').textContent = pair.extract_date;
   $('f-status').textContent = st.label;
   $('f-status').classList.add(pair.status in { verified: 1, candidate: 1, under_review: 1, sample: 1 } ? pair.status : 'under_review');
   if (st.watermark) { $('mark').hidden = false; $('mark').textContent = st.watermark + '. Every output carries this line.'; }
-  $('authnote').textContent = 'Addressed to: ' + a.to + ', ' + a.office + '. ' + a.note;
+  var R = K.recipients(pair);
+  $('authnote').textContent = R.sourced ? 'Addressed to the office that maintains this road, with copies to the elected representatives. ' + R.note : 'Addressed to: ' + a.to + ', ' + a.office + '. ' + a.note;
+  if (pair.where) { var wh = $('where'); wh.textContent = wh.textContent + ' ' + pair.where + '.'; }
+  // Who receives it, each with the official page the address came from.
+  (function () {
+    var box = $('who'); if (!box) return;
+    var list = function (title, arr) {
+      if (!arr.length) return;
+      box.appendChild(el('span', 'k', title));
+      var ul = el('ul', 'wholist');
+      arr.forEach(function (x) {
+        var li = el('li'); li.appendChild(el('b', null, x.designation || x.name || ''));
+        if (x.office) li.appendChild(el('span', null, ' · ' + x.office));
+        if (x.mailbox) li.appendChild(el('span', 'm mb', ' ' + x.mailbox));
+        var src = x.source || x.url;
+        if (src) { var aa = el('a', 'src', 'source'); aa.href = src; aa.rel = 'noopener noreferrer'; aa.target = '_blank'; li.appendChild(document.createTextNode(' ')); li.appendChild(aa); }
+        ul.appendChild(li);
+      });
+      box.appendChild(ul);
+    };
+    if (!R.sourced) { box.appendChild(el('p', 'hint', 'Official addresses for this place are still being checked. The letter leaves the address lines blank for you to fill from the office\'s official website.')); }
+    else { list('To', R.to); list('Copy to', R.cc); }
+    list('If there is no reply in 30 days', R.portals);
+    if (R.rti) list('Right to Information', [{ designation: R.rti.designation, office: R.rti.office, source: R.rti.source }]);
+    box.hidden = false;
+  })();
 
   var outs = ['b-letter', 'b-email', 'b-card'];
   function setStep(id, state) { var el = $(id); el.classList.remove('cur', 'done'); if (state) el.classList.add(state); }
@@ -38,15 +62,23 @@
     if (!on) { $('pv-letter').hidden = true; $('pv-card').hidden = true; }
   });
 
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function who() { return { name: $('who-name').value, address: $('who-addr').value, phone: $('who-phone').value }; }
   function today() { return new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }); }
-  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function lines(parent, arr) { arr.forEach(function (t, i) { if (i) parent.appendChild(document.createElement('br')); parent.appendChild(document.createTextNode(t)); }); }
   function say(t) { $('msg').textContent = t; }
 
-  var current = null;
+  var current = null, lang = 'en';
+  [].forEach.call(document.querySelectorAll('.langs button'), function (b) {
+    b.addEventListener('click', function () {
+      lang = b.getAttribute('data-l');
+      [].forEach.call(document.querySelectorAll('.langs button'), function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      $('langnote').hidden = lang === 'en';
+      if (!$('pv-letter').hidden) renderLetter();
+    });
+  });
   function renderLetter() {
-    var L = K.letter(pair, who(), today());
+    var L = K.letter(pair, who(), today(), lang);
     current = L;
     var p = $('letter'); p.replaceChildren();
     if (L.watermark) p.appendChild(el('div', 'wm', L.watermark));
@@ -70,7 +102,7 @@
   ['who-name', 'who-addr', 'who-phone'].forEach(function (id) { $(id).addEventListener('input', function () { if (!$('pv-letter').hidden) renderLetter(); }); });
   $('b-print').addEventListener('click', function () { window.print(); });
   $('b-copy').addEventListener('click', function () {
-    var text = K.letterText(current || K.letter(pair, who(), today()));
+    var text = K.letterText(current || K.letter(pair, who(), today(), lang));
     var done = function () { say('Copied.'); };
     var fallback = function () {
       var ta = el('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
@@ -82,9 +114,17 @@
   });
 
   $('b-email').addEventListener('click', function () {
-    say('Your mail app should open. The office address is left for you to add, and attachments cannot be added this way: the email links to the evidence page instead.');
-    window.location.href = K.mailto(pair);
+    say(R.sourced && R.to.some(function (t) { return t.mailbox; }) ? 'Your mail app should open with the office in To and the representatives in Copy. Add your name at the end before sending.' :
+      'Your mail app should open. The office address is left for you to add, and attachments cannot be added this way: the email links to the evidence page instead.');
+    window.location.href = K.mailto(pair, lang);
   });
+
+  (function share() {
+    var url = 'https://arcroad.org/act.html?pair=' + encodeURIComponent(pair.id || 'sample');
+    var t = K.formatDistance(pair.straight_m) + ' across, ' + K.formatDistance(pair.network_m) + ' by road: ' + (pair.road || pair.ref || 'a divided road') + (pair.area ? ', ' + pair.area : '') + '. Write to the people responsible: ' + url;
+    if ($('b-wa')) $('b-wa').href = 'https://wa.me/?text=' + encodeURIComponent(t);
+    if ($('b-x')) $('b-x').href = 'https://x.com/intent/post?text=' + encodeURIComponent(t);
+  })();
 
   function drawCard() {
     var c = K.card(pair), cv = $('card'), g = cv.getContext('2d'), W = 1080, H = 1350;
