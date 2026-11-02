@@ -1,0 +1,75 @@
+{
+  "status": "GROUNDWORK - DESK RESEARCH ONLY, NOTHING COLLECTED OR PUBLISHED",
+  "decided": "2026-11-02, Rohit: expand to major world cities as a sample in a future release; research first",
+  "rules": [
+    "Desk-only until each city has a ground-truth plan (a local partner or a driven/walked sample) pre-registered like Hyderabad's field day.",
+    "Open data only: OpenStreetMap (ODbL), GHSL population (global), Mapillary (CC BY-SA) where coverage exists. No Google data anywhere.",
+    "Each city is measured for its own problem. The Hyderabad driving-detour index is not assumed to be the right metric everywhere.",
+    "Boxes are approximate and are checked against the Geofabrik index and the city's administrative boundary before any run."
+  ],
+  "cities": [
+    {
+      "id": "world-manila", "name": "Metro Manila", "country": "Philippines",
+      "bbox": [120.90, 14.35, 121.15, 14.80], "geofabrik_scope": "/asia/philippines",
+      "problem": "Closed or time-restricted U-turn slots on divided arterials (EDSA, C-5, Quezon Avenue) force long detours; several EDSA slots were closed for the busway in 2020.",
+      "metric": "driving detour index (same as Hyderabad), plus before/after for slots with dated closure advisories",
+      "why": "Closest analogue to Hyderabad: a direct replication test of the method.",
+      "official_sources": ["MMDA traffic advisories (dated closures)"],
+      "role": "replication"
+    },
+    {
+      "id": "world-dhaka", "name": "Dhaka", "country": "Bangladesh",
+      "bbox": [90.30, 23.65, 90.52, 23.90], "geofabrik_scope": "/asia/bangladesh",
+      "problem": "Median U-turns and unauthorised median cuts; pedestrians avoid overpasses that sit far from desire lines.",
+      "metric": "driving detour index plus a walking-crossing gap (distance between legal pedestrian crossings)",
+      "why": "Same driving problem as Hyderabad, plus an observed walking problem that tests the second metric.",
+      "official_sources": ["Roads and Highways Department notices", "DNCC/DSCC crossing facility lists"],
+      "role": "replication plus walking"
+    },
+    {
+      "id": "world-nairobi", "name": "Nairobi", "country": "Kenya",
+      "bbox": [36.65, -1.45, 37.10, -1.15], "geofabrik_scope": "/africa/kenya",
+      "problem": "Pedestrian severance on high-speed highways (Thika Superhighway, Outer Ring Road): footbridges far apart or blocked, pedestrians are the largest group of road deaths.",
+      "metric": "walking detour to the nearest legal crossing; crossing spacing per km; footbridge accessibility",
+      "why": "Different use case: the cost falls on people walking, not driving.",
+      "official_sources": ["NTSA crash statistics and hazard mapping reports", "KeNHA and KURA footbridge notices"],
+      "role": "new use case: walking"
+    },
+    {
+      "id": "world-nyc", "name": "New York City", "country": "United States",
+      "bbox": [-74.26, 40.48, -73.70, 40.92], "geofabrik_scope": "/north-america/us/new-york",
+      "problem": "Neighbourhoods split by expressways and wide arterials; a published community severance index links severance to more collisions.",
+      "metric": "walking and driving detour across expressways; compare with the published Community Severance Index",
+      "why": "Data-rich benchmark: an independent index exists to validate against.",
+      "official_sources": ["NYC Open Data motor vehicle collisions", "Benavides et al. 2024, Environment International"],
+      "role": "validation benchmark"
+    },
+    {
+      "id": "world-london", "name": "London", "country": "United Kingdom",
+      "bbox": [-0.51, 51.28, 0.33, 51.70], "geofabrik_scope": "/europe/united-kingdom/england/greater-london",
+      "problem": "Busy arterial roads (for example Finchley Road) act as barriers to walking; a measured toolkit exists (UCL Street Mobility).",
+      "metric": "walking crossing gap and detour on arterials; compare with the UCL toolkit's case study",
+      "why": "Methodological benchmark and a possible research partner.",
+      "official_sources": ["TfL road network and crossing data", "UCL Street Mobility toolkit (open access)"],
+      "role": "validation benchmark"
+    },
+    {
+      "id": "world-bogota", "name": "Bogotá", "country": "Colombia",
+      "bbox": [-74.23, 4.47, -74.00, 4.84], "geofabrik_scope": "/south-america/colombia",
+      "problem": "Severance from bus rapid transit corridors and arterials: crossings concentrated at stations and footbridges.",
+      "metric": "walking crossing gap along BRT corridors; detour to the nearest station or bridge",
+      "why": "Tests whether a transit corridor, not only a highway, severs a neighbourhood.",
+      "official_sources": ["Bogotá open data portal (crashes, crossings)"],
+      "role": "new use case: transit corridor"
+    },
+    {
+      "id": "world-saopaulo", "name": "São Paulo", "country": "Brazil",
+      "bbox": [-46.83, -23.75, -46.36, -23.36], "geofabrik_scope": "/south-america/brazil/sudeste",
+      "problem": "Marginal expressways along rivers (Tietê, Pinheiros) and arterials split districts; few crossings over long stretches.",
+      "metric": "driving and walking detour across the marginal expressways",
+      "why": "Large-scale linear barrier case; river plus road severance.",
+      "official_sources": ["GeoSampa (city geodata portal)", "CET crash data"],
+      "role": "new use case: linear barrier"
+    }
+  ]
+}
