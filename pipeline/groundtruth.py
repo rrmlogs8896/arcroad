@@ -30,6 +30,7 @@ committed to this repository.
 """
 
 from __future__ import annotations
+import math
 
 import xml.etree.ElementTree as ET
 from datetime import datetime
@@ -189,6 +190,20 @@ def score_stop(track, stop: dict, network_m: float | None) -> dict:
         return row
     i, j = found
     row["driven_m"] = round(path_length_m(track, i, j), 1)
+    # A short pass that moves ALONG the road, not across it, went past both points on one carriageway
+    # (2 Nov 2026 commute; the same artefact B-15 removes from Mapillary). A real straight-over crossing
+    # moves across, in the direction from A to B, and still counts (it is the evidence of map lag).
+    if row["driven_m"] < row["straight_m"] * 0.9:
+        (_, la1, lo1), (_, la2, lo2) = track[i][:3], track[j][:3]
+        k = math.cos(math.radians((a[0] + b[0]) / 2))
+        mv = ((lo2 - lo1) * k, la2 - la1)
+        ab = ((b[1] - a[1]) * k, b[0] - a[0])
+        nmv, nab = math.hypot(*mv), math.hypot(*ab)
+        across = (mv[0] * ab[0] + mv[1] * ab[1]) / (nmv * nab) if nmv and nab else 0.0
+        if across < 0.5:
+            row["driven_m"] = None
+            row["passed_by"] = True
+            return row
     gap = max_gap_s(track, i, j)
     row["max_gap_s"] = gap
     if track[i][0] is not None and track[j][0] is not None:

@@ -154,3 +154,13 @@ def test_accept_filter_can_veto_a_side():
     track = g.parse_gpx(gpx(loop_track(1000)))
     assert g.find_pass(track, A, B) is not None
     assert g.find_pass(track, A, B, accept=lambda pt, side: side == "A") is None
+
+
+def test_pass_by_along_the_road_is_not_a_drive():
+    # 2 Nov 2026: a car driving ALONG a road comes within the visit radius of both points of a crossing
+    # (the radius is wider than the gap). Moving along the road, not across from A to B, is a pass-by.
+    from pipeline.groundtruth import score_stop
+    a, b = (17.50000, 78.30000), (17.50000, 78.30025)          # 26 m apart, east-west: across the road
+    track = [(k, 17.50060 - 0.00012 * k, 78.300125) for k in range(11)]  # driving south between them
+    row = score_stop(track, {"id": "X", "a": list(a), "b": list(b)}, 1841.3)
+    assert row["verdict"] == "NOT_DRIVEN"
