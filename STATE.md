@@ -92,6 +92,14 @@ only; every measured number stays in code.
    f. Waterlogging watch: barometer low points (2 Nov: a ~13 m dip on the Isnapur-Patancheru stretch) + dated rain reports.
    g. Road roughness map once the phone is mounted; feeds the letters.
    h. Private weekly commute card (later, shareable pattern once volunteers join).
+9. Further ideas, all approved by Rohit 2 Nov 2026 (19:06 IST), after items 8a-8h:
+   a. Places near schools (OSM schools within 500 m of a long-detour place; the letter says so).
+   b. Bus stops with no way across (facing stops on a divided road, no crossing between them).
+   c. Ambulance minutes (detour as extra minutes to the nearest hospital; reuses the hospital module).
+   d. Letters-sent count (opt-in, anonymous) and a 30-day no-reply prompt to the RTI request.
+   e. One-page constituency report per MLA seat (places, detours, cost, letters sent).
+   f. "Report a dark streetlight" (reuses /report/; pairs with the glare experience).
+   g. Embeddable place card for journalists (always shows date and evidence level).
    Drive 2 Nov 2026 17:48-18:45 IST Isnapur -> Hafeezpet, 20.4 km, avg ~21 km/h; no crossings driven (pass-by only at S01, S04, S06, S11, S12); S11 needs a deliberate U-turn check; motion sensors unusable (phone handled); scorer pass-by fix 6a3199a.
 
 ## Field day 1 lessons (1 Nov 2026; detail in the private field report, not in git)
