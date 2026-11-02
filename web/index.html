@@ -38,6 +38,17 @@ h1{margin:0 0 18px;font-size:clamp(30px,6vw,46px);line-height:1.1;letter-spacing
 section{padding-block:46px}
 h2{margin:0 0 16px;font-size:20px;font-weight:600;letter-spacing:-0.02em;color:var(--fg2)}
 h3{margin:0 0 8px;font-size:15.5px;font-weight:500;color:#D4D9DE}
+.tick{border-bottom:1px solid var(--line);padding:28px 0 30px}
+.tick .eyebrow{margin:0 0 10px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.tick .big{display:flex;flex-wrap:wrap;gap:12px 40px;margin:6px 0 14px}
+.tick .big div{min-width:0}
+.tick .big b{display:block;font-size:clamp(28px,5vw,40px);font-weight:500;letter-spacing:-.03em;color:var(--accent);font-variant-numeric:tabular-nums}
+.tick .big span{font-size:12.5px;color:var(--faint)}
+.tick p{margin:0 0 10px;font-size:14.5px;line-height:1.65;color:var(--mut);max-width:70ch}
+.tick .seg{display:inline-flex;gap:8px;margin:2px 0 12px}
+.tick .seg button{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line2);background:none;color:var(--fg);font:inherit;font-size:13.5px;cursor:pointer}
+.tick .seg button[aria-pressed="true"]{border-color:var(--accent);color:var(--fg2)}
+.tick small{display:block;font-size:12.5px;line-height:1.6;color:var(--faint);max-width:72ch}
 .band{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--line2);border-bottom:1px solid var(--line)}
 .cell{padding:22px 20px;border-right:1px solid var(--line);min-width:0}
 .cell:first-child{padding-left:0}
@@ -222,6 +233,24 @@ img,svg,canvas,video{max-width:100%}
       <div class="cell"><p class="v hot">2.2–3.8×</p><p class="k">Beyond the ring road vs the core city</p></div>
       <div class="cell"><p class="v">94</p><p class="k">Areas ranked</p></div>
       <div class="cell"><p class="v hot">5 / 5</p><p class="k">Driven directions that matched the model (1 Nov 2026)</p></div>
+    </div>
+  </div>
+</section>
+
+
+<section style="padding-top:0" aria-labelledby="h-tick">
+  <div class="wrap">
+    <div class="tick" id="ticker">
+      <p class="eyebrow" id="h-tick">Live · one crossing, one person</p>
+      <p>Since 1 January, someone who crosses HITEC City–Kukatpally Main Road at APHB Colony once a day, and back, has given up:</p>
+      <div class="big" aria-live="off">
+        <div><b id="t-rs">–</b><span>in fuel</span></div>
+        <div><b id="t-h">–</b><span>hours in traffic</span></div>
+        <div><b id="t-km">–</b><span>extra km</span></div>
+      </div>
+      <div class="seg" role="group" aria-label="Vehicle"><button type="button" data-v="tw" aria-pressed="true">Two-wheeler</button><button type="button" data-v="car" aria-pressed="false">Car</button></div>
+      <p>That is <span id="t-day">–</span>, or <span id="t-year">–</span>, for a place 13 m away. <a href="cost/?place=S18%20both%20ways&amp;veh=tw&amp;km=3.10&amp;min=15" style="color:var(--accent)">Put in your own numbers</a></p>
+      <small>From one arcroad drive on 1 Nov 2026 (1.58 km and 1.55 km, 15 minutes both ways on a Sunday, including waits at signals); petrol ₹116.15 a litre (16 Oct 2026), 45 km a litre on a two-wheeler and 15 in a car. One person and one crossing, not a city total: how many people cross here each day has not been measured.</small>
     </div>
   </div>
 </section>
@@ -528,5 +557,6 @@ img,svg,canvas,video{max-width:100%}
 </script>
 
 <script src="search.js" defer></script>
+<script src="ticker.js" defer></script>
 </body>
 </html>
