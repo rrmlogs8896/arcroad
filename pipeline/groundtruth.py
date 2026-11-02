@@ -133,12 +133,16 @@ def find_pass(track, a, b, radius=VISIT_RADIUS_M, max_pass_s=MAX_PASS_S, min_run
     def reaches(lo, hi, p):
         return min(haversine_m(track[k][2], track[k][1], p[1], p[0]) for k in range(lo, hi + 1)) <= END_REACH_M
 
+    # A run that never comes within END_REACH_M of its own point is passing on the other
+    # carriageway (B-15), so it is dropped before pairing: it must not be counted as being
+    # there, and must not stand between a real stay at A and a real stay at B. Declared
+    # method change of 2 Nov 2026 (before: only adjacent runs were paired, so such a run
+    # blocked the Hafeezpet flyover loop); applied to every drive, not one.
+    runs = [r for r in runs if reaches(r[1], r[2], a if r[0] == "A" else b)]
     best = None
-    for (l1, i0, i), (l2, j, j1) in pairwise(runs):
+    for (l1, _i0, i), (l2, j, _j1) in pairwise(runs):
         if (l1, l2) != ("A", "B"):
             continue
-        if not (reaches(i0, i, a) and reaches(j, j1, b)):
-            continue  # B-15: never actually at A, or never actually at B
         ti, tj = track[i][0], track[j][0]
         if ti is not None and tj is not None and tj - ti > max_pass_s:
             continue

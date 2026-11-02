@@ -164,3 +164,33 @@ def test_pass_by_along_the_road_is_not_a_drive():
     track = [(k, 17.50060 - 0.00012 * k, 78.300125) for k in range(11)]  # driving south between them
     row = score_stop(track, {"id": "X", "a": list(a), "b": list(b)}, 1841.3)
     assert row["verdict"] == "NOT_DRIVEN"
+
+
+def test_flyover_loop_counts_when_a_near_b_run_on_a_side_sits_between():
+    # 2 Nov 2026 night, Hafeezpet flyover: after leaving A the car stays on A's carriageway but is
+    # briefly "nearer B" without ever reaching B; it then loops ~1 km out, U-turns and arrives at B.
+    # Only adjacent runs used to be paired, so that near-B run blocked the real A -> B detour.
+    a, b = (17.5000, 78.2000), (17.5001, 78.2004)          # ~11 m across, ~42 m along (as B-15)
+    east = (17.49995, 78.2100)                               # ~1 km east on A's carriageway
+    east_b = (17.50012, 78.2100)
+    track = (
+        [a] * 5
+        + line(a, (17.49995, 78.2006), 8)[1:]                # along A's side, past b (nearer b, never at b)
+        + line((17.49995, 78.2006), east, 40)[1:]
+        + line(east, east_b, 2)[1:]                          # U-turn
+        + line(east_b, b, 40)[1:]                            # back on B's side, arriving at b
+        + [b] * 5
+    )
+    t = g.parse_gpx(gpx(track))
+    found = g.find_pass(t, a, b)
+    assert found is not None
+    i, j = found
+    assert 1900 < g.path_length_m(t, i, j) < 2200
+
+
+def test_runs_that_never_reach_their_point_still_cannot_make_a_pass():
+    # The same change must not create passes: a near-A run that never reaches A, then a real stay at B.
+    a, b = (17.5000, 78.2000), (17.5001, 78.2004)
+    near_a = (17.50003, 78.2001)                            # within the radius, nearer a, ~11 m from a
+    t = g.parse_gpx(gpx([near_a] * 6 + line(near_a, b, 6)[1:] + [b] * 6))
+    assert g.find_pass(t, a, b) is None
