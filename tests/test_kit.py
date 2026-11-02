@@ -70,7 +70,7 @@ const ctx = { window: {} }; vm.runInNewContext(fs.readFileSync(process.argv[1] +
 const base = { ref: 'NH65', area: 'Sample Nagar', lat: 17.5, lon: 78.2, straight_m: 21, network_m: 2344,
                extract_date: '2026-10-25', commit: 'abc1234', evidence_url: 'https://arcroad.org/#method' };
 const out = {};
-for (const s of ['verified', 'candidate', 'under_review', 'sample', 'bogus']) {
+for (const s of ['verified', 'candidate', 'under_review', 'sample', 'bogus', 'modelled', 'driven']) {
   const p = Object.assign({}, base, { status: s });
   out[s] = { text: K.letterText(K.letter(p, {}, '26 October 2026')), mail: decodeURIComponent(K.mailto(p)), card: K.card(p) };
 }
@@ -146,11 +146,21 @@ def test_typed_details_appear_only_where_put(probe):
     assert probe["who"].count("A Citizen") == 2  # From block and signature, nowhere else
 
 
+# The gate opened with the public v0 (2 Nov 2026): the places are already published on the
+# results page, the globe and the street search. From v0.2 a real pair must say exactly how
+# its figure was made: "driven" (a drive by arcroad) or "modelled" (open map data, with the
+# disclosure printed in every letter and email). Nothing real may read as "verified".
 @needs_node
-def test_public_pairs_are_samples_until_the_gate_opens(probe):
-    assert probe["pairs"] and all(s == "sample" for s in probe["pairs"]), (
-        "web/kit/pairs.js holds a non-sample pair: no real individual figure is published before the verification gate"
-    )
+def test_real_pairs_say_how_the_figure_was_made(probe):
+    real = [s for s in probe["pairs"] if s != "sample"]
+    assert probe["pairs"].count("sample") == 1
+    assert all(s in ("driven", "modelled") for s in real), real
+
+
+@needs_node
+def test_modelled_letter_and_email_carry_the_disclosure(probe):
+    for k in ("text", "mail"):
+        assert "not yet been confirmed by a drive" in probe["modelled"][k]
 
 
 # Regression, 26 Oct 2026: the page's own `display:flex` on .preview beat the

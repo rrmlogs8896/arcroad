@@ -280,6 +280,7 @@ function showPanel({ eyebrow, title, hook, facts, caveat, spot }) {
 
 async function selectCity(id) {
   const c = DATA.cities.find((x) => x.id === id); if (!c) return;
+  if ($('p-write')) $('p-write').hidden = true;
   stopPulse();
   touring = false;
   await fly({ center: c.c, zoom: id === 'hyderabad' ? 10.4 : 10.8, pitch: 40, bearing: -10 });
@@ -319,6 +320,7 @@ async function selectSpot(id, move = true) {
   const dv = s.driven || {};
   const way = (d) => (dv[d] ? `${km(dv[d].m)} driven (model ${km(s[d])})` : (s[d] == null ? 'no legal route found' : km(s[d])));
   startPulse(s);
+  const wr = $('p-write'); if (wr) { wr.hidden = Math.max(s.ab || 0, s.ba || 0) - s.straight < 60; $('p-write-a').href = '../act.html?pair=' + encodeURIComponent(s.id); }
   const rn = await roadNames(), road = rn[s.id] && ((rn[s.id].roads || [])[0] || (rn[s.id].refs || [])[0]);
   showPanel({
     eyebrow: `${road ? road + ' · ' : 'Hyderabad · '}place ${s.id} · ${s.driven ? 'driven 1 Nov 2026' : 'candidate'}`, title: `${km(s.straight)} across, ${km(worst)} around`,

@@ -73,3 +73,5 @@ button:focus-visible,summary:focus-visible{outline:2px solid var(--soft);outline
  .list[open]{max-height:50vh}
 }
 @media (prefers-reduced-motion:reduce){button{transition:none}}
+.panel .write{margin:12px 0 0}.panel .write a{display:inline-block;padding:10px 16px;border-radius:999px;background:var(--accent,#E2743B);color:#0B0D10;font-weight:500;font-size:14px;text-decoration:none}
+.panel .write a:hover{filter:brightness(1.08)}

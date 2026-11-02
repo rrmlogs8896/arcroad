@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>arcroad · report a median opening that opened or closed</title>
+<meta name="description" content="Tell arcroad about a median opening, U-turn or crossing that has opened, closed or changed. Made in your browser and sent from your own email.">
+<style>
+:root{--bg:#0B0D10;--fg:#E8EAED;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0;--card:#11151A}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:980px;margin:0 auto;padding:48px 22px 80px}a{color:var(--accent)}
+.top{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-bottom:28px}.top a{color:var(--mute);text-decoration:none}.top a:hover{color:var(--fg)}
+.eyebrow{font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 10px}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.12;margin:0 0 14px;font-weight:600;letter-spacing:-.01em}
+h2{font-size:20px;margin:44px 0 10px;font-weight:600}p.lead{font-size:18px;color:#C9CDD2;max-width:720px}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;min-width:680px;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mute);font-weight:500;font-size:12px}
+td.g{font:600 13px ui-monospace,monospace;white-space:nowrap}
+.lesson{border-left:3px solid var(--ok);padding:4px 0 4px 14px;margin:14px 0;color:#C9CDD2}
+.note{color:var(--mute);font-size:13px}details.more{margin:8px 0 0;border-top:1px solid var(--line)}details.more>summary{list-style:none;cursor:pointer;padding:12px 0;font-size:14px;color:var(--mute);display:flex;gap:10px}details.more>summary::-webkit-details-marker{display:none}details.more>summary::before{content:"+";font-family:ui-monospace,monospace;color:var(--accent)}details.more[open]>summary::before{content:"\2212"}details.more>summary:hover{color:var(--fg)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+</style>
+<meta name="theme-color" content="#0B0D10">
+<meta name="color-scheme" content="dark">
+<meta name="format-detection" content="telephone=no">
+<style id="mobile-base">
+/* Shared mobile and cross-browser base (Safari iOS, Chrome/Samsung Android, Firefox) */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{overflow-wrap:break-word;padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+a,button,summary,select,label{-webkit-tap-highlight-color:rgba(232,168,124,.22);touch-action:manipulation}
+details>summary{cursor:pointer;min-height:44px;box-sizing:border-box;align-items:center}
+details>summary::-webkit-details-marker{display:none}
+input[type=range]{min-height:36px;touch-action:pan-y;cursor:pointer}
+table{font-variant-numeric:tabular-nums}
+.wrap,.scroll{-webkit-overflow-scrolling:touch}
+img,svg,canvas,video{max-width:100%}
+@media (max-width:720px){
+  input,select,textarea{font-size:16px!important}
+  h1{overflow-wrap:anywhere}
+  .top,header nav{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;white-space:nowrap;margin-left:0!important;max-width:100%}
+  .top::-webkit-scrollbar,header nav::-webkit-scrollbar,.presets::-webkit-scrollbar{display:none}
+  .presets{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
+  .presets .reset{margin-left:0!important}
+}
+@media (pointer:coarse){nav a,.top a{padding-block:10px;display:inline-block} .srcbtn{padding:10px 0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+<style>
+form{display:grid;gap:16px;max-width:640px;margin-top:24px}
+label{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--mute)}
+select,input,textarea{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--fg);font:inherit}
+textarea{min-height:90px;resize:vertical}
+select:focus,input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-block;padding:11px 18px;border-radius:999px;background:var(--accent);color:#0B0D10;border:0;font:inherit;font-weight:500;font-size:14.5px;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid #2A3038}
+.btn:hover{filter:brightness(1.06)}.btn.ghost:hover{border-color:var(--mute)}
+.loc{font:13px ui-monospace,monospace;color:var(--mute)}
+#out{white-space:pre-wrap;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;font:13px/1.55 ui-monospace,monospace;color:#C9CDD2}
+</style>
+</head>
+<body>
+<main>
+<nav class="top"><a href="../">arcroad home</a><a href="../field/">Results</a><a href="../cost/">Your cost</a><a href="../roads/">Road costs</a><a href="../data/">Open data</a><a href="../volunteer/">Volunteer</a></nav>
+<p class="eyebrow">arcroad · report a change</p>
+<h1>A median opening opened or closed?</h1>
+<p class="lead">Tell arcroad when a U-turn, median opening or crossing near you opens, closes or changes. Every report is checked against the open map and, where possible, a drive before any figure changes.</p>
+<form id="f" autocomplete="off">
+<label>What changed
+<select id="what" required>
+<option value="">Choose one</option>
+<option>A new median opening or U-turn has opened</option>
+<option>A median opening or U-turn has been closed</option>
+<option>A barrier, divider or construction block has appeared</option>
+<option>A new crossing (signal, foot overbridge or underpass)</option>
+<option>Something else</option>
+</select></label>
+<label>Road and nearest landmark<input id="road" maxlength="140" placeholder="e.g. Mumbai Highway, opposite the bus stand"></label>
+<label>When you noticed it<input id="when" type="date"></label>
+<div><div class="row"><button class="btn ghost" type="button" id="geo">Use my location</button><span class="loc" id="loc">Location not added</span></div>
+<p class="note">Used only to fill in the report on this page. arcroad never receives it unless you send the email.</p></div>
+<label>Anything else (optional)<textarea id="more" maxlength="600" placeholder="Which side of the road, which direction, since when"></textarea></label>
+<div class="row"><button class="btn" type="submit">Open the email</button><button class="btn ghost" type="button" id="copy">Copy the report</button></div>
+<p class="note" id="msg" role="status" aria-live="polite"></p>
+</form>
+<h2>Your report</h2>
+<div id="out">Fill in the form to see it here.</div>
+<details class="more"><summary>Photos, safety and privacy</summary>
+<ul class="note">
+<li>Attach a photo in your mail app if you have one. No faces or number plates: blur them first. Raw photos are never published.</li>
+<li>Never use the phone while driving, and never stop on the carriageway to take a photo.</li>
+<li>Nothing you type here is stored by arcroad. It goes only to the address you send it to, from your own email.</li>
+</ul></details>
+<footer>Map links: © OpenStreetMap contributors (ODbL). arcroad is an independent citizen project, not linked to any government authority or political party.</footer>
+</main>
+<script src="report.js"></script>
+</body>
+</html>
