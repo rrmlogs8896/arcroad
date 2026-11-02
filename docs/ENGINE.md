@@ -188,7 +188,7 @@ Recorded per divider: location and what it closes; date first and last seen (dat
 
 ## Public pages for these layers (2 Nov 2026)
 
-- `web/cost/`: the economics calculator. Per trip, per person per year, per city per year, and share of Telangana GSDP. Defaults: extra 1.75 km and 9 min (middle of the four matched city passes, 1 Nov), petrol ₹116.15 (16 Oct 2026), VAT 35.2%, excise ₹21.90 (Apr 2025, to re-verify), value of time ₹60–600/h (Delhi 2013 values; Bengaluru 2017 experiment), city crossings 2–10 lakh/day (labelled assumption), GSDP 2025-26 ₹17,82,198 crore. Brent does not enter the arithmetic.
+- `web/cost/`: the citizen slider calculator ("What the detour costs you", 25 Oct design, now public): 16 sliders, 5 presets, show the working, tax inside the fuel (VAT 35.2%/27%, excise ₹21.90/₹17.80, to re-verify), time tax, GDP and GSDP shares, what moves the answer, A/B compare, "Whose hour counts?". Defaults from the 1 Nov drives (1.75 km, 14 km/h). Prefill by link: `?km=&min=&place=&veh=` (for the street search). Brent does not enter the arithmetic.
 - `web/roads/`: dividers, works stage and info button, spillover parking, surface, sudden-stop hotspots, glare, pedestrians, fixed obstructions, each with status (first findings / measuring / designed).
 - `web/evidence/`: grade A and B evidence only.
 

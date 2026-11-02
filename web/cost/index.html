@@ -3,150 +3,642 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>arcroad · what crossing your own road costs: you, the city, the state</title>
-<meta name="description" content="A calculator: the fuel, the tax inside that fuel, and the time a detour costs per trip, per person, per city, and as a share of Telangana's GSDP. Every assumption shown and adjustable.">
+<title>arcroad · what does crossing your own road cost you?</title>
+<meta name="description" content="Move the sliders: your vehicle, your trips, your value of time. See what detours cost you per day, per year and over ten years, the tax inside that fuel, and the total as a share of Telangana's GSDP. Every assumption shown.">
 <style>
-:root{--bg:#0B0D10;--fg:#E8EAED;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0;--card:#11151A}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
-main{max-width:980px;margin:0 auto;padding:48px 22px 80px}a{color:var(--accent)}
-.top{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-bottom:28px}.top a{color:var(--mute);text-decoration:none}.top a:hover{color:var(--fg)}
-.eyebrow{font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 10px}
-h1{font-size:clamp(28px,5vw,44px);line-height:1.12;margin:0 0 14px;font-weight:600;letter-spacing:-.01em}
-h2{font-size:20px;margin:44px 0 10px;font-weight:600}p.lead{font-size:18px;color:#C9CDD2;max-width:720px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
-label{display:block;font-size:13px;color:var(--mute);margin:10px 0 4px}
-input,select{width:100%;background:#0B0D10;color:var(--fg);border:1px solid #2A3038;border-radius:8px;padding:8px 10px;font:15px ui-monospace,SFMono-Regular,monospace}
-.out b{display:block;font:600 26px/1.15 ui-monospace,SFMono-Regular,monospace}.out span{color:var(--mute);font-size:13px}
-.out .r{color:var(--accent)}
-.bar{display:flex;height:26px;border-radius:6px;overflow:hidden;margin:10px 0 6px;font:12px/26px ui-monospace,monospace}
-.bar div{padding:0 8px;white-space:nowrap;overflow:hidden;color:#0B0D10}
-.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
-th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mute);font-weight:500;font-size:12px}
-td.n{text-align:right;font-family:ui-monospace,monospace}
-.note{color:var(--mute);font-size:13px}.tag{display:inline-block;font:500 11px ui-monospace,monospace;border:1px solid #2A3038;border-radius:20px;padding:1px 8px;color:var(--mute)}
-footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+:root {
+  --void: #07090C; --panel: #0E1117; --panel-2: #11151C;
+  --line: #1B2029; --line-2: #252C36;
+  --ink: #EDEFF2; --ink-dim: #99A1AB; --ink-faint: #68707A;
+  --sev: #E2743B; --sev-soft: #F0C2A0; --calm: #7E9A8C; --cool: #6E8FA8; --vat: #E8A87C; --exc: #C9A0DC;
+  --font-ui: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-num: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--void); color: var(--ink); font-family: var(--font-ui); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1140px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left,0px)); padding-right: max(16px, env(safe-area-inset-right,0px)); }
+.num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+a { color: var(--sev-soft); }
+
+header { border-bottom: 1px solid var(--line); padding-block: 18px; display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: baseline; }
+.brand { display: flex; align-items: baseline; gap: 12px; }
+.brand b { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; }
+.brand b a { color: var(--ink); text-decoration: none; }
+.brand span { font-size: 13px; color: var(--ink-faint); }
+header nav { display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; margin-left: auto; }
+header nav a { color: var(--ink-dim); text-decoration: none; }
+header nav a:hover { color: var(--ink); }
+
+.intro { padding-block: 44px 28px; }
+.eyebrow { margin: 0 0 15px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sev); }
+h1 { margin: 0 0 16px; font-size: clamp(29px,5vw,44px); line-height: 1.08; letter-spacing: -0.035em; font-weight: 600; text-wrap: balance; max-width: 19ch; }
+.lede { margin: 0; font-size: 17px; line-height: 1.65; color: var(--ink-dim); max-width: 64ch; }
+.from { margin: 18px 0 0; font-size: 14px; color: var(--sev-soft); }
+
+.presets { display: flex; flex-wrap: wrap; gap: 8px; padding-block: 0 30px; }
+.presets button { background: var(--panel); border: 1px solid var(--line-2); color: var(--ink-dim); font-family: var(--font-ui); font-size: 13px; padding: 8px 14px; border-radius: 3px; cursor: pointer; }
+.presets button:hover { border-color: #39424E; color: var(--ink); }
+.presets button[aria-pressed="true"] { border-color: var(--sev); color: var(--sev-soft); }
+.presets .reset { margin-left: auto; background: transparent; }
+.presets .reset svg { width: 13px; height: 13px; vertical-align: -2px; margin-right: 6px; }
+#top { position: fixed; right: max(16px, env(safe-area-inset-right,0px)); bottom: calc(18px + env(safe-area-inset-bottom,0px)); z-index: 40; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-2); background: var(--panel-2); color: var(--ink); cursor: pointer; display: grid; place-items: center; opacity: 0; visibility: hidden; box-shadow: 0 6px 18px rgba(0,0,0,.45); }
+#top.on { opacity: 1; visibility: visible; }
+#top:hover { border-color: var(--sev); color: var(--sev-soft); }
+#top svg { width: 17px; height: 17px; }
+@media (prefers-reduced-motion: no-preference) { #top { transition: opacity .18s, visibility .18s, border-color .15s, color .15s; } }
+
+.grid { display: flex; flex-wrap: wrap; gap: 34px; align-items: flex-start; padding-block: 0 44px; }
+.rail { flex: 1 1 320px; min-width: 0; }
+.result { flex: 999 1 430px; min-width: 0; }
+
+h2 { margin: 0 0 6px; font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+h3.grp { margin: 26px 0 2px; font-size: 12px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); font-weight: 500; }
+h3.grp:first-of-type { margin-top: 0; }
+.sub { margin: 0 0 20px; font-size: 13px; line-height: 1.6; color: var(--ink-faint); }
+
+.ctl { padding-block: 13px; border-bottom: 1px solid var(--line); }
+.ctl .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0 0 8px; }
+.ctl label { font-size: 14px; }
+.ctl output { font-size: 14px; color: var(--sev-soft); }
+.src { margin: 7px 0 0; font-size: 11px; line-height: 1.5; color: var(--ink-faint); }
+input[type=range] { width: 100%; accent-color: var(--sev); }
+select { width: 100%; background: var(--panel); color: var(--ink); border: 1px solid var(--line-2); border-radius: 3px; font-family: var(--font-ui); font-size: 14px; padding: 9px 10px; }
+input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--sev); outline-offset: 2px; }
+
+.headline { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 26px 28px; }
+.kicker { margin: 0 0 10px; font-size: 13px; color: var(--ink-dim); }
+.big { margin: 0 0 5px; font-size: clamp(32px,7vw,52px); font-weight: 500; letter-spacing: -0.04em; line-height: 1; color: var(--sev); }
+.unit { margin: 0 0 20px; font-size: 14px; color: var(--ink-faint); }
+.split { display: flex; flex-wrap: wrap; border-top: 1px solid var(--line); }
+.split div { flex: 1 1 120px; min-width: 0; padding: 16px 18px 2px 0; border-right: 1px solid var(--line); }
+.split div:last-child { border-right: 0; }
+.split b { display: block; font-size: 21px; font-weight: 500; letter-spacing: -0.02em; margin: 0 0 4px; }
+.split span { display: block; font-size: 12px; color: var(--ink-faint); line-height: 1.4; }
+
+.card { margin-block: 18px 0; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.card h3 { margin: 0; padding: 13px 20px; font-size: 14px; font-weight: 500; background: var(--panel-2); border-bottom: 1px solid var(--line); }
+.card .src { padding: 0 20px 14px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; padding: 10px 20px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.row:last-child { border-bottom: 0; }
+.row span:first-child { color: var(--ink-dim); flex: 1 1 190px; min-width: 0; }
+.row.tot { background: var(--panel-2); }
+.row.tot span { color: var(--sev-soft); }
+.lbar { display: flex; height: 24px; border-radius: 4px; overflow: hidden; margin: 14px 20px 6px; font: 11px/24px var(--font-num); }
+.lbar div { padding: 0 8px; white-space: nowrap; overflow: hidden; color: #0B0D10; }
+
+.sens { margin-block: 26px 0; }
+.bar { display: flex; align-items: center; gap: 12px; padding-block: 8px; }
+.bar span:first-child { flex: 0 0 136px; font-size: 13px; color: var(--ink-dim); }
+.track { flex: 1 1 auto; height: 5px; border-radius: 3px; background: var(--line); min-width: 50px; }
+.track i { display: block; height: 5px; border-radius: 3px; background: var(--sev); }
+.bar span:last-child { flex: 0 0 62px; text-align: right; font-size: 12px; color: var(--ink-faint); }
+
+.cmp { margin-block: 26px 0; }
+.cmp .acts { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.cmp .acts button { background: transparent; border: 1px solid var(--line-2); color: var(--ink-dim); font-family: var(--font-ui); font-size: 13px; padding: 8px 14px; border-radius: 3px; cursor: pointer; }
+.cmp .acts button:hover { border-color: #39424E; color: var(--ink); }
+.slots { display: flex; flex-wrap: wrap; gap: 12px; }
+.slot { flex: 1 1 180px; min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 16px 18px; }
+.slot p.t { margin: 0 0 8px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+.slot p.v { margin: 0 0 6px; font-size: 24px; font-weight: 500; letter-spacing: -0.03em; }
+.slot p.d { margin: 0; font-size: 12px; line-height: 1.55; color: var(--ink-faint); }
+
+.note { border: 1px solid #2A2520; border-left: 3px solid var(--sev); background: #15110D; padding: 20px 24px; margin-block: 18px 0; }
+.note b { display: block; font-size: 14px; font-weight: 500; color: var(--sev-soft); margin: 0 0 7px; }
+.note p { margin: 0 0 10px; font-size: 14px; line-height: 1.65; color: #B9A594; max-width: 72ch; }
+.note p:last-child { margin: 0; }
+
+.sources { padding-block: 38px 0; border-top: 1px solid var(--line); margin-top: 32px; }
+.sources dl { margin: 0; display: grid; gap: 12px; }
+.sources dt { font-size: 13px; }
+.sources dd { margin: 3px 0 0; font-size: 13px; line-height: 1.6; color: var(--ink-faint); }
+footer { padding-block: 34px 48px; }
+footer p { margin: 0 0 8px; font-size: 12px; line-height: 1.7; color: var(--ink-faint); max-width: 76ch; }
 </style>
 </head>
 <body>
-<main>
-<nav class="top"><a href="../">arcroad home</a><a href="../field/">Driven results</a><a href="../roads/">What else the road costs</a><a href="../evidence/">Civic-sense evidence</a><a href="../globe/">Globe</a></nav>
-<p class="eyebrow">arcroad · economics · estimate, every input adjustable</p>
-<h1>What crossing your own road costs: you, the city, the state.</h1>
-<p class="lead">When a median gap is closed, or a barricade goes up, people drive round. This page turns that extra distance and time into rupees: fuel, the tax inside that fuel, and time. Then it scales up to the city and sets the total beside Telangana's economy. It is an <b>estimated cost to people</b>, not a "GDP loss": GDP counts what is produced, not time wasted.</p>
+<div class="wrap">
+  <header>
+    <div class="brand"><b><a href="../">arcroad</a></b><span>What the detour costs</span></div>
+    <nav><a href="../field/">Driven results</a><a href="../roads/">What else the road costs</a><a href="../evidence/">Civic-sense evidence</a><a href="../globe/">Globe</a></nav>
+  </header>
 
-<h2>1 · One trip</h2>
-<div class="grid">
-<div class="card">
-<label for="veh">Vehicle</label>
-<select id="veh"><option value="tw">Two-wheeler (45 km/L)</option><option value="car" selected>Car (15 km/L)</option><option value="auto">Auto-rickshaw, petrol (25 km/L)</option></select>
-<label for="kmpl">Fuel use, km per litre</label><input id="kmpl" type="number" step="1" value="15">
-<label for="km">Extra distance per crossing, km</label><input id="km" type="number" step="0.05" value="1.75">
-<p class="note">Default 1.75 km: the middle of arcroad's four matched city passes on 1 Nov 2026 (1.53 to 2.28 km beyond the straight line). The Outer Ring Road pass (11.6 km) is left out.</p>
-<label for="min">Extra time per crossing, minutes</label><input id="min" type="number" step="0.5" value="9">
-<p class="note">Default 9 min: the middle of the same passes (3.2 to 11.5 min, Sunday, waits included).</p>
-</div>
-<div class="card">
-<label for="price">Petrol, Hyderabad, ₹ per litre</label><input id="price" type="number" step="0.01" value="116.15">
-<p class="note">Price on 16 Oct 2026. Refreshed from the oil companies' published price before each release.</p>
-<label for="vat">State VAT on petrol, %</label><input id="vat" type="number" step="0.1" value="35.2">
-<p class="note">Telangana's rate since Feb 2015, levied on the price before VAT.</p>
-<label for="exc">Central excise, ₹ per litre</label><input id="exc" type="number" step="0.1" value="21.9">
-<p class="note">₹21.90 in the oil companies' build-up of Apr 2025. <b>Not yet re-verified for Oct 2026</b>; change it here if it has moved.</p>
-<label for="vot">Value of time, ₹ per hour (low – high)</label>
-<div style="display:flex;gap:8px"><input id="votl" type="number" step="10" value="60" aria-label="low"><input id="voth" type="number" step="10" value="600" aria-label="high"></div>
-<p class="note">Indian studies span about ₹50/h (two-wheeler, Delhi, 2013 prices) to about ₹600/h (Bengaluru car commuters, 2017 field experiment). We show both ends rather than pick one.</p>
-</div>
-<div class="card out" id="tripout"></div>
-</div>
-<div class="card" style="margin-top:14px">
-<p class="eyebrow" style="margin:0">Where each litre's money goes (estimate)</p>
-<div class="bar" id="bar"></div>
-<p class="note" id="barnote"></p>
+  <div class="intro">
+    <p class="eyebrow">Directional estimate · not a measurement</p>
+    <h1 id="page-top" tabindex="-1">What does crossing your own road cost you?</h1>
+    <p class="lede">Every figure here is an assumption you can change. Pick the situation closest to yours, move any slider and watch the total move, and watch which assumption moves it most. Nobody should accept a cost figure they cannot take apart, including ours.</p>
+    <p class="from" id="from" hidden></p>
+  </div>
+
+  <div class="presets" id="presets">
+    <button type="button" data-p="student" aria-pressed="false">Student, two-wheeler</button>
+    <button type="button" data-p="worker" aria-pressed="false">Factory worker, daily</button>
+    <button type="button" data-p="family" aria-pressed="false">Family car, school run</button>
+    <button type="button" data-p="auto" aria-pressed="false">Auto driver, all day</button>
+    <button type="button" data-p="ev" aria-pressed="false">Electric scooter</button>
+    <button type="button" class="reset" id="reset" title="Put every assumption back to its starting value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Reset to defaults</button>
+  </div>
+
+  <div class="grid">
+    <div class="rail">
+      <h2>Your situation</h2>
+      <p class="sub">Sixteen inputs. Change any of them.</p>
+
+      <h3 class="grp">The trip</h3>
+      <div class="ctl">
+        <div class="top"><label for="km">Extra distance per crossing</label><output id="km-o">1.8 km</output></div>
+        <input type="range" id="km" min="0.2" max="12" step="0.05" value="1.75">
+        <p class="src">Starts at 1.75 km: the middle of arcroad's four matched city drives on 1 Nov 2026 (1.53 to 2.28 km beyond the straight line). Set it from a road you know.</p>
+      </div>
+      <div class="ctl">
+        <div class="top"><label for="trips">Such crossings per day</label><output id="trips-o">2</output></div>
+        <input type="range" id="trips" min="0" max="16" step="1" value="2">
+        <p class="src">The weakest input in the model. No public dataset gives this for Hyderabad.</p>
+      </div>
+      <div class="ctl">
+        <div class="top"><label for="days">Days per year</label><output id="days-o">300</output></div>
+        <input type="range" id="days" min="50" max="365" step="5" value="300">
+        <p class="src">365 for every day, about 250 for working days only.</p>
+      </div>
+      <div class="ctl">
+        <div class="top"><label for="occ">People in the vehicle</label><output id="occ-o">1.0</output></div>
+        <input type="range" id="occ" min="1" max="5" step="0.1" value="1">
+        <p class="src">Time is lost by everyone aboard; fuel is burned once.</p>
+      </div>
+
+      <h3 class="grp">The vehicle</h3>
+      <div class="ctl">
+        <div class="top"><label for="veh">Type</label></div>
+        <select id="veh">
+          <option value="tw" selected>Two-wheeler, petrol</option>
+          <option value="car">Car, petrol</option>
+          <option value="card">Car, diesel</option>
+          <option value="auto">Auto-rickshaw, CNG</option>
+          <option value="etw">Two-wheeler, electric</option>
+          <option value="ecar">Car, electric</option>
+        </select>
+        <p class="src">Two-wheelers are about 73% of Telangana's fleet.</p>
+      </div>
+      <div class="ctl">
+        <div class="top"><label for="eco">Fuel economy</label><output id="eco-o">50</output></div>
+        <input type="range" id="eco" min="4" max="90" step="1" value="50">
+        <p class="src">Real-world, not the manufacturer's claim.</p>
+      </div>
+      <div class="ctl">
+        <div class="top"><label for="price">Fuel price</label><output id="price-o">₹116.15</output></div>
+        <input type="range" id="price" min="5" max="150" step="0.05" value="116.15">
+        <p class="src">Petrol, Hyderabad, 16 Oct 2026. Electricity is per kWh.</p>
+      </div>
+      <div class="ctl">
+        <div class="top"><label for="wear">Wear and tear</label><output id="wear-o">₹1.20/km</output></div>
+        <input type="range" id="wear" min="0" max="12" step="0.1" value="1.2">
+        <p class="src">Tyres, servicing, depreciation. Set to zero to exclude.</p>
+      </div>
+
+      <h3 class="grp">Time</h3>
+      <div class="ctl">
+        <div class="top"><label for="vot">Value of an hour</label><output id="vot-o">₹120</output></div>
+        <input type="range" id="vot" min="0" max="1200" step="10" value="120">
+        <p class="src">Zero shows fuel and wear alone, the floor nobody can argue with. Indian studies span about ₹50 to ₹600 an hour; see "Whose hour counts?".</p>
+      </div>
+      <div class="ctl">
+        <div class="top"><label for="spd">Speed on the detour</label><output id="spd-o">14 km/h</output></div>
+        <input type="range" id="spd" min="6" max="70" step="1" value="14">
+        <p class="src">Turns distance into time. 14 km/h is about the average of arcroad's matched city drives, waits at signals and U-turn queues included.</p>
+      </div>
+
+      <h3 class="grp">Over time</h3>
+      <div class="ctl">
+        <div class="top"><label for="years">Horizon</label><output id="years-o">10 years</output></div>
+        <input type="range" id="years" min="1" max="30" step="1" value="10">
+        <p class="src">Medians outlast governments. A corridor built now is still there in 2040.</p>
+      </div>
+      <div class="ctl">
+        <div class="top"><label for="infl">Cost inflation</label><output id="infl-o">5.0%</output></div>
+        <input type="range" id="infl" min="0" max="12" step="0.1" value="5">
+        <p class="src">Applied to fuel, wear and the value of time alike.</p>
+      </div>
+      <div class="ctl">
+        <div class="top"><label for="disc">Discount rate</label><output id="disc-o">0.0%</output></div>
+        <input type="range" id="disc" min="0" max="12" step="0.5" value="0">
+        <p class="src">Official appraisal discounts future costs. At 0% a future rupee counts the same as today's.</p>
+      </div>
+
+      <h3 class="grp">Exchange rates</h3>
+      <div class="ctl">
+        <div class="top"><label for="fx">Rupees per US dollar</label><output id="fx-o">₹91.0</output></div>
+        <input type="range" id="fx" min="70" max="110" step="0.1" value="91">
+        <p class="src">Market rate. Set today's rate before quoting a dollar figure.</p>
+      </div>
+      <div class="ctl">
+        <div class="top"><label for="ppp">Rupees per international dollar (PPP)</label><output id="ppp-o">₹20.7</output></div>
+        <input type="range" id="ppp" min="15" max="30" step="0.1" value="20.7">
+        <p class="src">What a dollar buys in the US, priced in India.</p>
+      </div>
+
+      <h3 class="grp">Scale</h3>
+      <div class="ctl" style="border-bottom:0">
+        <div class="top"><label for="people">People in this situation</label><output id="people-o">50,000</output></div>
+        <input type="range" id="people" min="1000" max="3000000" step="1000" value="50000">
+        <p class="src">No official count exists. Treat any group total as an order of magnitude, nothing finer.</p>
+      </div>
+    </div>
+
+    <div class="result">
+      <div class="headline">
+        <p class="kicker">One person, at these settings</p>
+        <p class="big num" id="peryear">₹0</p>
+        <p class="unit" id="unitline">per year, for detours alone</p>
+        <div class="split">
+          <div><b class="num" id="perday">₹0</b><span>per day</span></div>
+          <div><b class="num" id="permonth">₹0</b><span>per month</span></div>
+          <div><b class="num" id="horizon">₹0</b><span id="horizon-l">over 10 years</span></div>
+          <div><b class="num" id="kmyear">0</b><span>km driven for nothing, a year</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Show the working</h3>
+        <div class="row"><span>Extra distance per year</span><span class="num" id="w-km">—</span></div>
+        <div class="row"><span>Energy used</span><span class="num" id="w-fuel">—</span></div>
+        <div class="row"><span>Energy cost</span><span class="num" id="w-fuelrs">—</span></div>
+        <div class="row"><span>Wear and tear</span><span class="num" id="w-wear">—</span></div>
+        <div class="row"><span>Hours lost, all occupants</span><span class="num" id="w-hours">—</span></div>
+        <div class="row"><span>Time valued at your rate</span><span class="num" id="w-timers">—</span></div>
+        <div class="row tot"><span>Total, one person, one year</span><span class="num" id="w-total">—</span></div>
+      </div>
+
+      <div class="card">
+        <h3>Tax inside that fuel</h3>
+        <div class="lbar" id="lbar"></div>
+        <div class="row"><span>State VAT in each unit</span><span class="num" id="x-vat">—</span></div>
+        <div class="row"><span>Central excise in each unit</span><span class="num" id="x-exc">—</span></div>
+        <div class="row"><span>Tax share of the price</span><span class="num" id="x-share">—</span></div>
+        <div class="row tot"><span>Tax you pay on detour fuel, per year</span><span class="num" id="x-year">—</span></div>
+        <p class="src" id="x-note" style="margin-top:12px">Estimate from published rates, not an official split for this date.</p>
+      </div>
+
+      <div class="card">
+        <h3>Scaled to the group</h3>
+        <div class="row"><span>People affected</span><span class="num" id="g-people">—</span></div>
+        <div class="row"><span>Distance driven for nothing, per year</span><span class="num" id="g-km">—</span></div>
+        <div class="row"><span>Energy burned, per year</span><span class="num" id="g-fuel">—</span></div>
+        <div class="row"><span>Tax collected on that fuel, per year</span><span class="num" id="g-tax">—</span></div>
+        <div class="row"><span>Tailpipe carbon, per year</span><span class="num" id="g-co2">—</span></div>
+        <div class="row"><span>Group total, per year</span><span class="num" id="g-total">—</span></div>
+        <div class="row tot"><span>Group total over the horizon</span><span class="num" id="g-horizon">—</span></div>
+      </div>
+
+      <div class="card">
+        <h3>Time tax</h3>
+        <div class="row"><span>Minutes lost per travelling day</span><span class="num" id="t-min">—</span></div>
+        <div class="row"><span>Hours lost per year</span><span class="num" id="t-hrs">—</span></div>
+        <div class="row"><span>Eight-hour working days per year</span><span class="num" id="t-wd">—</span></div>
+        <div class="row"><span>Share of your waking hours on travelling days</span><span class="num" id="t-wake">—</span></div>
+        <div class="row tot"><span>Time tax band</span><span class="num" id="t-band">—</span></div>
+        <p class="src" style="margin-top:12px">Bands by minutes lost per travelling day: under 5 light, 5–15 moderate, 15–30 heavy, over 30 severe. The bands are this page's own yardstick, set before any figure was computed. They measure time, not how anyone feels: arcroad does not measure stress or health.</p>
+      </div>
+
+      <div class="card">
+        <h3>Against the economy</h3>
+        <div class="row"><span>Share of India's GDP per person</span><span class="num" id="c-in">—</span></div>
+        <div class="row"><span>Share of Telangana's GSDP per person</span><span class="num" id="c-tg">—</span></div>
+        <div class="row"><span>Days of India's GDP per person</span><span class="num" id="c-days">—</span></div>
+        <div class="row"><span>In US dollars, market rate</span><span class="num" id="c-usd">—</span></div>
+        <div class="row"><span>In international dollars (PPP)</span><span class="num" id="c-ppp">—</span></div>
+        <div class="row tot"><span>Group total, share of Telangana's GSDP</span><span class="num" id="c-gsdp">—</span></div>
+        <p class="src" style="margin-top:12px">This is an estimated cost to people, not a "GDP loss": GDP counts what is produced, not time wasted. GDP per person is output, not take-home income, and Hyderabad pulls Telangana's average well above most residents'.</p>
+      </div>
+
+      <div class="sens">
+        <h2>What moves the answer</h2>
+        <p class="sub">How much the yearly total swings if each input alone were halved or doubled. The top bar is where to attack this model first.</p>
+        <div id="sens-bars"></div>
+      </div>
+
+      <div class="cmp">
+        <h2>Compare two situations</h2>
+        <p class="sub">Set the sliders, save as A, change them, save as B. For example: your road today, and your road with the median gap reopened.</p>
+        <div class="acts">
+          <button type="button" id="save-a">Save as A</button>
+          <button type="button" id="save-b">Save as B</button>
+          <button type="button" id="clear-ab">Clear</button>
+        </div>
+        <div class="slots">
+          <div class="slot"><p class="t">A</p><p class="v num" id="a-v">—</p><p class="d" id="a-d">Not set</p></div>
+          <div class="slot"><p class="t">B</p><p class="v num" id="b-v">—</p><p class="d" id="b-d">Not set</p></div>
+          <div class="slot"><p class="t">Difference</p><p class="v num" id="d-v">—</p><p class="d" id="d-d">Save both to compare</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Whose hour counts?</b>
+    <p>Standard transport appraisal values travel time at wage rates. Applied here, an hour lost by a software engineer in Gachibowli is worth many times an hour lost by a construction worker in Pashamylaram, and the arithmetic then concludes the richer corridor deserves investment first. That is one way peripheral settlements end up last in the queue.</p>
+    <p>This page refuses to pick for you. Set the hourly value to zero and you see fuel and wear alone. Set it to a wage and you see the conventional appraisal figure. The gap between those two numbers is itself worth looking at.</p>
+  </div>
+
+  <div class="note">
+    <b>What this is not</b>
+    <p>It is not a measurement. It is arithmetic on assumptions you chose, and it is only as strong as the weakest one: crossings per day, for which no public dataset exists for this city. Treat the single-person figure as directional and any group figure as an order of magnitude.</p>
+    <p>It leaves out tolls, congestion, roadworks, crashes and health damage, and it never puts a price on injury or death. It makes no claim about anyone's competence or motives.</p>
+  </div>
+
+  <div class="sources">
+    <h2>Where the numbers come from</h2>
+    <dl>
+      <dt>Extra distance and speed: arcroad's own drives, 1 Nov 2026</dt>
+      <dd>Four city passes that matched the model: 1.53 to 2.28 km beyond the straight line, 3 to 12 minutes each. The Outer Ring Road pass is left out because turning round there needs an interchange by design. <a href="../field/">Every pass</a>.</dd>
+      <dt>Fuel prices, Hyderabad: petrol ₹116.15/L (16 Oct 2026); diesel ₹103.82/L and CNG ₹97/kg (25 Oct 2026, indicative)</dt>
+      <dd>Refreshed from the oil marketing companies' published rates before each release.</dd>
+      <dt>Tax inside the price: Telangana VAT 35.2% on petrol and 27% on diesel; central excise ₹21.90/L petrol and ₹17.80/L diesel</dt>
+      <dd>VAT rates set by the state in Feb 2015 and unchanged since, as widely reported. Excise from the oil companies' price build-up of Apr 2025, <b>not yet re-verified for Oct 2026</b>. VAT is levied on the price before VAT, so its share of the pump price is VAT ÷ (100 + VAT). CNG and electricity taxes are not modelled.</dd>
+      <dt>Value of time: about ₹50 to ₹600 an hour in Indian studies</dt>
+      <dd>A Delhi congestion-cost study (values for 2013, arXiv 1708.08984) and a Bengaluru congestion-pricing field experiment (Kreindler, J-PAL and IGC). Peer-reviewed or working papers; no single figure is official.</dd>
+      <dt>Fleet mix: about 73% two-wheelers</dt>
+      <dd>Telangana Transport Department figures as reported in May 2023: 1.13 crore two-wheelers of 1.54 crore vehicles statewide. Registrations are not road use.</dd>
+      <dt>Fuel economy: 50 km/L two-wheeler, 16 km/L petrol car, 20 km/L diesel car, 28 km/kg CNG auto, 40 km/kWh e-scooter, 6 km/kWh e-car</dt>
+      <dd>Typical real-world figures for the Indian fleet rather than manufacturer claims. Every one is adjustable.</dd>
+      <dt>Tailpipe carbon: 2.31 kg CO₂/L petrol, 2.68 diesel, 2.75 per kg CNG</dt>
+      <dd>Standard combustion factors. Electric vehicles show zero at the tailpipe, which is not zero emissions: grid generation is excluded.</dd>
+      <dt>India's GDP per person: ₹2,43,803 (FY2025-26, current prices)</dt>
+      <dd>Ministry of Statistics and Programme Implementation, with the IMF World Economic Outlook (Apr 2026) for the dollar and PPP figures.</dd>
+      <dt>Telangana: ₹4,20,347 GSDP per person (2024-25); GSDP ₹17,82,004 crore (2025-26, revised estimate)</dt>
+      <dd>PRS Legislative Research, Telangana Budget Analysis 2026-27, from the state's budget documents.</dd>
+    </dl>
+  </div>
+
+  <footer>
+    <p>Map data © OpenStreetMap contributors, ODbL. Measurements by arcroad (ODbL). No Google Maps data is used anywhere. arcroad is an independent citizen project, not affiliated with GHMC, HMDA, NHAI, the Government of Telangana, or any political party.</p>
+    <p>The calculator runs in your browser; nothing you set is sent anywhere. Nothing on this page is financial, legal or policy advice.</p>
+  </footer>
 </div>
 
-<h2>2 · One person, one year</h2>
-<div class="grid">
-<div class="card">
-<label for="perday">Crossings per working day</label><input id="perday" type="number" step="1" value="2">
-<label for="days">Working days per year</label><input id="days" type="number" step="1" value="300">
-</div>
-<div class="card out" id="personout"></div>
-</div>
+<button id="top" type="button" aria-label="Back to top" title="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 
-<h2>3 · The city, and the state</h2>
-<div class="grid">
-<div class="card">
-<label for="xl">Detour crossings per day across Hyderabad (low – high)</label>
-<div style="display:flex;gap:8px"><input id="xl" type="number" step="10000" value="200000" aria-label="low"><input id="xh" type="number" step="10000" value="1000000" aria-label="high"></div>
-<p class="note"><span class="tag">assumption</span> No official count of median-gap detours exists. These are placeholders, to be replaced by traffic counts as arcroad finds them. Change them and watch the total move.</p>
-<label for="gsdp">Telangana GSDP, ₹ crore</label><input id="gsdp" type="number" step="1000" value="1782198">
-<p class="note">2025-26 at current prices, from the state budget speech. 2026-27 budget estimate: ₹19,61,701 crore.</p>
-</div>
-<div class="card out" id="cityout"></div>
-</div>
-
-<h2>How this is worked out</h2>
-<div class="wrap"><table>
-<thead><tr><th>Step</th><th>Arithmetic</th><th>Source, grade</th></tr></thead>
-<tbody>
-<tr><td>Fuel per trip</td><td>extra km ÷ km per litre × pump price</td><td>Distance: arcroad's own driven passes (measured). Price: oil company retail price (B).</td></tr>
-<tr><td>Tax inside that fuel</td><td>VAT part = price × VAT ÷ (100 + VAT). Excise = ₹/L as entered. Dealer commission and the refinery price are the rest.</td><td>Telangana VAT notification of Feb 2015, widely reported since (B). Excise: oil company build-up, Apr 2025 (B, to re-verify).</td></tr>
-<tr><td>Time per trip</td><td>extra minutes ÷ 60 × value of time, low and high</td><td>Delhi congestion-cost study, values for 2013 (A, arXiv 1708.08984); Bengaluru congestion-pricing experiment (A, Kreindler, J-PAL/IGC).</td></tr>
-<tr><td>City per year</td><td>per-trip cost × crossings per day × 365, low and high</td><td>Crossings per day: <b>assumption</b>, shown as a range until official counts exist.</td></tr>
-<tr><td>Against the state</td><td>city total ÷ GSDP</td><td>Telangana budget speech 2025-26; PRS Legislative Research (B).</td></tr>
-</tbody></table></div>
-<ul class="note">
-<li>Brent crude does not enter this arithmetic. A change in Brent reaches you only through the pump price, so the pump price is the input. Brent is shown on the site only once it can be taken daily from a public-domain series (US EIA).</li>
-<li>Tolls, wear on the vehicle, extra emissions and the safety cost of U-turns are not included yet, so these totals are on the low side.</li>
-<li>Diesel (27% VAT) and CNG vehicles are not modelled yet.</li>
-<li>arcroad never says a named party "caused" these costs. The road design and the official record are shown, with who is responsible for them.</li>
-</ul>
-<footer>Measurements by arcroad (ODbL). Map data © OpenStreetMap contributors. No Google Maps data is used anywhere. The calculator runs in your browser; nothing you type is sent anywhere.</footer>
-</main>
 <script>
-(function(){
-  var $=function(id){return document.getElementById(id)};
-  var KMPL={tw:45,car:15,auto:25};
-  var inr=function(x){
-    if(!isFinite(x))return '—';
-    var a=Math.abs(x);
-    if(a>=1e7)return '₹'+(x/1e7).toLocaleString('en-IN',{maximumFractionDigits:1})+' crore';
-    if(a>=1e5)return '₹'+(x/1e5).toLocaleString('en-IN',{maximumFractionDigits:1})+' lakh';
-    if(a>=100)return '₹'+Math.round(x).toLocaleString('en-IN');
-    return '₹'+x.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+(function () {
+  "use strict";
+
+  // vat: % levied on the pre-VAT price; exc: ₹ per unit. null = tax not modelled.
+  var VEH = {
+    tw:   { label: "Two-wheeler, petrol",   eco: 50, price: 116.15, eu: "L",   co2: 2.31, wear: 1.2, vat: 35.2, exc: 21.9 },
+    car:  { label: "Car, petrol",           eco: 16, price: 116.15, eu: "L",   co2: 2.31, wear: 4.5, vat: 35.2, exc: 21.9 },
+    card: { label: "Car, diesel",           eco: 20, price: 103.82, eu: "L",   co2: 2.68, wear: 4.2, vat: 27,   exc: 17.8 },
+    auto: { label: "Auto-rickshaw, CNG",    eco: 28, price: 97.00,  eu: "kg",  co2: 2.75, wear: 2.4, vat: null, exc: null },
+    etw:  { label: "Two-wheeler, electric", eco: 40, price: 8.00,   eu: "kWh", co2: 0,    wear: 0.8, vat: null, exc: null },
+    ecar: { label: "Car, electric",         eco: 6,  price: 8.00,   eu: "kWh", co2: 0,    wear: 3.0, vat: null, exc: null }
   };
-  var v=function(id){var n=parseFloat($(id).value);return isFinite(n)?n:0};
-  $('veh').addEventListener('change',function(){$('kmpl').value=KMPL[this.value];calc()});
-  function calc(){
-    var km=v('km'),kmpl=Math.max(v('kmpl'),1),p=v('price'),vat=v('vat'),exc=v('exc');
-    var litres=km/kmpl,fuel=litres*p;
-    var vatL=p*vat/(100+vat),taxL=vatL+exc,rest=Math.max(p-taxL,0);
-    var tax=litres*taxL;
-    var tl=v('min')/60*v('votl'),th=v('min')/60*v('voth');
-    var lo=fuel+tl,hi=fuel+th;
-    $('tripout').innerHTML='<p class="eyebrow" style="margin:0 0 8px">One crossing</p>'+
-      '<b>'+inr(fuel)+'</b><span>fuel ('+litres.toFixed(3)+' L)</span>'+
-      '<b style="margin-top:12px">'+inr(tax)+'</b><span>of that is tax ('+Math.round(taxL/p*100)+'% of the pump price)</span>'+
-      '<b class="r" style="margin-top:12px">'+inr(lo)+' – '+inr(hi)+'</b><span>fuel plus time, low to high value of time</span>';
-    var pct=function(x){return (x/p*100).toFixed(1)};
-    $('bar').innerHTML='<div style="width:'+pct(vatL)+'%;background:#E8A87C">VAT</div><div style="width:'+pct(exc)+'%;background:#C9A0DC">Excise</div><div style="width:'+pct(rest)+'%;background:#7CC5A0">Fuel, refining, dealer</div>';
-    $('barnote').textContent='Of ₹'+p.toFixed(2)+': state VAT about ₹'+vatL.toFixed(2)+', central excise ₹'+exc.toFixed(2)+', everything else ₹'+rest.toFixed(2)+'. Estimate from published rates, not an official split for this date.';
-    var n=v('perday')*v('days');
-    $('personout').innerHTML='<p class="eyebrow" style="margin:0 0 8px">'+n.toLocaleString('en-IN')+' crossings a year</p>'+
-      '<b>'+inr(fuel*n)+'</b><span>fuel, of which '+inr(tax*n)+' tax</span>'+
-      '<b style="margin-top:12px">'+Math.round(v('min')*n/60).toLocaleString('en-IN')+' hours</b><span>spent driving round</span>'+
-      '<b class="r" style="margin-top:12px">'+inr(lo*n)+' – '+inr(hi*n)+'</b><span>fuel plus time</span>';
-    var cl=lo*v('xl')*365,ch=hi*v('xh')*365,g=v('gsdp')*1e7;
-    var fy=fuel*365,share=function(x){return g>0?(x/g*100).toFixed(3)+'%':'—'};
-    $('cityout').innerHTML='<p class="eyebrow" style="margin:0 0 8px">Hyderabad, per year</p>'+
-      '<b>'+inr(fy*v('xl'))+' – '+inr(fy*v('xh'))+'</b><span>fuel burnt on detours</span>'+
-      '<b style="margin-top:12px">'+inr(tax*365*v('xl'))+' – '+inr(tax*365*v('xh'))+'</b><span>tax collected on that fuel</span>'+
-      '<b class="r" style="margin-top:12px">'+inr(cl)+' – '+inr(ch)+'</b><span>estimated cost to people, fuel plus time</span>'+
-      '<b style="margin-top:12px">'+share(cl)+' – '+share(ch)+'</b><span>of Telangana\'s GSDP</span>';
+
+  var PRESETS = {
+    student: { km: 1.5, trips: 2, days: 250, occ: 1, veh: "tw",   vot: 60,  spd: 14, years: 5,  infl: 5, disc: 0, people: 20000 },
+    worker:  { km: 2.3, trips: 2, days: 300, occ: 1, veh: "tw",   vot: 90,  spd: 14, years: 15, infl: 5, disc: 0, people: 120000 },
+    family:  { km: 2.2, trips: 4, days: 220, occ: 3, veh: "car",  vot: 250, spd: 14, years: 10, infl: 5, disc: 0, people: 40000 },
+    auto:    { km: 2.0, trips: 12, days: 320, occ: 1.6, veh: "auto", vot: 110, spd: 14, years: 10, infl: 5, disc: 0, people: 15000 },
+    ev:      { km: 1.8, trips: 3, days: 300, occ: 1, veh: "etw",  vot: 120, spd: 14, years: 10, infl: 5, disc: 0, people: 10000 }
+  };
+
+  var el = function (id) { return document.getElementById(id); };
+
+  // Guard: every vehicle option and preset must name a VEH entry (an earlier "ccard"/"card" mismatch broke the page).
+  (function () {
+    var bad = [], opts = el("veh").options, k;
+    for (var j = 0; j < opts.length; j++) if (!VEH[opts[j].value]) bad.push("option " + opts[j].value);
+    for (k in PRESETS) if (!VEH[PRESETS[k].veh]) bad.push("preset " + k);
+    if (bad.length) throw new Error("Vehicle table mismatch: " + bad.join(", "));
+  })();
+  var IDS = ["km","trips","days","occ","veh","eco","price","wear","vot","spd","years","infl","disc","fx","ppp","people"];
+
+  var INDIA_GDP_PC = 243803;      // ₹, FY2025-26 (MoSPI)
+  var TG_GSDP_PC   = 420347;      // ₹, 2024-25 (PRS)
+  var TG_GSDP      = 17820040e6;  // ₹17,82,004 crore, 2025-26 RE (PRS)
+
+  function pct(x) {
+    if (!isFinite(x)) return "—";
+    var p = x * 100;
+    if (p >= 10) return p.toFixed(0) + "%";
+    if (p >= 0.1) return p.toFixed(1) + "%";
+    if (p >= 0.001) return p.toFixed(3) + "%";
+    return "under 0.001%";
   }
-  document.querySelectorAll('input').forEach(function(i){i.addEventListener('input',calc)});
-  calc();
+  function dollars(n, sym) { return isFinite(n) ? sym + Math.round(n).toLocaleString("en-US") : "—"; }
+  function rupees(n) {
+    if (!isFinite(n)) return "—";
+    if (n >= 1e7) return "₹" + (n / 1e7).toFixed(2) + " cr";
+    if (n >= 1e5) return "₹" + (n / 1e5).toFixed(2) + " lakh";
+    if (n < 100) return "₹" + n.toFixed(2);
+    return "₹" + Math.round(n).toLocaleString("en-IN");
+  }
+  function big(n, unit) {
+    if (!isFinite(n)) return "—";
+    if (n >= 1e7) return (n / 1e7).toFixed(2) + " cr " + unit;
+    if (n >= 1e5) return (n / 1e5).toFixed(2) + " lakh " + unit;
+    return Math.round(n).toLocaleString("en-IN") + " " + unit;
+  }
+  var A = null, B = null;
+
+  function read() {
+    var o = {};
+    for (var i = 0; i < IDS.length; i++) {
+      var id = IDS[i], node = el(id);
+      o[id] = node.tagName === "SELECT" ? node.value : parseFloat(node.value);
+    }
+    return o;
+  }
+
+  function model(o) {
+    var v = VEH[o.veh];
+    var kmYear = o.km * o.trips * o.days;
+    var energy = kmYear / Math.max(o.eco, 0.1);
+    var energyRs = energy * o.price;
+    var wearRs = kmYear * o.wear;
+    var hours = (kmYear / Math.max(o.spd, 1)) * o.occ;
+    var timeRs = hours * o.vot;
+    var year1 = energyRs + wearRs + timeRs;
+    var vatU = v.vat == null ? 0 : o.price * v.vat / (100 + v.vat);
+    var excU = v.exc == null ? 0 : Math.min(v.exc, Math.max(o.price - vatU, 0));
+    var horizon = 0, g = 1 + o.infl / 100, d = 1 + o.disc / 100;
+    for (var y = 0; y < o.years; y++) horizon += year1 * Math.pow(g, y) / Math.pow(d, y);
+    return { kmYear: kmYear, energy: energy, energyRs: energyRs, wearRs: wearRs, hours: hours, timeRs: timeRs,
+      year1: year1, horizon: horizon, co2: energy * v.co2, eu: v.eu, veh: v,
+      vatU: vatU, excU: excU, taxYear: energy * (vatU + excU) };
+  }
+
+  function sensitivity(o) {
+    var keys = [["km","Extra distance"],["trips","Crossings per day"],["vot","Value of an hour"],
+                ["days","Days per year"],["spd","Detour speed"],["occ","Occupants"],
+                ["eco","Fuel economy"],["price","Fuel price"],["wear","Wear and tear"]];
+    var out = [];
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i][0], lo = {}, hi = {};
+      for (var p in o) { lo[p] = o[p]; hi[p] = o[p]; }
+      lo[k] = o[k] / 2; hi[k] = o[k] * 2;
+      out.push({ name: keys[i][1], swing: Math.abs(model(hi).year1 - model(lo).year1) });
+    }
+    out.sort(function (a, b) { return b.swing - a.swing; });
+    return out.slice(0, 6);
+  }
+
+  function describe(o) {
+    return VEH[o.veh].label + " · " + o.km.toFixed(2) + " km × " + o.trips + "/day × " + o.days + " days · ₹" + o.vot + "/hr";
+  }
+
+  function render() {
+    var o = read(), m = model(o);
+
+    el("km-o").textContent = o.km.toFixed(2) + " km";
+    el("trips-o").textContent = String(o.trips);
+    el("days-o").textContent = String(o.days);
+    el("occ-o").textContent = o.occ.toFixed(1);
+    el("eco-o").textContent = o.eco + " km/" + m.eu;
+    el("price-o").textContent = "₹" + o.price.toFixed(2) + "/" + m.eu;
+    el("wear-o").textContent = "₹" + o.wear.toFixed(2) + "/km";
+    el("vot-o").textContent = "₹" + o.vot;
+    el("spd-o").textContent = o.spd + " km/h";
+    el("years-o").textContent = o.years + (o.years === 1 ? " year" : " years");
+    el("infl-o").textContent = o.infl.toFixed(1) + "%";
+    el("disc-o").textContent = o.disc.toFixed(1) + "%";
+    el("people-o").textContent = o.people.toLocaleString("en-IN");
+
+    el("peryear").textContent = rupees(m.year1);
+    el("perday").textContent = rupees(m.year1 / 365);
+    el("permonth").textContent = rupees(m.year1 / 12);
+    el("horizon").textContent = rupees(m.horizon);
+    el("horizon-l").textContent = "over " + o.years + (o.years === 1 ? " year" : " years");
+    el("kmyear").textContent = Math.round(m.kmYear).toLocaleString("en-IN");
+
+    el("w-km").textContent = Math.round(m.kmYear).toLocaleString("en-IN") + " km";
+    el("w-fuel").textContent = m.energy.toFixed(1) + " " + m.eu;
+    el("w-fuelrs").textContent = rupees(m.energyRs);
+    el("w-wear").textContent = o.wear === 0 ? "not counted" : rupees(m.wearRs);
+    el("w-hours").textContent = m.hours.toFixed(1) + " hours";
+    el("w-timers").textContent = o.vot === 0 ? "not counted" : rupees(m.timeRs);
+    el("w-total").textContent = rupees(m.year1);
+
+    var taxed = m.veh.vat != null;
+    if (taxed) {
+      var rest = Math.max(o.price - m.vatU - m.excU, 0), w = function (x) { return (x / o.price * 100).toFixed(1); };
+      el("lbar").innerHTML = '<div style="width:' + w(m.vatU) + '%;background:var(--vat)">VAT</div><div style="width:' + w(m.excU) + '%;background:var(--exc)">Excise</div><div style="width:' + w(rest) + '%;background:var(--calm)">Fuel, refining, dealer</div>';
+      el("x-vat").textContent = rupees(m.vatU) + "/" + m.eu;
+      el("x-exc").textContent = rupees(m.excU) + "/" + m.eu;
+      el("x-share").textContent = pct((m.vatU + m.excU) / o.price);
+      el("x-year").textContent = rupees(m.taxYear);
+      el("x-note").textContent = "Of ₹" + o.price.toFixed(2) + ": state VAT about ₹" + m.vatU.toFixed(2) + ", central excise ₹" + m.excU.toFixed(2) + ", everything else ₹" + rest.toFixed(2) + ". Estimate from published rates, not an official split for this date.";
+    } else {
+      el("lbar").innerHTML = "";
+      el("x-vat").textContent = el("x-exc").textContent = el("x-share").textContent = el("x-year").textContent = "not modelled";
+      el("x-note").textContent = "Taxes on CNG and electricity are not modelled yet.";
+    }
+
+    el("g-people").textContent = o.people.toLocaleString("en-IN");
+    el("g-km").textContent = big(m.kmYear * o.people, "km");
+    el("g-fuel").textContent = big(m.energy * o.people, m.eu);
+    el("g-tax").textContent = taxed ? rupees(m.taxYear * o.people) : "not modelled";
+    el("g-co2").textContent = m.veh.co2 === 0 ? "none at the tailpipe" : big((m.co2 * o.people) / 1000, "tonnes");
+    el("g-total").textContent = rupees(m.year1 * o.people);
+    el("g-horizon").textContent = rupees(m.horizon * o.people);
+
+    var minDay = (o.km * o.trips / Math.max(o.spd, 1)) * 60;
+    var hrsYear = minDay * o.days / 60;
+    el("t-min").textContent = minDay < 10 ? minDay.toFixed(1) + " min" : Math.round(minDay) + " min";
+    el("t-hrs").textContent = Math.round(hrsYear).toLocaleString("en-IN") + " hours";
+    el("t-wd").textContent = (hrsYear / 8).toFixed(1) + " days";
+    el("t-wake").textContent = pct(minDay / (16 * 60));
+    el("t-band").textContent = minDay < 5 ? "Light" : minDay < 15 ? "Moderate" : minDay <= 30 ? "Heavy" : "Severe";
+
+    el("fx-o").textContent = "₹" + o.fx.toFixed(1);
+    el("ppp-o").textContent = "₹" + o.ppp.toFixed(1);
+    el("c-in").textContent = pct(m.year1 / INDIA_GDP_PC);
+    el("c-tg").textContent = pct(m.year1 / TG_GSDP_PC);
+    var days = m.year1 / (INDIA_GDP_PC / 365);
+    el("c-days").textContent = (days < 10 ? days.toFixed(1) : Math.round(days)) + " days";
+    el("c-usd").textContent = dollars(m.year1 / o.fx, "US$");
+    el("c-ppp").textContent = dollars(m.year1 / o.ppp, "$") + " PPP";
+    el("c-gsdp").textContent = pct((m.year1 * o.people) / TG_GSDP);
+
+    var s = sensitivity(o), max = s.length ? s[0].swing : 1, html = "";
+    for (var i = 0; i < s.length; i++) {
+      var bw = max > 0 ? Math.max(2, (s[i].swing / max) * 100) : 2;
+      html += '<div class="bar"><span>' + s[i].name + '</span><div class="track"><i style="width:' + bw.toFixed(0) + '%"></i></div><span>' + rupees(s[i].swing) + '</span></div>';
+    }
+    el("sens-bars").innerHTML = html;
+
+    if (A && B) {
+      var diff = B.v - A.v;
+      el("d-v").textContent = (diff >= 0 ? "+" : "−") + rupees(Math.abs(diff));
+      el("d-v").style.color = diff >= 0 ? "var(--sev)" : "var(--calm)";
+      el("d-d").textContent = "B costs " + (diff >= 0 ? "more" : "less") + " than A, per year";
+    }
+  }
+
+  function setVehicle(key) {
+    var v = VEH[key];
+    el("veh").value = key; el("eco").value = v.eco; el("price").value = v.price; el("wear").value = v.wear;
+  }
+
+  function applyPreset(name) {
+    var p = PRESETS[name];
+    if (!p) return;
+    for (var k in p) { if (Object.prototype.hasOwnProperty.call(p, k) && el(k)) el(k).value = p[k]; }
+    setVehicle(p.veh);
+    var btns = el("presets").querySelectorAll("button");
+    for (var i = 0; i < btns.length; i++) btns[i].setAttribute("aria-pressed", btns[i].dataset.p === name ? "true" : "false");
+    render();
+  }
+
+  for (var i = 0; i < IDS.length; i++) { el(IDS[i]).addEventListener("input", render); el(IDS[i]).addEventListener("change", render); }
+  el("veh").addEventListener("change", function () { setVehicle(el("veh").value); render(); });
+  el("presets").addEventListener("click", function (e) { var b = e.target.closest("button[data-p]"); if (b) applyPreset(b.dataset.p); });
+
+  function snap(slot) {
+    var o = read(), rec = { v: model(o).year1, d: describe(o) };
+    if (slot === "a") { A = rec; el("a-v").textContent = rupees(rec.v); el("a-d").textContent = rec.d; }
+    else { B = rec; el("b-v").textContent = rupees(rec.v); el("b-d").textContent = rec.d; }
+    render();
+  }
+  el("save-a").addEventListener("click", function () { snap("a"); });
+  el("save-b").addEventListener("click", function () { snap("b"); });
+  el("clear-ab").addEventListener("click", function () {
+    A = B = null;
+    el("a-v").textContent = el("b-v").textContent = el("d-v").textContent = "—";
+    el("a-d").textContent = el("b-d").textContent = "Not set";
+    el("d-d").textContent = "Save both to compare";
+    el("d-v").style.color = "";
+  });
+
+  // Prefill from a place link: ?km=2.30&min=9&place=S16&veh=car (used by the street search and the globe).
+  (function () {
+    var q = new URLSearchParams(location.search), km = parseFloat(q.get("km")), mins = parseFloat(q.get("min")), place = q.get("place"), veh = q.get("veh");
+    if (veh && VEH[veh]) setVehicle(veh);
+    if (isFinite(km) && km > 0) el("km").value = Math.min(km, 12);
+    if (isFinite(km) && km > 0 && isFinite(mins) && mins > 0) el("spd").value = Math.max(6, Math.min(70, Math.round(km / (mins / 60))));
+    if (place && /^[A-Za-z0-9 ,.'()-]{1,60}$/.test(place)) {
+      el("from").hidden = false;
+      el("from").textContent = "Set from " + place + (isFinite(km) ? ": " + km.toFixed(2) + " km extra" : "") + (isFinite(mins) ? ", " + mins + " min" : "") + ". Change anything below.";
+    }
+  })();
+
+  var DEFAULTS = {};
+  for (var d = 0; d < IDS.length; d++) DEFAULTS[IDS[d]] = el(IDS[d]).value;
+  el("reset").addEventListener("click", function () {
+    for (var id in DEFAULTS) el(id).value = DEFAULTS[id];
+    var bs = el("presets").querySelectorAll("button[data-p]");
+    for (var q = 0; q < bs.length; q++) bs[q].setAttribute("aria-pressed", "false");
+    render();
+  });
+
+  var topBtn = el("top"), smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches, ticking = false;
+  window.addEventListener("scroll", function () {
+    if (ticking) return; ticking = true;
+    window.requestAnimationFrame(function () { topBtn.classList.toggle("on", window.scrollY > 500); ticking = false; });
+  }, { passive: true });
+  topBtn.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" }); el("page-top").focus({ preventScroll: true }); });
+
+  render();
 })();
 </script>
 </body>
