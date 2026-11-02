@@ -11,6 +11,11 @@
       .replace(/\broad\b/g, "rd").replace(/\bstreet\b/g, "st").replace(/\bhighway\b/g, "hwy")
       .replace(/\bnational\s+hwy\b/g, "nh").replace(/[^a-z0-9ఀ-౿]+/g, " ").trim();
   }
+  // Everyday names for road numbers, so "Mumbai Highway" also finds a place tagged only NH65.
+  var ALIAS = { "nh65": "Mumbai Highway Pune Highway Old Bombay Road", "nh44": "Bengaluru Highway Nagpur Highway",
+    "nh163": "Warangal Highway", "nh765": "Srisailam Highway", "outer ring road": "ORR Nehru Outer Ring Road" };
+  var COMMON = { "nh65": "Mumbai Highway", "nh44": "Bengaluru Highway" };
+  function tidy(n) { n = String(n || "").replace(/\s+/g, " ").trim(); return n === n.toLowerCase() ? n.replace(/\b[a-z]/g, function (c) { return c.toUpperCase(); }) : n; }
   function km(m) { return m < 1000 ? Math.round(m) + " m" : (m / 1000).toFixed(1) + " km"; }
 
   function load(base) {
@@ -19,10 +24,12 @@
       var places = d[0], names = (d[1] && d[1].spots) || {};
       if (!places) return null;
       return places.spots.map(function (s) {
-        var n = names[s.id] || {}, roads = n.roads || [], refs = n.refs || [];
-        var label = roads[0] || refs[0] || "Unnamed road";
-        var hay = norm([s.id, label].concat(roads, refs, [n.area || "", "hyderabad"]).join(" "));
-        return { s: s, label: label, area: n.area || "", hay: hay };
+        var n = names[s.id] || {}, roads = (n.roads || []).map(tidy), refs = n.refs || [];
+        var key = function (r) { return r.toLowerCase().replace(/\s+(?=\d)/g, ""); };
+        var label = roads[0] || (refs[0] ? refs[0] + (COMMON[key(refs[0])] ? " · " + COMMON[key(refs[0])] : "") : "Unnamed road");
+        var extra = refs.concat(roads).map(function (r) { return ALIAS[key(r)] || ""; });
+        var hay = norm([s.id, label].concat(roads, refs, extra, [n.area || "", "hyderabad"]).join(" "));
+        return { s: s, label: label, area: tidy(n.area), hay: hay };
       });
     });
   }
