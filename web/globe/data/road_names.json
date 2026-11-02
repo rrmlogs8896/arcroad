@@ -1,0 +1,185 @@
+{
+ "generated": "2026-11-02",
+ "source": "© OpenStreetMap contributors, ODbL (via Nominatim reverse geocoding)",
+ "spots": {
+  "S01": {
+   "roads": [
+    "NH65"
+   ],
+   "refs": [
+    "NH65"
+   ],
+   "area": "Patancheru"
+  },
+  "S02": {
+   "roads": [
+    "patancheru shankar palli road"
+   ],
+   "refs": [],
+   "area": "Patancheru"
+  },
+  "S03": {
+   "roads": [],
+   "refs": [],
+   "area": "Nandigama"
+  },
+  "S04": {
+   "roads": [
+    "NH65"
+   ],
+   "refs": [
+    "NH65"
+   ],
+   "area": "Isnapur"
+  },
+  "S05": {
+   "roads": [
+    "Krishna Reddy Pet Road"
+   ],
+   "refs": [],
+   "area": "Bramrambika Colony"
+  },
+  "S06": {
+   "roads": [
+    "RC Puram BHEL - Beeramguda Rd Mumbai Highway"
+   ],
+   "refs": [
+    "NH65"
+   ],
+   "area": "Beeramguda Junction"
+  },
+  "S07": {
+   "roads": [
+    "Nallagandla Road"
+   ],
+   "refs": [],
+   "area": "Rail Vihar"
+  },
+  "S08": {
+   "roads": [
+    "Old Bombay Road"
+   ],
+   "refs": [],
+   "area": "Adarsh Nagar"
+  },
+  "S09": {
+   "roads": [
+    "Masibanda Link"
+   ],
+   "refs": [],
+   "area": "Sudarshan Nagar Colony"
+  },
+  "S10": {
+   "roads": [
+    "Nallagandla Road"
+   ],
+   "refs": [],
+   "area": "Ward 105 Gachibowli"
+  },
+  "S11": {
+   "roads": [
+    "Gachibowli - Miyapur Road",
+    "Gachibowli - Miyapur Road Mumbai Highway"
+   ],
+   "refs": [],
+   "area": "Vinayak Nagar Colony"
+  },
+  "S12": {
+   "roads": [
+    "Hafeezpet Flyover"
+   ],
+   "refs": [],
+   "area": "Hafeezpet"
+  },
+  "S13": {
+   "roads": [
+    "Miyapur - Allwyn Cross Road Mumbai Highway"
+   ],
+   "refs": [
+    "NH65"
+   ],
+   "area": "Miyapur"
+  },
+  "S14": {
+   "roads": [
+    "Gachibowli - Miyapur Highway"
+   ],
+   "refs": [],
+   "area": "Marthanda Nagar"
+  },
+  "S15": {
+   "roads": [
+    "Gachibowli - Miyapur Highway"
+   ],
+   "refs": [],
+   "area": "jubilee gardens"
+  },
+  "S16": {
+   "roads": [
+    "Hitec - Kukatpally Main Road"
+   ],
+   "refs": [],
+   "area": "HITEC City"
+  },
+  "S17": {
+   "roads": [
+    "Hitec - Kukatpally Main Road",
+    "4th Phase Road"
+   ],
+   "refs": [],
+   "area": "APHB Colony"
+  },
+  "S18": {
+   "roads": [
+    "Hitec - Kukatpally Main Road",
+    "HITEC City–Kukatpally Main Road"
+   ],
+   "refs": [],
+   "area": "APHB Colony"
+  },
+  "S19": {
+   "roads": [
+    "Nizampet - JNTU Road Mumbai Highway"
+   ],
+   "refs": [
+    "NH65"
+   ],
+   "area": "Satavahana Nagar"
+  },
+  "S20": {
+   "roads": [],
+   "refs": [],
+   "area": "Nizampet"
+  },
+  "S21": {
+   "roads": [],
+   "refs": [],
+   "area": "Bachupally mandal"
+  },
+  "S22": {
+   "roads": [
+    "Medak Road"
+   ],
+   "refs": [],
+   "area": "Anand Naidu Nagar"
+  },
+  "S23": {
+   "roads": [
+    "Outer Ring Road"
+   ],
+   "refs": [
+    "ORR"
+   ],
+   "area": "Maheshwaram"
+  },
+  "S24": {
+   "roads": [
+    "Outer Ring Road"
+   ],
+   "refs": [
+    "ORR"
+   ],
+   "area": "Sultanpur"
+  }
+ }
+}
