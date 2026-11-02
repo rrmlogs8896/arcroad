@@ -7,6 +7,31 @@
 <title>arcroad · from orbit to your street</title>
 <link rel="stylesheet" href="vendor/maplibre/maplibre-gl.css">
 <link rel="stylesheet" href="globe.css">
+<meta name="theme-color" content="#0B0D10">
+<meta name="color-scheme" content="dark">
+<meta name="format-detection" content="telephone=no">
+<style id="mobile-base">
+/* Shared mobile and cross-browser base (Safari iOS, Chrome/Samsung Android, Firefox) */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{overflow-wrap:break-word;padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+a,button,summary,select,label{-webkit-tap-highlight-color:rgba(232,168,124,.22);touch-action:manipulation}
+details>summary{cursor:pointer;min-height:44px;box-sizing:border-box;align-items:center}
+details>summary::-webkit-details-marker{display:none}
+input[type=range]{min-height:36px;touch-action:pan-y;cursor:pointer}
+table{font-variant-numeric:tabular-nums}
+.wrap,.scroll{-webkit-overflow-scrolling:touch}
+img,svg,canvas,video{max-width:100%}
+@media (max-width:720px){
+  input,select,textarea{font-size:16px!important}
+  h1{overflow-wrap:anywhere}
+  .top,header nav{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;white-space:nowrap;margin-left:0!important;max-width:100%}
+  .top::-webkit-scrollbar,header nav::-webkit-scrollbar,.presets::-webkit-scrollbar{display:none}
+  .presets{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
+  .presets .reset{margin-left:0!important}
+}
+@media (pointer:coarse){nav a,.top a{padding-block:10px;display:inline-block} .srcbtn{padding:10px 0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
 </head>
 <body>
 <div class="scrim" aria-hidden="true"></div>
