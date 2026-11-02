@@ -1,5 +1,7 @@
 # arcroad — STATE
 
+> **3 Nov 2026 00:21 IST — v0.2 LIVE.** Production e8466501 (main e0318b5, PR #48). Rollback: ee5f8a1f (street search). Preview 0b3de616 checked by Rohit on his phone. In it: write to the people responsible (officials directory, hi/te drafts), glare drive, report-a-change form, headline tied to driven place S18 with its selection rule, per-direction calculator links, declared scorer change (S12 counted, disclosed). Not yet on the site: S12 as a 4th driven place (needs the field page rebuild).
+
 Read this first; it replaces reconstructing status from the history. Update it in
 the same commit as any change that makes it wrong. Longer history and decisions
 live in the ledger (Drive: Anthropic / Hyderabad Mobility Atlas, Doc 03).
