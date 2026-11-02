@@ -61,13 +61,14 @@ table{min-width:760px}td.n,th.n{text-align:right;font-family:ui-monospace,monosp
 <p class="eyebrow">arcroad · open data · ODbL</p>
 <h1>Open data, free to use.</h1>
 <p class="lead">What the open map records for each city: roads, divided main roads, pedestrian crossings and footbridges, with the population living there. Download it, check it, build on it.</p>
-<div id="table"><div class="empty">The first release is being collected now: the 8 largest Indian cities, then a world sample. It will appear here once checked.</div></div>
+<div id="table"><div class="empty">Loading the table…</div></div>
 <p id="dl" class="note"></p>
 <details class="more"><summary>What these numbers are, and are not</summary>
 <ul class="note">
 <li>Counts of what OpenStreetMap records inside an approximate box around each city, with GHSL 2020 population for the same box.</li>
 <li>They show how well the map records a city as much as the city itself: a city with few mapped crossings may simply be under-mapped. That is where volunteers help most.</li>
-<li>Not an official boundary, not a measurement of the ground, and not a ranking of cities.</li>
+<li>Not an official boundary, not a measurement of the ground, and not a ranking of cities. Boxes differ in how much countryside or sea they include, so per-person figures compare poorly between cities.</li>
+<li>"Mapped as divided" means main roads drawn as two one-way carriageways, a proxy for a median. A footbridge drawn in several pieces counts once per piece.</li>
 <li>Detour figures are published only for places checked on the ground. See <a href="../field/">driven results</a>.</li>
 </ul></details>
 <details class="more"><summary>Licence and how to credit</summary>
@@ -77,12 +78,13 @@ table{min-width:760px}td.n,th.n{text-align:right;font-family:ui-monospace,monosp
 <footer>No Google Maps data is used anywhere. arcroad is an independent citizen project.</footer>
 <script>
 (function(){
+  var NAMES={delhi_ncr:'Delhi NCR',mumbai_mmr:'Mumbai (MMR)',saopaulo:'São Paulo',bogota:'Bogotá',nyc:'New York City',manila:'Metro Manila'};
   var fmt=function(n){return n==null?'—':Number(n).toLocaleString('en-IN')};
   var esc=function(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
   fetch('cities.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
     if(!d.cities||!d.cities.length)return;
-    var h='<div class="wrap"><table><thead><tr><th>City</th><th>Country</th><th class="n">Population</th><th class="n">Road km</th><th class="n">Main roads divided</th><th class="n">Crossings</th><th class="n">Footbridges</th><th class="n">Crossings per 1 lakh people</th></tr></thead><tbody>';
-    d.cities.forEach(function(c){h+='<tr><td>'+esc(c.city.replace(/_/g,' '))+'</td><td>'+esc(c.country)+'</td><td class="n">'+fmt(c.population_in_box)+'</td><td class="n">'+fmt(Math.round(c.road_km))+'</td><td class="n">'+esc(c.arterial_divided_pct)+'%</td><td class="n">'+fmt(c.crossings)+'</td><td class="n">'+fmt(c.footbridges)+'</td><td class="n">'+(c.crossings_per_100k==null?'—':esc(c.crossings_per_100k))+'</td></tr>'});
+    var h='<p class="note">8 Indian cities, open map of '+esc(String(d.cities[0].osm_extract_date||'').slice(0,10))+'. World sample to follow.</p><div class="wrap"><table><thead><tr><th>City</th><th>Country</th><th class="n">Population</th><th class="n">Road km</th><th class="n">Main roads mapped as divided</th><th class="n">Crossings</th><th class="n">Footbridge segments</th><th class="n">Crossings per 1 lakh people</th></tr></thead><tbody>';
+    d.cities.forEach(function(c){h+='<tr><td>'+esc(NAMES[c.city]||c.city.replace(/_/g,' ').replace(/\b\w/g,function(x){return x.toUpperCase()}))+'</td><td>'+esc(c.country)+'</td><td class="n">'+fmt(c.population_in_box)+'</td><td class="n">'+fmt(Math.round(c.road_km))+'</td><td class="n">'+esc(c.arterial_divided_pct)+'%</td><td class="n">'+fmt(c.crossings)+'</td><td class="n">'+fmt(c.footbridges)+'</td><td class="n">'+(c.crossings_per_100k==null?'—':esc(c.crossings_per_100k))+'</td></tr>'});
     h+='</tbody></table></div>';
     document.getElementById('table').innerHTML=h;
     document.getElementById('dl').innerHTML='Released '+esc(d.generated)+'. Download: <a href="cities.json">JSON</a>'+(d.csv?' · <a href="'+esc(d.csv)+'">CSV</a>':'')+'.';
