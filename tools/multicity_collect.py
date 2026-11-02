@@ -396,13 +396,17 @@ def main(argv=None) -> int:
 
     cov = coverage(clip_path)
     print(f"  coverage: {cov}")
+    # Same counts inside the exact box, so they share an area with the population figure (open-data export).
+    box_path = clip([clip_path], bbox, out / f"{city}_box.osm.pbf", cache)
+    cov_box = coverage(box_path)
+    print(f"  coverage in box: {cov_box}")
 
     manifest = {
         "city": city, "status": STATUS, "run_date": stamp, "collection_box": list(bbox),
         "box_is_official_boundary": city == "hyderabad", "clip_buffer_deg": b,
         "osm_zones": [z for z, _ in zones], "osm_extract_date": extract_date, "commit_sha": sha,
         "ghsl_product": "GHS_POP_E2020_GLOBE_R2023A_4326_3ss_V1_0 (CC BY 4.0)",
-        "ghsl_pop_in_box": pop, "coverage_on_buffered_extract": cov,
+        "ghsl_pop_in_box": pop, "coverage_on_buffered_extract": cov, "coverage_in_box": cov_box,
         "attribution": ("Map data (c) OpenStreetMap contributors (ODbL). "
                         "GHSL (c) European Union, JRC (CC BY 4.0)."),
     }
