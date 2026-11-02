@@ -109,11 +109,20 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
 .note p { margin: 0 0 10px; font-size: 14px; line-height: 1.65; color: #B9A594; max-width: 72ch; }
 .note p:last-child { margin: 0; }
 
-.sources { padding-block: 38px 0; border-top: 1px solid var(--line); margin-top: 32px; }
+.sources { margin-top: 32px; } .sources dl { padding-bottom: 10px; }
 .sources dl { margin: 0; display: grid; gap: 12px; }
 .sources dt { font-size: 13px; }
 .sources dd { margin: 3px 0 0; font-size: 13px; line-height: 1.6; color: var(--ink-faint); }
 footer { padding-block: 34px 48px; }
+body:not(.showsrc) .rail .src, body:not(.showsrc) .fineprint { display: none; }
+.srcbtn { background: transparent; border: 0; padding: 0; color: var(--ink-faint); font: 12px var(--font-ui); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.srcbtn:hover { color: var(--ink); }
+details.fine { margin-block: 18px 0; border-top: 1px solid var(--line); }
+details.fine > summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: 15px; color: var(--ink-dim); display: flex; gap: 10px; }
+details.fine > summary::-webkit-details-marker { display: none; }
+details.fine > summary::before { content: "+"; font-family: var(--font-num); color: var(--sev); }
+details.fine[open] > summary::before { content: "\2212"; }
+details.fine > summary:hover { color: var(--ink); }
 footer p { margin: 0 0 8px; font-size: 12px; line-height: 1.7; color: var(--ink-faint); max-width: 76ch; }
 </style>
 </head>
@@ -127,7 +136,7 @@ footer p { margin: 0 0 8px; font-size: 12px; line-height: 1.7; color: var(--ink-
   <div class="intro">
     <p class="eyebrow">Directional estimate · not a measurement</p>
     <h1 id="page-top" tabindex="-1">What does crossing your own road cost you?</h1>
-    <p class="lede">Every figure here is an assumption you can change. Pick the situation closest to yours, move any slider and watch the total move, and watch which assumption moves it most. Nobody should accept a cost figure they cannot take apart, including ours.</p>
+    <p class="lede">Pick the situation closest to yours, then move the sliders. Every number is an assumption you can change.</p>
     <p class="from" id="from" hidden></p>
   </div>
 
@@ -143,7 +152,7 @@ footer p { margin: 0 0 8px; font-size: 12px; line-height: 1.7; color: var(--ink-
   <div class="grid">
     <div class="rail">
       <h2>Your situation</h2>
-      <p class="sub">Sixteen inputs. Change any of them.</p>
+      <p class="sub">Change any of these. <button type="button" class="srcbtn" id="srcbtn" aria-pressed="false">Show where each number comes from</button></p>
 
       <h3 class="grp">The trip</h3>
       <div class="ctl">
@@ -297,7 +306,7 @@ footer p { margin: 0 0 8px; font-size: 12px; line-height: 1.7; color: var(--ink-
         <div class="row"><span>Eight-hour working days per year</span><span class="num" id="t-wd">—</span></div>
         <div class="row"><span>Share of your waking hours on travelling days</span><span class="num" id="t-wake">—</span></div>
         <div class="row tot"><span>Time tax band</span><span class="num" id="t-band">—</span></div>
-        <p class="src" style="margin-top:12px">Bands by minutes lost per travelling day: under 5 light, 5–15 moderate, 15–30 heavy, over 30 severe. The bands are this page's own yardstick, set before any figure was computed. They measure time, not how anyone feels: arcroad does not measure stress or health.</p>
+        <p class="src fineprint" style="margin-top:12px">Bands by minutes lost per travelling day: under 5 light, 5–15 moderate, 15–30 heavy, over 30 severe. The bands are this page's own yardstick, set before any figure was computed. They measure time, not how anyone feels: arcroad does not measure stress or health.</p>
       </div>
 
       <div class="card">
@@ -308,7 +317,7 @@ footer p { margin: 0 0 8px; font-size: 12px; line-height: 1.7; color: var(--ink-
         <div class="row"><span>In US dollars, market rate</span><span class="num" id="c-usd">—</span></div>
         <div class="row"><span>In international dollars (PPP)</span><span class="num" id="c-ppp">—</span></div>
         <div class="row tot"><span>Group total, share of Telangana's GSDP</span><span class="num" id="c-gsdp">—</span></div>
-        <p class="src" style="margin-top:12px">This is an estimated cost to people, not a "GDP loss": GDP counts what is produced, not time wasted. GDP per person is output, not take-home income, and Hyderabad pulls Telangana's average well above most residents'.</p>
+        <p class="src" style="margin-top:12px">An estimated cost to people, not a "GDP loss": GDP counts what is produced, not time wasted.</p>
       </div>
 
       <div class="sens">
@@ -334,20 +343,13 @@ footer p { margin: 0 0 8px; font-size: 12px; line-height: 1.7; color: var(--ink-
     </div>
   </div>
 
-  <div class="note">
-    <b>Whose hour counts?</b>
-    <p>Standard transport appraisal values travel time at wage rates. Applied here, an hour lost by a software engineer in Gachibowli is worth many times an hour lost by a construction worker in Pashamylaram, and the arithmetic then concludes the richer corridor deserves investment first. That is one way peripheral settlements end up last in the queue.</p>
+  <details class="fine"><summary>Whose hour counts?</summary><div class="note" style="margin-top:0"><p>Standard transport appraisal values travel time at wage rates. Applied here, an hour lost by a software engineer in Gachibowli is worth many times an hour lost by a construction worker in Pashamylaram, and the arithmetic then concludes the richer corridor deserves investment first. That is one way peripheral settlements end up last in the queue.</p>
     <p>This page refuses to pick for you. Set the hourly value to zero and you see fuel and wear alone. Set it to a wage and you see the conventional appraisal figure. The gap between those two numbers is itself worth looking at.</p>
-  </div>
-
-  <div class="note">
-    <b>What this is not</b>
-    <p>It is not a measurement. It is arithmetic on assumptions you chose, and it is only as strong as the weakest one: crossings per day, for which no public dataset exists for this city. Treat the single-person figure as directional and any group figure as an order of magnitude.</p>
+  </div></details>
+  <details class="fine"><summary>What this is not</summary><div class="note" style="margin-top:0"><p>It is not a measurement. It is arithmetic on assumptions you chose, and it is only as strong as the weakest one: crossings per day, for which no public dataset exists for this city. Treat the single-person figure as directional and any group figure as an order of magnitude.</p>
     <p>It leaves out tolls, congestion, roadworks, crashes and health damage, and it never puts a price on injury or death. It makes no claim about anyone's competence or motives.</p>
-  </div>
-
-  <div class="sources">
-    <h2>Where the numbers come from</h2>
+  </div></details>
+  <details class="fine sources"><summary>Where the numbers come from</summary>
     <dl>
       <dt>Extra distance and speed: arcroad's own drives, 1 Nov 2026</dt>
       <dd>Four city passes that matched the model: 1.53 to 2.28 km beyond the straight line, 3 to 12 minutes each. The Outer Ring Road pass is left out because turning round there needs an interchange by design. <a href="../field/">Every pass</a>.</dd>
@@ -368,7 +370,7 @@ footer p { margin: 0 0 8px; font-size: 12px; line-height: 1.7; color: var(--ink-
       <dt>Telangana: ₹4,20,347 GSDP per person (2024-25); GSDP ₹17,82,004 crore (2025-26, revised estimate)</dt>
       <dd>PRS Legislative Research, Telangana Budget Analysis 2026-27, from the state's budget documents.</dd>
     </dl>
-  </div>
+  </details>
 
   <footer>
     <p>Map data © OpenStreetMap contributors, ODbL. Measurements by arcroad (ODbL). No Google Maps data is used anywhere. arcroad is an independent citizen project, not affiliated with GHMC, HMDA, NHAI, the Government of Telangana, or any political party.</p>
@@ -637,6 +639,12 @@ footer p { margin: 0 0 8px; font-size: 12px; line-height: 1.7; color: var(--ink-
     window.requestAnimationFrame(function () { topBtn.classList.toggle("on", window.scrollY > 500); ticking = false; });
   }, { passive: true });
   topBtn.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" }); el("page-top").focus({ preventScroll: true }); });
+
+  el("srcbtn").addEventListener("click", function () {
+    var on = document.body.classList.toggle("showsrc");
+    this.setAttribute("aria-pressed", on ? "true" : "false");
+    this.textContent = on ? "Hide sources" : "Show where each number comes from";
+  });
 
   render();
 })();

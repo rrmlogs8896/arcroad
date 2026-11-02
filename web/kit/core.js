@@ -2,7 +2,7 @@
  *
  * Pure functions only: no DOM, no network, no storage. Everything a citizen
  * generates is built from the pair record and what they type, in their own
- * browser. tests/test_kit.py runs these functions under Node and scans this
+ * browser. automated checks runs these functions under Node and scans this
  * directory for any network or storage call; either failing blocks CI.
  *
  * Ledger: 36.29 (Act on this), 36.30 (representation kit), 36.31

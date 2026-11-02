@@ -65,25 +65,32 @@ h2{{font-size:20px;margin:44px 0 10px;font-weight:600}}p.lead{{font-size:18px;co
 th,td{{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}}th{{color:var(--mute);font-weight:500;font-size:12px}}
 td.n,th.n{{text-align:right;font-family:ui-monospace,SFMono-Regular,monospace;font-variant-numeric:tabular-nums}}
 tr.driven td:first-child{{box-shadow:inset 3px 0 0 var(--ok)}}ul{{padding-left:20px}}li{{margin:4px 0}}
-.note{{color:var(--mute);font-size:13px}}footer{{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}}
+.note{{color:var(--mute);font-size:13px}}
+.top{{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-bottom:28px}}.top a{{color:var(--mute);text-decoration:none}}.top a:hover{{color:var(--fg)}}
+details.more{{margin-top:28px;border-top:1px solid var(--line)}}details.more summary{{cursor:pointer;padding:14px 0;color:var(--mute);font-size:14px}}details.more summary:hover{{color:var(--fg)}}
+details.more h3{{font-size:15px;margin:18px 0 6px;font-weight:600}}details.more p,details.more li{{font-size:14px;color:#C9CDD2}}footer{{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}}
 </style>
 </head>
 <body>
 <main>
+<nav class="top"><a href="../">arcroad home</a><a href="../cost/">Your cost</a><a href="../roads/">Road costs</a><a href="../evidence/">Evidence</a><a href="../globe/">Globe</a></nav>
 <p class="eyebrow">arcroad · Hyderabad · driven {e(day["day"])}</p>
 <h1>We drove the detours the map predicted.</h1>
-<p class="lead">On {e(day["day"])} arcroad drove modelled places on Hyderabad's west corridor with a GPS recording. Of {n_graded} direction(s) that could be compared with the model, {n_match} matched it within the tolerance fixed before the drive. Every pass is listed, including the ones that did not count.</p>
+<p class="lead">{n_match} of {n_graded} comparable directions matched the model, within a tolerance fixed before the drive.</p>
 <div class="stats"><div><b>{len(places)}</b><span>places now driven by arcroad</span></div><div><b>{n_match}/{n_graded}</b><span>directions matched the model</span></div><div><b>{len(rejected)}</b><span>passes rejected</span></div></div>
 <h2>Every pass</h2>
 <div class="wrap"><table>
 <thead><tr><th>Place</th><th>Direction</th><th class="n">Straight across</th><th class="n">Model</th><th class="n">Driven</th><th class="n">Time</th><th>Verdict</th><th>Evidence level</th><th>Evidence kinds</th></tr></thead>
 <tbody>{"".join(rows)}</tbody></table></div>
-<p class="note">Evidence kinds: S a timed drive, P a usable photo at the place during the pass, R a repeat pass. One kind is a candidate, two corroborated, three with a photo or an official record triangulated. Times include waits at signals and U-turn queues (Sunday afternoon and evening).</p>
-<h2>Rejected passes</h2><ul>{nr or "<li>None.</li>"}</ul>
-<h2>Visited but not scored</h2><ul>{ns}</ul>
-<h2>Limits</h2><ul>{li(day["limitations"])}</ul>
-<h2>How this was scored</h2>
-<p>Thresholds were written before the drive and are not changed after seeing results. A drive matches when it is within the larger of 150 m or 25% of the model's distance. The code is public: <code>{e(day["method"])}</code>. The raw recordings stay private; only these per-pass numbers are published. <a href="../globe/">See the places on the 3D map</a> · <a href="../">arcroad home</a></p>
+<p class="note">Times include waits at signals and U-turn queues. <a href="../cost/">What would this cost you?</a></p>
+<details class="more"><summary>Rejected passes, places not scored, limits and how this was scored</summary>
+<h3>Evidence kinds</h3><p>S a timed drive, P a usable photo at the place during the pass, R a repeat pass. One kind is a candidate, two corroborated, three with a photo or an official record triangulated.</p>
+<h3>Rejected passes</h3><ul>{nr or "<li>None.</li>"}</ul>
+<h3>Visited but not scored</h3><ul>{ns}</ul>
+<h3>Limits</h3><ul>{li(day["limitations"])}</ul>
+<h3>How this was scored</h3>
+<p>Thresholds were written before the drive and not changed after seeing results. A drive matches when it is within the larger of 150 m or 25% of the model's distance. Raw recordings stay private; only these per-pass numbers are published.</p>
+</details>
 <footer>Map data © OpenStreetMap contributors (ODbL). Measurements by arcroad (ODbL). Model: {e(day["model"])}. No Google Maps data is used anywhere.</footer>
 </main>
 </body>
