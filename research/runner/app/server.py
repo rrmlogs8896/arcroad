@@ -16,6 +16,7 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+import hotspots
 import openings
 
 OUT = Path("/tmp/out")
@@ -36,12 +37,27 @@ def job_openings():
     return p
 
 
+def repo():
+    """A fresh shallow clone of the public repo, made once per night and shared by the jobs."""
+    work = Path("/tmp/arcroad")
+    if not (work / ".git").exists():
+        if work.exists():
+            shutil.rmtree(work)
+        subprocess.run(["git", "clone", "--depth", "1", "https://github.com/rrmlogs8896/arcroad.git", str(work)],
+                       check=True)
+    return work
+
+
+def job_hotspots():
+    OUT.mkdir(exist_ok=True)
+    p = OUT / "hotspots-v1.json"
+    p.write_bytes(hotspots.run(log, repo()))
+    return p
+
+
 def job_bengaluru():
     """Bengaluru candidate collection: the same code and config as the monthly GitHub workflow."""
-    work = Path("/tmp/arcroad")
-    if work.exists():
-        shutil.rmtree(work)
-    subprocess.run(["git", "clone", "--depth", "1", "https://github.com/rrmlogs8896/arcroad.git", str(work)], check=True)
+    work = repo()
     out = work / "out"
     cmd = ["python", "tools/multicity_collect.py", "bengaluru", "--out", "out", "--cache", "/tmp/cache", "--detour"]
     with subprocess.Popen(cmd, cwd=work, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True) as pr:
@@ -56,7 +72,7 @@ def job_bengaluru():
     return tgz
 
 
-JOBS = [("openings", job_openings), ("bengaluru", job_bengaluru)]
+JOBS = [("openings", job_openings), ("hotspots", job_hotspots), ("bengaluru", job_bengaluru)]
 
 
 def run_all():
