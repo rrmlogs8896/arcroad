@@ -2,7 +2,7 @@
 
 > **3 Nov 2026 00:21 IST — v0.2 LIVE.** Production e8466501 (main e0318b5, PR #48). Rollback: ee5f8a1f (street search). Preview 0b3de616 checked by Rohit on his phone. In it: write to the people responsible (officials directory, hi/te drafts), glare drive, report-a-change form, headline tied to driven place S18 with its selection rule, per-direction calculator links, declared scorer change (S12 counted, disclosed). Not yet on the site: S12 as a 4th driven place (needs the field page rebuild).
 
-> **3 Nov 2026 — /drive/ added (PR, this change):** immersive 3D ride of the S18 detour (both directions), distances and clock from data/field/2026-11-01-results.json, road drawn straight at driven length (OSM geometry is a v1.1 swap), made-up traffic matched to each pass's average speed, no walking claim. Open check (rule 4): the S18 b→a 692 s pass needs the personal-stop check before more is built on it.
+> **3 Nov 2026 09:30 IST — /drive/ LIVE.** Production 3f46de04 (main 07d17de, PR #50). Rollback: e8466501 (v0.2). /drive/ added: immersive 3D ride of the S18 detour (both directions), distances and clock from data/field/2026-11-01-results.json, road drawn straight at driven length (OSM geometry is a v1.1 swap), made-up traffic matched to each pass's average speed, no walking claim. Open check (rule 4): the S18 b→a 692 s pass needs the personal-stop check before more is built on it.
 
 Read this first; it replaces reconstructing status from the history. Update it in
 the same commit as any change that makes it wrong. Longer history and decisions
