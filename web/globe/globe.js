@@ -295,6 +295,7 @@ async function selectCity(id) {
   }
 }
 
+function drovenOn(s) { const ds = Object.values(s.driven || {}).map((d) => d.date).filter(Boolean).sort(); const f = (d) => { const [y, m, dd] = d.split('-'); return `${+dd} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m - 1]} ${y}`; }; return ds.length ? f(ds[0]) : ''; }
 function spotHook(s) {
   const worst = (x) => Math.max(x.ab || 0, x.ba || 0);
   const ranked = [...DATA.spots].sort((p, q) => worst(q) - worst(p));
@@ -323,11 +324,11 @@ async function selectSpot(id, move = true) {
   const wr = $('p-write'); if (wr) { wr.hidden = Math.max(s.ab || 0, s.ba || 0) - s.straight < 60; $('p-write-a').href = '../act.html?pair=' + encodeURIComponent(s.id); }
   const rn = await roadNames(), road = rn[s.id] && ((rn[s.id].roads || [])[0] || (rn[s.id].refs || [])[0]);
   showPanel({
-    eyebrow: `${road ? road + ' · ' : 'Hyderabad · '}place ${s.id} · ${s.driven ? 'driven 1 Nov 2026' : 'candidate'}`, title: `${km(s.straight)} across, ${km(worst)} around`,
+    eyebrow: `${road ? road + ' · ' : 'Hyderabad · '}place ${s.id} · ${s.driven ? 'driven ' + drovenOn(s) : 'candidate'}`, title: `${km(s.straight)} across, ${km(worst)} around`,
     hook: spotHook(s),
     facts: [['Straight across', km(s.straight)], ['By road, one way', way('ab')], ['By road, the other way', way('ba')], ['Times longer than crossing', '×' + Math.round(worst / s.straight)]],
     spot: s,
-    caveat: s.driven ? `Driven by arcroad on 1 Nov 2026 with a GPS recording, in ${Object.keys(dv).length === 2 ? 'both directions' : 'one direction'}; the drive matched the model within the pre-set tolerance. One drive so far: it becomes triangulated after a repeat on another day or a usable photo. Times include waits at signals and U-turn queues.` : 'Candidate, not a finding. Modelled from OpenStreetMap (extract of 25 Oct 2026) and not yet confirmed by a drive. A new gap in the median that the map has not caught up with would make the real trip shorter.'
+    caveat: s.driven ? `Driven by arcroad on ${drovenOn(s)} with a GPS recording, in ${Object.keys(dv).length === 2 ? 'both directions' : 'one direction'}; the drive matched the model within the pre-set tolerance. One drive so far: it becomes triangulated after a repeat on another day or a usable photo. Times include waits at signals and U-turn queues.${s.note ? ' ' + s.note : ''}` : 'Candidate, not a finding. Modelled from OpenStreetMap (extract of 25 Oct 2026) and not yet confirmed by a drive. A new gap in the median that the map has not caught up with would make the real trip shorter.'
   });
 }
 

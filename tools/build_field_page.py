@@ -21,6 +21,24 @@ VERDICT = {"MATCH": "Matched the model", "SHORTER": "Much shorter than the model
            "REJECTED": "Rejected: not a crossing", "POOR_TRACK": "Rejected: gaps in the recording"}
 
 
+def short_date(d):
+    if not d:
+        return ""
+    y, m, dd = d.split("-")
+    return f"{int(dd)} {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][int(m) - 1]}"
+
+
+def combine(days: list) -> dict:
+    """All field days on one page: every pass keeps its own date; limits are listed once."""
+    out = {"day": " and ".join(short_date(d["day"]) for d in days) + " " + days[-1]["day"][:4],
+           "model": days[-1]["model"], "passes": [], "not_scored": [], "limitations": []}
+    for d in days:
+        out["passes"] += d["passes"]
+        out["not_scored"] += [dict(x, date=d["day"]) for x in d["not_scored"]]
+        out["limitations"] += [x for x in d["limitations"] if x not in out["limitations"]]
+    return out
+
+
 def km(m):
     return "—" if m is None else (f"{m / 1000:.2f} km" if m >= 1000 else f"{round(m)} m")
 
@@ -38,7 +56,7 @@ def render(day: dict) -> str:
             continue
         lvl = "driven" if r["level"] == 1 else "candidate"
         rows.append(
-            f'<tr class="{lvl}"><td>{e(r["id"])}</td><td>{DIRS.get(r["dir"], r["dir"])}</td>'
+            f'<tr class="{lvl}"><td>{e(r["id"])}</td><td>{e(short_date(r.get("date")))}</td><td>{DIRS.get(r["dir"], r["dir"])}</td>'
             f'<td class="n">{km(r.get("straight_m"))}</td><td class="n">{km(r.get("model_m"))}</td>'
             f'<td class="n"><b>{km(r["driven_m"])}</b></td><td class="n">{mins(r["seconds"])}</td>'
             f'<td>{e(VERDICT.get(r["verdict"], r["verdict"]))}</td><td>{e(r["label"])}</td>'
@@ -47,8 +65,10 @@ def render(day: dict) -> str:
     n_match = sum(r["verdict"] == "MATCH" for r in day["passes"])
     n_graded = sum(r["verdict"] in ("MATCH", "SHORTER", "LONGER", "BETWEEN") for r in day["passes"])
     places = sorted({r["id"] for r in day["passes"] if r["level"] == 1})
+    ph = sorted({r["id"] for r in day["passes"] if r.get("posthoc_rule")})
+    posthoc_note = (f" {', '.join(ph)} counts only under a pairing rule changed after its drive was seen; see the limits below." if ph else "")
     li = lambda xs: "".join(f"<li>{e(x)}</li>" for x in xs)  # noqa: E731
-    ns = "".join(f'<li><b>{e(x["id"])}</b>: {e(x["why"])}</li>' for x in day["not_scored"])
+    ns = "".join(f'<li><b>{e(x["id"])}</b> ({e(short_date(x.get("date")))}): {e(x["why"])}</li>' for x in day["not_scored"])
     nr = "".join(f'<li><b>{e(r["id"])} {DIRS.get(r["dir"], "")}</b>: {e(r["reason"])}</li>' for r in rejected)
     return f"""<!doctype html>
 <html lang="en">
@@ -66,7 +86,7 @@ h1{{font-size:clamp(28px,5vw,44px);line-height:1.12;margin:0 0 14px;font-weight:
 h2{{font-size:20px;margin:44px 0 10px;font-weight:600}}p.lead{{font-size:18px;color:#C9CDD2;max-width:720px}}
 .stats{{display:flex;flex-wrap:wrap;gap:28px;margin:28px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0}}
 .stats b{{display:block;font:600 30px/1.1 ui-monospace,SFMono-Regular,monospace}}.stats span{{color:var(--mute);font-size:13px}}
-.wrap{{overflow-x:auto;border:1px solid var(--line);border-radius:10px}}table{{border-collapse:collapse;width:100%;min-width:820px;font-size:14px}}
+.wrap{{overflow-x:auto;border:1px solid var(--line);border-radius:10px}}table{{border-collapse:collapse;width:100%;min-width:960px;font-size:14px}}td.n,td:nth-child(2),td:nth-child(3){{white-space:nowrap}}
 th,td{{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}}th{{color:var(--mute);font-weight:500;font-size:12px}}
 td.n,th.n{{text-align:right;font-family:ui-monospace,SFMono-Regular,monospace;font-variant-numeric:tabular-nums}}
 tr.driven td:first-child{{box-shadow:inset 3px 0 0 var(--ok)}}ul{{padding-left:20px}}li{{margin:4px 0}}
@@ -108,11 +128,11 @@ img,svg,canvas,video{{max-width:100%}}
 {NAV}
 <p class="eyebrow">arcroad · Hyderabad · driven {e(day["day"])}</p>
 <h1>We drove the detours the map predicted.</h1>
-<p class="lead">{n_match} of {n_graded} comparable directions matched the model, within a tolerance fixed before the drive.</p>
+<p class="lead">{n_match} of {n_graded} comparable directions matched the model, within a tolerance fixed before the drive.{posthoc_note}</p>
 <div class="stats"><div><b>{len(places)}</b><span>places now driven by arcroad</span></div><div><b>{n_match}/{n_graded}</b><span>directions matched the model</span></div><div><b>{len(rejected)}</b><span>passes rejected</span></div></div>
 <h2>Every pass</h2>
 <div class="wrap"><table>
-<thead><tr><th>Place</th><th>Direction</th><th class="n">Straight across</th><th class="n">Model</th><th class="n">Driven</th><th class="n">Time</th><th>Verdict</th><th>Evidence level</th><th>Evidence kinds</th></tr></thead>
+<thead><tr><th>Place</th><th>Date</th><th>Direction</th><th class="n">Straight across</th><th class="n">Model</th><th class="n">Driven</th><th class="n">Time</th><th>Verdict</th><th>Evidence level</th><th>Evidence kinds</th></tr></thead>
 <tbody>{"".join(rows)}</tbody></table></div>
 <p class="note">Times include waits at signals and U-turn queues. <a href="../cost/">What would this cost you?</a></p>
 <details class="more"><summary>Rejected passes, places not scored, limits and how this was scored</summary>
@@ -121,7 +141,7 @@ img,svg,canvas,video{{max-width:100%}}
 <h3>Visited but not scored</h3><ul>{ns}</ul>
 <h3>Limits</h3><ul>{li(day["limitations"])}</ul>
 <h3>How this was scored</h3>
-<p>Thresholds were written before the drive and not changed after seeing results. A drive matches when it is within the larger of 150 m or 25% of the model's distance. Raw recordings stay private; only these per-pass numbers are published.</p>
+<p>Thresholds were written before the first drive and not changed after seeing results. One pairing rule was changed on 2 Nov 2026 after that night's drive was seen; it is declared under Limits, was re-applied to every drive on file, and changed only S12. A drive matches when it is within the larger of 150 m or 25% of the model's distance. Raw recordings stay private; only these per-pass numbers are published.</p>
 </details>
 <footer>Map data © OpenStreetMap contributors (ODbL). Measurements by arcroad (ODbL). Model: {e(day["model"])}. No Google Maps data is used anywhere.</footer>
 </main>
@@ -134,8 +154,11 @@ def main():
     files = sorted(glob.glob(os.path.join(ROOT, "data", "field", "*-results.json")))
     if not files:
         raise SystemExit("no results files")
-    with open(files[-1], encoding="utf-8") as fh:
-        day = json.load(fh)
+    days = []
+    for f in files:
+        with open(f, encoding="utf-8") as fh:
+            days.append(json.load(fh))
+    day = combine(days)
     out = os.path.join(ROOT, "web", "field")
     os.makedirs(out, exist_ok=True)
     with open(os.path.join(out, "index.html"), "w", encoding="utf-8") as fh:
