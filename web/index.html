@@ -210,11 +210,11 @@ img,svg,canvas,video{max-width:100%}
   <div class="wrap">
     <h1>A place you can see, 1.5 km away</h1>
     <p class="lede">Divided roads cut neighbours off. arcroad measures what crossing your own road costs, then drives the detour to check.</p>
-    <a class="teaser" href="drive/" aria-label="Ride the S18 detour in 3D: 13 metres across, 1.58 kilometres to get there">
+    <a class="teaser" href="drive/?dive=1" aria-label="Ride the S18 detour in 3D: 13 metres across, 1.58 kilometres to get there">
       <video class="on" muted playsinline preload="none" poster="drive/media/films/drive.jpg" aria-hidden="true"></video>
       <video muted playsinline preload="none" aria-hidden="true"></video>
       <span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      <span class="tz"><span class="cap"><b>13 m across. 1.58 km to get there.</b><small>3D illustration of our 1 Nov drive at S18</small></span><span class="go">Ride it →</span></span>
+      <span class="tz"><span class="cap"><b>13 m across. 1.58 km to get there.</b><small>3D illustration of our 1 Nov drive at S18</small></span><span class="go">Dive into 3D →</span></span>
     </a>
     <script>
     (function () {
@@ -222,12 +222,12 @@ img,svg,canvas,video{max-width:100%}
       var V = box.querySelectorAll('video'), cap = box.querySelector('.cap'), dots = box.querySelectorAll('.dots i');
       // Six films, all built from measured drives (tools/films/). Played in random order; nothing is stored.
       var FILMS = [
-        ['drive', '13 m across. 1.58 km to get there.', '3D illustration of our 1 Nov drive at S18', 'drive/'],
-        ['night', '17 m across. 1.95 km after dark.', 'Illustration of our 2 Nov night drive at S12', 'drive/'],
+        ['drive', '13 m across. 1.58 km to get there.', '3D illustration of our 1 Nov drive at S18', 'drive/?dive=1'],
+        ['night', '17 m across. 1.95 km after dark.', 'Illustration of our 2 Nov night drive at S12', 'drive/?place=S12&dive=1'],
         ['orbit', 'From orbit to 13 metres.', '29 cities on the globe, down to one road in Hyderabad', 'globe/?spot=S18'],
-        ['thread', '1,580 m to cross 13 m.', 'The S18 detour, traced from our drive', 'drive/'],
-        ['blueprint', 'What could fix it.', 'Three options drawn on S18 · illustration, not a design', 'drive/#fix'],
-        ['timelapse', 'A year of crossing: ₹1,901.', 'One person, both ways, every working day, two-wheeler', 'cost/']
+        ['thread', '1,580 m to cross 13 m.', 'The S18 detour, traced from our drive', 'drive/?dive=1'],
+        ['blueprint', 'What could fix it.', 'Three options drawn on S18 · illustration, not a design', 'drive/?fix=auto'],
+        ['timelapse', 'A year of crossing: ₹1,901.', 'One person, both ways, every working day, two-wheeler', 'drive/?dive=1']
       ];
       var cur = Math.floor(Math.random() * FILMS.length);
       function show(k) {

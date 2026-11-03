@@ -537,21 +537,27 @@
       lead: function (o) { return 'On this drawing the nearest U-turn is about ' + o.cur + ' m away, which is why crossing ' + SM + ' took ' + o.today + '. Bring an opening to ' + o.L + ' m and the crossing becomes about ' + o.nw + '.'; },
       guide: 'Guidance: India\'s access-control guidelines keep median openings to intersections with public roads, at least 750 m apart on highways (IRC:62). An IIT course text gives 500 m as the closest on other highways.',
       trade: 'Trade-off: every opening is another place where turning and through traffic meet. Studies abroad find openings that allow only U-turns have fewer crashes overall than full openings, though the U-turns pile up further along.' },
-    signal: { n: 2, title: 'A signal-controlled crossing here',
+    jturn: { n: 2, title: 'A signal-free U-turn with a bay',
+      lead: function (o) { return 'No signal and no full opening: a U-turn-only opening about ' + JT + ' m away, with a widened bay (a "loon") so turning vehicles do not stop the through lanes. The crossing becomes about ' + o.nw + '.'; },
+      guide: 'Guidance: known in the US as a J-turn or restricted crossing U-turn; the US Federal Highway Administration lists it as a proven safety countermeasure, and a Missouri study found 35% fewer crashes and 54% fewer injury crashes (FHWA-HRT-17-082). In India, IRC:62 keeps median openings to intersections, so where it fits is the road owner\'s call.',
+      trade: 'Trade-off: longer than a full opening at this spot, it needs room on the far side for the bay, and buses and trucks need a wider one. Traffic keeps moving, which is the point.' },
+    signal: { n: 3, title: 'A signal-controlled crossing here',
       lead: function (o) { return 'Open the median at this place and control it with a signal. The crossing becomes about ' + o.nw + ', plus the wait at the light.'; },
       guide: 'Guidance: signals in India follow IRC:93, which asks for a traffic study showing a signal is warranted before one is installed.',
       trade: 'Trade-off: through traffic stops more often, and a signal needs that study, power and upkeep.' },
-    under: { n: 3, title: 'A U-turn underpass',
+    under: { n: 4, title: 'A U-turn underpass',
       lead: function (o) { return 'Turn under the road instead of across it. In this layout the crossing is about ' + o.nw + ', with no conflict with through traffic.'; },
       guide: 'Guidance: India\'s six-lane highway standard provides vehicular underpasses or overpasses at major crossings, with service roads instead of direct access (IRC:SP:87).',
       trade: 'Trade-off: the costliest option, with land, drainage and years of works. It suits heavy flows, not every street.' },
-    why: { n: 4, title: 'Why not a gap every hundred metres?',
+    why: { n: 5, title: 'Why not a gap every hundred metres?',
       lead: function () { return 'Because each opening is a new point where turning and through traffic cross. That is why the guidance keeps openings few and at intersections.'; },
       guide: 'Guidance: median openings limited to intersections, their number kept to a minimum (IRC:62).',
       trade: 'Which option fits this place depends on its traffic, and that study is the road owner\'s. arcroad measures what the detour costs; it does not choose the fix.' }
   };
   function nearDist() { return Math.round(RT[S.dir].L); }
+  var JT = 300;   // J-turn spacing on the drawing: US practice puts the U-turn about 300-450 m from the junction
   function solPath() {
+    if (SOL.k === 'jturn') return { r: mirrored(route(JT)), gap: JT + LANES[0], loon: true };
     if (SOL.k === 'nearer') return { r: mirrored(route(SOL.L)), gap: SOL.L + LANES[0] };
     if (SOL.k === 'signal') return { r: mirrored(route(7)), gap: 7 + LANES[0] };
     if (SOL.k === 'under') return { r: mirrored(route(110)), gap: 110 + LANES[0], under: true };
@@ -599,6 +605,7 @@
     function tag(text, accent, z, y) { var t = label(text, accent ? '#E8A87C' : '#9AA0A6'); t.scale.set(12 * lk, 2 * lk, 1); t.position.set(0, y || 6 * lk, z); solG.add(t); }
     if (SOL.k === 'nearer') { tag('New opening · ' + SOL.L + ' m', true, sg * sp.gap); if (nearDist() - SOL.L > 60) tag('Today\'s U-turn · ' + nearDist() + ' m', false, sg * (nearDist() + 3)); }
     if (SOL.k === 'signal') tag('Signal-controlled opening', true, sg * sp.gap, 9);
+    if (SOL.k === 'jturn') { var bx = (S.dir === 'ab' ? 1 : -1) * (EDGE + 1.6); solG.add(ghostBox(3.2, 0.25, 34, bx, 0.12, sg * sp.gap)); tag('U-turn only · bay · ' + JT + ' m', true, sg * sp.gap); }
     if (SOL.k === 'under') tag('U-turn underpass', true, sg * (sp.gap - 2), 7);
     SOL.route = sp.r; SOL.grow = 0;
   }
@@ -609,7 +616,7 @@
   }
   function renderSol() {
     var t = OPT[SOL.k], o = solNumbers();
-    $('s-eyebrow').textContent = 'Option ' + t.n + ' of 4 · illustration, not a design';
+    $('s-eyebrow').textContent = 'Option ' + t.n + ' of 5 · illustration, not a design';
     $('s-title').textContent = t.title;
     $('s-lead').textContent = t.lead(o);
     $('s-guide').textContent = t.guide; $('s-trade').textContent = t.trade;
@@ -745,7 +752,7 @@
   })();
 
   // ---------------- the fixes play by themselves, in random order, until you choose one ----------------
-  var AUTO = { on: false, t: 0, every: 9 }, KINDS = ['nearer', 'signal', 'under', 'why'];
+  var AUTO = { on: false, t: 0, every: 9 }, KINDS = ['nearer', 'jturn', 'signal', 'under', 'why'];
   function autoBtn() { var b = $('s-auto'); if (b) { b.setAttribute('aria-pressed', String(AUTO.on)); b.textContent = AUTO.on ? 'Auto · on' : 'Auto'; } }
   function randomKind(not) { var k; do { k = KINDS[Math.floor(Math.random() * KINDS.length)]; } while (k === not); return k; }
   function autoStep(dt) {
@@ -755,6 +762,49 @@
     solView(); buildSolution(); renderSol();
   }
   function stopAuto() { AUTO.on = false; autoBtn(); }
+
+  // ---------------- dive into 3D: full screen, drag to look around ----------------
+  var DIVE = { on: false, yaw: 0, pitch: 0, drag: null, idle: 0 }, vLook = new T3.Vector3(), UPV = new T3.Vector3(0, 1, 0);
+  var diveB = $('dive'), diveX = $('dive-x');
+  function enterDive() {
+    if (DIVE.on) return;
+    DIVE.on = true; DIVE.yaw = DIVE.pitch = 0; stage.classList.add('dive'); document.body.classList.add('diving'); diveB.classList.remove('pulse');
+    var fs = host.requestFullscreen || host.webkitRequestFullscreen;
+    if (fs) { try { var pr = fs.call(host); if (pr && pr.catch) pr.catch(function () {}); } catch (e) { /* the CSS full-window view still applies */ } }
+    if (SOL.on) closeSol();
+    if (S.above) { S.above = false; updateViewBtn(); }
+    if (S.mode !== 'driving') play();
+    var h = $('dhint'); h.classList.add('on'); setTimeout(function () { h.classList.remove('on'); }, 3500);
+    setTimeout(size, 60); kick();
+  }
+  function exitDive() {
+    if (!DIVE.on) return;
+    DIVE.on = false; DIVE.yaw = DIVE.pitch = 0; DIVE.drag = null; stage.classList.remove('dive'); document.body.classList.remove('diving');
+    var d = document; if (d.fullscreenElement || d.webkitFullscreenElement) { var ex = d.exitFullscreen || d.webkitExitFullscreen; if (ex) { try { ex.call(d); } catch (e) { /* already out */ } } }
+    setTimeout(size, 60); kick();
+  }
+  diveB.addEventListener('click', enterDive); diveX.addEventListener('click', exitDive);
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (t) { document.addEventListener(t, function () { if (!(document.fullscreenElement || document.webkitFullscreenElement) && DIVE.on && host.requestFullscreen) exitDive(); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && DIVE.on) exitDive(); });
+  host.addEventListener('pointerdown', function (e) {
+    if (!DIVE.on || SOL.on || (e.target.closest && e.target.closest('button,a,input'))) return;
+    DIVE.drag = { x: e.clientX, y: e.clientY, yaw: DIVE.yaw, pitch: DIVE.pitch };
+  });
+  host.addEventListener('pointermove', function (e) {
+    if (!DIVE.drag) return;
+    DIVE.yaw = DIVE.drag.yaw - (e.clientX - DIVE.drag.x) * 0.006;
+    DIVE.pitch = Math.max(-0.6, Math.min(0.5, DIVE.drag.pitch - (e.clientY - DIVE.drag.y) * 0.004)); DIVE.idle = 0; kick();
+  });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (t) { host.addEventListener(t, function () { DIVE.drag = null; }); });
+
+  // ---------------- links from the home page films ----------------
+  (function () {
+    var q = location.search;
+    if (/[?&]light=night/.test(q)) LIGHT.night = true;
+    if (/[?&]light=day/.test(q)) LIGHT.night = false;
+    if (/[?&]dive=1/.test(q)) { diveB.classList.add('pulse'); setTimeout(function () { host.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' }); }, 300); }
+    if (/[?&]fix=auto/.test(q)) setTimeout(function () { openSol('auto'); host.scrollIntoView({ block: 'center' }); }, 400);
+  })();
 
   // ---------------- loop ----------------
   var last = 0, running = false, visible = true, lastS = 0;
@@ -791,7 +841,13 @@
     var k = 1 - Math.exp(-dt * (SOL.on ? (RM ? 60 : 1.6) : (S.mode === 'intro' ? 2 : 4.5)));
     camPos.lerp(tmpP, k); camLook.lerp(tmpL, k);
     if (!SOL.on && !S.above && S.mode !== 'intro' && S.mode !== 'done' && camPos.distanceTo(tmpP) < 3) camPos.copy(tmpP);
-    cam.position.copy(camPos); cam.lookAt(camLook);
+    cam.position.copy(camPos);
+    if (DIVE.on && !SOL.on) {   // look around from wherever the camera is; ease back to the road after a pause
+      if (!DIVE.drag) { DIVE.idle += dt; if (DIVE.idle > 2.5) { var fk = Math.exp(-dt * 1.2); DIVE.yaw *= fk; DIVE.pitch *= fk; } }
+      vLook.copy(camLook).sub(camPos).applyAxisAngle(UPV, DIVE.yaw);
+      vLook.y += Math.hypot(vLook.x, vLook.z) * Math.tan(DIVE.pitch);
+      cam.lookAt(vLook.add(camPos));
+    } else cam.lookAt(camLook);
     pins.forEach(function (g) { g.children[1].scale.setScalar(1 + 0.08 * Math.sin(now / 400)); });
     if (!SOL.on) { if (S.mode !== 'intro' || Math.abs(s - lastS) > 0.01 || !lastS) hud(s, kmh); lastS = s; drawStrip(S.dir, s); }
     if (LIGHT.glare && !SOL.on && !S.above && S.mode !== 'intro' && S.mode !== 'done') drawGlare(p); else clearGlare();
