@@ -147,6 +147,13 @@ def find_pass(track, a, b, radius=VISIT_RADIUS_M, max_pass_s=MAX_PASS_S, min_run
         if ti is not None and tj is not None and tj - ti > max_pass_s:
             continue
         length = path_length_m(track, i, j)
+        # A pass shorter than half the straight line (or than the straight line minus both end
+        # tolerances, if that is larger) cannot be a crossing: it is GPS jitter while stopped or
+        # passing along the road (3 Nov 2026 drive, B-16). It is skipped so it cannot win over a
+        # real, longer loop. Declared method change of 3 Nov 2026, applied to every drive on file.
+        straight = haversine_m(a[1], a[0], b[1], b[0])
+        if length < max(straight - 2 * END_REACH_M, 0.5 * straight):
+            continue
         if best is None or length < best[2]:
             best = (i, j, length)
     return None if best is None else (best[0], best[1])

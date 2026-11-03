@@ -193,3 +193,7 @@ only; every measured number stays in code.
 - Found: the detour model counts OSM turn restrictions but does not obey them, so it could route through a banned U-turn. Declared in docs/PREREG-routercheck.md; any fix is a dated method change applied to every place and drive.
 - New nightly jobs: `mapwatch` (edits within 1 km in 48 h, re-check list) and `routercheck` (OSRM + Valhalla vs model vs drives, ±15% agreement, both-longer flag). Order: openings, mapwatch, routercheck, hotspots, bengaluru.
 - Standing rule (Rohit, 3 Nov): input from other AI tools is sorted critically; useful parts are adopted and the rest set aside with reasons.
+
+## 3 Nov 2026 — drive 3 (night, west belt) and B-16
+- Drive 3, 21:13–22:14 IST (Open GPX Tracker + Sensor Logger at 1 Hz, both private). Passed S11 and S09 along the road only (no crossing). Two U-turn loops found by hand: S10 A→B 1,115 m (model 1,126 m) and S08 B→A 402 m (model 432 m). NOT yet scored or published: the scorer cannot pair them because at places where A and B are under ~20 m apart, phone GPS cannot tell the two carriageways apart. A "loop rule" (leave, U-turn, return within 10 m; side from heading and left-hand traffic) is to be pre-registered before it is applied to any drive.
+- B-16 (declared method change): a pass shorter than max(straight − 20 m, half the straight) is GPS jitter and is skipped, so it cannot beat a real loop. Re-applied to the 2 Nov drive: unchanged (S12 only). The 1 Nov drive must be re-scored on the iMac; its published passes are 1.5–11.6 km, far above the bound, so none can change.
