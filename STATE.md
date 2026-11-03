@@ -177,3 +177,10 @@ only; every measured number stays in code.
 ## 3 Nov 2026 — share cards and logged-crash evidence
 - Every page now has Open Graph and Twitter tags pointing at a 1200×630 card in `web/og/` (7 cards, rendered by `tools/og/make_og.py` from the films). Links shared on WhatsApp, LinkedIn and X now show a thumbnail.
 - `/evidence/#logged`: official Hyderabad and Cyberabad crash totals (MoRTH 2023 city tables; Cyberabad 2025 annual report and Q1 2026 figures as reported). City-wide totals only; no place attribution.
+
+## 3 Nov 2026 — phone interface pass (all mobile browsers)
+- /drive/: phone layout with a taller stage, a two-row dash (Fixes · Above · Skip / Dive · Drive) that fits 320 px, intro card clamped to two lines (tap to expand), slimmer progress rail, wider intro orbit in portrait so both pins are in frame, touch wording in Dive.
+- Device tier like 13point8: starting resolution from screen, density and memory (`?q=low` forces low), then frame time steps it down or up by 0.25 between 1 and the cap.
+- /report/: form no longer wider than the screen (was 480 px on a 320 px phone).
+- /globe/: place and city buttons are 40 px tall on touch screens.
+- Nav: fades at the right edge while there is more to scroll.

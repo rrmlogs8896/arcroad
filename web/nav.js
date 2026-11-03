@@ -30,4 +30,6 @@
       if (g.classList.contains('open') || g.contains(document.activeElement)) { set(g, false); g.classList.add('shut'); g.querySelector('button').focus(); }
     });
   });
+  function edge() { nav.classList.toggle('fade', nav.scrollWidth - nav.clientWidth - nav.scrollLeft > 4); }
+  nav.addEventListener('scroll', edge, { passive: true }); window.addEventListener('resize', edge); edge();
 })();

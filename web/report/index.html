@@ -59,7 +59,7 @@ img,svg,canvas,video{max-width:100%}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 <style>
-form{display:grid;gap:16px;max-width:640px;margin-top:24px}
+form{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;max-width:640px;margin-top:24px}form select,form input,form textarea{max-width:100%;min-width:0;width:100%}
 label{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--mute)}
 select,input,textarea{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--fg);font:inherit}
 textarea{min-height:90px;resize:vertical}

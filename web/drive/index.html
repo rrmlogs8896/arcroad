@@ -129,6 +129,25 @@ footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var
   .stabs button{flex:none;padding:10px 14px}
 }
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* Phone interface: a taller stage, a two-row dash that never overflows, and cards that leave the road visible. */
+@media (max-width:640px){
+  .stage:not(.dive){aspect-ratio:auto;height:min(82svh,720px);min-height:540px}
+  .dash{flex-wrap:wrap;align-items:center;row-gap:8px;padding:10px 10px 12px}
+  .dash .spd{font-size:24px}
+  .dash .btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+  .dash .btns .b{padding:11px 4px;font-size:14px;text-align:center;white-space:nowrap;min-height:44px}
+  .dash #dive{grid-column:1}.dash #play{grid-column:2 / span 2;font-weight:600}
+  .strip{bottom:150px;width:30px;right:8px;opacity:.85}
+  .hud{right:48px}
+  .intro{bottom:152px;right:46px;max-height:none;padding:12px 14px;cursor:pointer}
+  .intro p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .intro.open p{-webkit-line-clamp:unset;display:block}
+  .result{bottom:152px;right:12px;max-height:calc(100% - 210px)}
+  .result .btns .b{padding:9px 12px;font-size:13.5px}
+}
+@media (max-width:640px){.stage.dive #dive{display:none}.stage.dive .dash #play{grid-column:1 / -1}}
+@media (max-width:360px){.dash .btns .b{font-size:13px}.hud b{font-size:17px}.hud .chip,.hud .sub{display:none}}
 </style>
 <style id="mobile-base">
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
