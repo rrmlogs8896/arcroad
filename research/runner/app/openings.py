@@ -10,7 +10,7 @@ import math
 import time
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 PLACES_URL = "https://arcroad.org/globe/data/places.json"
 OVERPASS = "https://overpass-api.de/api/interpreter"
@@ -90,7 +90,7 @@ def analyse(place, data):
     div_ids = {w["id"] for w in divided}
     div_nodes = {}
     for w in divided:
-        for nid, g in zip(w.get("nodes", []), w.get("geometry", [])):
+        for nid, g in zip(w.get("nodes", []), w.get("geometry", []), strict=False):
             div_nodes[nid] = (g["lat"], g["lon"])
     inter = {}
     for w in ways:
@@ -140,7 +140,7 @@ def analyse(place, data):
 def run(log):
     places = json.loads(get(PLACES_URL))["spots"]
     out = {"job": "openings-guidance-v1", "prereg": "docs/PREREG-openings.md",
-           "started": datetime.now(timezone.utc).isoformat(), "source": PLACES_URL,
+           "started": datetime.now(UTC).isoformat(), "source": PLACES_URL,
            "data": "OpenStreetMap via Overpass API (ODbL)", "status": "CANDIDATE, NOT PUBLISHED", "places": []}
     for i, p in enumerate(places):
         a = (p["a"][1] + p["b"][1]) / 2, (p["a"][0] + p["b"][0]) / 2
@@ -164,5 +164,5 @@ def run(log):
     out["summary"] = {"places_ok": len(ok), "controls": len(ctl),
                       "places_at_intersection_share": sp, "controls_at_intersection_share": sc,
                       "verdict_per_prereg": verdict}
-    out["finished"] = datetime.now(timezone.utc).isoformat()
+    out["finished"] = datetime.now(UTC).isoformat()
     return json.dumps(out, indent=1).encode()
