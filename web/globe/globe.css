@@ -78,3 +78,6 @@ button:focus-visible,summary:focus-visible{outline:2px solid var(--soft);outline
 
 .cost .calc{margin:10px 0 0;font-size:12.5px;line-height:1.6;color:var(--mut,#9aa3ad)}
 .cost .calc a{color:var(--accent,#E8743B)}
+
+.top .home{pointer-events:auto;color:var(--fg);text-decoration:none;border-bottom:1px solid var(--line2);padding-bottom:1px}.top .home:hover{border-color:var(--accent)}
+@media (pointer:coarse){.top .home{display:inline-block;padding-block:8px}}

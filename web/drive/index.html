@@ -59,6 +59,7 @@ footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var
   .dash{padding:10px 12px}.b{padding:10px 14px;font-size:14px}.spd{font-size:26px}
   .dash .btns{flex-wrap:nowrap}
 }
+.stage.capture .hud,.stage.capture .dash,.stage.capture .result,.stage.capture .intro,.stage.capture .strip{display:none}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 <style id="mobile-base">
@@ -72,13 +73,14 @@ img,svg,canvas,video{max-width:100%}
 @media (pointer:coarse){.top a{padding-block:10px;display:inline-block}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
+<style id="sitenav">.top a[aria-current=page],header nav a[aria-current=page],.sitenav a[aria-current=page]{color:#E8EAED}</style>
 </head>
 <body>
 <main>
-<nav class="top"><a href="../">arcroad home</a><a href="../field/">Driven results</a><a href="../cost/">Cost calculator</a><a href="../roads/">What else the road costs</a><a href="../globe/?spot=S18">Globe</a></nav>
+<nav class="top" aria-label="arcroad"><a href="../">arcroad home</a><a href="../drive/" aria-current="page">Drive it</a><a href="../field/">Results</a><a href="../cost/">Your cost</a><a href="../roads/">Road costs</a><a href="../evidence/">Evidence</a><a href="../globe/">Globe</a><a href="../data/">Open data</a><a href="../volunteer/">Volunteer</a></nav>
 <p class="eyebrow">arcroad · ride the detour</p>
 <h1>13 metres across.</h1>
-<p class="lead">You are on HITEC City–Kukatpally Main Road at APHB Colony. The place you need is on the other side of the median, 13 m away. There is no way across here. Take the driver's seat for the detour we drove on 1 Nov 2026, clock running.</p>
+<p class="lead">HITEC City–Kukatpally Main Road, APHB Colony. The other side is 13 m away, and there is no way across. Take the wheel for the detour we drove on 1 Nov 2026, on its real clock.</p>
 
 <div class="stage" id="stage" tabindex="0" aria-label="The detour, from the driver's seat. Press Drive or the space bar to start or pause.">
   <div class="hud" aria-hidden="true">
