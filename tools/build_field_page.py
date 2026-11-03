@@ -9,6 +9,10 @@ import glob
 import html
 import json
 import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from site_nav import nav  # noqa: E402  (one nav for every page)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIRS = {"ab": "A → B", "ba": "B → A"}
@@ -26,6 +30,7 @@ def mins(s):
 
 
 def render(day: dict) -> str:
+    NAV = nav("../", "field/", True)
     e = html.escape
     rows = []
     for r in day["passes"]:
@@ -95,11 +100,12 @@ img,svg,canvas,video{{max-width:100%}}
 @media (pointer:coarse){{nav a,.top a{{padding-block:10px;display:inline-block}} .srcbtn{{padding:10px 0}}}}
 @media (prefers-reduced-motion:reduce){{*,*::before,*::after{{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}}}
 </style>
-<style id="sitenav">.top a[aria-current=page],header nav a[aria-current=page],.sitenav a[aria-current=page]{{color:#E8EAED}}</style>
+<link rel="stylesheet" href="../nav.css" id="sn-css">
+<script src="../nav.js" defer id="sn-js"></script>
 </head>
 <body>
 <main>
-<nav class="top" aria-label="arcroad"><a href="../">arcroad home</a><a href="../drive/">Drive it</a><a href="../field/" aria-current="page">Results</a><a href="../cost/">Your cost</a><a href="../roads/">Road costs</a><a href="../evidence/">Evidence</a><a href="../globe/">Globe</a><a href="../data/">Open data</a><a href="../volunteer/">Volunteer</a></nav>
+{NAV}
 <p class="eyebrow">arcroad · Hyderabad · driven {e(day["day"])}</p>
 <h1>We drove the detours the map predicted.</h1>
 <p class="lead">{n_match} of {n_graded} comparable directions matched the model, within a tolerance fixed before the drive.</p>
