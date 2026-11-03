@@ -1,0 +1,14 @@
+{
+  // arcroad research runner. Deploy from this folder on the iMac with Docker running: npx wrangler deploy
+  "name": "arcroad-research",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": false,
+  "containers": [
+    { "class_name": "ResearchRunner", "image": "./Dockerfile", "instance_type": "standard-1", "max_instances": 1 }
+  ],
+  "durable_objects": { "bindings": [{ "name": "RUNNER", "class_name": "ResearchRunner" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ResearchRunner"] }],
+  "r2_buckets": [{ "binding": "OUT", "bucket_name": "arcroad-research" }],
+  "triggers": { "crons": ["30 16 * * *", "*/10 16-23 * * *", "*/10 0-3 * * *"] }
+}
