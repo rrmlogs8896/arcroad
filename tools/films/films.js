@@ -442,8 +442,7 @@
     } };
   }
 
-  var MAKERS = { thread: filmThread, night: filmNight, orbit: filmOrbit, blueprint: filmBlueprint, timelapse: filmTimelapse };
-  var F = MAKERS[film]();
+  var F = film === 'night' ? filmNight() : film === 'orbit' ? filmOrbit() : film === 'blueprint' ? filmBlueprint() : film === 'timelapse' ? filmTimelapse() : filmThread();
   window.FILM = { D: F.D, fps: 30, set: function (t) { F.set(t); return true; } };
   F.set(0);
 })();
