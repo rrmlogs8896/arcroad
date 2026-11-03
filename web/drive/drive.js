@@ -1,7 +1,9 @@
 /* arcroad · 13 metres across: ride the detour we drove at S18.
  *
- * Every number shown comes from the 1 Nov 2026 field drive (data/field/2026-11-01-results.json):
- *   S18 a→b (west side to east side): 1,579.5 m in 193 s; b→a: 1,546.0 m in 692 s; straight 13.1 m.
+ * Every number shown comes from a field drive by arcroad:
+ *   S18 a→b (west side to east side): 1,579.5 m in 193 s; b→a: 1,546.0 m in 692 s; straight 13.1 m (data/field/2026-11-01-results.json)
+ *   S12 a→b (north side to south side): 1,951.2 m in 245 s, after dark; straight 17.4 m (data/field/2026-11-02-results.json)
+ * Only places with a matched drive can be chosen; every other place is listed as not driven yet.
  * The road is drawn straight and scaled so the route length equals the driven length. Where the car
  * slows and stops is illustrated; the total time equals the driven time. Vehicles, buildings and trees
  * are made up. Traffic density is set to match each pass's average speed (about 29 and 8 km/h).
@@ -17,13 +19,23 @@
   var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ---------------- measured data ----------------
-  var STRAIGHT = 13.1;
-  var DRIVES = {
-    ab: { m: 1579.5, s: 193, model: 1571.7, from: 'west side', to: 'east side', ev: 'Driven by arcroad · 1 Nov 2026 · matched the model (1.57 km) · single pass, candidate until repeated',
-          cost: '../cost/?place=S18%20west%20to%20east&veh=tw&km=1.57&min=3' },
-    ba: { m: 1546.0, s: 692, model: 1378.3, from: 'east side', to: 'west side', ev: 'Driven by arcroad · 1 Nov 2026 · matched the model (1.38 km) · backed by photos',
-          cost: '../cost/?place=S18%20east%20to%20west&veh=tw&km=1.53&min=12' }
+  var PLACES = {
+    S18: { road: 'HITEC City–Kukatpally Main Road', area: 'APHB Colony', straight: 13.1, day: '1 Nov 2026', night: false,
+      owner: 'The road owner is Cyberabad Municipal Corporation; signals are with the traffic police.',
+      drives: {
+        ab: { m: 1579.5, s: 193, model: 1571.7, from: 'west side', to: 'east side', ev: 'Driven by arcroad · 1 Nov 2026 · matched the model (1.57 km) · single pass, candidate until repeated',
+              cost: '../cost/?place=S18%20west%20to%20east&veh=tw&km=1.57&min=3' },
+        ba: { m: 1546.0, s: 692, model: 1378.3, from: 'east side', to: 'west side', ev: 'Driven by arcroad · 1 Nov 2026 · matched the model (1.38 km) · backed by photos',
+              cost: '../cost/?place=S18%20east%20to%20west&veh=tw&km=1.53&min=12' } } },
+    S12: { road: 'Hafeezpet Flyover', area: 'Hafeezpet', straight: 17.4, day: '2 Nov 2026', night: true, flyover: true,
+      owner: 'The road owner is Cyberabad Municipal Corporation (Serilingampally zone); signals are with the traffic police.',
+      drives: {
+        ab: { m: 1951.2, s: 245, model: 2028.9, from: 'north side', to: 'south side', ev: 'Driven by arcroad · 2 Nov 2026, after dark · matched the model (2.03 km) · single pass, candidate until repeated · counted under a pairing rule changed on 2 Nov',
+              cost: '../cost/?place=S12%20north%20to%20south&veh=tw&km=1.93&min=4' } } }
   };
+  var PID = (location.search.match(/[?&]place=(S\d+)/) || [])[1]; if (!PLACES[PID]) PID = 'S18';
+  var PL = PLACES[PID], STRAIGHT = PL.straight, DRIVES = PL.drives, SM = Math.round(STRAIGHT) + ' m';
+  function heavyDir(dir) { var d = DRIVES[dir]; return !!d && d.m / d.s < 4; }   // slower than 4 m/s on average: a crowded pass
   var COST = { petrol: 116.15, tw: 50, car: 16, days: 22 }; // same as web/cost/ (16 Oct 2026 price)
 
   // ---------------- small helpers ----------------
@@ -62,12 +74,20 @@
     return out;
   };
   var VC = new T3.MeshLambertMaterial({ vertexColors: true });
+  // after dark: one soft round light used for lamps, headlights and their pools on the road
+  var LIGHT = { night: !!PL.night, glare: false };
+  var GLOW = (function () { var c = document.createElement('canvas'); c.width = c.height = 128; var g = c.getContext('2d');
+    var gr = g.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.2, 'rgba(255,255,255,.55)');
+    gr.addColorStop(0.5, 'rgba(255,255,255,.12)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, 128, 128); return new T3.CanvasTexture(c); })();
+  function glowPts(hex, size) { return new T3.PointsMaterial({ map: GLOW, color: col(hex), size: size, transparent: true, blending: T3.AdditiveBlending, depthWrite: false, sizeAttenuation: true }); }
+  var lampHeadM = glowPts('#FFB868', 5.5), poolM = new T3.MeshBasicMaterial({ map: GLOW, color: col('#FF9E45'), transparent: true, opacity: 0.34, blending: T3.AdditiveBlending, depthWrite: false });
+  var poolG = new T3.PlaneGeometry(24, 24); poolG.rotateX(-Math.PI / 2);
 
   // ---------------- road layout (metres; x east, -z north) ----------------
   var MED = 1.25;                       // half median width
   var LANES = [3.0, 6.5, 10.0];         // lane centres from the road axis
   var EDGE = 11.75, WALK = 15.25, FRONT = 17;
-  var A = [-6.5, 0], B = [6.5, 0];      // 13 m apart, as measured
+  var A = [-STRAIGHT / 2, 0], B = [STRAIGHT / 2, 0];      // as measured
 
   // Route a→b: merge to the inner lane, run to the gap, U-turn round the median end, come back.
   function route(L) {
@@ -82,9 +102,9 @@
   }
   function fit(target) { var lo = 70, hi = 2000, r, k; for (k = 0; k < 40; k++) { var mid = (lo + hi) / 2; r = route(mid); if (r.len > target) hi = mid; else lo = mid; } return route((lo + hi) / 2); }
   var RT = { ab: fit(DRIVES.ab.m), ba: null };
-  (function () { var r = fit(DRIVES.ba.m); // b→a is the mirror (start at B heading south, gap to the south)
+  if (DRIVES.ba) (function () { var r = fit(DRIVES.ba.m); // b→a is the mirror (start at B heading south, gap to the south)
     r.x = r.x.map(function (v) { return -v; }); r.z = r.z.map(function (v) { return -v; }); RT.ba = r; })();
-  var GAP_N = -RT.ab.L - LANES[0], GAP_S = RT.ba.L + LANES[0];     // centres of the two median gaps
+  var GAP_N = -RT.ab.L - LANES[0], GAP_S = (RT.ba || RT.ab).L + LANES[0];     // centres of the two median gaps
   var ZMIN = GAP_N - 330, ZMAX = GAP_S + 330;
 
   function at(r, s) { // position and heading at distance s along route r
@@ -98,7 +118,7 @@
 
   // ---------------- pace: total time equals the driven time ----------------
   function pace(dir) {
-    var r = RT[dir], S = Math.ceil(r.len), T = DRIVES[dir].s, heavy = dir === 'ba';
+    var r = RT[dir], S = Math.ceil(r.len), T = DRIVES[dir].s, heavy = heavyDir(dir);
     var a0 = 60 + (r.L - 60), a1 = a0 + Math.PI * LANES[0];           // arc start and end along the route
     var w = new Float64Array(S + 1), i, stops = [];
     for (i = 0; i <= S; i++) {
@@ -123,7 +143,7 @@
     var scale = T / t; for (i = 0; i < TT.length; i++) TT[i] *= scale;
     return { T: T, t: TT, s: SS };
   }
-  var PACE = { ab: pace('ab'), ba: pace('ba') };
+  var PACE = { ab: pace('ab'), ba: DRIVES.ba ? pace('ba') : null };
   function sAt(p, t) {
     if (t <= 0) return 0; if (t >= p.T) return p.s[p.s.length - 1];
     var lo = 0, hi = p.t.length - 1; while (hi - lo > 1) { var m = (lo + hi) >> 1; if (p.t[m] < t) lo = m; else hi = m; }
@@ -144,7 +164,7 @@
   scene.fog = new T3.Fog(col('#ddd0bb'), 60, 205);
   var cam = new T3.PerspectiveCamera(60, 16 / 9, 0.15, 1200);
   scene.add(cam);
-  scene.add(new T3.HemisphereLight(col('#dce8ff'), col('#7d6d55'), 0.85));
+  var hemi = new T3.HemisphereLight(col('#dce8ff'), col('#7d6d55'), 0.85); scene.add(hemi);
   var sun = new T3.DirectionalLight(col('#ffe0b5'), 0.95); sun.position.set(-0.6, 1, 0.35); scene.add(sun);
 
   // ---------------- the world ----------------
@@ -155,6 +175,7 @@
     for (var i = 0; i < d.data.length; i += 4) { var v = base + (r() - 0.5) * spread; d.data[i] = v; d.data[i + 1] = v; d.data[i + 2] = v + 3; d.data[i + 3] = 255; }
     g.putImageData(d, 0, 0); var t = new T3.CanvasTexture(c); t.wrapS = t.wrapT = T3.RepeatWrapping; t.repeat.set(rep[0], rep[1]); t.encoding = T3.sRGBEncoding; t.anisotropy = 4; return t;
   }
+  var lineMat = null;
   var groundMesh = flat(7000, LEN + 7000, '#9a8c74', 0, -0.3, ZMID);                                            // ground
   var asphalt = new T3.MeshLambertMaterial({ map: noiseTex(66, 26, [3, LEN / 10]) });
   flat(EDGE - MED, LEN, null, -(EDGE + MED) / 2, 0, ZMID, asphalt);
@@ -167,7 +188,7 @@
   });
   // lines: edge lines (white outside, yellow by the median) and lane dashes
   (function () {
-    var lineM = new T3.MeshBasicMaterial({ color: col('#e9e6dc') }), yel = new T3.MeshBasicMaterial({ color: col('#d9b43c') });
+    var lineM = lineMat = new T3.MeshBasicMaterial({ color: col('#e9e6dc') }), yel = new T3.MeshBasicMaterial({ color: col('#d9b43c') });
     [-1, 1].forEach(function (sd) { flat(0.15, LEN, null, sd * (EDGE - 0.35), 0.03, ZMID, lineM); });
     var dashG = new T3.PlaneGeometry(0.14, 3); dashG.rotateX(-Math.PI / 2);
     var per = Math.floor(LEN / 9), dash = new T3.InstancedMesh(dashG, lineM, per * 4), o = new T3.Object3D(), n = 0;
@@ -191,7 +212,7 @@
     segs.forEach(function (s) {
       var len = s[1] - s[0], mid = (s[0] + s[1]) / 2;
       var tx = new T3.CanvasTexture(kerbTex); tx.wrapS = T3.RepeatWrapping; tx.repeat.set(len / 2, 1); tx.encoding = T3.sRGBEncoding;
-      var km = new T3.MeshLambertMaterial({ map: tx });
+      var km = new T3.MeshLambertMaterial({ map: tx }); km.userData.dim = true; if (LIGHT.night) km.color.copy(col('#4A4A4A'));
       var kerb = new T3.Mesh(new T3.BoxGeometry(MED * 2, 0.3, len), [km, km, soilM, soilM, capM, capM]);
       kerb.position.set(0, 0.15, mid); medianG.add(kerb);
       for (var z = s[0] + 1.3; z < s[1] - 1; z += 2.6) {
@@ -203,11 +224,18 @@
     var lights = []; segs.forEach(function (s) { for (var z = s[0] + 10; z < s[1] - 6; z += 34) lights.push(z); });
     var lamps = new T3.InstancedMesh(lampGeo, VC, Math.max(1, lights.length)); o.scale.set(1, 1, 1); o.rotation.set(0, 0, 0);
     lights.forEach(function (z, i) { o.position.set(0, 0.3, z); o.updateMatrix(); lamps.setMatrixAt(i, o.matrix); }); lamps.count = lights.length; medianG.add(lamps);
+    var lp = []; lights.forEach(function (z) { lp.push(-2.1, 8.7, z, 2.1, 8.7, z); });
+    var lg = new T3.BufferGeometry(); lg.setAttribute('position', new T3.Float32BufferAttribute(lp.length ? lp : [0, -99, 0], 3));
+    var heads = new T3.Points(lg, lampHeadM); heads.userData.night = 1; medianG.add(heads);
+    var pools = new T3.InstancedMesh(poolG, poolM, Math.max(1, lights.length * 2)); pools.userData.night = 1;
+    lights.forEach(function (z, i) { [-1, 1].forEach(function (sd, j) { o.position.set(sd * 5.6, 0.05, z); o.updateMatrix(); pools.setMatrixAt(i * 2 + j, o.matrix); }); });
+    pools.count = lights.length * 2; medianG.add(pools);
+    medianG.children.forEach(function (c) { if (c.userData.night) c.visible = LIGHT.night && !(typeof SOL !== 'undefined' && SOL.on); });
   }
   var BASE_GAPS = [GAP_N, GAP_S];
   buildMedian(BASE_GAPS);
   // buildings, window bands, shop awnings, trees (all instanced, all made up)
-  var cityMeshes = [];
+  var cityMeshes = [], nightCity = [];
   (function () {
     var o = new T3.Object3D(), box = new T3.BoxGeometry(1, 1, 1); box.translate(0, 0.5, 0);
     var walls = ['#e8dcc4', '#efe6d2', '#d9c7a7', '#e3c9b6', '#cfd6d8', '#f1ede4', '#c9c1b2', '#e7d3a6', '#d6b8a4', '#bfc8c2'];
@@ -228,6 +256,10 @@
     B.forEach(function (b, i) { o.position.set(b[0], 0, b[1]); o.scale.set(b[4], b[3], b[2]); o.updateMatrix(); bm.setMatrixAt(i, o.matrix); bm.setColorAt(i, col(b[5])); }); scene.add(bm); cityMeshes.push(bm);
     var wm = new T3.InstancedMesh(box, new T3.MeshLambertMaterial({ color: col('#45515c') }), W.length);
     W.forEach(function (b, i) { o.position.set(b[0], b[1], b[2]); o.scale.set(0.12, b[4], b[3]); o.updateMatrix(); wm.setMatrixAt(i, o.matrix); }); scene.add(wm); cityMeshes.push(wm);
+    var cells = [], RW = rng(9090); W.forEach(function (b) { var n = Math.max(1, Math.floor(b[3] / 2.4)); for (var q = 0; q < n; q++) if (RW() < 0.4) cells.push([b[0] + (b[0] < 0 ? 0.04 : -0.04), b[1], b[2] - b[3] / 2 + (q + 0.5) * b[3] / n, b[3] / n * 0.7, b[4] * 0.85, RW()]); });
+    var lit = new T3.InstancedMesh(box, new T3.MeshBasicMaterial({ color: 0xffffff }), Math.max(1, cells.length)), wc = ['#FFC98A', '#FFB86B', '#FFE4BD', '#BFD4FF', '#FFD9A0'];
+    cells.forEach(function (c, i) { o.position.set(c[0], c[1], c[2]); o.scale.set(0.12, c[4], c[3]); o.updateMatrix(); lit.setMatrixAt(i, o.matrix); lit.setColorAt(i, col(wc[Math.floor(c[5] * 5)]).multiplyScalar(0.35 + 0.6 * c[5])); });
+    lit.visible = false; scene.add(lit); nightCity.push(lit);
     var sm = new T3.InstancedMesh(box, new T3.MeshLambertMaterial({ color: 0xffffff }), S.length);
     S.forEach(function (b, i) { o.position.set(b[0], b[1], b[2]); o.scale.set(2.0, 0.35, b[3]); o.updateMatrix(); sm.setMatrixAt(i, o.matrix); sm.setColorAt(i, col(b[4])); }); scene.add(sm); cityMeshes.push(sm);
     var P = new Parts(); P.box(0, 1.2, 0, 0.32, 2.4, 0.32, '#6a5039').geo(new T3.IcosahedronGeometry(2.3, 0), 0, 4.0, 0, '#557d3d').geo(new T3.IcosahedronGeometry(1.6, 0), 0.9, 5.2, 0.5, '#4a7035');
@@ -271,10 +303,11 @@
   var WIN = 200, VEH = [], meshes = [];
   function laneX(c, l) { return (c ? 1 : -1) * LANES[l]; }
   function dirOf(c) { return c ? 1 : -1; }   // west carriageway runs north (-z), east runs south (+z)
-  function makeTraffic(heavy) {
+  function makeTraffic(dir) {
+    var heavy = heavyDir(dir);
     VEH = []; VARIANTS.forEach(function (v) { v.list = []; v.mesh = null; });
     meshes.forEach(function (m) { scene.remove(m); m.dispose && m.dispose(); }); meshes = [];
-    var start = heavy ? B : A, cs = start[0] < 0 ? 0 : 1;
+    var start = dir === 'ba' ? B : A, cs = start[0] < 0 ? 0 : 1;
     for (var c = 0; c < 2; c++) for (var l = 0; l < 3; l++) {
       var z = start[1] - WIN, dense = heavy ? (c === cs ? [1.8, 6] : [3, 11]) : [7, 24];
       while (z < start[1] + WIN) {
@@ -288,9 +321,15 @@
         z += t.len + gap;
       }
     }
+    if (heads) { scene.remove(heads); heads.geometry.dispose(); } if (tails) { scene.remove(tails); tails.geometry.dispose(); }
+    heads = lightCloud(VEH.length * 2, headM); tails = lightCloud(VEH.length * 2, tailM); heads.visible = tails.visible = LIGHT.night;
     VARIANTS.forEach(function (v) { if (!v.list.length) return; var m = new T3.InstancedMesh(v.g, VC, v.list.length); m.instanceMatrix.setUsage(T3.DynamicDrawUsage); m.frustumCulled = false; v.mesh = m; scene.add(m); meshes.push(m); });
   }
   var player = new T3.Mesh(vCar('#d9dde2'), VC); scene.add(player);
+  var headM = glowPts('#FFFFFF', 1.9), tailM = glowPts('#FFFFFF', 1.0), heads = null, tails = null; headM.vertexColors = tailM.vertexColors = true;
+  function lightCloud(n, m) { var g = new T3.BufferGeometry(); g.setAttribute('position', new T3.BufferAttribute(new Float32Array(Math.max(1, n) * 3), 3)); g.setAttribute('color', new T3.BufferAttribute(new Float32Array(Math.max(1, n) * 3), 3)); var p = new T3.Points(g, m); p.frustumCulled = false; scene.add(p); return p; }
+  var beam = new T3.Mesh(new T3.PlaneGeometry(8, 30), new T3.MeshBasicMaterial({ map: GLOW, color: col('#FFF0D0'), transparent: true, opacity: 0.3, blending: T3.AdditiveBlending, depthWrite: false }));
+  beam.rotation.x = -Math.PI / 2; beam.visible = false; scene.add(beam);
 
   // driver's cockpit (follows the camera; hidden from above)
   var cockpit = new T3.Group();
@@ -315,7 +354,7 @@
   function makePins(dir) {
     pins.forEach(function (p) { scene.remove(p); }); pins = [];
     var st = dir === 'ab' ? A : B, en = dir === 'ab' ? B : A;
-    [[st, 'You are here', '#9AA0A6', 0x9aa0a6], [en, 'Where you need to be · 13 m', '#E8A87C', 0xe8a87c]].forEach(function (q) {
+    [[st, 'You are here', '#9AA0A6', 0x9aa0a6], [en, 'Where you need to be · ' + SM, '#E8A87C', 0xe8a87c]].forEach(function (q) {
       var g = new T3.Group(), m = new T3.MeshBasicMaterial({ color: col('#' + q[3].toString(16)), transparent: true, opacity: 0.9 });
       var pole = new T3.Mesh(new T3.CylinderGeometry(0.09, 0.09, 11, 8), m); pole.position.y = 5.5; g.add(pole);
       var ring = new T3.Mesh(new T3.RingGeometry(1.0, 1.35, 40), m); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.06; g.add(ring);
@@ -336,7 +375,7 @@
     function X(x) { return w / 2 + x * (w * 0.032); }
     sg.lineCap = 'round';
     sg.strokeStyle = 'rgba(255,255,255,0.16)'; sg.lineWidth = 6;
-    [-1, 1].forEach(function (sd) { sg.beginPath(); sg.moveTo(X(sd * 6.5), Y(top)); sg.lineTo(X(sd * 6.5), Y(bot)); sg.stroke(); });
+    [-1, 1].forEach(function (sd) { sg.beginPath(); sg.moveTo(X(sd * STRAIGHT / 2), Y(top)); sg.lineTo(X(sd * STRAIGHT / 2), Y(bot)); sg.stroke(); });
     var r = RT[dir], i, n = r.x.length, stp = Math.max(1, Math.floor(n / 220));
     sg.strokeStyle = 'rgba(232,168,124,0.35)'; sg.lineWidth = 2; sg.beginPath();
     for (i = 0; i < n; i += stp) { if (i === 0) sg.moveTo(X(r.x[i]), Y(r.z[i])); else sg.lineTo(X(r.x[i]), Y(r.z[i])); } sg.stroke();
@@ -348,6 +387,26 @@
     sg.fillStyle = '#E8A87C'; sg.beginPath(); sg.arc(X(en[0]), Y(en[1]), 3.5, 0, 7); sg.fill();
     sg.fillStyle = '#fff'; sg.strokeStyle = '#E8A87C'; sg.lineWidth = 2; sg.beginPath(); sg.arc(X(p.x), Y(p.z), 4.5, 0, 7); sg.fill(); sg.stroke();
   }
+
+  // ---------------- page text for the chosen place ----------------
+  (function () {
+    if (PID === 'S18') return;
+    var d = DRIVES.ab, set = function (id, t) { var e = $(id); if (e) e.textContent = t; };
+    document.title = 'arcroad · ' + Math.round(STRAIGHT) + ' metres across at ' + PID;
+    set('p-h1', Math.round(STRAIGHT) + ' metres across.');
+    set('p-lead', PL.road + ', ' + PL.area + '. The other side is ' + SM + ' away, and there is no way across. Take the wheel for the detour we drove on ' + PL.day + (PL.night ? ' after dark' : '') + ', on its real clock.');
+    set('h-straight', SM); set('intro-h', 'The other side is ' + SM + ' away, across the median.');
+    set('s-who', 'Illustration, not a design: distances are measured on this drawing. ' + PL.owner);
+    var act = $('s-act'); if (act) act.href = '../act.html?pair=' + PID;
+    var f = $('facts'); if (f) f.innerHTML = '<div><b>' + SM + '</b><span>Straight across, on OpenStreetMap. The median has no gap at this point.</span></div>' +
+      '<div><b>' + (d.m / 1000).toFixed(2) + ' km · ' + fmtDur(d.s) + '</b><span>' + d.from.charAt(0).toUpperCase() + d.from.slice(1) + ' to ' + d.to + ', as we drove it on ' + PL.day + (PL.night ? ', after dark' : '') + '. The model said ' + (d.model / 1000).toFixed(2) + ' km.</span></div>' +
+      '<div><b>Not driven yet</b><span>' + d.to.charAt(0).toUpperCase() + d.to.slice(1) + ' to ' + d.from + '. We publish it once it has been driven.</span></div>' +
+      '<div><b>Evidence level 1</b><span>Driven and matched the model, counted under a pairing rule changed on 2 Nov after this drive was seen. <a href="../field/">Every pass we drove</a></span></div>';
+    var n1 = $('n-clock'); if (n1) n1.textContent = 'The distance and the clock are from our drive on ' + PL.day + ', after dark (22:55–23:49 IST, a Monday): one driver, one car, phone GPS once a second (about ±50 m). Night times are shorter than at peak hours. Where the car slows and stops is illustrated; the total time is what we measured.';
+    var n2 = $('n-road'); if (n2) n2.textContent = 'The road is drawn straight, level and to scale in length; the real road here is a flyover and bends, and its exact U-turn points may sit a little nearer or further. The vehicles, buildings and trees are made up for illustration. No photo, person or number plate from the drive appears anywhere.';
+    Array.prototype.forEach.call($('c-dir').querySelectorAll('button'), function (b) { var k = b.getAttribute('data-v');
+      if (!DRIVES[k]) b.hidden = true; else b.textContent = DRIVES[k].from.charAt(0).toUpperCase() + DRIVES[k].from.slice(1) + ' to ' + DRIVES[k].to; });
+  })();
 
   // ---------------- state ----------------
   var S = { dir: 'ab', rate: 8, mode: 'intro', t: 0, above: RM, orbit: 0.6 };
@@ -361,17 +420,20 @@
     S.dir = dir; S.t = 0; S.mode = 'intro'; stage.classList.remove('done'); result.hidden = true; introC.hidden = false;
     var d = DRIVES[dir];
     $('intro-body').textContent = 'You are on the ' + d.from + '. To reach the ' + d.to + ', drive away from it to the gap in the median, turn, and come back.';
-    playB.textContent = 'Drive'; skipB.disabled = true; makeTraffic(dir === 'ba'); makePins(dir); setPressed('c-dir', dir); hud(0, 0);
+    playB.textContent = 'Drive'; skipB.disabled = true; makeTraffic(dir); makePins(dir); setPressed('c-dir', dir); hud(0, 0);
   }
   function hud(s, kmh) { $('h-dist').textContent = fmtM(s); $('h-clock').textContent = fmtClock(S.t); $('h-spd').textContent = Math.round(kmh); $('h-rate').textContent = 'Replayed ' + S.rate + '× faster'; }
   function finish() {
     S.mode = 'done'; S.t = PACE[S.dir].T; stage.classList.add('done'); playB.textContent = 'Drive again'; skipB.disabled = true;
     var d = DRIVES[S.dir], o = DRIVES[S.dir === 'ab' ? 'ba' : 'ab'];
-    $('r-head').textContent = '13 m across. ' + (d.m / 1000).toFixed(2) + ' km and ' + fmtDur(d.s) + ' to get there.';
-    $('r-body').textContent = 'That is the drive we made on 1 Nov 2026 from the ' + d.from + ' to the ' + d.to + '. The other way, ' + o.from + ' to ' + o.to + ', took ' + fmtDur(o.s) + ' for ' + (o.m / 1000).toFixed(2) + ' km. One drive each way, at one time of day: another hour will differ.';
-    var km = (DRIVES.ab.m + DRIVES.ba.m - 2 * STRAIGHT) / 1000 * COST.days, secs = (DRIVES.ab.s + DRIVES.ba.s) * COST.days;
-    $('r-month').textContent = 'Crossing once each way every working day: about ' + Math.round(km) + ' km and ' + fmtDur(secs) + ' of driving a month, and about ₹' + Math.round(km / COST.tw * COST.petrol) + ' of petrol on a two-wheeler or ₹' + Math.round(km / COST.car * COST.petrol) + ' in a car.';
+    $('r-head').textContent = SM + ' across. ' + (d.m / 1000).toFixed(2) + ' km and ' + fmtDur(d.s) + ' to get there.';
+    $('r-body').textContent = 'That is the drive we made on ' + PL.day + (PL.night ? ', after dark,' : '') + ' from the ' + d.from + ' to the ' + d.to + '. ' +
+      (o ? 'The other way, ' + o.from + ' to ' + o.to + ', took ' + fmtDur(o.s) + ' for ' + (o.m / 1000).toFixed(2) + ' km. One drive each way, at one time of day: another hour will differ.' : 'The other way has not been driven yet. One drive, at one time of day: another hour will differ.');
+    var both = !!o, km = (d.m + (o ? o.m : 0) - (both ? 2 : 1) * STRAIGHT) / 1000 * COST.days, secs = (d.s + (o ? o.s : 0)) * COST.days;
+    $('r-month').textContent = (both ? 'Crossing once each way every working day' : 'Crossing this way once every working day') + ': about ' + Math.round(km) + ' km and ' + fmtDur(secs) +
+      ' of driving a month, and about ₹' + Math.round(km / COST.tw * COST.petrol) + ' of petrol on a two-wheeler or ₹' + Math.round(km / COST.car * COST.petrol) + ' in a car.';
     $('r-ev').textContent = d.ev; $('r-cost').href = d.cost;
+    $('r-other').hidden = !both;
     $('r-other').textContent = 'Drive the other way'; result.hidden = false;
   }
   function play() {
@@ -416,6 +478,17 @@
       }
     }
     VARIANTS.forEach(function (va) { if (!va.mesh) return; for (var k = 0; k < va.list.length; k++) { var q = va.list[k]; o3.position.set(q.x, 0, q.z); o3.rotation.set(0, q.c ? Math.PI : 0, 0); o3.updateMatrix(); va.mesh.setMatrixAt(k, o3.matrix); } va.mesh.instanceMatrix.needsUpdate = true; });
+    if (LIGHT.night && heads) {
+      var hp = heads.geometry.attributes.position.array, tp = tails.geometry.attributes.position.array;
+      for (i = 0; i < VEH.length; i++) { v = VEH[i]; var dz = dirOf(v.c), w = v.len < 2.2 ? 0 : 0.62, f = v.z + dz * (v.len / 2 + 0.1), b = v.z - dz * (v.len / 2 + 0.1);
+        hp[i * 6] = v.x - w; hp[i * 6 + 1] = 0.75; hp[i * 6 + 2] = f; hp[i * 6 + 3] = v.x + w; hp[i * 6 + 4] = 0.75; hp[i * 6 + 5] = f;
+        tp[i * 6] = v.x - w; tp[i * 6 + 1] = 0.8; tp[i * 6 + 2] = b; tp[i * 6 + 3] = v.x + w; tp[i * 6 + 4] = 0.8; tp[i * 6 + 5] = b; }
+      var hc = heads.geometry.attributes.color.array, tc = tails.geometry.attributes.color.array;
+      for (i = 0; i < VEH.length; i++) { var mine = VEH[i].c === pc, hk = mine ? 0.18 : (LIGHT.glare ? 1.6 : 1), tk = mine ? 1 : 0.25;
+        for (var j = 0; j < 2; j++) { hc.set([0.95 * hk, 0.97 * hk, hk], i * 6 + j * 3); tc.set([tk, 0.09 * tk, 0.05 * tk], i * 6 + j * 3); } }
+      heads.geometry.attributes.position.needsUpdate = true; tails.geometry.attributes.position.needsUpdate = true;
+      heads.geometry.attributes.color.needsUpdate = true; tails.geometry.attributes.color.needsUpdate = true;
+    }
   }
 
 
@@ -461,7 +534,7 @@
   }
   var OPT = {
     nearer: { n: 1, title: 'A U-turn opening nearer',
-      lead: function (o) { return 'On this drawing the nearest U-turn is about ' + o.cur + ' m away, which is why crossing 13 m took ' + o.today + '. Bring an opening to ' + o.L + ' m and the crossing becomes about ' + o.nw + '.'; },
+      lead: function (o) { return 'On this drawing the nearest U-turn is about ' + o.cur + ' m away, which is why crossing ' + SM + ' took ' + o.today + '. Bring an opening to ' + o.L + ' m and the crossing becomes about ' + o.nw + '.'; },
       guide: 'Guidance: India\'s access-control guidelines keep median openings to intersections with public roads, at least 750 m apart on highways (IRC:62). An IIT course text gives 500 m as the closest on other highways.',
       trade: 'Trade-off: every opening is another place where turning and through traffic meet. Studies abroad find openings that allow only U-turns have fewer crashes overall than full openings, though the U-turns pile up further along.' },
     signal: { n: 2, title: 'A signal-controlled crossing here',
@@ -489,7 +562,8 @@
     var gr = g.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, '#05070B'); gr.addColorStop(1, '#10141B'); g.fillStyle = gr; g.fillRect(0, 0, 4, 256);
     var t = new T3.CanvasTexture(c); t.encoding = T3.sRGBEncoding; return t; })();
   function blueprint(on) {
-    cityMeshes.forEach(function (m) { m.visible = !on; });
+    cityMeshes.forEach(function (m) { m.visible = !on; }); nightCity.forEach(function (m) { m.visible = !on && LIGHT.night; });
+    if (!on) { applyLight(); return; }
     scene.background = on ? nightBg : dayBg; scene.fog.color.copy(on ? col('#0B0E13') : dayFog);
     groundMesh.material.color.copy(on ? col('#151A21') : dayGround); walkM.color.copy(col(on ? '#3b3833' : '#a49a8a'));
   }
@@ -551,6 +625,7 @@
   }
   function openSol(k) {
     if (S.mode === 'driving') { S.mode = 'paused'; playB.textContent = 'Resume'; }
+    AUTO.on = k === 'auto'; AUTO.t = 0; if (AUTO.on) k = randomKind(); autoBtn();
     SOL.on = true; SOL.k = k || SOL.k; SOL.tSol = 0; stage.classList.add('sol'); scene.fog.near = 400; scene.fog.far = 3000; blueprint(true);
     solView(); buildSolution(); renderSol(); kick(); host.focus({ preventScroll: true });
   }
@@ -559,12 +634,13 @@
     while (solG.children.length) { var c = solG.children.pop(); c.traverse(function (m) { if (m.geometry) m.geometry.dispose(); }); }
     buildMedian(BASE_GAPS); kick();
   }
-  Array.prototype.forEach.call(document.querySelectorAll('#s-tabs button'), function (b) { b.addEventListener('click', function () { SOL.k = b.getAttribute('data-k'); solView(); buildSolution(); renderSol(); kick(); }); });
+  Array.prototype.forEach.call(document.querySelectorAll('#s-tabs button[data-k]'), function (b) { b.addEventListener('click', function () { stopAuto(); SOL.k = b.getAttribute('data-k'); solView(); buildSolution(); renderSol(); kick(); }); });
+  if ($('s-auto')) $('s-auto').addEventListener('click', function () { AUTO.on = !AUTO.on; AUTO.t = AUTO.every; autoBtn(); kick(); });
   Array.prototype.forEach.call(document.querySelectorAll('[data-sol]'), function (b) { b.addEventListener('click', function (e) { e.preventDefault(); openSol(b.getAttribute('data-sol')); if (b.closest('.fixes')) host.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' }); }); });
   $('s-back').addEventListener('click', closeSol);
   $('s-more').addEventListener('click', function () { var p = $('solp'), f = p.classList.toggle('full'); this.setAttribute('aria-expanded', String(f)); this.textContent = f ? 'Less' : 'Guidance and trade-off'; });
   var lTimer = 0;
-  $('s-L').addEventListener('input', function (e) { SOL.L = +e.target.value; $('s-Lv').textContent = SOL.L + ' m'; renderSol(); clearTimeout(lTimer); lTimer = setTimeout(function () { solView(); buildSolution(); SOL.grow = 1; if (SOL.ribbon) SOL.ribbon.geometry.setDrawRange(0, SOL.ribbon.userData.total); kick(); }, 60); });
+  $('s-L').addEventListener('input', function (e) { stopAuto(); SOL.L = +e.target.value; $('s-Lv').textContent = SOL.L + ' m'; renderSol(); clearTimeout(lTimer); lTimer = setTimeout(function () { solView(); buildSolution(); SOL.grow = 1; if (SOL.ribbon) SOL.ribbon.geometry.setDrawRange(0, SOL.ribbon.userData.total); kick(); }, 60); });
   // frame the option: road across the free part of the stage (the panel takes the left side on wide screens)
   function solView() {
     var sg = S.dir === 'ab' ? -1 : 1, sp = solPath(), wide = (cam.aspect || 1.7) >= 1;
@@ -578,7 +654,7 @@
     if (wide) cam.setViewOffset(w, h, -Math.min(260, w * 0.21), 0, w, h); else cam.setViewOffset(w, h, 0, Math.round(h * 0.2), w, h);
   }
   function solFrame(dt, now) {
-    SOL.tSol += dt; var sg = S.dir === 'ab' ? -1 : 1;
+    autoStep(dt); SOL.tSol += dt; var sg = S.dir === 'ab' ? -1 : 1;
     if (SOL.ribbon && SOL.grow < 1) { SOL.grow = Math.min(1, SOL.grow + dt / (RM ? 0.01 : 1.1)); SOL.ribbon.geometry.setDrawRange(0, Math.floor(SOL.ribbon.userData.total * smooth(SOL.grow) / 3) * 3); }
     solG.children.forEach(function (c) {
       if (c.userData.pulse) c.scale.setScalar(c.userData.base * (1 + 0.15 * Math.sin(now / 280 + c.userData.pulse)));
@@ -591,6 +667,94 @@
     tmpP.copy(SOL.pos).sub(SOL.look).applyAxisAngle(cam.up, drift).add(SOL.look); tmpL.copy(SOL.look);
     chev.offset.x = -(SOL.tSol * 0.9) % 1;
   }
+
+  // ---------------- day and night ----------------
+  var dayHemi = hemi.intensity, daySun = sun.intensity, WHITE = new T3.Color(1, 1, 1);
+  var nightSky = (function () { var c = document.createElement('canvas'); c.width = 4; c.height = 256; var g = c.getContext('2d'), gr = g.createLinearGradient(0, 0, 0, 256);
+    gr.addColorStop(0, '#02040A'); gr.addColorStop(0.6, '#0C1220'); gr.addColorStop(1, '#231E29'); g.fillStyle = gr; g.fillRect(0, 0, 4, 256);
+    var t = new T3.CanvasTexture(c); t.encoding = T3.sRGBEncoding; return t; })();
+  var cityDay = cityMeshes.map(function (m) { return m.material.color.clone(); }), cityNight = ['#2B2E35', '#0F1217', '#3A3633', '#26332A'];
+  var beamG = new T3.Group(); scene.remove(beam); beam.position.set(0, 0.06, -17); beamG.add(beam); scene.add(beamG);
+  function applyLight() {
+    var n = LIGHT.night;
+    if (!n) LIGHT.glare = false;
+    if (!SOL.on) {
+      scene.background = n ? nightSky : dayBg; scene.fog.color.copy(n ? col('#0B0E16') : dayFog); scene.fog.near = n ? 40 : 60; scene.fog.far = n ? 260 : 205;
+      groundMesh.material.color.copy(n ? col('#0D0E11') : dayGround); walkM.color.copy(col(n ? '#2A2826' : '#a49a8a'));
+    }
+    hemi.intensity = n ? 0.2 : dayHemi; sun.intensity = n ? 0.03 : daySun;
+    asphalt.color.copy(n ? col('#55585F') : WHITE); if (lineMat) lineMat.color.copy(col(n ? '#7B7D83' : '#e9e6dc')); VC.color.copy(n ? col('#4A4D54') : WHITE);
+    cityMeshes.forEach(function (m, i) { m.material.color.copy(n ? col(cityNight[i]) : cityDay[i]); });
+    nightCity.forEach(function (m) { m.visible = n && !SOL.on; });
+    shrubM.color.copy(n ? col('#3A3F3A') : WHITE);
+    if (medianG) medianG.traverse(function (o) { (Array.isArray(o.material) ? o.material : [o.material]).forEach(function (m) { if (m && m.userData.dim) m.color.copy(n ? col('#4A4A4A') : WHITE); }); });
+    if (medianG) medianG.children.forEach(function (c) { if (c.userData.night) c.visible = n && !SOL.on; });
+    if (heads) heads.visible = tails.visible = n; headM.size = LIGHT.glare ? 3.2 : 1.9; beam.visible = n;
+    stage.classList.toggle('night', n);
+    setPressed('c-light', n ? 'night' : 'day');
+    var gb = $('c-glare'); if (gb) { gb.disabled = !n; gb.setAttribute('aria-pressed', String(LIGHT.glare)); }
+    var gn = $('glare-note'); if (gn) gn.hidden = !LIGHT.glare;
+    if (!LIGHT.glare) clearGlare();
+  }
+  // Glare from oncoming high beams, from the driver's seat. Same equation as /roads/glare/ (CIE 146:2002, young-eye term):
+  //   veil luminance Lveil = 10 · Eeye / θ²   with Eeye = I / d² from two high-beam lamps of 30,000 cd each.
+  // Drawn as light scattered across the view; an illustration on a published equation, not a measurement of this road.
+  var gc = $('glare'), gx = gc && gc.getContext('2d'), gDirty = false, vt = new T3.Vector3(), fwd = new T3.Vector3();
+  function clearGlare() { if (gx && gDirty) { gx.clearRect(0, 0, gc.width, gc.height); gDirty = false; } }
+  function drawGlare(p) {
+    if (!gx) return;
+    var w = gc.clientWidth, h = gc.clientHeight, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    if (gc.width !== Math.round(w * dpr) || gc.height !== Math.round(h * dpr)) { gc.width = Math.round(w * dpr); gc.height = Math.round(h * dpr); }
+    gx.setTransform(dpr, 0, 0, dpr, 0, 0); gx.clearRect(0, 0, w, h); gDirty = true;
+    cam.getWorldDirection(fwd);
+    var pc = p.x < 0 ? 0 : 1, list = [], i;
+    for (i = 0; i < VEH.length; i++) { var v = VEH[i]; if (v.c === pc) continue;
+      var dz = dirOf(v.c), fz = v.z + dz * v.len / 2; if ((camPos.z - fz) * dz <= 0) continue;
+      vt.set(v.x, 0.75, fz).sub(camPos); var d = vt.length(); if (d > 180 || d < 2) continue; vt.normalize();
+      var th = Math.acos(Math.max(-1, Math.min(1, vt.dot(fwd)))) * 180 / Math.PI; if (th > 70) continue;
+      var E = 2 * 30000 / (d * d), L = 10 * E / Math.pow(Math.max(th, 1), 2);
+      list.push({ x: v.x, z: fz, L: L }); }
+    list.sort(function (a, b) { return b.L - a.L; });
+    var tot = 0;
+    list.slice(0, 6).forEach(function (q) {
+      vt.set(q.x, 0.75, q.z).project(cam); if (vt.z > 1) return;
+      var x = (vt.x + 1) / 2 * w, y = (1 - vt.y) / 2 * h, a = 0.85 * (1 - Math.exp(-q.L / 2)), R = Math.max(w, h) * (0.08 + 0.36 * a); tot += q.L;
+      var g = gx.createRadialGradient(x, y, 0, x, y, R);
+      g.addColorStop(0, 'rgba(255,252,244,' + a.toFixed(3) + ')'); g.addColorStop(0.06, 'rgba(255,248,236,' + (a * 0.7).toFixed(3) + ')');
+      g.addColorStop(0.32, 'rgba(225,232,255,' + (a * 0.16).toFixed(3) + ')'); g.addColorStop(1, 'rgba(225,232,255,0)');
+      gx.fillStyle = g; gx.fillRect(0, 0, w, h);
+    });
+    var veil = 1 - Math.exp(-tot / 20); if (veil > 0.01) { gx.fillStyle = 'rgba(210,220,245,' + (veil * 0.14).toFixed(3) + ')'; gx.fillRect(0, 0, w, h); }
+  }
+  Array.prototype.forEach.call($('c-light').querySelectorAll('button[data-v]'), function (b) { b.addEventListener('click', function () { LIGHT.night = b.getAttribute('data-v') === 'night'; applyLight(); kick(); }); });
+  $('c-glare').addEventListener('click', function () { if (!LIGHT.night) return; LIGHT.glare = !LIGHT.glare; if (LIGHT.glare && S.above) { S.above = false; updateViewBtn(); } applyLight(); kick(); });
+
+  // ---------------- place picker: driven places can be chosen; the rest are listed as not driven yet ----------------
+  (function () {
+    var sel = $('c-place'); if (!sel) return;
+    sel.innerHTML = ''; var g1 = document.createElement('optgroup'); g1.label = 'Driven by arcroad';
+    Object.keys(PLACES).forEach(function (k) { g1.appendChild(new Option(k + ' · ' + PLACES[k].area + ', ' + PLACES[k].road, k)); });
+    sel.appendChild(g1); sel.value = PID;
+    sel.addEventListener('change', function () { location.search = sel.value === 'S18' ? '' : '?place=' + sel.value; });
+    if (!window.fetch) return;
+    fetch('../globe/data/places.json').then(function (r) { return r.json(); }).then(function (d) {
+      var g2 = document.createElement('optgroup'); g2.label = 'Not driven yet · help drive one';
+      (d.spots || []).forEach(function (sp) { if (PLACES[sp.id]) return; var o = new Option(sp.id + ' · not driven yet', sp.id); o.disabled = true; g2.appendChild(o); });
+      if (g2.children.length) sel.appendChild(g2);
+    }).catch(function () {});
+  })();
+
+  // ---------------- the fixes play by themselves, in random order, until you choose one ----------------
+  var AUTO = { on: false, t: 0, every: 9 }, KINDS = ['nearer', 'signal', 'under', 'why'];
+  function autoBtn() { var b = $('s-auto'); if (b) { b.setAttribute('aria-pressed', String(AUTO.on)); b.textContent = AUTO.on ? 'Auto · on' : 'Auto'; } }
+  function randomKind(not) { var k; do { k = KINDS[Math.floor(Math.random() * KINDS.length)]; } while (k === not); return k; }
+  function autoStep(dt) {
+    if (!AUTO.on || RM) return; AUTO.t += dt; if (AUTO.t < AUTO.every) return; AUTO.t = 0;
+    SOL.k = randomKind(SOL.k);
+    if (SOL.k === 'nearer') { var mx = Math.max(150, nearDist() - 20); SOL.L = Math.round((120 + Math.random() * (mx - 120)) / 10) * 10; $('s-L').value = SOL.L; }
+    solView(); buildSolution(); renderSol();
+  }
+  function stopAuto() { AUTO.on = false; autoBtn(); }
 
   // ---------------- loop ----------------
   var last = 0, running = false, visible = true, lastS = 0;
@@ -606,8 +770,9 @@
     var s = sAt(P, S.t), p = at(r, s);
     var kmh = S.mode === 'driving' ? Math.max(0, (sAt(P, S.t + 0.75) - sAt(P, S.t - 0.75)) / 1.5 * 3.6) : 0;
     var pv = kmh / 3.6;
-    stepTraffic(S.mode === 'driving' ? dt * S.rate : (S.mode === 'paused' ? 0 : dt), S.t, p, S.mode === 'intro' ? 0 : pv, S.dir === 'ba');
-    if (!SOL.on) { player.position.set(p.x, 0, p.z); player.rotation.y = Math.atan2(-p.hx, -p.hz); }
+    stepTraffic(S.mode === 'driving' ? dt * S.rate : (S.mode === 'paused' ? 0 : dt), S.t, p, S.mode === 'intro' ? 0 : pv, heavyDir(S.dir));
+    if (!SOL.on) { player.position.set(p.x, 0, p.z); player.rotation.y = Math.atan2(-p.hx, -p.hz); beamG.position.copy(player.position); beamG.rotation.y = player.rotation.y; }
+    beamG.visible = LIGHT.night && !SOL.on;
     var ahead = at(r, s + 22);
     if (SOL.on) {
       solFrame(dt, now);
@@ -629,14 +794,15 @@
     cam.position.copy(camPos); cam.lookAt(camLook);
     pins.forEach(function (g) { g.children[1].scale.setScalar(1 + 0.08 * Math.sin(now / 400)); });
     if (!SOL.on) { if (S.mode !== 'intro' || Math.abs(s - lastS) > 0.01 || !lastS) hud(s, kmh); lastS = s; drawStrip(S.dir, s); }
+    if (LIGHT.glare && !SOL.on && !S.above && S.mode !== 'intro' && S.mode !== 'done') drawGlare(p); else clearGlare();
     R.render(scene, cam);
   }
   function kick() { if (!running && visible) { running = true; requestAnimationFrame(frame); } }
   if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting && !document.hidden; if (visible) { last = 0; kick(); } }).observe(host);
   document.addEventListener('visibilitychange', function () { visible = !document.hidden; if (visible) { last = 0; kick(); } });
   if ('ResizeObserver' in window) new ResizeObserver(size).observe(host); else window.addEventListener('resize', size);
-  size(); updateViewBtn(); reset('ab'); kick();
-  window.__arcroadDrive = { dbg: function () { return { n: solG.children.length, kinds: solG.children.map(function (c) { return c.type + (c.geometry && c.geometry.drawRange ? ':' + c.geometry.drawRange.count + '/' + (c.userData.total || '') : ''); }), w: SOL.w, pos: SOL.pos && SOL.pos.toArray().map(Math.round), look: SOL.look && SOL.look.toArray().map(Math.round) }; }, SOL: function () { return SOL; }, openSol: function (k) { openSol(k); }, S: S, RT: RT, PACE: PACE, DRIVES: DRIVES, play: play,   // hooks for tests and the home-page preview render
+  size(); updateViewBtn(); reset('ab'); applyLight(); kick();
+  window.__arcroadDrive = { dbg: function () { return { n: solG.children.length, kinds: solG.children.map(function (c) { return c.type + (c.geometry && c.geometry.drawRange ? ':' + c.geometry.drawRange.count + '/' + (c.userData.total || '') : ''); }), w: SOL.w, pos: SOL.pos && SOL.pos.toArray().map(Math.round), look: SOL.look && SOL.look.toArray().map(Math.round) }; }, SOL: function () { return SOL; }, openSol: function (k) { openSol(k); }, S: S, RT: RT, PACE: PACE, DRIVES: DRIVES, play: play, LIGHT: LIGHT, AUTO: AUTO, applyLight: applyLight, PID: PID,   // hooks for tests and the home-page preview render
     capture: function () { visible = false; host.classList.add('capture'); },
     frame: function (dt, now) { tick(dt, now); return R.domElement.toDataURL('image/jpeg', 0.92); } };
 })();
