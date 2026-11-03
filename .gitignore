@@ -9,3 +9,6 @@ __pycache__/
 # Raw GPS tracks show where the driver lives and goes: never committed (pipeline/groundtruth.py)
 *.gpx
 /field/
+
+# Generated from Natural Earth by tools/films/make_land.py; only the rendered film is published
+tools/films/land.js
