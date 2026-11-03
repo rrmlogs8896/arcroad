@@ -17,7 +17,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 import hotspots
+import mapwatch
 import openings
+import routercheck
 
 OUT = Path("/tmp/out")
 STATE = {"running": False, "done": [], "failed": {}, "log": []}
@@ -48,6 +50,20 @@ def repo():
     return work
 
 
+def job_routercheck():
+    OUT.mkdir(exist_ok=True)
+    p = OUT / "routercheck-v1.json"
+    p.write_bytes(routercheck.run(log))
+    return p
+
+
+def job_mapwatch():
+    OUT.mkdir(exist_ok=True)
+    p = OUT / "mapwatch-v1.json"
+    p.write_bytes(mapwatch.run(log))
+    return p
+
+
 def job_hotspots():
     OUT.mkdir(exist_ok=True)
     p = OUT / "hotspots-v1.json"
@@ -72,7 +88,8 @@ def job_bengaluru():
     return tgz
 
 
-JOBS = [("openings", job_openings), ("hotspots", job_hotspots), ("bengaluru", job_bengaluru)]
+JOBS = [("openings", job_openings), ("mapwatch", job_mapwatch), ("routercheck", job_routercheck),
+        ("hotspots", job_hotspots), ("bengaluru", job_bengaluru)]
 
 
 def run_all():
