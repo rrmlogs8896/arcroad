@@ -151,9 +151,15 @@
   }
 
   // ---------------- renderer, scene, cameras ----------------
+  // Device tier: screen size, pixel density, memory and cores decide the starting resolution,
+  // then frame time adjusts it, so older phones stay smooth and new ones stay sharp.
   var SMALL = Math.min(screen.width, screen.height) < 700;
-  var R = new T3.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-  R.setPixelRatio(Math.min(window.devicePixelRatio || 1, SMALL ? 1.5 : 2));
+  var MEM = navigator.deviceMemory || 8, CORES = navigator.hardwareConcurrency || 8;
+  var LOW = /[?&]q=low/.test(location.search) || MEM <= 2 || CORES <= 2;
+  var PR_MAX = Math.min(window.devicePixelRatio || 1, LOW ? 1.25 : (SMALL ? 1.75 : 2)), PR = PR_MAX;
+  var R = new T3.WebGLRenderer({ antialias: !LOW, powerPreference: LOW ? 'default' : 'high-performance' });
+  R.setPixelRatio(PR);
+  host.dataset.tier = LOW ? 'low' : (SMALL ? 'phone' : 'full');
   R.outputEncoding = T3.sRGBEncoding;
   host.insertBefore(R.domElement, host.firstChild);
   R.domElement.setAttribute('aria-hidden', 'true');
@@ -412,6 +418,8 @@
   var S = { dir: 'ab', rate: 8, mode: 'intro', t: 0, above: RM, orbit: 0.6 };
   var camPos = new T3.Vector3(30, 26, 30), camLook = new T3.Vector3(0, 0, 0), tmpP = new T3.Vector3(), tmpL = new T3.Vector3();
   var stage = host, playB = $('play'), skipB = $('skip'), viewB = $('view'), introC = $('intro'), result = $('result');
+  if (window.matchMedia && matchMedia('(pointer:coarse)').matches) $('dhint').textContent = 'Drag to look around · Exit 3D to leave';
+  introC.addEventListener('click', function () { introC.classList.toggle('open'); });
   function setPressed(groupId, v) { Array.prototype.forEach.call($(groupId).querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-v') === String(v))); }); }
   function two(lg, sm) { return '<span class="lg">' + lg + '</span><span class="sm">' + sm + '</span>'; }
   function updateViewBtn() { viewB.innerHTML = S.above ? two("Driver's view", 'Driver') : two('View from above', 'Above'); viewB.setAttribute('aria-pressed', String(S.above)); }
@@ -809,9 +817,16 @@
   // ---------------- loop ----------------
   var last = 0, running = false, visible = true, lastS = 0;
   function size() { var w = host.clientWidth, h = host.clientHeight; if (!w || !h) return; R.setSize(w, h, false); cam.aspect = w / h; cam.fov = w / h < 1 ? 72 : 60; cam.updateProjectionMatrix(); if (typeof SOL !== 'undefined' && SOL.on) { solView(); buildSolution(); } }
+  var FT = { n: 0, s: 0 };
   function frame(now) {
     running = false; if (!visible) return;
-    var dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016); last = now;
+    var raw = last ? (now - last) / 1000 : 0.016, dt = Math.min(0.05, raw); last = now;
+    if (raw < 0.25) { FT.n++; FT.s += raw; }
+    if (FT.n >= 90) {
+      var avg = FT.s / FT.n; FT.n = 0; FT.s = 0;
+      if (avg > 0.042 && PR > 1) { PR = Math.max(1, PR - 0.25); R.setPixelRatio(PR); size(); }
+      else if (avg < 0.02 && PR < PR_MAX) { PR = Math.min(PR_MAX, PR + 0.25); R.setPixelRatio(PR); size(); }
+    }
     tick(dt, now); kick();
   }
   function tick(dt, now) {
@@ -829,7 +844,8 @@
     } else if (S.mode === 'intro') {
       S.orbit += RM ? 0 : dt * 0.1;
       var st = S.dir === 'ab' ? A : B;
-      tmpP.set(Math.sin(S.orbit) * 34, 24, Math.cos(S.orbit) * 34); tmpL.set(-Math.cos(S.orbit) * 9, 1, Math.sin(S.orbit) * 9);
+      var pf = cam.aspect < 1 ? 1.5 : 1;
+      tmpP.set(Math.sin(S.orbit) * 34 * pf, 24 * pf, Math.cos(S.orbit) * 34 * pf); tmpL.set(-Math.cos(S.orbit) * 9, 1, Math.sin(S.orbit) * 9);
       player.visible = true; cockpit.visible = false;
     } else if (S.above || S.mode === 'done') {
       tmpP.set(p.x - p.hx * 30 + 6, 30, p.z - p.hz * 30); tmpL.set(p.x + p.hx * 18, 0, p.z + p.hz * 18);

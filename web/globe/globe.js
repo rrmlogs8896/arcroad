@@ -379,7 +379,7 @@ function buildList() {
   for (const s of DATA.spots) {
     const tr = document.createElement('tr');
     const td = (v, n) => { const c = document.createElement('td'); if (n) c.className = 'n'; c.textContent = v; return c; };
-    const b = document.createElement('button'); b.type = 'button'; b.textContent = s.driven ? s.id + ' ✓' : s.id; if (s.driven) b.setAttribute('aria-label', s.id + ', driven by arcroad'); b.style.padding = '1px 8px'; b.addEventListener('click', () => selectSpot(s.id));
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'tap'; b.textContent = s.driven ? s.id + ' ✓' : s.id; if (s.driven) b.setAttribute('aria-label', s.id + ', driven by arcroad'); b.style.padding = '1px 8px'; b.addEventListener('click', () => selectSpot(s.id));
     const c0 = document.createElement('td'); c0.append(b);
     tr.append(c0, td(km(s.straight), 1), td(km(s.ab), 1), td(s.ba == null ? 'none' : km(s.ba), 1));
     tb.append(tr);
@@ -388,7 +388,7 @@ function buildList() {
   const h2 = document.createElement('h3'); h2.textContent = '29 cities measured'; host.append(h2);
   const p = document.createElement('p'); p.style.margin = '0';
   DATA.cities.forEach((c, i) => {
-    const b = document.createElement('button'); b.type = 'button'; b.textContent = c.name; b.style.cssText = 'padding:1px 8px;margin:2px 4px 2px 0;font-size:12px';
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'tap'; b.textContent = c.name; b.style.cssText = 'padding:1px 8px;margin:2px 4px 2px 0;font-size:12px';
     b.addEventListener('click', () => selectCity(c.id)); p.append(b);
   });
   host.append(p);
