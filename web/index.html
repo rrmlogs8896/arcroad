@@ -202,7 +202,7 @@ img,svg,canvas,video{max-width:100%}
     <h1>A place you can see, 1.5 km away</h1>
     <p class="lede">Divided roads cut neighbours off. arcroad measures what crossing your own road costs, then drives the detour to check.</p>
     <a class="teaser" href="drive/" aria-label="Ride the S18 detour in 3D: 13 metres across, 1.58 kilometres to get there">
-      <video muted playsinline loop preload="none" poster="drive/media/preview.jpg" data-src="drive/media/preview.mp4" aria-hidden="true"></video>
+      <video muted playsinline loop preload="none" poster="drive/media/preview.jpg" aria-hidden="true"></video>
       <span class="tz"><span><b>13 m across. 1.58 km to get there.</b><small>3D illustration of our 1 Nov drive</small></span><span class="go">Ride it →</span></span>
     </a>
     <script>
@@ -212,7 +212,7 @@ img,svg,canvas,video{max-width:100%}
       var save = navigator.connection && navigator.connection.saveData;
       if (rm || save || !('IntersectionObserver' in window)) return;
       new IntersectionObserver(function (e) {
-        if (e[0].isIntersecting) { if (!v.src) v.src = v.getAttribute('data-src'); var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+        if (e[0].isIntersecting) { if (!v.src) v.src = 'drive/media/preview.mp4'; var p = v.play(); if (p && p.catch) p.catch(function () {}); }
         else v.pause();
       }, { threshold: 0.25 }).observe(v);
     })();
