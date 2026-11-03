@@ -95,10 +95,11 @@ img,svg,canvas,video{{max-width:100%}}
 @media (pointer:coarse){{nav a,.top a{{padding-block:10px;display:inline-block}} .srcbtn{{padding:10px 0}}}}
 @media (prefers-reduced-motion:reduce){{*,*::before,*::after{{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}}}
 </style>
+<style id="sitenav">.top a[aria-current=page],header nav a[aria-current=page],.sitenav a[aria-current=page]{{color:#E8EAED}}</style>
 </head>
 <body>
 <main>
-<nav class="top"><a href="../">arcroad home</a><a href="../cost/">Your cost</a><a href="../roads/">Road costs</a><a href="../evidence/">Evidence</a><a href="../globe/">Globe</a></nav>
+<nav class="top" aria-label="arcroad"><a href="../">arcroad home</a><a href="../drive/">Drive it</a><a href="../field/" aria-current="page">Results</a><a href="../cost/">Your cost</a><a href="../roads/">Road costs</a><a href="../evidence/">Evidence</a><a href="../globe/">Globe</a><a href="../data/">Open data</a><a href="../volunteer/">Volunteer</a></nav>
 <p class="eyebrow">arcroad · Hyderabad · driven {e(day["day"])}</p>
 <h1>We drove the detours the map predicted.</h1>
 <p class="lead">{n_match} of {n_graded} comparable directions matched the model, within a tolerance fixed before the drive.</p>
