@@ -414,6 +414,9 @@
   function frame(now) {
     running = false; if (!visible) return;
     var dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016); last = now;
+    tick(dt, now); kick();
+  }
+  function tick(dt, now) {
     var P = PACE[S.dir], r = RT[S.dir];
     if (S.mode === 'driving') { S.t += dt * S.rate; if (S.t >= P.T) finish(); }
     var s = sAt(P, S.t), p = at(r, s);
@@ -442,12 +445,13 @@
     if (S.mode !== 'intro' || Math.abs(s - lastS) > 0.01 || !lastS) hud(s, kmh); lastS = s;
     drawStrip(S.dir, s);
     R.render(scene, cam);
-    kick();
   }
   function kick() { if (!running && visible) { running = true; requestAnimationFrame(frame); } }
   if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting && !document.hidden; if (visible) { last = 0; kick(); } }).observe(host);
   document.addEventListener('visibilitychange', function () { visible = !document.hidden; if (visible) { last = 0; kick(); } });
   if ('ResizeObserver' in window) new ResizeObserver(size).observe(host); else window.addEventListener('resize', size);
   size(); updateViewBtn(); reset('ab'); kick();
-  window.__arcroadDrive = { S: S, RT: RT, PACE: PACE, DRIVES: DRIVES };   // read-only hook for tests
+  window.__arcroadDrive = { S: S, RT: RT, PACE: PACE, DRIVES: DRIVES, play: play,   // hooks for tests and the home-page preview render
+    capture: function () { visible = false; host.classList.add('capture'); },
+    frame: function (dt, now) { tick(dt, now); return R.domElement.toDataURL('image/jpeg', 0.92); } };
 })();

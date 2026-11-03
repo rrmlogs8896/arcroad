@@ -150,12 +150,13 @@ img,svg,canvas,video{max-width:100%}
 @media (pointer:coarse){nav a,.top a{padding-block:10px;display:inline-block} .srcbtn{padding:10px 0}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
+<style id="sitenav">.top a[aria-current=page],header nav a[aria-current=page],.sitenav a[aria-current=page]{color:#E8EAED}</style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <div class="brand"><b><a href="../">arcroad</a></b><span>What the detour costs</span></div>
-    <nav><a href="../field/">Driven results</a><a href="../roads/">What else the road costs</a><a href="../evidence/">Civic-sense evidence</a><a href="../globe/">Globe</a></nav>
+    <nav aria-label="arcroad"><a href="../drive/">Drive it</a><a href="../field/">Results</a><a href="../cost/" aria-current="page">Your cost</a><a href="../roads/">Road costs</a><a href="../evidence/">Evidence</a><a href="../globe/">Globe</a><a href="../data/">Open data</a><a href="../volunteer/">Volunteer</a></nav>
   </header>
 
   <div class="intro">

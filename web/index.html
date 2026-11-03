@@ -6,9 +6,8 @@
 <title>arcroad — what it costs to cross your own road</title>
 <meta name="description" content="Measuring what road geometry costs the people who live beside it, from open data, with every claim checkable. First drive results: 5 of 5 directions matched the model.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg fill='none' stroke='%23E2743B' stroke-linecap='round'%3E%3Cpath d='M12 25 A 10 10 0 1 1 20 25' stroke-width='2.8'/%3E%3C/g%3E%3Ccircle cx='12' cy='25' r='2.4' fill='%23E2743B'/%3E%3Ccircle cx='20' cy='25' r='2.4' fill='%23E2743B'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
 :root{
   --bg:#0B0D10; --surface:#11141A; --line:#1C2026; --line2:#2A3038;
@@ -110,6 +109,13 @@ a{color:#E8A87C}
 .why dd{margin:0}
 .why p{margin:12px 0 0}
 @media (max-width:560px){.why dl{grid-template-columns:1fr}.why dd{margin-bottom:6px}}
+.teaser{display:block;position:relative;margin:26px 0 0;max-width:760px;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid var(--line2);background:#0E1116;text-decoration:none}
+.teaser video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.teaser .tz{position:absolute;left:0;right:0;bottom:0;padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:linear-gradient(transparent,rgba(5,7,11,.78));color:var(--fg2)}
+.teaser .tz b{display:block;font-size:15.5px;font-weight:600;letter-spacing:-0.01em}
+.teaser .tz small{display:block;font-size:13px;color:var(--mut)}
+.teaser .go{font-size:14.5px;color:var(--accent);white-space:nowrap}
+.teaser:hover{border-color:var(--accent)}
 .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
 .cta a{display:inline-block;padding:11px 18px;border-radius:999px;border:1px solid var(--line2);color:var(--fg);text-decoration:none;font-size:14.5px}
 .cta a.p{background:var(--accent);border-color:var(--accent);color:#0B0D10;font-weight:500}
@@ -160,14 +166,14 @@ img,svg,canvas,video{max-width:100%}
 
 <div class="staging">
   <div class="wrap">
-    <p><strong style="color:var(--soft);font-weight:500">v0 · first drive results.</strong> On 1 Nov 2026 we drove the model's detours: 5 of 5 comparable directions matched. Area figures below are still model values. <a href="field/" style="color:var(--accent)">See every pass</a></p>
+    <p><strong style="color:var(--soft);font-weight:500">v0 · first drive results.</strong> 1 Nov 2026: we drove the model's detours and 5 of 5 comparable directions matched. Area figures below are still model values. <a href="field/" style="color:var(--accent)">See every pass</a></p>
     <span class="m">3 places driven · 1 day</span>
   </div>
 </div>
 
 <header>
   <div class="wrap">
-    <a class="brand" href="#findings" aria-label="arcroad, Hyderabad">
+    <a class="brand" href="./" aria-label="arcroad, Hyderabad, home">
       <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
         <g fill="none" stroke="currentColor" stroke-linecap="round">
           <path class="drive" d="M12 25 A 10 10 0 1 1 20 25" stroke-width="2.4"/>
@@ -178,7 +184,8 @@ img,svg,canvas,video{max-width:100%}
       </svg>
       <span><span class="logo">arcroad</span><span class="place">Hyderabad</span></span>
     </a>
-    <nav>
+    <nav aria-label="arcroad">
+      <a href="drive/">Drive it</a>
       <a href="field/">Results</a>
       <a href="cost/">Your cost</a>
       <a href="roads/">Road costs</a>
@@ -193,7 +200,23 @@ img,svg,canvas,video{max-width:100%}
 <section>
   <div class="wrap">
     <h1>A place you can see, 1.5 km away</h1>
-    <p class="lede">Divided roads cut neighbours off from each other. arcroad measures what crossing your own road costs, then drives the detours to check.</p>
+    <p class="lede">Divided roads cut neighbours off. arcroad measures what crossing your own road costs, then drives the detour to check.</p>
+    <a class="teaser" href="drive/" aria-label="Ride the S18 detour in 3D: 13 metres across, 1.58 kilometres to get there">
+      <video muted playsinline loop preload="none" poster="drive/media/preview.jpg" data-src="drive/media/preview.mp4" aria-hidden="true"></video>
+      <span class="tz"><span><b>13 m across. 1.58 km to get there.</b><small>3D illustration of our 1 Nov drive</small></span><span class="go">Ride it →</span></span>
+    </a>
+    <script>
+    (function () {
+      var v = document.querySelector('.teaser video'); if (!v) return;
+      var rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var save = navigator.connection && navigator.connection.saveData;
+      if (rm || save || !('IntersectionObserver' in window)) return;
+      new IntersectionObserver(function (e) {
+        if (e[0].isIntersecting) { if (!v.src) v.src = v.getAttribute('data-src'); var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+        else v.pause();
+      }, { threshold: 0.25 }).observe(v);
+    })();
+    </script>
     <details class="why">
       <summary>Which place is this, and how we picked it</summary>
       <dl>
@@ -204,7 +227,7 @@ img,svg,canvas,video{max-width:100%}
         <dt>Your cost</dt><dd><a href="cost/?place=S18%20west%20to%20east&amp;veh=tw&amp;km=1.57&amp;min=3" style="color:var(--accent)">West to east, 1.57 km extra</a> · <a href="cost/?place=S18%20east%20to%20west&amp;veh=tw&amp;km=1.53&amp;min=12" style="color:var(--accent)">East to west, 1.53 km extra</a>. Opens the calculator with this crossing filled in; change anything.</dd>
         <dt>Evidence</dt><dd>Both directions driven and matched the model; one direction also photographed</dd>
       </dl>
-      <p>How it was chosen, by a rule fixed before choosing: of every direction we have driven that matched the model, leave out access-controlled roads like the Outer Ring Road, where a long way round is by design; then take the place with the strongest evidence. It is not our biggest number: S16 on the same drive was 2.3 km for 19 m. <a href="field/" style="color:var(--accent)">Every pass we drove</a></p>
+      <p>Chosen by a rule fixed in advance: among driven directions that matched the model, leave out access-controlled roads such as the Outer Ring Road, where the long way round is by design, then take the strongest evidence. It is not our biggest number: S16, same drive, was 2.3 km for 19 m. <a href="field/" style="color:var(--accent)">Every pass we drove</a></p>
     </details>
     <div class="cta"><a class="p" href="cost/">What does it cost you?</a><a href="field/">What we drove</a><a href="roads/">What else the road costs</a></div>
     <form class="rs" data-base="./" role="search" autocomplete="off">
@@ -260,7 +283,7 @@ img,svg,canvas,video{max-width:100%}
         </tbody>
       </table>
     </div>
-    <p style="margin:16px 0 12px;font-size:14px;line-height:1.7;color:var(--mut);max-width:74ch">A reading, not a conclusion. The fringe is where highway-grade divided roads already exist but the local street network behind them has not filled in, so the severance has nothing to absorb it. Further out there are fewer divided roads and less severance. The shape is consistent with that explanation and has not been tested against it. Patancheru and Isnapur, where this project began, sit at roughly 36 km — inside the peak ring.</p>
+    <p style="margin:16px 0 12px;font-size:14px;line-height:1.7;color:var(--mut);max-width:74ch">A reading, not a conclusion. On the fringe, highway-grade divided roads already exist but the street network behind them has not filled in, so nothing absorbs the severance. Further out there are fewer divided roads. The shape fits this explanation; it has not been tested against it. Patancheru and Isnapur, where this project began, sit at roughly 36 km — inside the peak ring.</p>
     <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:var(--mut);max-width:74ch">"Beyond ORR" here means everything past 26 km, including points up to 85 km from the centre. On 26 October 2026 we found that 12.2% of the measured set lay outside the study area this project had declared. Those points score lower than the true fringe, so every ratio in this table understates the fringe rather than overstating it. The ring table above is the corrected view. The next run will be clipped to the declared area and these figures replaced, not revised.</p>
     </div></details>
   </div>
