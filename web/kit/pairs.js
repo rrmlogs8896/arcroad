@@ -527,7 +527,7 @@ window.ARCROAD_PAIRS = {
  },
  "S08": {
   "id": "S08",
-  "status": "modelled",
+  "status": "driven",
   "road": "Old Bombay Road",
   "ref": "",
   "area": "Adarsh Nagar",
@@ -545,7 +545,12 @@ window.ARCROAD_PAIRS = {
   "ab": 800.2,
   "ba": 431.8,
   "network_m": 800.2,
-  "driven": {},
+  "driven": {
+   "ba": {
+    "m": 403.7,
+    "date": "2026-11-03"
+   }
+  },
   "extract_date": "2026-11-02",
   "commit": "v05.1",
   "evidence_url": "https://arcroad.org/field/",
@@ -685,7 +690,7 @@ window.ARCROAD_PAIRS = {
  },
  "S10": {
   "id": "S10",
-  "status": "modelled",
+  "status": "driven",
   "road": "Nallagandla Road",
   "ref": "",
   "area": "Ward 105 Gachibowli",
@@ -703,7 +708,12 @@ window.ARCROAD_PAIRS = {
   "ab": 1126.2,
   "ba": 183.2,
   "network_m": 1126.2,
-  "driven": {},
+  "driven": {
+   "ab": {
+    "m": 1120.9,
+    "date": "2026-11-03"
+   }
+  },
   "extract_date": "2026-11-02",
   "commit": "v05.1",
   "evidence_url": "https://arcroad.org/field/",
@@ -843,7 +853,7 @@ window.ARCROAD_PAIRS = {
  },
  "S12": {
   "id": "S12",
-  "status": "modelled",
+  "status": "driven",
   "road": "Hafeezpet Flyover",
   "ref": "",
   "area": "Hafeezpet",
@@ -861,7 +871,12 @@ window.ARCROAD_PAIRS = {
   "ab": 2028.9,
   "ba": 981.3,
   "network_m": 2028.9,
-  "driven": {},
+  "driven": {
+   "ab": {
+    "m": 1951.2,
+    "date": "2026-11-02"
+   }
+  },
   "extract_date": "2026-11-02",
   "commit": "v05.1",
   "evidence_url": "https://arcroad.org/field/",
