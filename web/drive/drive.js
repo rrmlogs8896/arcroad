@@ -71,12 +71,12 @@
 
   // Route a→b: merge to the inner lane, run to the gap, U-turn round the median end, come back.
   function route(L) {
-    var px = [], pz = [], step = 0.25, z, t, f;
-    for (z = 0; z > -60; z -= step) { px.push(A[0] + (-LANES[0] - A[0]) * smooth(-z / 60)); pz.push(z); }
-    for (z = -60; z > -L; z -= step) { px.push(-LANES[0]); pz.push(z); }
+    var px = [], pz = [], step = 0.25, z, t, f, sh = Math.min(60, Math.max(3, L * 0.45));
+    for (z = 0; z > -sh; z -= step) { px.push(A[0] + (-LANES[0] - A[0]) * smooth(-z / sh)); pz.push(z); }
+    for (z = -sh; z > -L; z -= step) { px.push(-LANES[0]); pz.push(z); }
     for (f = Math.PI; f > 0; f -= step / LANES[0]) { px.push(LANES[0] * Math.cos(f)); pz.push(-L - LANES[0] * Math.sin(f)); }
-    for (z = -L; z < -60; z += step) { px.push(LANES[0]); pz.push(z); }
-    for (z = -60; z <= 0.001; z += step) { t = (z + 60) / 60; px.push(LANES[0] + (B[0] - LANES[0]) * smooth(t)); pz.push(z); }
+    for (z = -L; z < -sh; z += step) { px.push(LANES[0]); pz.push(z); }
+    for (z = -sh; z <= 0.001; z += step) { t = (z + sh) / sh; px.push(LANES[0] + (B[0] - LANES[0]) * smooth(t)); pz.push(z); }
     var ps = [0], i; for (i = 1; i < px.length; i++) ps.push(ps[i - 1] + Math.hypot(px[i] - px[i - 1], pz[i] - pz[i - 1]));
     return { x: px, z: pz, s: ps, len: ps[ps.length - 1], L: L };
   }
@@ -155,14 +155,14 @@
     for (var i = 0; i < d.data.length; i += 4) { var v = base + (r() - 0.5) * spread; d.data[i] = v; d.data[i + 1] = v; d.data[i + 2] = v + 3; d.data[i + 3] = 255; }
     g.putImageData(d, 0, 0); var t = new T3.CanvasTexture(c); t.wrapS = t.wrapT = T3.RepeatWrapping; t.repeat.set(rep[0], rep[1]); t.encoding = T3.sRGBEncoding; t.anisotropy = 4; return t;
   }
-  flat(900, LEN + 600, '#9a8c74', 0, -0.3, ZMID);                                            // ground
+  var groundMesh = flat(7000, LEN + 7000, '#9a8c74', 0, -0.3, ZMID);                                            // ground
   var asphalt = new T3.MeshLambertMaterial({ map: noiseTex(66, 26, [3, LEN / 10]) });
   flat(EDGE - MED, LEN, null, -(EDGE + MED) / 2, 0, ZMID, asphalt);
   flat(EDGE - MED, LEN, null, (EDGE + MED) / 2, 0, ZMID, asphalt);
-  [GAP_N, GAP_S].forEach(function (z) { flat(MED * 2 + 0.2, 14, null, 0, 0.01, z, asphalt); });
   // footpaths and kerbs
+  var walkM = new T3.MeshLambertMaterial({ color: col('#a49a8a') });
   [-1, 1].forEach(function (sd) {
-    var fp = new T3.Mesh(new T3.BoxGeometry(WALK - EDGE, 0.18, LEN), new T3.MeshLambertMaterial({ color: col('#a49a8a') }));
+    var fp = new T3.Mesh(new T3.BoxGeometry(WALK - EDGE, 0.18, LEN), walkM);
     fp.position.set(sd * (EDGE + WALK) / 2, 0.09, ZMID); scene.add(fp);
   });
   // lines: edge lines (white outside, yellow by the median) and lane dashes
@@ -173,32 +173,41 @@
     var per = Math.floor(LEN / 9), dash = new T3.InstancedMesh(dashG, lineM, per * 4), o = new T3.Object3D(), n = 0;
     [-4.75, -8.25, 4.75, 8.25].forEach(function (x) { for (var i = 0; i < per; i++) { o.position.set(x, 0.03, ZMIN + i * 9); o.updateMatrix(); dash.setMatrixAt(n++, o.matrix); } });
     scene.add(dash);
-    // median segments with striped kerb, soil, shrubs; gaps at the two U-turns
-    var segs = [[ZMIN, GAP_N - 7], [GAP_N + 7, GAP_S - 7], [GAP_S + 7, ZMAX]];
-    var shrubG = new T3.IcosahedronGeometry(0.75, 0), shrubM = new T3.MeshLambertMaterial({ color: 0xffffff, flatShading: true });
+  })();
+  // median segments with striped kerb, soil, shrubs, lights; rebuilt when an option opens a new gap
+  var medianG = null, kerbTex = (function () { var c = document.createElement('canvas'); c.width = 64; c.height = 8; var g = c.getContext('2d');
+    g.fillStyle = '#f0c419'; g.fillRect(0, 0, 32, 8); g.fillStyle = '#1b1b1b'; g.fillRect(32, 0, 32, 8); return c; })();
+  var lampGeo = new Parts().box(0, 4.5, 0, 0.16, 9, 0.16, '#7c8085').box(0, 8.9, 0, 4.4, 0.12, 0.12, '#7c8085').box(2.1, 8.75, 0, 0.6, 0.18, 0.3, '#d9d6cc').box(-2.1, 8.75, 0, 0.6, 0.18, 0.3, '#d9d6cc').build();
+  var shrubG = new T3.IcosahedronGeometry(0.75, 0), shrubM = new T3.MeshLambertMaterial({ color: 0xffffff, flatShading: true });
+  var soilM = new T3.MeshLambertMaterial({ color: col('#6b5a43') }), capM = new T3.MeshLambertMaterial({ color: col('#1b1b1b') });
+  function buildMedian(gaps) {
+    if (medianG) { scene.remove(medianG); medianG.traverse(function (m) { if (m.geometry && m.geometry !== shrubG && m.geometry !== lampGeo) m.geometry.dispose(); }); }
+    medianG = new T3.Group(); scene.add(medianG);
+    var R1 = rng(4242), o = new T3.Object3D(), cuts = gaps.slice().sort(function (a, b) { return a - b; }), segs = [], z0 = ZMIN;
+    cuts.forEach(function (z) { if (z - 7 > z0) segs.push([z0, z - 7]); z0 = z + 7; }); segs.push([z0, ZMAX]);
+    cuts.forEach(function (z) { var m = new T3.Mesh(new T3.PlaneGeometry(MED * 2 + 0.2, 14), asphalt); m.rotation.x = -Math.PI / 2; m.position.set(0, 0.01, z); medianG.add(m); });
     var shrubN = 0; segs.forEach(function (s) { shrubN += Math.floor((s[1] - s[0]) / 2.6); });
-    var shrubs = new T3.InstancedMesh(shrubG, shrubM, shrubN), sc = 0, greens = ['#4f7a3a', '#5d8a42', '#3f6a33', '#6b8f45'];
+    var shrubs = new T3.InstancedMesh(shrubG, shrubM, Math.max(1, shrubN)), sc = 0, greens = ['#4f7a3a', '#5d8a42', '#3f6a33', '#6b8f45'];
     segs.forEach(function (s) {
       var len = s[1] - s[0], mid = (s[0] + s[1]) / 2;
-      var c = document.createElement('canvas'); c.width = 64; c.height = 8; var g = c.getContext('2d');
-      g.fillStyle = '#f0c419'; g.fillRect(0, 0, 32, 8); g.fillStyle = '#1b1b1b'; g.fillRect(32, 0, 32, 8);
-      var tx = new T3.CanvasTexture(c); tx.wrapS = T3.RepeatWrapping; tx.repeat.set(len / 2, 1); tx.encoding = T3.sRGBEncoding;
-      var kerb = new T3.Mesh(new T3.BoxGeometry(MED * 2, 0.3, len), [new T3.MeshLambertMaterial({ map: tx }), new T3.MeshLambertMaterial({ map: tx }), new T3.MeshLambertMaterial({ color: col('#6b5a43') }), new T3.MeshLambertMaterial({ color: col('#6b5a43') }), new T3.MeshLambertMaterial({ color: col('#1b1b1b') }), new T3.MeshLambertMaterial({ color: col('#1b1b1b') })]);
-      kerb.position.set(0, 0.15, mid); scene.add(kerb);
+      var tx = new T3.CanvasTexture(kerbTex); tx.wrapS = T3.RepeatWrapping; tx.repeat.set(len / 2, 1); tx.encoding = T3.sRGBEncoding;
+      var km = new T3.MeshLambertMaterial({ map: tx });
+      var kerb = new T3.Mesh(new T3.BoxGeometry(MED * 2, 0.3, len), [km, km, soilM, soilM, capM, capM]);
+      kerb.position.set(0, 0.15, mid); medianG.add(kerb);
       for (var z = s[0] + 1.3; z < s[1] - 1; z += 2.6) {
-        if (sc >= shrubN) break;
-        var k = rr(0.7, 1.25); o.position.set(rr(-0.35, 0.35), 0.45 + 0.3 * k, z); o.scale.set(k, k * rr(0.8, 1.2), k); o.rotation.set(0, rr(0, 6), 0); o.updateMatrix();
-        shrubs.setMatrixAt(sc, o.matrix); shrubs.setColorAt(sc, col(pick(greens))); sc++;
+        var k = 0.7 + 0.55 * R1(); o.position.set((R1() - 0.5) * 0.7, 0.45 + 0.3 * k, z); o.scale.set(k, k * (0.8 + 0.4 * R1()), k); o.rotation.set(0, R1() * 6, 0); o.updateMatrix();
+        shrubs.setMatrixAt(sc, o.matrix); shrubs.setColorAt(sc, col(greens[Math.floor(R1() * 4)])); sc++;
       }
     });
-    shrubs.count = sc; o.scale.set(1, 1, 1); o.rotation.set(0, 0, 0); scene.add(shrubs);
-    // median street lights
-    var P = new Parts(); P.box(0, 4.5, 0, 0.16, 9, 0.16, '#7c8085').box(0, 8.9, 0, 4.4, 0.12, 0.12, '#7c8085').box(2.1, 8.75, 0, 0.6, 0.18, 0.3, '#d9d6cc').box(-2.1, 8.75, 0, 0.6, 0.18, 0.3, '#d9d6cc');
-    var lg = P.build(), lights = [], z;
-    segs.forEach(function (s) { for (z = s[0] + 10; z < s[1] - 6; z += 34) lights.push(z); });
-    var lamps = new T3.InstancedMesh(lg, VC, lights.length); lights.forEach(function (z, i) { o.position.set(0, 0.3, z); o.updateMatrix(); lamps.setMatrixAt(i, o.matrix); }); scene.add(lamps);
-  })();
+    shrubs.count = sc; medianG.add(shrubs);
+    var lights = []; segs.forEach(function (s) { for (var z = s[0] + 10; z < s[1] - 6; z += 34) lights.push(z); });
+    var lamps = new T3.InstancedMesh(lampGeo, VC, Math.max(1, lights.length)); o.scale.set(1, 1, 1); o.rotation.set(0, 0, 0);
+    lights.forEach(function (z, i) { o.position.set(0, 0.3, z); o.updateMatrix(); lamps.setMatrixAt(i, o.matrix); }); lamps.count = lights.length; medianG.add(lamps);
+  }
+  var BASE_GAPS = [GAP_N, GAP_S];
+  buildMedian(BASE_GAPS);
   // buildings, window bands, shop awnings, trees (all instanced, all made up)
+  var cityMeshes = [];
   (function () {
     var o = new T3.Object3D(), box = new T3.BoxGeometry(1, 1, 1); box.translate(0, 0.5, 0);
     var walls = ['#e8dcc4', '#efe6d2', '#d9c7a7', '#e3c9b6', '#cfd6d8', '#f1ede4', '#c9c1b2', '#e7d3a6', '#d6b8a4', '#bfc8c2'];
@@ -216,14 +225,14 @@
       for (z = ZMIN + rr(0, 8); z < ZMAX; z += rr(11, 19)) Tr.push([sd * (WALK - 0.9), z, rr(0.8, 1.35)]);
     });
     var bm = new T3.InstancedMesh(box, new T3.MeshLambertMaterial({ color: 0xffffff }), B.length);
-    B.forEach(function (b, i) { o.position.set(b[0], 0, b[1]); o.scale.set(b[4], b[3], b[2]); o.updateMatrix(); bm.setMatrixAt(i, o.matrix); bm.setColorAt(i, col(b[5])); }); scene.add(bm);
+    B.forEach(function (b, i) { o.position.set(b[0], 0, b[1]); o.scale.set(b[4], b[3], b[2]); o.updateMatrix(); bm.setMatrixAt(i, o.matrix); bm.setColorAt(i, col(b[5])); }); scene.add(bm); cityMeshes.push(bm);
     var wm = new T3.InstancedMesh(box, new T3.MeshLambertMaterial({ color: col('#45515c') }), W.length);
-    W.forEach(function (b, i) { o.position.set(b[0], b[1], b[2]); o.scale.set(0.12, b[4], b[3]); o.updateMatrix(); wm.setMatrixAt(i, o.matrix); }); scene.add(wm);
+    W.forEach(function (b, i) { o.position.set(b[0], b[1], b[2]); o.scale.set(0.12, b[4], b[3]); o.updateMatrix(); wm.setMatrixAt(i, o.matrix); }); scene.add(wm); cityMeshes.push(wm);
     var sm = new T3.InstancedMesh(box, new T3.MeshLambertMaterial({ color: 0xffffff }), S.length);
-    S.forEach(function (b, i) { o.position.set(b[0], b[1], b[2]); o.scale.set(2.0, 0.35, b[3]); o.updateMatrix(); sm.setMatrixAt(i, o.matrix); sm.setColorAt(i, col(b[4])); }); scene.add(sm);
+    S.forEach(function (b, i) { o.position.set(b[0], b[1], b[2]); o.scale.set(2.0, 0.35, b[3]); o.updateMatrix(); sm.setMatrixAt(i, o.matrix); sm.setColorAt(i, col(b[4])); }); scene.add(sm); cityMeshes.push(sm);
     var P = new Parts(); P.box(0, 1.2, 0, 0.32, 2.4, 0.32, '#6a5039').geo(new T3.IcosahedronGeometry(2.3, 0), 0, 4.0, 0, '#557d3d').geo(new T3.IcosahedronGeometry(1.6, 0), 0.9, 5.2, 0.5, '#4a7035');
     var tg = P.build(), tm = new T3.InstancedMesh(tg, new T3.MeshLambertMaterial({ vertexColors: true, flatShading: true }), Tr.length);
-    Tr.forEach(function (t, i) { o.position.set(t[0], 0.18, t[1]); o.scale.set(t[2], t[2] * rr(0.9, 1.15), t[2]); o.rotation.y = rr(0, 6); o.updateMatrix(); tm.setMatrixAt(i, o.matrix); }); scene.add(tm);
+    Tr.forEach(function (t, i) { o.position.set(t[0], 0.18, t[1]); o.scale.set(t[2], t[2] * rr(0.9, 1.15), t[2]); o.rotation.y = rr(0, 6); o.updateMatrix(); tm.setMatrixAt(i, o.matrix); }); scene.add(tm); cityMeshes.push(tm);
   })();
 
   // ---------------- vehicles (made up, no brands, no plates, faceless riders) ----------------
@@ -348,6 +357,7 @@
   function two(lg, sm) { return '<span class="lg">' + lg + '</span><span class="sm">' + sm + '</span>'; }
   function updateViewBtn() { viewB.innerHTML = S.above ? two("Driver's view", 'Driver') : two('View from above', 'Above'); viewB.setAttribute('aria-pressed', String(S.above)); }
   function reset(dir) {
+    if (SOL && SOL.on) closeSol();
     S.dir = dir; S.t = 0; S.mode = 'intro'; stage.classList.remove('done'); result.hidden = true; introC.hidden = false;
     var d = DRIVES[dir];
     $('intro-body').textContent = 'You are on the ' + d.from + '. To reach the ' + d.to + ', drive away from it to the gap in the median, turn, and come back.';
@@ -408,9 +418,183 @@
     VARIANTS.forEach(function (va) { if (!va.mesh) return; for (var k = 0; k < va.list.length; k++) { var q = va.list[k]; o3.position.set(q.x, 0, q.z); o3.rotation.set(0, q.c ? Math.PI : 0, 0); o3.updateMatrix(); va.mesh.setMatrixAt(k, o3.matrix); } va.mesh.instanceMatrix.needsUpdate = true; });
   }
 
+
+  // ---------------- what could fix this (illustrations, not designs) ----------------
+  var SOL = { on: false, k: 'nearer', L: 375, tSol: 0, grow: 0 };
+  var solG = new T3.Group(); scene.add(solG);
+  var mOld = new T3.MeshBasicMaterial({ color: col('#9AA0A6'), transparent: true, opacity: 0.55, depthWrite: false, side: T3.DoubleSide });
+  var chev = (function () { var c = document.createElement('canvas'); c.width = 64; c.height = 64; var g = c.getContext('2d');
+    g.fillStyle = '#E8935A'; g.fillRect(0, 0, 64, 64); g.strokeStyle = '#FFE2C8'; g.lineWidth = 7; g.lineCap = 'round'; g.lineJoin = 'round';
+    g.beginPath(); g.moveTo(18, 14); g.lineTo(40, 32); g.lineTo(18, 50); g.stroke();
+    var t = new T3.CanvasTexture(c); t.wrapS = t.wrapT = T3.RepeatWrapping; t.encoding = T3.sRGBEncoding; t.anisotropy = 4; return t; })();
+  var mNew = new T3.MeshBasicMaterial({ map: chev, transparent: true, opacity: 0.98, depthWrite: false, side: T3.DoubleSide });
+  var ghostFill = new T3.MeshBasicMaterial({ color: col('#E8A87C'), transparent: true, opacity: 0.1, depthWrite: false, side: T3.DoubleSide });
+  var ghostLine = new T3.LineBasicMaterial({ color: col('#F0C2A0'), transparent: true, opacity: 0.85 });
+  function mirrored(r) { if (S.dir === 'ba') { r.x = r.x.map(function (v) { return -v; }); r.z = r.z.map(function (v) { return -v; }); } return r; }
+  function ribbon(r, ys, mat, w, lift) {
+    var pts = [], i, n = r.x.length;
+    for (i = 0; i < n; i += 4) pts.push(i); if (pts[pts.length - 1] !== n - 1) pts.push(n - 1);
+    var pos = new Float32Array(pts.length * 6), uv = new Float32Array(pts.length * 4), idx = [];
+    pts.forEach(function (i, k) {
+      uv.set([r.s[i] / w, 0, r.s[i] / w, 1], k * 4);
+      var j = Math.min(n - 1, i + 4), h = Math.max(0, i - 4), dx = r.x[j] - r.x[h], dz = r.z[j] - r.z[h], d = Math.hypot(dx, dz) || 1;
+      var nx = -dz / d * w / 2, nz = dx / d * w / 2, y = (ys ? ys(r.s[i]) : 0) + lift;
+      pos.set([r.x[i] + nx, y, r.z[i] + nz, r.x[i] - nx, y, r.z[i] - nz], k * 6);
+      if (k) { var a = (k - 1) * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+    });
+    var g = new T3.BufferGeometry(); g.setAttribute('position', new T3.BufferAttribute(pos, 3)); g.setAttribute('uv', new T3.BufferAttribute(uv, 2)); g.setIndex(idx);
+    var m = new T3.Mesh(g, mat); m.renderOrder = 5; m.userData.total = idx.length; return m;
+  }
+  function ghostBox(w, h, d, x, y, z) {
+    var g = new T3.BoxGeometry(w, h, d), grp = new T3.Group();
+    grp.add(new T3.Mesh(g, ghostFill)); grp.add(new T3.LineSegments(new T3.EdgesGeometry(g), ghostLine)); grp.position.set(x, y, z); return grp;
+  }
+  function signalPole(x, z, face) {
+    var grp = new T3.Group(), dark = new T3.MeshLambertMaterial({ color: col('#2a2d31') });
+    var pole = new T3.Mesh(new T3.CylinderGeometry(0.09, 0.11, 5.2, 10), dark); pole.position.y = 2.6; grp.add(pole);
+    var head = new T3.Mesh(new T3.BoxGeometry(0.42, 1.2, 0.36), dark); head.position.set(0, 4.7, 0); grp.add(head);
+    ['#e2463a', '#e8b13a', '#4cc38a'].forEach(function (c, i) {
+      var lamp = new T3.Mesh(new T3.SphereGeometry(0.13, 12, 8), new T3.MeshBasicMaterial({ color: col(c) }));
+      lamp.position.set(0, 5.05 - i * 0.36, face * 0.19); lamp.userData.lamp = i; grp.add(lamp);
+    });
+    grp.position.set(x, 0, z); return grp;
+  }
+  var OPT = {
+    nearer: { n: 1, title: 'A U-turn opening nearer',
+      lead: function (o) { return 'On this drawing the nearest U-turn is about ' + o.cur + ' m away, which is why crossing 13 m took ' + o.today + '. Bring an opening to ' + o.L + ' m and the crossing becomes about ' + o.nw + '.'; },
+      guide: 'Guidance: India\'s access-control guidelines keep median openings to intersections with public roads, at least 750 m apart on highways (IRC:62). An IIT course text gives 500 m as the closest on other highways.',
+      trade: 'Trade-off: every opening is another place where turning and through traffic meet. Studies abroad find openings that allow only U-turns have fewer crashes overall than full openings, though the U-turns pile up further along.' },
+    signal: { n: 2, title: 'A signal-controlled crossing here',
+      lead: function (o) { return 'Open the median at this place and control it with a signal. The crossing becomes about ' + o.nw + ', plus the wait at the light.'; },
+      guide: 'Guidance: signals in India follow IRC:93, which asks for a traffic study showing a signal is warranted before one is installed.',
+      trade: 'Trade-off: through traffic stops more often, and a signal needs that study, power and upkeep.' },
+    under: { n: 3, title: 'A U-turn underpass',
+      lead: function (o) { return 'Turn under the road instead of across it. In this layout the crossing is about ' + o.nw + ', with no conflict with through traffic.'; },
+      guide: 'Guidance: India\'s six-lane highway standard provides vehicular underpasses or overpasses at major crossings, with service roads instead of direct access (IRC:SP:87).',
+      trade: 'Trade-off: the costliest option, with land, drainage and years of works. It suits heavy flows, not every street.' },
+    why: { n: 4, title: 'Why not a gap every hundred metres?',
+      lead: function () { return 'Because each opening is a new point where turning and through traffic cross. That is why the guidance keeps openings few and at intersections.'; },
+      guide: 'Guidance: median openings limited to intersections, their number kept to a minimum (IRC:62).',
+      trade: 'Which option fits this place depends on its traffic, and that study is the road owner\'s. arcroad measures what the detour costs; it does not choose the fix.' }
+  };
+  function nearDist() { return Math.round(RT[S.dir].L); }
+  function solPath() {
+    if (SOL.k === 'nearer') return { r: mirrored(route(SOL.L)), gap: SOL.L + LANES[0] };
+    if (SOL.k === 'signal') return { r: mirrored(route(7)), gap: 7 + LANES[0] };
+    if (SOL.k === 'under') return { r: mirrored(route(110)), gap: 110 + LANES[0], under: true };
+    return { r: null };
+  }
+  var undY = null, dayBg = scene.background, dayFog = scene.fog.color.clone(), dayGround = groundMesh.material.color.clone();
+  var nightBg = (function () { var c = document.createElement('canvas'); c.width = 4; c.height = 256; var g = c.getContext('2d');
+    var gr = g.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, '#05070B'); gr.addColorStop(1, '#10141B'); g.fillStyle = gr; g.fillRect(0, 0, 4, 256);
+    var t = new T3.CanvasTexture(c); t.encoding = T3.sRGBEncoding; return t; })();
+  function blueprint(on) {
+    cityMeshes.forEach(function (m) { m.visible = !on; });
+    scene.background = on ? nightBg : dayBg; scene.fog.color.copy(on ? col('#0B0E13') : dayFog);
+    groundMesh.material.color.copy(on ? col('#151A21') : dayGround); walkM.color.copy(col(on ? '#3b3833' : '#a49a8a'));
+  }
+  function setXray(on) {
+    [asphalt, groundMesh.material].forEach(function (m) { m.transparent = on; m.opacity = on ? 0.32 : 1; m.depthWrite = !on; m.needsUpdate = true; });
+  }
+  function buildSolution() {
+    while (solG.children.length) { var c = solG.children.pop(); c.traverse(function (m) { if (m.geometry) m.geometry.dispose(); }); }
+    var sp = solPath(), sg = S.dir === 'ab' ? -1 : 1, today = RT[S.dir];
+    setXray(!!sp.under);
+    var W = SOL.w || 1.5;
+    solG.add(ribbon(today, null, mOld, W * 0.7, 0.06));
+    if (!sp.r) {
+      buildMedian(BASE_GAPS);
+      for (var z = 40; z < nearDist() - 30; z += 100) { var ring = new T3.Mesh(new T3.RingGeometry(1.6, 2.3, 40), new T3.MeshBasicMaterial({ color: col('#ff5a4a'), transparent: true, opacity: 0.9, depthWrite: false, depthTest: false })); ring.renderOrder = 7; ring.rotation.x = -Math.PI / 2; ring.position.set(0, 0.7, sg * z); ring.userData.base = Math.max(1, W / 1.2); ring.scale.setScalar(ring.userData.base); ring.userData.pulse = z; solG.add(ring); }
+      var t = label('Each opening: a conflict point', '#ff5a4a'); var lk2 = Math.max(1, (SOL.d || 120) / 70); t.scale.set(12 * lk2, 2 * lk2, 1); t.position.set(0, 8 * lk2, sg * Math.min(240, nearDist() / 2)); solG.add(t);
+      SOL.route = null; return;
+    }
+    buildMedian(BASE_GAPS.concat(sp.under ? [] : [sg * sp.gap]));
+    var L = sp.r.L, arc0 = L, arc1 = L + Math.PI * LANES[0];
+    undY = sp.under ? function (s) { var d = s < arc0 ? (s - (arc0 - 45)) / 45 : (s > arc1 ? 1 - (s - arc1) / 45 : 1); return -4.6 * smooth(d); } : null;
+    var nr = ribbon(sp.r, undY, mNew, W, 0.09); nr.geometry.setDrawRange(0, 0); solG.add(nr); SOL.ribbon = nr;
+    if (sp.under) {
+      var zc = sg * (L + 1.5);
+      solG.add(ghostBox(22, 4.4, 15, 0, -2.6, zc));
+      [-1, 1].forEach(function (x) {
+        var rg = new T3.PlaneGeometry(3.8, 46); var rm = new T3.Mesh(rg, ghostFill); rm.rotation.x = -Math.PI / 2 + Math.atan2(4.6, 46) * (sg < 0 ? 1 : -1); rm.position.set(x * LANES[0], -2.3, sg * (L - 22)); solG.add(rm);
+        var re = new T3.LineSegments(new T3.EdgesGeometry(rg), ghostLine); re.rotation.copy(rm.rotation); re.position.copy(rm.position); solG.add(re);
+      });
+    }
+    if (SOL.k === 'signal') { solG.add(signalPole(-EDGE - 0.6, sg * (sp.gap + 9), -sg)); solG.add(signalPole(EDGE + 0.6, sg * (sp.gap - 9), sg)); }
+    var lk = Math.max(1, (SOL.d || 120) / 70);
+    function tag(text, accent, z, y) { var t = label(text, accent ? '#E8A87C' : '#9AA0A6'); t.scale.set(12 * lk, 2 * lk, 1); t.position.set(0, y || 6 * lk, z); solG.add(t); }
+    if (SOL.k === 'nearer') { tag('New opening · ' + SOL.L + ' m', true, sg * sp.gap); if (nearDist() - SOL.L > 60) tag('Today\'s U-turn · ' + nearDist() + ' m', false, sg * (nearDist() + 3)); }
+    if (SOL.k === 'signal') tag('Signal-controlled opening', true, sg * sp.gap, 9);
+    if (SOL.k === 'under') tag('U-turn underpass', true, sg * (sp.gap - 2), 7);
+    SOL.route = sp.r; SOL.grow = 0;
+  }
+  function solNumbers() {
+    var sp = solPath(), d = DRIVES[S.dir], o = { cur: nearDist(), L: SOL.L, today: (d.m / 1000).toFixed(2) + ' km' };
+    if (sp.r) { var m = sp.r.len; o.nwM = m; o.nw = m >= 1000 ? (m / 1000).toFixed(2) + ' km' : Math.round(m / 10) * 10 + ' m'; }
+    return o;
+  }
+  function renderSol() {
+    var t = OPT[SOL.k], o = solNumbers();
+    $('s-eyebrow').textContent = 'Option ' + t.n + ' of 4 · illustration, not a design';
+    $('s-title').textContent = t.title;
+    $('s-lead').textContent = t.lead(o);
+    $('s-guide').textContent = t.guide; $('s-trade').textContent = t.trade;
+    var nums = $('s-nums');
+    if (o.nw) {
+      nums.hidden = false; $('s-today').textContent = o.today; $('s-new').textContent = o.nw;
+      var save = (DRIVES[S.dir].m - o.nwM) / 1000;
+      $('s-save').textContent = 'about ' + save.toFixed(2) + ' km shorter each time'; $('s-save').hidden = false;
+    } else { nums.hidden = true; $('s-save').hidden = true; }
+    $('s-range').hidden = SOL.k !== 'nearer';
+    var rg = $('s-L'); rg.max = Math.max(150, nearDist() - 20); $('s-Lv').textContent = SOL.L + ' m';
+    Array.prototype.forEach.call(document.querySelectorAll('#s-tabs button'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-k') === SOL.k)); });
+  }
+  function openSol(k) {
+    if (S.mode === 'driving') { S.mode = 'paused'; playB.textContent = 'Resume'; }
+    SOL.on = true; SOL.k = k || SOL.k; SOL.tSol = 0; stage.classList.add('sol'); scene.fog.near = 400; scene.fog.far = 3000; blueprint(true);
+    solView(); buildSolution(); renderSol(); kick(); host.focus({ preventScroll: true });
+  }
+  function closeSol() {
+    SOL.on = false; cam.clearViewOffset(); stage.classList.remove('sol'); scene.fog.near = 60; scene.fog.far = 205; setXray(false); blueprint(false);
+    while (solG.children.length) { var c = solG.children.pop(); c.traverse(function (m) { if (m.geometry) m.geometry.dispose(); }); }
+    buildMedian(BASE_GAPS); kick();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#s-tabs button'), function (b) { b.addEventListener('click', function () { SOL.k = b.getAttribute('data-k'); solView(); buildSolution(); renderSol(); kick(); }); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-sol]'), function (b) { b.addEventListener('click', function (e) { e.preventDefault(); openSol(b.getAttribute('data-sol')); if (b.closest('.fixes')) host.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' }); }); });
+  $('s-back').addEventListener('click', closeSol);
+  $('s-more').addEventListener('click', function () { var p = $('solp'), f = p.classList.toggle('full'); this.setAttribute('aria-expanded', String(f)); this.textContent = f ? 'Less' : 'Guidance and trade-off'; });
+  var lTimer = 0;
+  $('s-L').addEventListener('input', function (e) { SOL.L = +e.target.value; $('s-Lv').textContent = SOL.L + ' m'; renderSol(); clearTimeout(lTimer); lTimer = setTimeout(function () { solView(); buildSolution(); SOL.grow = 1; if (SOL.ribbon) SOL.ribbon.geometry.setDrawRange(0, SOL.ribbon.userData.total); kick(); }, 60); });
+  // frame the option: road across the free part of the stage (the panel takes the left side on wide screens)
+  function solView() {
+    var sg = S.dir === 'ab' ? -1 : 1, sp = solPath(), wide = (cam.aspect || 1.7) >= 1;
+    var span = SOL.k === 'signal' ? 60 : (SOL.k === 'under' ? 170 : (sp.r ? sp.r.L + 70 : Math.min(520, nearDist() + 40)));
+    var zc = SOL.k === 'under' ? sg * (sp.r.L - 45) : sg * (span / 2 - 22);
+    var d = Math.max(48, span * (wide ? 0.78 : 1.05));
+    SOL.d = d; SOL.w = Math.max(1.4, Math.min(6, d / 85));
+    SOL.look = new T3.Vector3(0, SOL.k === 'under' ? -2 : 0, zc);
+    SOL.pos = wide ? new T3.Vector3(0.62 * d, (SOL.k === 'under' ? 0.42 : 0.6) * d, zc - sg * 0.5 * d) : new T3.Vector3(0.2 * d, 0.9 * d, zc - sg * 0.55 * d);
+    var w = host.clientWidth, h = host.clientHeight;
+    if (wide) cam.setViewOffset(w, h, -Math.min(260, w * 0.21), 0, w, h); else cam.setViewOffset(w, h, 0, Math.round(h * 0.2), w, h);
+  }
+  function solFrame(dt, now) {
+    SOL.tSol += dt; var sg = S.dir === 'ab' ? -1 : 1;
+    if (SOL.ribbon && SOL.grow < 1) { SOL.grow = Math.min(1, SOL.grow + dt / (RM ? 0.01 : 1.1)); SOL.ribbon.geometry.setDrawRange(0, Math.floor(SOL.ribbon.userData.total * smooth(SOL.grow) / 3) * 3); }
+    solG.children.forEach(function (c) {
+      if (c.userData.pulse) c.scale.setScalar(c.userData.base * (1 + 0.15 * Math.sin(now / 280 + c.userData.pulse)));
+      c.traverse && c.traverse(function (m) { if (m.userData.lamp !== undefined) { var ph = Math.floor(SOL.tSol / 2.2) % 3; m.material.color.setHex(m.userData.lamp === [0, 2, 1][ph] ? [0xff5a4a, 0xffc24a, 0x5ff0a6][m.userData.lamp] : 0x26292d); } });
+    });
+    var r = SOL.route || RT[S.dir], len = r.len, spd = Math.max(len / 7, 8), s = (SOL.tSol * spd) % (len + spd * 1.2);
+    s = Math.min(s, len); var p = at(r, s);
+    player.position.set(p.x, SOL.route && undY ? undY(s) : 0, p.z); player.rotation.y = Math.atan2(-p.hx, -p.hz); player.visible = true; cockpit.visible = false;
+    var drift = RM ? 0 : Math.sin(SOL.tSol * 0.18) * 0.06;
+    tmpP.copy(SOL.pos).sub(SOL.look).applyAxisAngle(cam.up, drift).add(SOL.look); tmpL.copy(SOL.look);
+    chev.offset.x = -(SOL.tSol * 0.9) % 1;
+  }
+
   // ---------------- loop ----------------
   var last = 0, running = false, visible = true, lastS = 0;
-  function size() { var w = host.clientWidth, h = host.clientHeight; if (!w || !h) return; R.setSize(w, h, false); cam.aspect = w / h; cam.fov = w / h < 1 ? 72 : 60; cam.updateProjectionMatrix(); }
+  function size() { var w = host.clientWidth, h = host.clientHeight; if (!w || !h) return; R.setSize(w, h, false); cam.aspect = w / h; cam.fov = w / h < 1 ? 72 : 60; cam.updateProjectionMatrix(); if (typeof SOL !== 'undefined' && SOL.on) { solView(); buildSolution(); } }
   function frame(now) {
     running = false; if (!visible) return;
     var dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016); last = now;
@@ -423,9 +607,11 @@
     var kmh = S.mode === 'driving' ? Math.max(0, (sAt(P, S.t + 0.75) - sAt(P, S.t - 0.75)) / 1.5 * 3.6) : 0;
     var pv = kmh / 3.6;
     stepTraffic(S.mode === 'driving' ? dt * S.rate : (S.mode === 'paused' ? 0 : dt), S.t, p, S.mode === 'intro' ? 0 : pv, S.dir === 'ba');
-    player.position.set(p.x, 0, p.z); player.rotation.y = Math.atan2(-p.hx, -p.hz);
+    if (!SOL.on) { player.position.set(p.x, 0, p.z); player.rotation.y = Math.atan2(-p.hx, -p.hz); }
     var ahead = at(r, s + 22);
-    if (S.mode === 'intro') {
+    if (SOL.on) {
+      solFrame(dt, now);
+    } else if (S.mode === 'intro') {
       S.orbit += RM ? 0 : dt * 0.1;
       var st = S.dir === 'ab' ? A : B;
       tmpP.set(Math.sin(S.orbit) * 34, 24, Math.cos(S.orbit) * 34); tmpL.set(-Math.cos(S.orbit) * 9, 1, Math.sin(S.orbit) * 9);
@@ -437,13 +623,12 @@
       tmpP.set(p.x + p.hx * 0.2, 1.25, p.z + p.hz * 0.2); tmpL.set(ahead.x, 1.05, ahead.z);
       player.visible = false; cockpit.visible = true;
     }
-    var k = 1 - Math.exp(-dt * (S.mode === 'intro' ? 2 : 4.5));
+    var k = 1 - Math.exp(-dt * (SOL.on ? (RM ? 60 : 1.6) : (S.mode === 'intro' ? 2 : 4.5)));
     camPos.lerp(tmpP, k); camLook.lerp(tmpL, k);
-    if (!S.above && S.mode !== 'intro' && S.mode !== 'done' && camPos.distanceTo(tmpP) < 3) camPos.copy(tmpP);
+    if (!SOL.on && !S.above && S.mode !== 'intro' && S.mode !== 'done' && camPos.distanceTo(tmpP) < 3) camPos.copy(tmpP);
     cam.position.copy(camPos); cam.lookAt(camLook);
     pins.forEach(function (g) { g.children[1].scale.setScalar(1 + 0.08 * Math.sin(now / 400)); });
-    if (S.mode !== 'intro' || Math.abs(s - lastS) > 0.01 || !lastS) hud(s, kmh); lastS = s;
-    drawStrip(S.dir, s);
+    if (!SOL.on) { if (S.mode !== 'intro' || Math.abs(s - lastS) > 0.01 || !lastS) hud(s, kmh); lastS = s; drawStrip(S.dir, s); }
     R.render(scene, cam);
   }
   function kick() { if (!running && visible) { running = true; requestAnimationFrame(frame); } }
@@ -451,7 +636,7 @@
   document.addEventListener('visibilitychange', function () { visible = !document.hidden; if (visible) { last = 0; kick(); } });
   if ('ResizeObserver' in window) new ResizeObserver(size).observe(host); else window.addEventListener('resize', size);
   size(); updateViewBtn(); reset('ab'); kick();
-  window.__arcroadDrive = { S: S, RT: RT, PACE: PACE, DRIVES: DRIVES, play: play,   // hooks for tests and the home-page preview render
+  window.__arcroadDrive = { dbg: function () { return { n: solG.children.length, kinds: solG.children.map(function (c) { return c.type + (c.geometry && c.geometry.drawRange ? ':' + c.geometry.drawRange.count + '/' + (c.userData.total || '') : ''); }), w: SOL.w, pos: SOL.pos && SOL.pos.toArray().map(Math.round), look: SOL.look && SOL.look.toArray().map(Math.round) }; }, SOL: function () { return SOL; }, openSol: function (k) { openSol(k); }, S: S, RT: RT, PACE: PACE, DRIVES: DRIVES, play: play,   // hooks for tests and the home-page preview render
     capture: function () { visible = false; host.classList.add('capture'); },
     frame: function (dt, now) { tick(dt, now); return R.domElement.toDataURL('image/jpeg', 0.92); } };
 })();
