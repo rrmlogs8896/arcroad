@@ -5,7 +5,8 @@ A Worker with no public route. At 22:00 IST every night, a cron trigger starts o
 ## Jobs
 
 1. **openings**: pre-registered in `docs/PREREG-openings.md`. For each place it records whether a public road meets the divided road, whether a signal is nearby, and how many traffic-calming features (speed breakers) are mapped within 750 m. Places are compared against control points.
-2. **bengaluru**: the same candidate collection as the monthly GitHub workflow (`tools/multicity_collect.py bengaluru --detour`). Its output is a candidate and is not published.
+2. **hotspots**: pre-registered in `docs/PREREG-hotspots.md`. Ranks crossing pressure across Hyderabad and at each place from where people live (GHSL, cross-checked with WorldPop), where they go during the day and how much main road serves them (OpenStreetMap). A pressure proxy, not counted traffic. Adds about 10 minutes.
+3. **bengaluru**: the same candidate collection as the monthly GitHub workflow (`tools/multicity_collect.py bengaluru --detour`). Its output is a candidate and is not published.
 
 ## Deploy (iMac, Docker Desktop running)
 
@@ -21,4 +22,4 @@ npx wrangler r2 object get arcroad-research/nights/<date>/openings.json --remote
 
 ## Cost
 
-The plan includes 375 vCPU-minutes a month. A night that runs both jobs for an hour uses about 30 vCPU-minutes (½ vCPU × 60 min).
+The plan includes 375 vCPU-minutes a month. A night that runs all three jobs for an hour uses about 30 vCPU-minutes (½ vCPU × 60 min).

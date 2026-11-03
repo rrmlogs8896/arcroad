@@ -184,3 +184,7 @@ only; every measured number stays in code.
 - /report/: form no longer wider than the screen (was 480 px on a 320 px phone).
 - /globe/: place and city buttons are 40 px tall on touch screens.
 - Nav: fades at the right edge while there is more to scroll.
+
+## 3 Nov 2026 — hotspots job in the research runner
+- New nightly job `hotspots` (research/runner/app/hotspots.py, docs/PREREG-hotspots.md): crossing-pressure proxies from GHSL residents (WorldPop cross-check), OSM daytime destinations and main-road supply; per place and on a 500 m city grid. Two pre-registered gates (triangulation ρ ≥ 0.70; composite must differ from population-only). Output to R2 `nights/<date>/hotspots.json`, not published.
+- Dockerfile now installs rasterio (the bengaluru job also needed it for GHSL).
