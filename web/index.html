@@ -213,10 +213,22 @@ img,svg,canvas,video{max-width:100%}
     (function () {
       var v = document.querySelector('.teaser video'); if (!v) return;
       var rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var save = navigator.connection && navigator.connection.saveData;
-      if (rm || save || !('IntersectionObserver' in window)) return;
+      var c = navigator.connection || {};
+      if (rm || c.saveData || /(^|-)2g$/.test(c.effectiveType || '') || !('IntersectionObserver' in window)) return;
+      var TIERS = [[480, 854], [720, 1280], [1080, 1920], [1440, 2560]];
+      var need = v.clientWidth * Math.min(window.devicePixelRatio || 1, 3) * 0.9, cap = 1440;
+      if (c.effectiveType === '3g') cap = 480;
+      else if (c.downlink) cap = c.downlink < 3 ? 720 : (c.downlink < 8 ? 1080 : 1440);
+      var i = cap === 480 ? 0 : 1; while (i < TIERS.length - 1 && TIERS[i][1] < need && TIERS[i + 1][0] <= cap) i++;
+      var started = false, timer = 0;
+      function load(k) {
+        i = k; v.src = 'drive/media/preview-' + TIERS[k][0] + '.mp4';
+        var p = v.play(); if (p && p.catch) p.catch(function () {});
+        clearTimeout(timer); timer = setTimeout(function () { if (!started && i > 0) load(i - 1); }, 4000);
+      }
+      v.addEventListener('playing', function () { started = true; clearTimeout(timer); });
       new IntersectionObserver(function (e) {
-        if (e[0].isIntersecting) { if (!v.src) v.src = 'drive/media/preview.mp4'; var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+        if (e[0].isIntersecting) { if (!v.src) load(i); else { var p = v.play(); if (p && p.catch) p.catch(function () {}); } }
         else v.pause();
       }, { threshold: 0.25 }).observe(v);
     })();
