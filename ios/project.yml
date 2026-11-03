@@ -1,0 +1,50 @@
+# arcroad for iPhone. Generate the Xcode project on a Mac with:  xcodegen generate
+# Needs Xcode 26 or later (App Store Connect rejects older builds since 28 Apr 2026).
+name: arcroad
+options:
+  bundleIdPrefix: org.arcroad
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+    DEVELOPMENT_TEAM: ""
+targets:
+  arcroad:
+    type: application
+    platform: iOS
+    sources:
+      - path: arcroad
+    info:
+      path: arcroad/Info.plist
+      properties:
+        CFBundleDisplayName: arcroad
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSApplicationCategoryType: public.app-category.navigation
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIUserInterfaceStyle: Dark
+        ITSAppUsesNonExemptEncryption: false
+        NSLocationWhenInUseUsageDescription: "arcroad uses your location only while you record a crossing, to measure the distance and time of your detour on this iPhone. Nothing is sent anywhere unless you choose to share the summary."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.arcroad.app
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_STYLE: Automatic
+    preBuildScripts:
+      - name: Bundle the arcroad site
+        basedOnDependencyAnalysis: false
+        script: |
+          # The app carries its own copy of arcroad.org (web/), so it works offline.
+          # The two largest film sizes are left out: an iPhone screen never needs them.
+          DEST="${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/site"
+          mkdir -p "$DEST"
+          rsync -a --delete --exclude '*-1440.mp4' --exclude '*-2160.mp4' --exclude '.DS_Store' "${SRCROOT}/../web/" "$DEST/"

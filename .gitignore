@@ -12,3 +12,9 @@ __pycache__/
 
 # Generated from Natural Earth by tools/films/make_land.py; only the rendered film is published
 tools/films/land.js
+
+# Xcode (generate with xcodegen; never commit signing or user state)
+ios/*.xcodeproj/
+ios/arcroad/Info.plist
+xcuserdata/
+DerivedData/
