@@ -120,8 +120,13 @@ a{color:#E8A87C}
 .why dd{margin:0}
 .why p{margin:12px 0 0}
 @media (max-width:560px){.why dl{grid-template-columns:1fr}.why dd{margin-bottom:6px}}
-.teaser{display:block;position:relative;margin:26px 0 0;max-width:760px;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid var(--line2);background:#0E1116;text-decoration:none}
-.teaser video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.teaser{display:block;position:relative;margin:26px 0 0;max-width:1068px;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid var(--line2);background:#0E1116;text-decoration:none}
+.teaser video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .9s ease}
+.teaser video.on{opacity:1}
+.teaser .dots{position:absolute;top:14px;right:16px;display:flex;gap:6px}
+.teaser .dots i{width:5px;height:5px;border-radius:50%;background:rgba(245,246,247,.28);transition:background .6s ease,transform .6s ease}
+.teaser .dots i.on{background:var(--accent);transform:scale(1.25)}
+.teaser .cap b,.teaser .cap small{transition:opacity .5s ease}
 .teaser .tz{position:absolute;left:0;right:0;bottom:0;padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:linear-gradient(transparent,rgba(5,7,11,.78));color:var(--fg2)}
 .teaser .tz b{display:block;font-size:15.5px;font-weight:600;letter-spacing:-0.01em}
 .teaser .tz small{display:block;font-size:13px;color:var(--mut)}
@@ -206,31 +211,67 @@ img,svg,canvas,video{max-width:100%}
     <h1>A place you can see, 1.5 km away</h1>
     <p class="lede">Divided roads cut neighbours off. arcroad measures what crossing your own road costs, then drives the detour to check.</p>
     <a class="teaser" href="drive/" aria-label="Ride the S18 detour in 3D: 13 metres across, 1.58 kilometres to get there">
-      <video muted playsinline loop preload="none" poster="drive/media/preview.jpg" aria-hidden="true"></video>
-      <span class="tz"><span><b>13 m across. 1.58 km to get there.</b><small>3D illustration of our 1 Nov drive</small></span><span class="go">Ride it →</span></span>
+      <video class="on" muted playsinline preload="none" poster="drive/media/films/drive.jpg" aria-hidden="true"></video>
+      <video muted playsinline preload="none" aria-hidden="true"></video>
+      <span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="tz"><span class="cap"><b>13 m across. 1.58 km to get there.</b><small>3D illustration of our 1 Nov drive at S18</small></span><span class="go">Ride it →</span></span>
     </a>
     <script>
     (function () {
-      var v = document.querySelector('.teaser video'); if (!v) return;
+      var box = document.querySelector('.teaser'); if (!box) return;
+      var V = box.querySelectorAll('video'), cap = box.querySelector('.cap'), dots = box.querySelectorAll('.dots i');
+      // Six films, all built from measured drives (tools/films/). Played in random order; nothing is stored.
+      var FILMS = [
+        ['drive', '13 m across. 1.58 km to get there.', '3D illustration of our 1 Nov drive at S18', 'drive/'],
+        ['night', '17 m across. 1.95 km after dark.', 'Illustration of our 2 Nov night drive at S12', 'drive/'],
+        ['orbit', 'From orbit to 13 metres.', '29 cities on the globe, down to one road in Hyderabad', 'globe/?spot=S18'],
+        ['thread', '1,580 m to cross 13 m.', 'The S18 detour, traced from our drive', 'drive/'],
+        ['blueprint', 'What could fix it.', 'Three options drawn on S18 · illustration, not a design', 'drive/#fix'],
+        ['timelapse', 'A year of crossing: ₹1,901.', 'One person, both ways, every working day, two-wheeler', 'cost/']
+      ];
+      var cur = Math.floor(Math.random() * FILMS.length);
+      function show(k) {
+        var f = FILMS[k]; cap.firstChild.textContent = f[1]; cap.lastChild.textContent = f[2]; box.setAttribute('href', f[3]); box.setAttribute('aria-label', f[1] + ' ' + f[2]);
+        for (var d = 0; d < dots.length; d++) dots[d].className = d === k ? 'on' : '';
+      }
+      V[0].poster = 'drive/media/films/' + FILMS[cur][0] + '.jpg'; show(cur);
       var rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
       var c = navigator.connection || {};
       if (rm || c.saveData || /(^|-)2g$/.test(c.effectiveType || '') || !('IntersectionObserver' in window)) return;
-      var TIERS = [[480, 854], [720, 1280], [1080, 1920], [1440, 2560]];
-      var need = v.clientWidth * Math.min(window.devicePixelRatio || 1, 3) * 0.9, cap = 1440;
-      if (c.effectiveType === '3g') cap = 480;
-      else if (c.downlink) cap = c.downlink < 3 ? 720 : (c.downlink < 8 ? 1080 : 1440);
-      var i = cap === 480 ? 0 : 1; while (i < TIERS.length - 1 && TIERS[i][1] < need && TIERS[i + 1][0] <= cap) i++;
-      var started = false, timer = 0;
-      function load(k) {
-        i = k; v.src = 'drive/media/preview-' + TIERS[k][0] + '.mp4';
-        var p = v.play(); if (p && p.catch) p.catch(function () {});
-        clearTimeout(timer); timer = setTimeout(function () { if (!started && i > 0) load(i - 1); }, 4000);
+      // Size: the smallest file that covers the box at this screen's density, one step sharper on a fast link.
+      var TIERS = [[480, 854], [720, 1280], [1080, 1920], [1440, 2560], [2160, 3840]];
+      var need = box.clientWidth * Math.min(window.devicePixelRatio || 1, 3), i = 0;
+      while (i < TIERS.length - 1 && TIERS[i][1] < need) i++;
+      var slow = c.effectiveType === '3g' || (c.downlink && c.downlink < 3), fast = c.downlink ? c.downlink >= 10 : screen.width >= 1280;
+      if (slow) i = 0; else { if (fast) i++; if (c.downlink && c.downlink < 8) i = Math.min(i, 2); }
+      i = Math.max(0, Math.min(TIERS.length - 1, i));
+      function url(k) { return 'drive/media/films/' + FILMS[k][0] + '-' + TIERS[i][0] + '.mp4'; }
+      function nextOf(k) { var n = Math.floor(Math.random() * (FILMS.length - 1)); return n >= k ? n + 1 : n; }
+      var a = 0, nxt = nextOf(cur), started = false, timer = 0, inView = false;
+      function play(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+      function load() {
+        V[a].src = url(cur); play(V[a]);
+        clearTimeout(timer); timer = setTimeout(function () { if (!started && i > 0) { i--; load(); } }, 4000);
       }
-      v.addEventListener('playing', function () { started = true; clearTimeout(timer); });
+      function onTime() {
+        var v = V[a], o = V[1 - a];
+        if (v.duration && v.currentTime > v.duration - 3 && !o.getAttribute('src')) { o.preload = 'auto'; o.src = url(nxt); o.load(); }
+      }
+      function onEnd() {
+        var o = V[1 - a]; if (!o.getAttribute('src')) { o.src = url(nxt); }
+        o.currentTime = 0; play(o); o.className = 'on'; V[a].className = '';
+        var old = V[a]; setTimeout(function () { old.pause(); old.removeAttribute('src'); old.load(); }, 900);
+        a = 1 - a; cur = nxt; nxt = nextOf(cur); show(cur);
+      }
+      for (var k = 0; k < 2; k++) {
+        V[k].addEventListener('playing', function () { started = true; clearTimeout(timer); });
+        V[k].addEventListener('timeupdate', function (e) { if (e.target === V[a]) onTime(); });
+        V[k].addEventListener('ended', function (e) { if (e.target === V[a]) onEnd(); });
+      }
       new IntersectionObserver(function (e) {
-        if (e[0].isIntersecting) { if (!v.src) load(i); else { var p = v.play(); if (p && p.catch) p.catch(function () {}); } }
-        else v.pause();
-      }, { threshold: 0.25 }).observe(v);
+        inView = e[0].isIntersecting;
+        if (inView) { if (!V[a].getAttribute('src')) load(); else play(V[a]); } else V[a].pause();
+      }, { threshold: 0.25 }).observe(box);
     })();
     </script>
     <details class="why">
