@@ -241,7 +241,7 @@ $('tour').addEventListener('click', async () => {
     { view: { center: [78.4, 17.45], zoom: 10.4, pitch: 40, bearing: -10 }, cap: ['3 of 6', 'Hyderabad, west corridor', 'Each ring is a place where the other side of the road is close, but getting there legally is not.'] },
     { spot: s01, view: { center: s01.a, zoom: 17.2, pitch: 62, bearing: 25 }, cap: ['4 of 6', 'Street level: 47 metres across', 'Here the far side is a short walk away. The map says a car needs 2.8 km to reach it.'] },
     { spot: s24, view: { center: s24.a, zoom: 16.8, pitch: 60, bearing: -30 }, cap: ['5 of 6', 'One way: 1.6 km. The other: 10.5 km', 'Direction matters. Coming back can be a very different trip.'] },
-    { view: { center: [78.36, 17.5], zoom: 11.2, pitch: 35, bearing: 0 }, cap: ['6 of 6', 'Not yet confirmed', 'These are the map\'s numbers. Each place is being checked against a real drive before anything is called a finding. Tap any ring to explore.'] }
+    { view: { center: [78.36, 17.5], zoom: 11.2, pitch: 35, bearing: 0 }, cap: ['8 of 8', 'Not yet confirmed', 'These are the map\'s numbers. Each place is being checked against a real drive before anything is called a finding. Tap any ring to explore.'] }
   ];
   for (const st of steps) {
     if (!touring) break;

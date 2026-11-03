@@ -226,3 +226,70 @@ def score_day(track, stops: list[dict], network: dict) -> dict:
     rows = [score_stop(track, s, network.get(s["id"])) for s in stops if s.get("b")]
     counts = {v: sum(r["verdict"] == v for r in rows) for v in VERDICTS}
     return {"stops": rows, "counts": counts}
+
+
+# ---------------- loop rule (pre-registered 3 Nov 2026, docs/PREREG-loop-rule.md) ----------------
+# Where A and B sit closer together than phone GPS can separate, side labels flip at random, so
+# find_pass cannot pair them. A loop is then read from the shape of the drive instead: come within
+# LOOP_NEAR_M of the place, leave it by at least LOOP_OUT_M, turn round, and come back within
+# LOOP_NEAR_M, inside MAX_PASS_S. Which side the loop started on comes from the direction of travel
+# at the first approach: in India traffic keeps left, so the car is on the side to its left.
+
+LOOP_NEAR_M = 10.0
+LOOP_OUT_M = 60.0
+LOOP_MIN_TURN_DEG = 120.0
+LOOP_MAX_STRAIGHT_M = 40.0   # the rule is used only where A and B are this close or closer
+
+
+def _xy(lat0, lat, lon):
+    k = math.cos(math.radians(lat0))
+    return lon * 111320.0 * k, lat * 110574.0
+
+
+def _heading(track, i, back):
+    """Unit travel vector at sample i, from about 15 m of track before (back=True) or after it."""
+    lat0 = track[i][1]
+    x0, y0 = _xy(lat0, track[i][1], track[i][2])
+    rng = range(i - 1, -1, -1) if back else range(i + 1, len(track))
+    for k in rng:
+        x, y = _xy(lat0, track[k][1], track[k][2])
+        d = math.hypot(x - x0, y - y0)
+        if d >= 15.0:
+            return ((x0 - x) / d, (y0 - y) / d) if back else ((x - x0) / d, (y - y0) / d)
+    return None
+
+
+def find_loops(track, a, b):
+    """Every loop at the place: list of dicts with i, j, dir ('ab'|'ba'), driven_m, seconds, max_gap_s.
+    a and b are (lat, lon). Returns [] where A and B are too far apart for the rule to apply."""
+    straight = haversine_m(a[1], a[0], b[1], b[0])
+    if straight > LOOP_MAX_STRAIGHT_M:
+        return []
+    m = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
+    dist = [haversine_m(p[2], p[1], m[1], m[0]) for p in track]
+    near = [k for k in range(1, len(track) - 1)
+            if dist[k] <= LOOP_NEAR_M and dist[k] <= dist[k - 1] and dist[k] <= dist[k + 1]]
+    out, used = [], -1
+    for x, y in pairwise(near):
+        if x <= used:
+            continue
+        tx, ty = track[x][0], track[y][0]
+        if tx is None or ty is None or ty - tx > MAX_PASS_S or ty - tx <= 0:
+            continue
+        if max(dist[x:y + 1]) < LOOP_OUT_M:
+            continue
+        h_in, h_out = _heading(track, x, back=True), _heading(track, y, back=True)
+        if not h_in or not h_out:
+            continue
+        turn = math.degrees(math.acos(max(-1.0, min(1.0, h_in[0] * h_out[0] + h_in[1] * h_out[1]))))
+        if turn < LOOP_MIN_TURN_DEG:
+            continue
+        # Side at the start: A is the start if A lies to the left of the travel direction.
+        ax, ay = _xy(m[0], a[0], a[1])
+        mx, my = _xy(m[0], m[0], m[1])
+        left = h_in[0] * (ay - my) - h_in[1] * (ax - mx) > 0
+        out.append({"i": x, "j": y, "dir": "ab" if left else "ba",
+                    "driven_m": round(path_length_m(track, x, y), 1), "seconds": round(ty - tx),
+                    "max_gap_s": max_gap_s(track, x, y), "turn_deg": round(turn)})
+        used = y
+    return out

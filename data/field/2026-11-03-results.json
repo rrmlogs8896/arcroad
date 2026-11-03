@@ -1,0 +1,28 @@
+{
+ "day": "2026-11-03",
+ "driver": "arcroad (one driver, one car, phone GPS at 1 Hz)",
+ "model": "OpenStreetMap extract 25 Oct 2026",
+ "method": "pipeline/groundtruth.py find_loops (loop rule, docs/PREREG-loop-rule.md), pipeline/evidence.py",
+ "passes": [
+  {"id": "S10", "dir": "ab", "driven_m": 1120.9, "seconds": 191, "date": "2026-11-03", "photos_usable": 0,
+   "straight_m": 16.8, "model_m": 1126.2, "verdict": "MATCH", "reason": "", "level": 1, "label": "Driven by arcroad",
+   "kinds": "S", "tri_level": "candidate", "posthoc_rule": true},
+  {"id": "S08", "dir": "ba", "driven_m": 403.7, "seconds": 84, "date": "2026-11-03", "photos_usable": 0,
+   "straight_m": 13.3, "model_m": 431.8, "verdict": "MATCH", "reason": "", "level": 1, "label": "Driven by arcroad",
+   "kinds": "S", "tri_level": "candidate", "posthoc_rule": true}
+ ],
+ "not_scored": [
+  {"id": "S11", "why": "passed along the road only, no U-turn: no crossing to score"},
+  {"id": "S09", "why": "passed along the road only, no U-turn: no crossing to score"},
+  {"id": "S07", "why": "passed along the road only, no U-turn: no crossing to score"},
+  {"id": "S06", "why": "passed along the road only; place held back for a geometry review"},
+  {"id": "S01", "why": "passed along the road only, no U-turn: no crossing to score"},
+  {"id": "S04", "why": "passed along the road only, no U-turn: no crossing to score"}
+ ],
+ "limitations": [
+  "Night drive, 21:13-22:14 IST on a Tuesday; times at night are shorter than at peak hours.",
+  "S10 and S08 count only under the loop rule, written on 3 Nov 2026 after this drive was seen (docs/PREREG-loop-rule.md). At these places the two sides are 13-17 m apart, too close for phone GPS to tell them apart, so the side a loop started on is read from the direction of travel. Re-applied to the 2 Nov drive, it agreed with the published S12 result and changed nothing.",
+  "Phone GPS at 1 Hz; distances carry roughly ±50 m of noise on a 1-3 km loop.",
+  "Photos from this drive are private and were not used in scoring."
+ ]
+}

@@ -66,7 +66,13 @@ def render(day: dict) -> str:
     n_graded = sum(r["verdict"] in ("MATCH", "SHORTER", "LONGER", "BETWEEN") for r in day["passes"])
     places = sorted({r["id"] for r in day["passes"] if r["level"] == 1})
     ph = sorted({r["id"] for r in day["passes"] if r.get("posthoc_rule")})
-    posthoc_note = (f" {', '.join(ph)} counts only under a pairing rule changed after its drive was seen; see the limits below." if ph else "")
+    if not ph:
+        posthoc_note = ""
+    elif len(ph) == 1:
+        posthoc_note = f" {ph[0]} counts only under a rule changed after its drive was seen; see the limits below."
+    else:
+        posthoc_note = (f" {', '.join(ph[:-1])} and {ph[-1]} count only under rules changed after their drives"
+                        " were seen; see the limits below.")
     li = lambda xs: "".join(f"<li>{e(x)}</li>" for x in xs)  # noqa: E731
     ns = "".join(f'<li><b>{e(x["id"])}</b> ({e(short_date(x.get("date")))}): {e(x["why"])}</li>' for x in day["not_scored"])
     nr = "".join(f'<li><b>{e(r["id"])} {DIRS.get(r["dir"], "")}</b>: {e(r["reason"])}</li>' for r in rejected)
@@ -77,6 +83,19 @@ def render(day: dict) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>arcroad · driven results, {e(day["day"])}</title>
 <meta name="description" content="arcroad drove its modelled detours in Hyderabad. Every pass, matched or not, with the method and the limits.">
+<link rel="canonical" href="https://arcroad.org/field/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="arcroad">
+<meta property="og:title" content="arcroad · driven results, {e(day["day"])}">
+<meta property="og:description" content="arcroad drove its modelled detours in Hyderabad. Every pass, matched or not, with the method and the limits.">
+<meta property="og:url" content="https://arcroad.org/field/">
+<meta property="og:image" content="https://arcroad.org/og/field.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="arcroad: every pass we drove, matched or not">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://arcroad.org/og/field.jpg">
 <style>
 :root{{--bg:#0B0D10;--fg:#E8EAED;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0}}
 *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}}
