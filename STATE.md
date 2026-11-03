@@ -2,6 +2,8 @@
 
 > **3 Nov 2026 00:21 IST — v0.2 LIVE.** Production e8466501 (main e0318b5, PR #48). Rollback: ee5f8a1f (street search). Preview 0b3de616 checked by Rohit on his phone. In it: write to the people responsible (officials directory, hi/te drafts), glare drive, report-a-change form, headline tied to driven place S18 with its selection rule, per-direction calculator links, declared scorer change (S12 counted, disclosed). Not yet on the site: S12 as a 4th driven place (needs the field page rebuild).
 
+> **3 Nov 2026 — /drive/ added (PR, this change):** immersive 3D ride of the S18 detour (both directions), distances and clock from data/field/2026-11-01-results.json, road drawn straight at driven length (OSM geometry is a v1.1 swap), made-up traffic matched to each pass's average speed, no walking claim. Open check (rule 4): the S18 b→a 692 s pass needs the personal-stop check before more is built on it.
+
 Read this first; it replaces reconstructing status from the history. Update it in
 the same commit as any change that makes it wrong. Longer history and decisions
 live in the ledger (Drive: Anthropic / Hyderabad Mobility Atlas, Doc 03).
@@ -82,7 +84,7 @@ only; every measured number stays in code.
 2. Evidence: driven spots shown as level 1 "Driven by arcroad" with date; model-vs-driven gap used to correct similar spots, labelled as estimate.
 3. Commute campaign: scheduled morning message (Mon-Fri 07:47 IST) batches 4 spots per leg; D1-D2 cover the remaining 16 of 24; later batches added as "QUEUE D<n>" lines in Drive doc "arcroad commute drives", including no-detour control spots (rule 5).
 4. Potholes: 100 Hz accelerometer + GPS -> speed-normalised vertical-jolt events; pothole vs speed-breaker classifier; candidate until a second pass or photo; routed to the road owner (NHAI / ORR operator / corporation).
-5. Immersive detour ride: driver's-eye 3D replay of a real drive (GPS path + timing + bumps), procedural original vehicles (trucks, buses, autos, two-wheelers), road rebuilt from photos as reference only (no faces/plates/brands shown); end card with distance, time, fuel vs "walk across in 15 s"; first prototype S01 Patancheru.
+5. Immersive detour ride (v1 shipped 3 Nov 2026 at /drive/, S18 instead of S01 because S01 did not pass the 10 m gate; the end card drops "walk across" per the never-claim rule): driver's-eye 3D replay of a real drive (GPS path + timing + bumps), procedural original vehicles (trucks, buses, autos, two-wheelers), road rebuilt from photos as reference only (no faces/plates/brands shown); end card with distance, time, fuel vs "walk across in 15 s"; first prototype S01 Patancheru.
 6. Photo pipeline: EXIF (time, GPS, heading, altitude) read in place on the iMac; originals private; web copies ~200 KB with faces/plates blurred and metadata stripped.
 7. Colab: read secrets in the first cell while Rohit is present (v04 Mapillary step timed out on a locked screen).
 8. Claude's own ideas: proposed 2 Nov 2026 after the first commute recording; Rohit approved "all that is necessary" (Claude's call). Order, after v0.2 goes live:

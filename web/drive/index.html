@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>arcroad · 13 metres across: ride the detour we drove</title>
+<meta name="description" content="Take the driver's seat at HITEC City–Kukatpally Main Road, APHB Colony. The other side is 13 m away across the median. Ride the 1.58 km detour arcroad drove on 1 Nov 2026, in its real time.">
+<meta name="theme-color" content="#05070B"><meta name="color-scheme" content="dark"><meta name="format-detection" content="telephone=no">
+<style>
+:root{--bg:#05070B;--fg:#E8EAED;--mute:#9AA0A6;--faint:#6E767F;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0;--warn:#E5C07B;--card:#0E1116}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:1180px;margin:0 auto;padding:40px 22px 80px}a{color:var(--accent)}
+.top{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-bottom:26px}.top a{color:var(--mute);text-decoration:none}.top a:hover{color:var(--fg)}
+.eyebrow{font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+h1{font-size:clamp(30px,5.4vw,54px);line-height:1.05;margin:0 0 14px;font-weight:600;letter-spacing:-.02em}
+p.lead{font-size:clamp(16px,2.2vw,19px);color:#C9CDD2;max-width:720px;margin:0}
+.stage{position:relative;margin:28px 0 0;border-radius:18px;overflow:hidden;background:#0B0E13;aspect-ratio:16/9;border:1px solid var(--line);outline:none;isolation:isolate}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}.hud,.dash,.result,.strip,.intro{z-index:1}
+.hud{position:absolute;left:16px;right:76px;top:14px;display:flex;justify-content:space-between;gap:12px;pointer-events:none;font:500 11px/1.3 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,234,237,.8);text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.hud b{display:block;font:600 24px/1.1 Inter,system-ui,sans-serif;letter-spacing:-.01em;text-transform:none;color:#fff;font-variant-numeric:tabular-nums}
+.hud .sub{display:block;margin-top:3px;color:rgba(232,234,237,.62)}
+.hud .r{text-align:right}
+.chip{display:inline-block;margin-top:6px;padding:2px 8px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(5,7,11,.45)}
+.strip{position:absolute;right:16px;top:16px;bottom:84px;width:44px;border-radius:12px;background:rgba(5,7,11,.55);border:1px solid rgba(255,255,255,.12);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.strip canvas{position:absolute;inset:0;width:100%;height:100%}
+.dash{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:linear-gradient(transparent,rgba(0,0,0,.7))}
+.spd{font:600 34px/1 Inter,system-ui,sans-serif;color:#fff;text-shadow:0 1px 8px #000;font-variant-numeric:tabular-nums}.spd small{font:500 11px ui-monospace,monospace;letter-spacing:.12em;color:rgba(232,234,237,.7);margin-left:6px}
+.btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.b{appearance:none;border:1px solid rgba(255,255,255,.22);background:rgba(10,12,16,.6);color:#fff;border-radius:999px;padding:12px 18px;font:500 14.5px Inter,system-ui,sans-serif;cursor:pointer;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:transform .15s,border-color .2s,background .2s;text-decoration:none;display:inline-block}
+.b:hover{border-color:var(--accent)}.b:active{transform:scale(.97)}
+.b.p{background:var(--accent);color:#0B0D10;border-color:var(--accent)}
+.b:disabled{opacity:.45;cursor:default}
+.intro,.result{position:absolute;left:16px;top:84px;max-width:440px;background:rgba(8,10,14,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px 20px;animation:up .35s cubic-bezier(.2,.7,.2,1)}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+.intro h2,.result h2{margin:0 0 6px;font-size:20px;line-height:1.25;letter-spacing:-.01em}.intro p,.result p{margin:6px 0 0;color:#C9CDD2;font-size:14.5px}
+.result .mon{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.1);font-size:13.5px}
+.result .ev{font:500 11px/1.5 ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--ok);margin-top:10px}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:16px 0 0}
+.ctl .g{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.ctl .k{font:500 11px ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:8px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}.seg button{appearance:none;border:1px solid var(--line);background:transparent;color:var(--mute);border-radius:999px;padding:8px 13px;font:inherit;font-size:13.5px;cursor:pointer;transition:color .2s,border-color .2s}
+.seg button:hover{color:var(--fg)}.seg button[aria-pressed=true]{color:#fff;border-color:var(--accent);background:rgba(232,168,124,.1)}
+h2.sec{font-size:22px;margin:48px 0 10px;font-weight:600}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:14px}
+.facts div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}.facts b{display:block;font-size:26px;letter-spacing:-.01em;margin-bottom:4px;font-variant-numeric:tabular-nums}.facts span{color:#C9CDD2;font-size:14.5px}
+.note{color:var(--mute);font-size:13.5px}
+details.more{margin:12px 0 0;border-top:1px solid var(--line)}details.more>summary{list-style:none;cursor:pointer;padding:12px 0;font-size:14px;color:var(--mute);display:flex;gap:10px}details.more>summary::before{content:"+";font-family:ui-monospace,monospace;color:var(--accent)}details.more[open]>summary::before{content:"\2212"}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+.hud .sm,.b .sm{display:none}
+@media (max-width:640px){
+  .stage{aspect-ratio:4/5;border-radius:14px}
+  .hud{left:12px;right:64px;top:10px;font-size:9.5px;letter-spacing:.06em}.hud b{font-size:19px}
+  .hud .lg,.b .lg{display:none}.hud .sm,.b .sm{display:inline}
+  .stage{aspect-ratio:3/4}
+  #r-body{display:none}
+  .strip{right:10px;top:10px;bottom:78px;width:38px}
+  .intro,.result{left:12px;right:60px;top:auto;bottom:74px;max-width:none;padding:14px 16px;max-height:calc(100% - 150px);overflow:auto}
+  .intro h2,.result h2{font-size:17px}.intro p,.result p{font-size:13.5px}
+  .dash{padding:10px 12px}.b{padding:10px 14px;font-size:14px}.spd{font-size:26px}
+  .dash .btns{flex-wrap:nowrap}
+}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+<style id="mobile-base">
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{overflow-wrap:break-word;padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+a,button,summary,select,label{-webkit-tap-highlight-color:rgba(232,168,124,.22);touch-action:manipulation}
+details>summary{cursor:pointer;min-height:44px;box-sizing:border-box;align-items:center}
+details>summary::-webkit-details-marker{display:none}
+img,svg,canvas,video{max-width:100%}
+@media (max-width:720px){h1{overflow-wrap:anywhere}.top{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;white-space:nowrap;max-width:100%}.top::-webkit-scrollbar{display:none}}
+@media (pointer:coarse){.top a{padding-block:10px;display:inline-block}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<nav class="top"><a href="../">arcroad home</a><a href="../field/">Driven results</a><a href="../cost/">Cost calculator</a><a href="../roads/">What else the road costs</a><a href="../globe/?spot=S18">Globe</a></nav>
+<p class="eyebrow">arcroad · ride the detour</p>
+<h1>13 metres across.</h1>
+<p class="lead">You are on HITEC City–Kukatpally Main Road at APHB Colony. The place you need is on the other side of the median, 13 m away. There is no way across here. Take the driver's seat for the detour we drove on 1 Nov 2026, clock running.</p>
+
+<div class="stage" id="stage" tabindex="0" aria-label="The detour, from the driver's seat. Press Drive or the space bar to start or pause.">
+  <div class="hud" aria-hidden="true">
+    <div><span class="lg">Driven so far</span><span class="sm">Driven</span><b id="h-dist">0 m</b><span class="sub"><span class="lg">Straight across: </span><span class="sm">Across: </span>13 m</span></div>
+    <div class="r"><span class="lg">Clock, real time of our drive</span><span class="sm">Clock</span><b id="h-clock">0:00</b><span class="chip" id="h-rate">Replayed 8× faster</span></div>
+  </div>
+  <div class="strip" aria-hidden="true"><canvas id="strip"></canvas></div>
+  <div class="intro" id="intro" role="status" aria-live="polite">
+    <h2>The other side is 13 m away, across the median.</h2>
+    <p id="intro-body"></p>
+  </div>
+  <div class="result" id="result" hidden role="status" aria-live="polite">
+    <h2 id="r-head"></h2><p id="r-body"></p><p class="mon" id="r-month"></p><p class="ev" id="r-ev"></p>
+    <div class="btns" style="margin-top:12px;justify-content:flex-start"><button class="b p" id="r-other" type="button"></button><a class="b" id="r-cost" href="../cost/">What does it cost you?</a><a class="b" href="../act.html?pair=S18">Write to the people responsible</a></div>
+  </div>
+  <div class="dash"><div class="spd"><span id="h-spd">0</span><small>km/h</small></div>
+    <div class="btns"><button class="b" id="view" type="button" aria-pressed="false">View from above</button><button class="b" id="skip" type="button" disabled><span class="lg">Skip to the end</span><span class="sm">Skip</span></button><button class="b p" id="play" type="button">Drive</button></div></div>
+</div>
+
+<div class="ctl" aria-label="Settings">
+  <div class="g"><span class="k">Which way</span><div class="seg" id="c-dir"><button type="button" data-v="ab" aria-pressed="true">West side to east side</button><button type="button" data-v="ba" aria-pressed="false">East side to west side</button></div></div>
+  <div class="g"><span class="k">Replay speed</span><div class="seg" id="c-rate"><button type="button" data-v="4" aria-pressed="false">4×</button><button type="button" data-v="8" aria-pressed="true">8×</button><button type="button" data-v="16" aria-pressed="false">16×</button></div></div>
+</div>
+
+<h2 class="sec">What we measured here</h2>
+<div class="facts">
+  <div><b>13 m</b><span>Straight across, on OpenStreetMap. The median has no gap at this point.</span></div>
+  <div><b>1.58 km · 3 min 13 s</b><span>West side to east side, as we drove it on 1 Nov 2026. The model said 1.57 km.</span></div>
+  <div><b>1.55 km · 11 min 32 s</b><span>East side to west side, the same day. The model said 1.38 km. One drive, at one time of day.</span></div>
+  <div><b>Evidence level 1</b><span>Both directions driven and matched the model. The east-to-west pass is also backed by photos. <a href="../field/">Every pass we drove</a></span></div>
+</div>
+
+<details class="more"><summary>How this is built, and its limits</summary>
+<p class="note">The distances and the clock are from our drive on 1 Nov 2026: one driver, one car, phone GPS once a second (about ±50 m). The clock runs in the real time of that pass, replayed faster. Where the car slows and stops along the way is illustrated; the total time is what we measured. Another day, or another hour, will differ.</p>
+<p class="note">The road is drawn straight and to scale in length; the real road bends a little and its exact U-turn points may sit a little nearer or further. The vehicles, buildings and trees are made up for illustration, and the traffic is drawn to match the average speed we measured on each pass (about 29 km/h one way, 8 km/h the other). No photo, person or number plate from the drive appears here.</p>
+<p class="note">The monthly figures assume one crossing each way on every working day (22 days) and use the cost calculator's own figures: petrol at ₹116.15/L (Hyderabad, 16 Oct 2026), 50 km/L for a two-wheeler and 16 km/L for a car. They count fuel only. This page says nothing about walking: arcroad measures driving.</p>
+</details>
+
+<footer>Map data © OpenStreetMap contributors (ODbL). Measurements by arcroad (ODbL). Three.js (MIT), self-hosted. Nothing is stored or sent. <a href="../field/">See every pass we drove</a></footer>
+</main>
+<script src="vendor/three.min.js"></script>
+<script src="drive.js"></script>
+</body>
+</html>
