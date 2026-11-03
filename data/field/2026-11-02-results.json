@@ -1,0 +1,62 @@
+{
+ "day": "2026-11-02",
+ "driver": "arcroad (one driver, one car, phone GPS at 1 Hz)",
+ "model": "OpenStreetMap extract 25 Oct 2026",
+ "method": "pipeline/fieldscore.py, pipeline/groundtruth.py (pairing rule as amended 2 Nov 2026), pipeline/evidence.py; docs/ENGINE.md triangulation rule",
+ "passes": [
+  {
+   "id": "S12",
+   "dir": "ab",
+   "driven_m": 1951.2,
+   "seconds": 245,
+   "date": "2026-11-02",
+   "photos_usable": 0,
+   "straight_m": 17.4,
+   "model_m": 2028.9,
+   "verdict": "MATCH",
+   "reason": "",
+   "level": 1,
+   "label": "Driven by arcroad",
+   "kinds": "S",
+   "tri_level": "candidate",
+   "posthoc_rule": true
+  },
+  {
+   "id": "S06",
+   "dir": "ab",
+   "driven_m": 10.8,
+   "seconds": 1,
+   "date": "2026-11-02",
+   "photos_usable": 0,
+   "straight_m": 36.9,
+   "model_m": 569.4,
+   "verdict": "REJECTED",
+   "reason": "driven shorter than the straight line: not a crossing",
+   "level": 3,
+   "label": "Modelled",
+   "kinds": "",
+   "tri_level": "none"
+  }
+ ],
+ "not_scored": [
+  {
+   "id": "S01",
+   "why": "passed along the road only, no U-turn: no crossing to score"
+  },
+  {
+   "id": "S11",
+   "why": "passed along the road only, no U-turn: no crossing to score"
+  },
+  {
+   "id": "S04",
+   "why": "only side A visited"
+  }
+ ],
+ "limitations": [
+  "Night drive, 22:55-23:49 IST on a Monday; times at night are shorter than at peak hours.",
+  "S12 counts only under a pairing rule changed on 2 Nov 2026 after this drive was seen: pair the last stay that reaches A with the next stay that reaches B, skipping stays that reach neither. Re-applied to every drive on file, it changed this pass alone (from not driven to matched) and removed nothing.",
+  "Phone GPS at 1 Hz; distances carry roughly ±50 m of noise on a 1-3 km loop.",
+  "Photos from this drive are private and were not used as evidence here; they show vehicles and number plates.",
+  "Raw tracks and photos are private; only these per-pass summaries are published."
+ ]
+}
