@@ -19,6 +19,7 @@ from pathlib import Path
 import hotspots
 import mapwatch
 import openings
+import remote
 import routercheck
 import structures
 
@@ -72,6 +73,14 @@ def job_structures():
     return p
 
 
+def job_remote():
+    OUT.mkdir(exist_ok=True)
+    p = OUT / "remote-v1.json"
+    earlier = {k: FILES[k].read_bytes() if k in FILES else None for k in ("routercheck", "mapwatch")}
+    p.write_bytes(remote.run(log, earlier))
+    return p
+
+
 def job_hotspots():
     OUT.mkdir(exist_ok=True)
     p = OUT / "hotspots-v1.json"
@@ -97,7 +106,7 @@ def job_bengaluru():
 
 
 JOBS = [("openings", job_openings), ("mapwatch", job_mapwatch), ("routercheck", job_routercheck),
-        ("structures", job_structures),
+        ("structures", job_structures), ("remote", job_remote),
         ("hotspots", job_hotspots), ("bengaluru", job_bengaluru)]
 
 
