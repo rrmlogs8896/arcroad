@@ -201,3 +201,14 @@ only; every measured number stays in code.
 
 ## 4 Nov 2026 — contrast
 - Faintest text colour #6E767F (4.2:1 on the page background) raised to #7D858E (5.2:1 on the background, 4.9:1 on card surfaces), meeting WCAG AA 4.5:1. From the 4 Nov research handover.
+
+## 4 Nov 2026 — decisions on the research handover (delegated to Claude by Rohit)
+1. /drive/ becomes two layers: a 2D version of every mode for every phone, 3D on tap. Prototype v3 next.
+2. Test phone: borrow an entry-level Android first; meanwhile CI emulates a low-end phone (4× CPU throttle, Slow 4G).
+3. Previews move to an arcroad.org subdomain and Email Obfuscation goes off (Rohit's Cloudflare actions).
+4. Telugu, Hindi and Urdu stay drafts until native readers are named.
+5. Home keeps model values, each block tagged "Modelled · not yet driven" with a link to driven results (done).
+6. No Cloudflare Web Analytics (it adds a script); a server-side count with no script or cookie instead.
+7. S18 B→A 692 s check waits for the 1 Nov GPX.
+8. Voice memo now carries the time of day; commute task rewritten (Apple Maps links, picks undriven spots from places.json, full U-turn loop, no Google links).
+- Home film: a pause/play control (WCAG 2.2.2), slower 1.2 s cross-fade, stronger caption scrim. Theme follows the device (light/dark) in the v3 redesign, not before.
