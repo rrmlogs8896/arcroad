@@ -20,6 +20,7 @@ import hotspots
 import mapwatch
 import openings
 import routercheck
+import structures
 
 OUT = Path("/tmp/out")
 STATE = {"running": False, "done": [], "failed": {}, "log": []}
@@ -64,6 +65,13 @@ def job_mapwatch():
     return p
 
 
+def job_structures():
+    OUT.mkdir(exist_ok=True)
+    p = OUT / "structures-v1.json"
+    p.write_bytes(structures.run(log))
+    return p
+
+
 def job_hotspots():
     OUT.mkdir(exist_ok=True)
     p = OUT / "hotspots-v1.json"
@@ -89,6 +97,7 @@ def job_bengaluru():
 
 
 JOBS = [("openings", job_openings), ("mapwatch", job_mapwatch), ("routercheck", job_routercheck),
+        ("structures", job_structures),
         ("hotspots", job_hotspots), ("bengaluru", job_bengaluru)]
 
 
