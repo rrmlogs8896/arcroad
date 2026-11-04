@@ -65,7 +65,9 @@ def render(day: dict) -> str:
     n_match = sum(r["verdict"] == "MATCH" for r in day["passes"])
     n_graded = sum(r["verdict"] in ("MATCH", "SHORTER", "LONGER", "BETWEEN") for r in day["passes"])
     places = sorted({r["id"] for r in day["passes"] if r["level"] == 1})
-    ph = sorted({r["id"] for r in day["passes"] if r.get("posthoc_rule")})
+    later = {r["id"] for r in day["passes"] if not r.get("posthoc_rule") and r["verdict"] not in ("REJECTED", "POOR_TRACK")}
+    ph = sorted({r["id"] + (f" {DIRS.get(r['dir'], '')}" if r["id"] in later else "")
+                 for r in day["passes"] if r.get("posthoc_rule")})
     if not ph:
         posthoc_note = ""
     elif len(ph) == 1:
