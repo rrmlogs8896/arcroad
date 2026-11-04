@@ -212,3 +212,7 @@ only; every measured number stays in code.
 7. S18 B→A 692 s check waits for the 1 Nov GPX.
 8. Voice memo now carries the time of day; commute task rewritten (Apple Maps links, picks undriven spots from places.json, full U-turn loop, no Google links).
 - Home film: a pause/play control (WCAG 2.2.2), slower 1.2 s cross-fade, stronger caption scrim. Theme follows the device (light/dark) in the v3 redesign, not before.
+
+## 4 Nov 2026 — structures in medians
+- New nightly job `structures` (docs/PREREG-structures.md): fixed structures between two carriageways (every faith and kind counted the same way). Public total only; breakdown and locations internal; nothing named, mapped or pictured; never called a cause. Order: openings, mapwatch, routercheck, structures, hotspots, bengaluru.
+- 4 Nov commute drive (13:58-14:46 IST, Sensor Logger + GPX): passed S01, S06, S11, S12 along the road only; no loops, nothing to score.
