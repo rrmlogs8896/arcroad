@@ -216,3 +216,7 @@ only; every measured number stays in code.
 ## 4 Nov 2026 — structures in medians
 - New nightly job `structures` (docs/PREREG-structures.md): fixed structures between two carriageways (every faith and kind counted the same way). Public total only; breakdown and locations internal; nothing named, mapped or pictured; never called a cause. Order: openings, mapwatch, routercheck, structures, hotspots, bengaluru.
 - 4 Nov commute drive (13:58-14:46 IST, Sensor Logger + GPX): passed S01, S06, S11, S12 along the road only; no loops, nothing to score.
+
+## 4 Nov 2026 — v3 prototype and baseline
+- web/v3/drive/: 2D Drive it prototype for every phone (SVG, no WebGL): place picker for the six driven places, A→B/B→A, day/night, high-beam glare, the five fixes with a live U-turn slider, theme follows the device, "Open in 3D" to the current page. noindex, not linked, not in the sitemap.
+- Rollback rule (Rohit): the current site is always kept as a baseline. Before v3 is promoted, the current production build is deployed to the Pages branch `baseline` (baseline.arcroad-org.pages.dev); Rohit may attach baseline.arcroad.org himself.
