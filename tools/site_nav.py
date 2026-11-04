@@ -77,6 +77,7 @@ PAGES = {
     "cost/index.html": ("../", "cost/", False),
     "data/index.html": ("../", "data/", True),
     "drive/index.html": ("../", "drive/", True),
+    "drive/3d/index.html": ("../../", "drive/", True),
     "evidence/index.html": ("../", "evidence/", True),
     "help/index.html": ("../", "help/", True),
     "report/index.html": ("../", "report/", True),
