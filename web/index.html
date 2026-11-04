@@ -133,16 +133,26 @@ a{color:#E8A87C}
 .why dd{margin:0}
 .why p{margin:12px 0 0}
 @media (max-width:560px){.why dl{grid-template-columns:1fr}.why dd{margin-bottom:6px}}
+.mtag{margin:-4px 0 18px;font-size:13px;line-height:1.5;color:var(--mut)}.mtag span{display:inline-block;margin-right:8px;padding:2px 9px;border:1px solid var(--line2);border-radius:999px;font:500 10.5px/1.6 "JetBrains Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}.mtag a{color:var(--mut);text-underline-offset:3px}
+.tw{position:relative;max-width:1068px}
+.tw .teaser{max-width:none}
+.tp{position:absolute;top:8px;right:8px;width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(8,10,14,.42);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);display:grid;place-items:center;cursor:pointer;opacity:.0;transition:opacity .4s cubic-bezier(.4,0,.2,1),border-color .2s,background .2s;padding:0}
+.tw:hover .tp,.tp:focus-visible,.tp[aria-pressed=true]{opacity:1}
+@media (hover:none){.tp{opacity:.85}}
+.tp:hover{border-color:rgba(255,255,255,.32);background:rgba(8,10,14,.6)}
+.tp:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tp svg{width:14px;height:14px;fill:none;stroke:var(--fg2);stroke-width:1.8;stroke-linecap:round}
+.tp .pl{display:none;fill:var(--fg2);stroke:none}.tp[aria-pressed=true] .ps{display:none}.tp[aria-pressed=true] .pl{display:block}
 .teaser{display:block;position:relative;margin:26px 0 0;max-width:1068px;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid var(--line2);background:#0E1116;text-decoration:none}
-.teaser video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .9s ease}
+.teaser video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 1.2s cubic-bezier(.4,0,.2,1)}
 .teaser video.on{opacity:1}
-.teaser .dots{position:absolute;top:14px;right:16px;display:flex;gap:6px}
+.teaser .dots{position:absolute;top:23px;right:54px;display:flex;gap:6px}
 .teaser .dots i{width:5px;height:5px;border-radius:50%;background:rgba(245,246,247,.28);transition:background .6s ease,transform .6s ease}
 .teaser .dots i.on{background:var(--accent);transform:scale(1.25)}
 .teaser .cap b,.teaser .cap small{transition:opacity .5s ease}
-.teaser .tz{position:absolute;left:0;right:0;bottom:0;padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:linear-gradient(transparent,rgba(5,7,11,.78));color:var(--fg2)}
+.teaser .tz{position:absolute;left:0;right:0;bottom:0;padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding-top:56px;background:linear-gradient(rgba(5,7,11,0),rgba(5,7,11,.62) 45%,rgba(5,7,11,.9));color:var(--fg2);text-shadow:0 1px 10px rgba(0,0,0,.35)}
 .teaser .tz b{display:block;font-size:15.5px;font-weight:600;letter-spacing:-0.01em}
-.teaser .tz small{display:block;font-size:13px;color:var(--mut)}
+.teaser .tz small{display:block;font-size:13px;color:#C9CDD2}
 .teaser .go{font-size:14.5px;color:var(--accent);white-space:nowrap}
 .teaser:hover{border-color:var(--accent)}
 .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
@@ -223,12 +233,15 @@ img,svg,canvas,video{max-width:100%}
   <div class="wrap">
     <h1>A place you can see, 1.5 km away</h1>
     <p class="lede">Divided roads cut neighbours off. arcroad measures what crossing your own road costs, then drives the detour to check.</p>
+    <div class="tw">
     <a class="teaser" href="drive/?dive=1" aria-label="Ride the S18 detour in 3D: 13 metres across, 1.58 kilometres to get there">
       <video class="on" muted playsinline preload="none" poster="drive/media/films/drive.jpg" aria-hidden="true"></video>
       <video muted playsinline preload="none" aria-hidden="true"></video>
       <span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
       <span class="tz"><span class="cap"><b>13 m across. 1.58 km to get there.</b><small>3D illustration of our 1 Nov drive at S18</small></span><span class="go">Dive into 3D →</span></span>
     </a>
+    <button class="tp" type="button" aria-label="Pause the film" aria-pressed="false" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path class="ps" d="M5 3.5v9M11 3.5v9"/><path class="pl" d="M5.5 3.2v9.6L12.6 8z"/></svg></button>
+    </div>
     <script>
     (function () {
       var box = document.querySelector('.teaser'); if (!box) return;
@@ -281,9 +294,18 @@ img,svg,canvas,video{max-width:100%}
         V[k].addEventListener('timeupdate', function (e) { if (e.target === V[a]) onTime(); });
         V[k].addEventListener('ended', function (e) { if (e.target === V[a]) onEnd(); });
       }
+      var tp = document.querySelector('.tp'), held = false;
+      if (tp) {
+        tp.hidden = false;
+        tp.addEventListener('click', function () {
+          held = !held; tp.setAttribute('aria-pressed', String(held));
+          tp.setAttribute('aria-label', held ? 'Play the film' : 'Pause the film');
+          if (held) V[a].pause(); else if (inView) { if (!V[a].getAttribute('src')) load(); else play(V[a]); }
+        });
+      }
       new IntersectionObserver(function (e) {
         inView = e[0].isIntersecting;
-        if (inView) { if (!V[a].getAttribute('src')) load(); else play(V[a]); } else V[a].pause();
+        if (inView && !held) { if (!V[a].getAttribute('src')) load(); else play(V[a]); } else V[a].pause();
       }, { threshold: 0.25 }).observe(box);
     })();
     </script>
@@ -339,6 +361,7 @@ img,svg,canvas,video{max-width:100%}
 <section style="padding-top:0">
   <div class="wrap">
     <h2>It's worst at the edge of the city</h2>
+    <p class="mtag"><span>Modelled</span> from OpenStreetMap, not yet driven. <a href="field/">Driven results</a></p>
     <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:var(--mut);max-width:70ch">The detour index is how far you drive to reach the point straight across the road: 40 means forty times the distance. It peaks 26–40 km from the centre, where Patancheru and Isnapur sit.</p>
     <div class="scroll">
       <table>
@@ -379,6 +402,7 @@ img,svg,canvas,video{max-width:100%}
 <section id="areas" style="padding-top:0">
   <div class="wrap">
     <h2>Worst areas measured</h2>
+    <p class="mtag"><span>Modelled</span> from OpenStreetMap, not yet driven. <a href="field/">Driven results</a></p>
     <div class="scroll">
       <table>
         <thead><tr>
