@@ -2,14 +2,21 @@
 // files each result in the private R2 bucket "arcroad-research". It has no public route.
 import { Container, getContainer } from "@cloudflare/containers";
 
-export class ResearchRunner extends Container {
-  defaultPort = 8080;
-  sleepAfter = "30m"; // the poll every 10 minutes keeps it awake only while a job runs
-}
-
 interface Env {
   RUNNER: DurableObjectNamespace<ResearchRunner>;
   OUT: R2Bucket;
+  // Set with `npx wrangler secret put <NAME>` (hidden prompt); never in a file or the repo.
+  MAPILLARY_TOKEN?: string;
+  ANTHROPIC_API_KEY?: string;
+}
+
+export class ResearchRunner extends Container<Env> {
+  defaultPort = 8080;
+  sleepAfter = "30m"; // the poll every 10 minutes keeps it awake only while a job runs
+  constructor(ctx: DurableObjectState<{}>, env: Env) {
+    super(ctx, env);
+    this.envVars = { MAPILLARY_TOKEN: env.MAPILLARY_TOKEN ?? "", ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY ?? "" };
+  }
 }
 
 type Status = { running: boolean; done: string[]; failed: Record<string, string>; log: string[] };

@@ -220,3 +220,6 @@ only; every measured number stays in code.
 ## 4 Nov 2026 — v3 prototype and baseline
 - web/v3/drive/: 2D Drive it prototype for every phone (SVG, no WebGL): place picker for the six driven places, A→B/B→A, day/night, high-beam glare, the five fixes with a live U-turn slider, theme follows the device, "Open in 3D" to the current page. noindex, not linked, not in the sitemap.
 - Rollback rule (Rohit): the current site is always kept as a baseline. Before v3 is promoted, the current production build is deployed to the Pages branch `baseline` (baseline.arcroad-org.pages.dev); Rohit may attach baseline.arcroad.org himself.
+
+## 4 Nov 2026 — remote corroboration (Art 4g)
+- New nightly job `remote` (docs/PREREG-remote.md): routers + map edits + Mapillary photos sorted by Claude (sorting only, cap 96/night). Review list only; "Corroborated remotely" needs a person to confirm the photo. Keys via `wrangler secret put` (MAPILLARY_TOKEN, ANTHROPIC_API_KEY), passed to the container as env vars; without them the job records SKIPPED.
