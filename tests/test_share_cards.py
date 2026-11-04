@@ -17,7 +17,7 @@ def jpeg_size(path):
     raise ValueError(path)
 
 
-PAGES = [p for p in WEB.rglob("index.html") if "media" not in p.parts and "v3" not in p.parts] + [WEB / "act.html"]
+PAGES = [p for p in WEB.rglob("index.html") if "media" not in p.parts] + [WEB / "act.html"]
 
 
 def test_every_page_has_a_share_card():
