@@ -65,8 +65,8 @@ map.on('style.load', async () => {
 const PAL = { land: '#161B22', water: '#0B1118', town: '#1A1F27', green: '#17201D' };
 const EN = ['coalesce', ['get', 'name:en'], ['get', 'name:latin'], ['get', 'name']];
 const LABEL_RULES = {
-  place_other: { minzoom: 15, color: '#6E767F' }, place_suburb: { minzoom: 13, color: '#6E767F' },
-  place_village: { minzoom: 12, color: '#6E767F' }, place_town: { minzoom: 9, color: '#8B939C' },
+  place_other: { minzoom: 15, color: '#7D858E' }, place_suburb: { minzoom: 13, color: '#7D858E' },
+  place_village: { minzoom: 12, color: '#7D858E' }, place_town: { minzoom: 9, color: '#8B939C' },
   place_city: { minzoom: 6, color: '#C9CED4' }, place_city_large: { minzoom: 4, color: '#E6E8EB' },
   place_country_other: { minzoom: 3, color: '#AEB4BB' }, place_country_minor: { minzoom: 2.6, color: '#AEB4BB' }, place_country_major: { minzoom: 1.6, color: '#C9CED4' },   // B: at whole-globe zoom on phones, labels near the limb were drawn outside the sphere
   water_name: { color: '#4E6A85' }, highway_name_other: { color: '#7C858F' }
