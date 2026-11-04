@@ -198,3 +198,6 @@ only; every measured number stays in code.
 - Loop rule (docs/PREREG-loop-rule.md, declared post-hoc): at places where A and B are ≤40 m apart and pairing finds no pass, a pass is a closest approach within 10 m, out ≥60 m, a turn of ≥120°, and back within 10 m in 30 min; the starting side comes from the direction of travel (keep left). pipeline/groundtruth.find_loops, tests/test_loop_rule.py, tools/loops.py.
 - Re-applied: 2 Nov finds S12 A→B 1,990 m (same direction as the published 1,951 m; unchanged). 3 Nov (Sensor Logger, 1 s): S10 A→B 1,121 m vs 1,126 m MATCH; S08 B→A 404 m vs 432 m MATCH. Published in data/field/2026-11-03-results.json: 6 places driven, 8 of 8 comparable directions matched. 1 Nov still to be re-run on the iMac with tools/loops.py.
 - Field page generator now writes its own share-card tags.
+
+## 4 Nov 2026 — contrast
+- Faintest text colour #6E767F (4.2:1 on the page background) raised to #7D858E (5.2:1 on the background, 4.9:1 on card surfaces), meeting WCAG AA 4.5:1. From the 4 Nov research handover.
