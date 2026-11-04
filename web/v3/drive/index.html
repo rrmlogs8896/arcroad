@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>arcroad · Drive it (v3 prototype)</title>
+<link rel="stylesheet" href="../../fonts/fonts.css">
+<style>
+:root{
+  --bg:#FBFBFA;--surface:#FFFFFF;--line:#E7E8EA;--line2:#D9DBDE;--fg:#16181B;--fg2:#0B0D10;--mut:#5C636B;--faint:#6B7279;
+  --accent:#C8551F;--accentSoft:#F6E3D7;--ok:#2F7D5B;
+  --road:#3A3F46;--road2:#2F343A;--kerb:#C9CDD2;--median:#B9C3A8;--lane:#F2F3F4;--sky:#EEF1F3;--ground:#E6E9DF;
+  --car:#16181B;--trail:#C8551F;--pin:#16181B;
+  color-scheme:light;
+}
+:root[data-theme=dark]{
+  --bg:#0B0D10;--surface:#11141A;--line:#1C2026;--line2:#2A3038;--fg:#E6E8EB;--fg2:#F5F6F7;--mut:#9AA0A6;--faint:#7D858E;
+  --accent:#E2743B;--accentSoft:#2A1A10;--ok:#8FA89A;
+  --road:#262A30;--road2:#1E2227;--kerb:#5A6068;--median:#3E4636;--lane:#AEB4BA;--sky:#0F1216;--ground:#14181C;
+  --car:#F5F6F7;--trail:#E2743B;--pin:#F5F6F7;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+.m{font-family:"JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+main{max-width:1100px;margin:0 auto;padding:28px max(18px,env(safe-area-inset-left)) 80px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:17px;color:var(--fg2);text-decoration:none}
+.brand svg{width:22px;height:22px}
+.proto{font:500 10.5px/1 "JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--line2);border-radius:999px;padding:6px 10px}
+.theme{appearance:none;border:1px solid var(--line2);background:var(--surface);color:var(--mut);border-radius:999px;padding:7px 12px;font:500 13px Inter,sans-serif;cursor:pointer}
+.eyebrow{margin:44px 0 10px;font:500 11.5px/1.4 "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{margin:0;font-size:clamp(32px,5.4vw,52px);line-height:1.05;letter-spacing:-.03em;font-weight:600;color:var(--fg2)}
+.lead{margin:14px 0 0;max-width:62ch;font-size:17px;color:var(--mut)}
+.places{display:flex;gap:8px;margin:28px 0 0;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.places::-webkit-scrollbar{display:none}
+.chip{flex:none;appearance:none;border:1px solid var(--line2);background:var(--surface);color:var(--fg);border-radius:999px;padding:9px 14px;font:500 14px Inter,sans-serif;cursor:pointer;min-height:40px;transition:border-color .2s,background .2s,color .2s}
+.chip small{color:var(--faint);margin-left:6px;font-weight:400}
+.chip[aria-pressed=true]{border-color:var(--fg2);background:var(--fg2);color:var(--bg)}
+.chip[aria-pressed=true] small{color:inherit;opacity:.7}
+.stage{margin:18px 0 0;border:1px solid var(--line);border-radius:18px;background:var(--surface);overflow:hidden}
+.hud{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+.hud div{padding:14px 18px}
+.hud div+div{border-left:1px solid var(--line)}
+.hud small{display:block;font:500 10.5px/1.4 "JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.hud b{display:block;margin-top:2px;font:600 clamp(20px,3.4vw,28px)/1.15 Inter,sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--fg2)}
+.scene{position:relative;background:var(--sky)}
+svg.map{display:block;width:100%;height:auto}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 14px;border-top:1px solid var(--line)}
+.btn{appearance:none;border:1px solid var(--line2);background:var(--surface);color:var(--fg);border-radius:999px;padding:10px 16px;font:500 14px Inter,sans-serif;cursor:pointer;min-height:42px}
+.btn.p{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;min-width:104px}
+.btn[aria-pressed=true]{border-color:var(--fg2)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:999px;padding:3px}
+.seg button{appearance:none;border:0;background:none;color:var(--mut);border-radius:999px;padding:7px 12px;font:500 13.5px Inter,sans-serif;cursor:pointer;min-height:36px}
+.seg button[aria-pressed=true]{background:var(--fg2);color:var(--bg)}
+.sp{flex:1}
+.go3d{font:500 14px Inter,sans-serif;color:var(--accent);text-decoration:none;white-space:nowrap}
+.note{margin:10px 2px 0;font-size:13px;color:var(--faint)}
+.tag{display:inline-block;margin-right:6px;padding:2px 9px;border:1px solid var(--line2);border-radius:999px;font:500 10.5px/1.7 "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.tag.ok{color:var(--ok);border-color:currentColor}
+h2{margin:64px 0 6px;font-size:clamp(24px,3.4vw,32px);letter-spacing:-.02em;line-height:1.15;font-weight:600;color:var(--fg2)}
+.sub{margin:0 0 18px;color:var(--mut);max-width:62ch}
+.tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.card{margin-top:14px;border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:22px}
+.card .ey{margin:0 0 8px;font:500 11px/1.4 "JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.card h3{margin:0 0 6px;font-size:21px;letter-spacing:-.015em;color:var(--fg2)}
+.card p{margin:0;color:var(--mut)}
+.nums{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:14px;margin:18px 0 6px;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.nums small{display:block;font:500 10.5px/1.4 "JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:4px}
+.nums b{font:600 30px/1 Inter,sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.nums .was b{color:var(--faint);text-decoration:line-through;text-decoration-thickness:1px}
+.nums .now b{color:var(--accent)}
+.nums .ar{color:var(--faint);padding-bottom:4px}
+.save{margin:8px 0 0;font-size:14px;color:var(--ok)}
+.rng{margin:16px 0 0}
+.rng label{display:flex;justify-content:space-between;font-size:14px;color:var(--mut);margin-bottom:6px}
+.rng input{width:100%;accent-color:var(--accent)}
+.foot{margin:64px 0 0;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--faint)}
+.foot a{color:var(--mut)}
+@media (max-width:640px){.hud div{padding:11px 12px}.bar{gap:6px}.btn{padding:9px 13px}.card{padding:18px}.nums b{font-size:24px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <a class="brand" href="#"><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="var(--accent)" stroke-linecap="round"><path d="M12 25 A 10 10 0 1 1 20 25" stroke-width="2.8"/></g><circle cx="12" cy="25" r="2.4" fill="var(--accent)"/><circle cx="20" cy="25" r="2.4" fill="var(--accent)"/></svg>arcroad</a>
+    <span style="display:flex;gap:8px;align-items:center"><span class="proto">v3 prototype</span><button class="theme" id="theme" type="button" aria-label="Colour theme">Auto</button></span>
+  </div>
+
+  <p class="eyebrow">Drive it · works on every phone</p>
+  <h1 id="h1">13 metres across.</h1>
+  <p class="lead" id="lead"></p>
+
+  <div class="places" id="places" role="group" aria-label="Place"></div>
+
+  <section class="stage" aria-label="The detour, seen from above">
+    <div class="hud">
+      <div><small>Driven</small><b id="hd">0 m</b></div>
+      <div><small>Clock</small><b id="hc">0:00</b></div>
+      <div><small>Across</small><b id="hs">13 m</b></div>
+    </div>
+    <div class="scene"><svg class="map" id="map" viewBox="0 0 1000 400" role="img" aria-labelledby="maptitle"><title id="maptitle">Top-down drawing of the road and the detour</title></svg></div>
+    <div class="bar">
+      <button class="btn p" id="play" type="button">Drive</button>
+      <div class="seg" id="dirs" role="group" aria-label="Direction"></div>
+      <div class="seg" role="group" aria-label="Light"><button type="button" data-l="day" aria-pressed="true">Day</button><button type="button" data-l="night" aria-pressed="false">Night</button></div>
+      <button class="btn" id="glare" type="button" aria-pressed="false" hidden>High-beam glare</button>
+      <span class="sp"></span>
+      <a class="go3d" id="go3d" href="https://arcroad.org/drive/">Open in 3D →</a>
+    </div>
+  </section>
+  <p class="note" id="note"></p>
+
+  <h2>What could fix this</h2>
+  <p class="sub">Each option drawn on this road with its trade-off. Illustrations to make the choice concrete, not designs; the road owner decides.</p>
+  <div class="tabs" id="tabs" role="tablist"></div>
+  <div class="card" id="card" role="tabpanel"></div>
+
+  <p class="foot">Prototype for review, not live. Drawing is to scale along the road; the gap across is widened so it can be seen. Driven distances: phone GPS once a second (about ±50 m). Map data © OpenStreetMap contributors (ODbL). <a href="https://arcroad.org/field/">Every pass we drove</a></p>
+</main>
+
+<script>
+(function () {
+  var P = [
+    { id: 'S18', road: 'HITEC City–Kukatpally Main Road', area: 'APHB Colony', st: 13.1, ab: 1571.7, ba: 1378.3,
+      d: { ab: { m: 1579.5, s: 193, date: '1 Nov' }, ba: { m: 1546.0, s: 692, date: '1 Nov' } } },
+    { id: 'S12', road: 'Hafeezpet Flyover', area: 'Hafeezpet', st: 17.4, ab: 2028.9, ba: 981.3, d: { ab: { m: 1951.2, s: 245, date: '2 Nov' } } },
+    { id: 'S10', road: 'Nallagandla Road', area: 'Gachibowli', st: 16.8, ab: 1126.2, ba: 183.2, d: { ab: { m: 1120.9, s: 191, date: '3 Nov' } } },
+    { id: 'S08', road: 'Old Bombay Road', area: 'Adarsh Nagar', st: 13.3, ab: 800.2, ba: 431.8, d: { ba: { m: 403.7, s: 84, date: '3 Nov' } } },
+    { id: 'S16', road: 'HITEC City–Kukatpally Main Road', area: 'HITEC City', st: 19.1, ab: 1088.0, ba: 2381.8, d: { ba: { m: 2298.1, s: 539, date: '1 Nov' } } },
+    { id: 'S24', road: 'Outer Ring Road', area: 'Sultanpur', st: 20.4, ab: 1554.3, ba: 10492.2,
+      d: { ab: { m: 1772.9, s: 567, date: '1 Nov' }, ba: { m: 11601.3, s: 1512, date: '1 Nov' } } }
+  ];
+  var RATE = 8, NS = 'http://www.w3.org/2000/svg';
+  var S = { p: P[0], dir: 'ab', light: 'day', glare: false, fix: 'today', L: 375, t: 0, playing: false, last: 0 };
+  var $ = function (id) { return document.getElementById(id); };
+  var map = $('map');
+
+  // Theme: follows the device unless the viewer picks one (kept only for this visit).
+  var themeMode = 'auto', mq = matchMedia('(prefers-color-scheme: dark)');
+  function applyTheme() {
+    var dark = themeMode === 'dark' || (themeMode === 'auto' && mq.matches);
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    $('theme').textContent = themeMode === 'auto' ? 'Auto' : themeMode === 'dark' ? 'Dark' : 'Light';
+    draw();
+  }
+  $('theme').onclick = function () { themeMode = themeMode === 'auto' ? 'light' : themeMode === 'light' ? 'dark' : 'auto'; applyTheme(); };
+  mq.addEventListener && mq.addEventListener('change', applyTheme);
+
+  function km(m) { return m >= 1000 ? (m / 1000).toFixed(m >= 10000 ? 1 : 2) + ' km' : Math.round(m) + ' m'; }
+  function clock(s) { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  function el(n, a, parent) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); (parent || map).appendChild(e); return e; }
+  function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+  // Geometry: the place sits at x0; the U-turn (or the fix) sits along the road.
+  var VW = 1000, X0 = 930, XMIN = 50, TOPY = 150, BOTY = 250, W = 34, FS = 14;
+  function layout() { VW = map.clientWidth && map.clientWidth < 600 ? 560 : 1000; FS = VW < 700 ? 21 : 14; X0 = VW - 60; XMIN = 40; map.setAttribute('viewBox', '0 0 ' + VW + ' 400'); }
+  function scaleFor(far) { return (X0 - XMIN) / Math.max(far, 300); }
+  function route() {
+    var p = S.p, leg = (p.d[S.dir] || {}).m || p[S.dir], st = p.st;
+    var uturn = Math.max(20, (leg - st) / 2), k = scaleFor(uturn * 1.08);
+    var f = S.fix, path, len, note = '';
+    if (f === 'nearer') { uturn = S.L; }
+    if (f === 'jturn') { uturn = 150; }
+    var ux = X0 - uturn * k, yA = BOTY + W / 2 - 8, yB = TOPY + W / 2 + 8 - W + 10;
+    var aY = BOTY + 8, bY = TOPY + W - 8;
+    if (S.dir === 'ba') { var t = aY; aY = bY; bY = t; }
+    var r = (aY > bY ? aY - bY : bY - aY) / 2, sweep = S.dir === 'ab' ? 1 : 0;
+    if (f === 'signal') {
+      path = 'M' + X0 + ' ' + aY + ' L' + X0 + ' ' + bY; len = st;
+    } else if (f === 'under') {
+      path = 'M' + X0 + ' ' + aY + ' L' + (X0 - 120) + ' ' + aY + ' C' + (X0 - 175) + ' ' + aY + ',' + (X0 - 175) + ' ' + bY + ',' + (X0 - 120) + ' ' + bY + ' L' + X0 + ' ' + bY;
+      len = 2 * 100 + st + 30; note = 'Turn under the road instead of across it.';
+    } else {
+      path = 'M' + X0 + ' ' + aY + ' L' + ux + ' ' + aY + ' A' + r + ' ' + r + ' 0 0 ' + sweep + ' ' + ux + ' ' + bY + ' L' + X0 + ' ' + bY;
+      len = f === 'today' ? leg : 2 * uturn + st;
+    }
+    return { d: path, len: len, ux: ux, k: k, uturn: uturn, aY: aY, bY: bY, note: note };
+  }
+
+  var R, trail, car, pathEl, glareEl, beam;
+  function draw() {
+    while (map.lastChild && map.lastChild.tagName !== 'title') map.removeChild(map.lastChild);
+    layout();
+    var night = S.light === 'night';
+    var sky = night ? (document.documentElement.dataset.theme === 'dark' ? '#07090C' : '#0F1318') : css('--ground');
+    el('rect', { x: 0, y: 0, width: VW, height: 400, fill: sky });
+    R = route();
+    // Carriageways and median
+    el('rect', { x: 0, y: TOPY - 6, width: VW, height: W + 6, fill: night ? '#1A1E23' : css('--road') });
+    el('rect', { x: 0, y: BOTY - 2, width: VW, height: W + 6, fill: night ? '#1A1E23' : css('--road') });
+    el('rect', { x: 0, y: TOPY + W, width: VW, height: BOTY - TOPY - W - 2, fill: night ? '#232A20' : css('--median') });
+    if (S.fix !== 'today' && S.fix !== 'why') el('rect', { x: R.ux - 14, y: TOPY + W, width: 28, height: BOTY - TOPY - W - 2, fill: night ? '#1A1E23' : css('--road'), opacity: S.fix === 'nearer' || S.fix === 'jturn' ? 1 : 0 });
+    if (S.fix === 'today' || S.fix === 'why') el('rect', { x: R.ux - 14, y: TOPY + W, width: 28, height: BOTY - TOPY - W - 2, fill: night ? '#1A1E23' : css('--road') });
+    if (S.fix === 'signal') {
+      el('rect', { x: X0 - 16, y: TOPY + W, width: 32, height: BOTY - TOPY - W - 2, fill: night ? '#1A1E23' : css('--road') });
+      el('circle', { cx: X0 + 34, cy: (TOPY + BOTY + W) / 2, r: 7, fill: '#2F7D5B' });
+    }
+    for (var x = 20; x < VW; x += 46) {
+      el('rect', { x: x, y: TOPY + W / 2 - 2.5, width: 22, height: 2, fill: night ? '#4A5058' : css('--lane'), opacity: .75 });
+      el('rect', { x: x, y: BOTY + W / 2 + 1, width: 22, height: 2, fill: night ? '#4A5058' : css('--lane'), opacity: .75 });
+    }
+    // Direction of travel (keep left)
+    el('text', { x: XMIN, y: TOPY - 6 - FS * 0.6, fill: css('--faint'), 'font-size': FS - 1, 'font-family': 'Inter' }).textContent = 'Traffic this way →';
+    el('text', { x: XMIN, y: BOTY + W + 4 + FS * 1.4, fill: css('--faint'), 'font-size': FS - 1, 'font-family': 'Inter' }).textContent = '← Traffic this way';
+    // Lamps at night
+    if (night) for (var lx = 60; lx < VW; lx += 140) {
+      el('circle', { cx: lx, cy: (TOPY + BOTY + W) / 2, r: 46, fill: 'url(#lamp)', opacity: .55 });
+    }
+    var defs = el('defs', {});
+    var g = el('radialGradient', { id: 'lamp' }, defs);
+    el('stop', { offset: '0%', 'stop-color': '#FFD9A8', 'stop-opacity': .55 }, g); el('stop', { offset: '100%', 'stop-color': '#FFD9A8', 'stop-opacity': 0 }, g);
+    var gb = el('radialGradient', { id: 'beam' }, defs);
+    el('stop', { offset: '0%', 'stop-color': '#FFFFFF', 'stop-opacity': .95 }, gb); el('stop', { offset: '100%', 'stop-color': '#FFFFFF', 'stop-opacity': 0 }, gb);
+    // Scale bar
+    var sbm = R.uturn > 2000 ? 1000 : R.uturn > 500 ? 200 : 100, sbx = XMIN;
+    el('rect', { x: sbx, y: 352, width: sbm * R.k, height: 2, fill: css('--mut') });
+    el('text', { x: sbx, y: 352 + FS + 8, fill: css('--faint'), 'font-size': FS - 2, 'font-family': 'JetBrains Mono' }).textContent = sbm + ' m';
+    // Route and trail
+    pathEl = el('path', { d: R.d, fill: 'none', stroke: css('--trail'), 'stroke-opacity': .22, 'stroke-width': 4, 'stroke-linecap': 'round', 'stroke-dasharray': S.fix === 'under' ? '1 9' : 'none' });
+    trail = el('path', { d: R.d, fill: 'none', stroke: css('--trail'), 'stroke-width': 4, 'stroke-linecap': 'round' });
+    var L = pathEl.getTotalLength(); trail.setAttribute('stroke-dasharray', L + ' ' + L); trail.setAttribute('stroke-dashoffset', L);
+    // Pins
+    function pin(y, label, sub) {
+      el('circle', { cx: X0, cy: y, r: 7, fill: css('--bg'), stroke: css('--pin'), 'stroke-width': 2.5 });
+      var up = y < 200;
+      var ly = up ? TOPY - 6 - FS * 1.45 : BOTY + W + 4 + FS * 1.25, sy = up ? TOPY - 6 - FS * 0.35 : BOTY + W + 4 + FS * 2.35;
+      el('text', { x: X0 + 8, y: ly, fill: night ? '#F5F6F7' : css('--fg2'), 'font-size': FS + 1, 'font-weight': 600, 'font-family': 'Inter', 'text-anchor': 'end' }).textContent = label;
+      el('text', { x: X0 + 8, y: sy, fill: night ? '#AEB4BA' : css('--mut'), 'font-size': FS - 1, 'font-family': 'Inter', 'text-anchor': 'end' }).textContent = sub;
+    }
+    pin(R.aY, 'You are here', S.dir === 'ab' ? 'Side A' : 'Side B');
+    pin(R.bY, 'Where you need to be', (S.dir === 'ab' ? 'Side B · ' : 'Side A · ') + Math.round(S.p.st) + ' m across');
+    if (S.fix === 'today' || S.fix === 'nearer' || S.fix === 'jturn') {
+      el('text', { x: R.ux, y: (TOPY + BOTY + W) / 2 + 5, fill: night ? '#F5F6F7' : css('--fg2'), 'font-size': FS - 1, 'font-weight': 600, 'font-family': 'Inter', 'text-anchor': 'middle' }).textContent = 'U';
+    }
+    // Glare
+    if (night && S.glare) {
+      beam = el('ellipse', { cx: VW, cy: (S.dir === 'ab' ? TOPY : BOTY) + W / 2, rx: 120, ry: 50, fill: 'url(#beam)' });
+      glareEl = el('rect', { x: 0, y: 0, width: VW, height: 400, fill: '#FFFFFF', opacity: 0, 'pointer-events': 'none' });
+    } else { beam = glareEl = null; }
+    car = el('g', {});
+    el('rect', { x: -9, y: -5.5, width: 18, height: 11, rx: 3, fill: css('--car') }, car);
+    if (night) el('circle', { cx: 0, cy: 0, r: 26, fill: 'url(#lamp)', opacity: .9 }, car);
+    place(S.t);
+  }
+
+  function totals() {
+    var p = S.p, dv = p.d[S.dir];
+    var len = R ? R.len : (dv ? dv.m : p[S.dir]);
+    var secs = S.fix === 'today' && dv ? dv.s : len / 8.3 + (S.fix === 'signal' ? 75 : 0);
+    return { len: len, secs: secs };
+  }
+  function place(t) {
+    if (!pathEl) return;
+    var T = totals(), f = Math.min(1, t / T.secs), L = pathEl.getTotalLength(), q = pathEl.getPointAtLength(f * L), q2 = pathEl.getPointAtLength(Math.min(L, f * L + 1));
+    var ang = Math.atan2(q2.y - q.y, q2.x - q.x) * 180 / Math.PI;
+    car.setAttribute('transform', 'translate(' + q.x + ' ' + q.y + ') rotate(' + ang + ')');
+    trail.setAttribute('stroke-dashoffset', L * (1 - f));
+    $('hd').textContent = km(T.len * f);
+    $('hc').textContent = clock(T.secs * f);
+    if (beam) {
+      var bx = VW - ((t * 60) % (VW + 400));
+      beam.setAttribute('cx', bx);
+      var dx = Math.abs(bx - q.x), near = Math.max(0, 1 - dx / 380), sameLane = Math.abs(beam.getAttribute('cy') - q.y) > 40;
+      glareEl.setAttribute('opacity', (sameLane ? .55 : .15) * near * near);
+    }
+  }
+  function frame(now) {
+    if (!S.playing) return;
+    var dt = S.last ? (now - S.last) / 1000 : 0; S.last = now;
+    S.t += dt * RATE;
+    var T = totals();
+    if (S.t >= T.secs) { S.t = T.secs; S.playing = false; $('play').textContent = 'Again'; }
+    place(S.t);
+    if (S.playing) requestAnimationFrame(frame);
+  }
+  $('play').onclick = function () {
+    var T = totals();
+    if (S.t >= T.secs) S.t = 0;
+    S.playing = !S.playing; S.last = 0;
+    this.textContent = S.playing ? 'Pause' : 'Drive';
+    if (S.playing) requestAnimationFrame(frame);
+  };
+  function stop() { S.playing = false; S.t = 0; $('play').textContent = 'Drive'; }
+
+  function text() {
+    var p = S.p, dv = p.d[S.dir];
+    $('h1').textContent = Math.round(p.st) + ' metres across.';
+    $('lead').textContent = p.road + ', ' + p.area + '. The other side is ' + Math.round(p.st) + ' m away and there is no way across. ' +
+      (dv ? 'We drove the legal way round on ' + dv.date + ' 2026: ' + km(dv.m) + ' in ' + clock(dv.s) + '.' : 'Not driven in this direction yet; the drawing uses the map’s figure.');
+    $('hs').textContent = Math.round(p.st) + ' m';
+    $('note').innerHTML = (dv ? '<span class="tag ok">Driven ' + dv.date + '</span>' : '<span class="tag">Modelled</span>') +
+      'Model ' + km(p[S.dir]) + (dv ? ' · driven ' + km(dv.m) : '') + '. Replayed ' + RATE + '× faster.';
+    $('go3d').href = 'https://arcroad.org/drive/?place=' + p.id;
+  }
+  function chips() {
+    var h = $('places'); h.innerHTML = '';
+    P.forEach(function (p) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'chip';
+      b.setAttribute('aria-pressed', String(p === S.p));
+      b.innerHTML = p.id + '<small>' + p.area + '</small>';
+      b.onclick = function () { S.p = p; S.dir = p.d.ab ? 'ab' : 'ba'; stop(); chips(); dirs(); text(); draw(); card(); };
+      h.appendChild(b);
+    });
+  }
+  function dirs() {
+    var h = $('dirs'); h.innerHTML = '';
+    ['ab', 'ba'].forEach(function (k) {
+      if (!S.p[k]) return;
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = k === 'ab' ? 'A → B' : 'B → A';
+      b.setAttribute('aria-pressed', String(S.dir === k));
+      b.onclick = function () { S.dir = k; stop(); dirs(); text(); draw(); card(); };
+      h.appendChild(b);
+    });
+  }
+  document.querySelectorAll('[data-l]').forEach(function (b) {
+    b.onclick = function () {
+      S.light = b.dataset.l;
+      document.querySelectorAll('[data-l]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      $('glare').hidden = S.light !== 'night'; if (S.light !== 'night') { S.glare = false; $('glare').setAttribute('aria-pressed', 'false'); }
+      draw();
+    };
+  });
+  $('glare').onclick = function () { S.glare = !S.glare; this.setAttribute('aria-pressed', String(S.glare)); draw(); };
+
+  var FIX = [
+    ['today', 'Today'],
+    ['nearer', 'Nearer U-turn'],
+    ['jturn', 'Signal-free U-turn'],
+    ['signal', 'Signal here'],
+    ['under', 'Underpass'],
+    ['why', 'Why not everywhere']
+  ];
+  function tabs() {
+    var h = $('tabs'); h.innerHTML = '';
+    FIX.forEach(function (f) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', String(S.fix === f[0])); b.setAttribute('aria-pressed', String(S.fix === f[0]));
+      b.textContent = f[1];
+      b.onclick = function () { S.fix = f[0]; stop(); tabs(); draw(); card(); };
+      h.appendChild(b);
+    });
+  }
+  function card() {
+    var p = S.p, dv = p.d[S.dir], today = dv ? dv.m : p[S.dir], c = $('card'), R2 = route();
+    var nowLen = R2.len, html;
+    var head = { today: ['As it is', 'The legal way round today'], nearer: ['Option 1 · illustration, not a design', 'A U-turn opening nearer'],
+      jturn: ['Option 2 · illustration, not a design', 'A signal-free U-turn'], signal: ['Option 3 · illustration, not a design', 'A signal-controlled crossing'],
+      under: ['Option 4 · illustration, not a design', 'A U-turn underpass'], why: ['The trade-off', 'Why not a gap everywhere?'] }[S.fix];
+    var body = { today: 'The nearest legal U-turn is about ' + km(R2.uturn) + ' away, so crossing ' + Math.round(p.st) + ' m means ' + km(today) + '.',
+      nearer: 'Drag the U-turn closer and watch the detour shrink. Each opening adds conflict points, so where it goes matters.',
+      jturn: 'Turn left onto the road, then use a U-turn-only bay about 150 m along. No signal; through traffic keeps moving. A recognised safety design.',
+      signal: 'Open the median here with a light to take turns. The shortest distance, at the cost of a wait of about a minute or more each time.',
+      under: 'Pass under the road instead of across it. No conflict with through traffic, but costly and slow to build.',
+      why: 'Every opening is a place where turning traffic meets through traffic. Too many and crashes rise; too few and people ride the wrong way to save distance. The right spacing is a judgement for the road owner, made with numbers like these.' }[S.fix];
+    html = '<p class="ey">' + head[0] + '</p><h3>' + head[1] + '</h3><p>' + body + '</p>';
+    if (S.fix !== 'today' && S.fix !== 'why') {
+      html += '<div class="nums"><div class="was"><small>Today' + (dv ? ', driven' : ', modelled') + '</small><b>' + km(today) + '</b></div><span class="ar" aria-hidden="true">→</span><div class="now"><small>In this illustration</small><b>' + km(nowLen) + '</b></div></div>';
+      var saved = today - nowLen;
+      html += '<p class="save">' + (saved > 0 ? 'About ' + km(saved) + ' shorter each time' : 'No shorter here') + (S.fix === 'signal' ? ', plus a wait at the light' : '') + '.</p>';
+    }
+    if (S.fix === 'nearer') html += '<div class="rng"><label for="L"><span>Nearest U-turn</span><output id="Lv">' + km(S.L) + '</output></label><input type="range" id="L" min="100" max="' + Math.round(Math.max(200, (today - p.st) / 2)) + '" step="10" value="' + Math.min(S.L, Math.round(Math.max(200, (today - p.st) / 2))) + '"></div>';
+    c.innerHTML = html;
+    var L = $('L');
+    if (L) L.oninput = function () {
+      S.L = +L.value; stop(); draw();
+      var n = route().len, s = today - n;
+      $('Lv').textContent = km(S.L); c.querySelector('.now b').textContent = km(n);
+      c.querySelector('.save').textContent = (s > 0 ? 'About ' + km(s) + ' shorter each time' : 'No shorter here') + '.';
+    };
+  }
+
+  var rw = 0; addEventListener('resize', function () { var w = map.clientWidth; if ((w < 600) !== (rw < 600)) draw(); rw = w; });
+  chips(); dirs(); text(); tabs(); applyTheme(); card(); rw = map.clientWidth;
+})();
+</script>
+</body>
+</html>
