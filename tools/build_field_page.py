@@ -12,7 +12,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from site_nav import nav  # noqa: E402  (one nav for every page)
+from site_nav import nav, reuse  # noqa: E402  (one nav and footer line for every page)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIRS = {"ab": "A → B", "ba": "B → A"}
@@ -164,7 +164,7 @@ img,svg,canvas,video{{max-width:100%}}
 <h3>How this was scored</h3>
 <p>Thresholds were written before the first drive and not changed after seeing results. One pairing rule was changed on 2 Nov 2026 after that night's drive was seen; it is declared under Limits, was re-applied to every drive on file, and changed only S12. A drive matches when it is within the larger of 150 m or 25% of the model's distance. Raw recordings stay private; only these per-pass numbers are published.</p>
 </details>
-<footer>Map data © OpenStreetMap contributors (ODbL). Measurements by arcroad (ODbL). Model: {e(day["model"])}. No Google Maps data is used anywhere.</footer>
+<footer>Map data © OpenStreetMap contributors (ODbL). Measurements by arcroad (ODbL). Model: {e(day["model"])}. No Google Maps data is used anywhere.{reuse("../")}</footer>
 </main>
 </body>
 </html>
