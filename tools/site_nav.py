@@ -64,6 +64,28 @@ def nav(prefix: str, current: str, brand: bool = True) -> str:
     return "".join(out)
 
 
+def reuse(prefix: str) -> str:
+    """One line in every footer: what is free to reuse (data, code) and what is not (name, logo, films, design)."""
+    return ('<!-- reuse:start --><span class="sn-reuse">© 2026 arcroad. Data (ODbL) and code (MIT) are free to reuse with credit; '
+            'the arcroad name, logo, films and design are not. '
+            f'<a href="{prefix}reuse/">What you may reuse</a></span><!-- reuse:end -->')
+
+
+REUSE = re.compile(r"<!-- reuse:start -->.*?<!-- reuse:end -->", re.S)
+
+
+def apply_reuse(html: str, prefix: str) -> str:
+    markup = reuse(prefix)
+    if REUSE.search(html):
+        return REUSE.sub(lambda m: markup, html, count=1)
+    i = html.rfind("</footer>")
+    if i < 0:
+        return html
+    head = html[:i].rstrip()
+    j = len(head) - len("</div>") if head.endswith("</div>") else i
+    return html[:j] + markup + html[j:]
+
+
 def head_tags(prefix: str) -> str:
     return (f'<link rel="stylesheet" href="{prefix}nav.css" id="sn-css">\n'
             f'<script src="{prefix}nav.js" defer id="sn-js"></script>\n')
@@ -84,6 +106,7 @@ PAGES = {
     "roads/index.html": ("../", "roads/", True),
     "roads/glare/index.html": ("../../", "roads/glare/", True),
     "volunteer/index.html": ("../", "volunteer/", True),
+    "reuse/index.html": ("../", "reuse/", True),
 }
 
 FIRST_NAV = re.compile(r'<nav class="top" aria-label="arcroad">.*?</nav>|<nav class="sitenav" aria-label="arcroad">.*?</nav>'
@@ -103,7 +126,7 @@ def apply(html: str, prefix: str, current: str, brand: bool) -> str:
     html = OLD_STYLES.sub("", html)
     if 'id="sn-css"' not in html:
         html = html.replace("</head>", head_tags(prefix) + "</head>", 1)
-    return html
+    return apply_reuse(html, prefix)
 
 
 def main() -> None:
