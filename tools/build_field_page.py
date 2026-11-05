@@ -157,7 +157,7 @@ img,svg,canvas,video{{max-width:100%}}
 <tbody>{"".join(rows)}</tbody></table></div>
 <p class="note">Times include waits at signals and U-turn queues. <a href="../cost/">What would this cost you?</a></p>
 <details class="more"><summary>Rejected passes, places not scored, limits and how this was scored</summary>
-<h3>Evidence kinds</h3><p>S a timed drive, P a usable photo at the place during the pass, R a repeat pass. One kind is a candidate, two corroborated, three with a photo or an official record triangulated.</p>
+<h3>Evidence kinds</h3><p>S a timed drive, P a usable photo at the place during the pass, R a repeat pass in the same direction. One kind is a candidate, two corroborated, three with a photo or an official record triangulated.</p>
 <h3>Rejected passes</h3><ul>{nr or "<li>None.</li>"}</ul>
 <h3>Visited but not scored</h3><ul>{ns}</ul>
 <h3>Limits</h3><ul>{li(day["limitations"])}</ul>

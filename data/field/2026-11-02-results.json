@@ -17,8 +17,8 @@
    "reason": "",
    "level": 1,
    "label": "Driven by arcroad",
-   "kinds": "S+R",
-   "tri_level": "corroborated",
+   "kinds": "S",
+   "tri_level": "candidate",
    "posthoc_rule": true
   },
   {
