@@ -547,7 +547,7 @@
       trade: 'Trade-off: every opening is another place where turning and through traffic meet. Studies abroad find openings that allow only U-turns have fewer crashes overall than full openings, though the U-turns pile up further along.' },
     jturn: { n: 2, title: 'A signal-free U-turn with a bay',
       lead: function (o) { return 'No signal and no full opening: a U-turn-only opening about ' + JT + ' m away, with a widened bay (a "loon") so turning vehicles do not stop the through lanes. The crossing becomes about ' + o.nw + '.'; },
-      guide: 'Guidance: known in the US as a J-turn or restricted crossing U-turn; the US Federal Highway Administration lists it as a proven safety countermeasure, and a Missouri study found 35% fewer crashes and 54% fewer injury crashes (FHWA-HRT-17-082). In India, IRC:62 keeps median openings to intersections, so where it fits is the road owner\'s call.',
+      guide: 'Guidance: known in the US as a J-turn or restricted crossing U-turn; the US Federal Highway Administration lists it as a proven safety countermeasure, and a Missouri study found 35% fewer crashes and 54% fewer injury crashes (FHWA-HRT-17-082). Those are US results, not an expected result for Hyderabad or this place. In India, IRC:62 keeps median openings to intersections, so where it fits is the road owner\'s call.',
       trade: 'Trade-off: longer than a full opening at this spot, it needs room on the far side for the bay, and buses and trucks need a wider one. Traffic keeps moving, which is the point.' },
     signal: { n: 3, title: 'A signal-controlled crossing here',
       lead: function (o) { return 'Open the median at this place and control it with a signal. The crossing becomes about ' + o.nw + ', plus the wait at the light.'; },
