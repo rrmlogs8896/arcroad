@@ -87,6 +87,22 @@ th.n,td.n{text-align:right;padding-right:0}
 .lim .s{flex:0 0 96px;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase}
 .lim .t{flex:1 1 320px;min-width:0;font-size:14.5px;line-height:1.62;color:var(--fg)}
 .s-open{color:var(--accent)} .s-prog{color:var(--warm)} .s-fix{color:var(--good)}
+.act .eyebrow{margin:0 0 10px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.act .why{margin:0 0 30px;font-size:clamp(17px,2.6vw,21px);line-height:1.5;letter-spacing:-.01em;color:var(--fg2);max-width:52ch;text-wrap:pretty}
+.act .three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line2)}
+.act .three>div{padding:22px 24px 24px 0;min-width:0}
+.act .three>div+div{padding-left:24px;border-left:1px solid var(--line)}
+.act h3{margin:0 0 12px;font-size:15px;font-weight:600;color:var(--fg2);letter-spacing:-.01em}
+.act ul{margin:0;padding:0;list-style:none}
+.act li{margin:0 0 12px;font-size:14px;line-height:1.6;color:var(--mut)}
+.act li b{color:var(--fg);font-weight:500}
+.act li a{color:var(--accent)}
+.act .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line);margin-top:6px}
+.act .two>div{padding:22px 24px 4px 0;min-width:0}
+.act .two>div+div{padding-left:24px;border-left:1px solid var(--line)}
+.act .t{display:block;margin:0 0 10px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.act small{display:block;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.6;color:var(--faint);max-width:90ch}
+@media (max-width:820px){.act .three,.act .two{grid-template-columns:minmax(0,1fr)}.act .three>div+div,.act .two>div+div{padding-left:0;border-left:0;border-top:1px solid var(--line)}.act .three>div,.act .two>div{padding-right:0}}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px}
 footer{border-top:1px solid var(--line)}
 footer .wrap{padding-block:26px 56px}
@@ -232,7 +248,7 @@ img,svg,canvas,video{max-width:100%}
 <section>
   <div class="wrap">
     <h1>A place you can see, 1.5 km away</h1>
-    <p class="lede">Divided roads cut neighbours off. arcroad measures what crossing your own road costs, then drives the detour to check.</p>
+    <p class="lede">Divided roads cut neighbours off. arcroad measures what crossing your own road costs, then drives the detour to check. <a href="#act" style="color:var(--accent);white-space:nowrap">What you can do ↓</a></p>
     <div class="tw">
     <a class="teaser" href="drive/3d/?dive=1" aria-label="Ride the S18 detour in 3D: 13 metres across, 1.58 kilometres to get there">
       <video class="on" muted playsinline preload="none" poster="drive/media/films/drive.jpg" aria-hidden="true"></video>
@@ -336,8 +352,59 @@ img,svg,canvas,video{max-width:100%}
       <div class="cell"><p class="v">12,585</p><p class="k">Points measured</p></div>
       <div class="cell"><p class="v hot">2.2–3.8×</p><p class="k">Beyond the ring road vs the core city</p></div>
       <div class="cell"><p class="v">94</p><p class="k">Areas ranked</p></div>
-      <div class="cell"><p class="v hot">6 / 6</p><p class="k">Driven directions that matched the model (1–2 Nov 2026)</p></div>
+      <div class="cell"><p class="v hot">9 / 9</p><p class="k">Driven directions that matched the model (1–4 Nov 2026)</p></div>
     </div>
+  </div>
+</section>
+
+<section style="padding-top:0" id="act" class="act" aria-labelledby="h-act">
+  <div class="wrap">
+    <p class="eyebrow" id="h-act">What you can do</p>
+    <p class="why">arcroad exists to show what crossing your own road really costs, so that it gets fixed. A fix takes the road owner years. These help today.</p>
+    <div class="three">
+      <div>
+        <h3>Before you leave</h3>
+        <ul>
+          <li><b>Check your crossing.</b> <a href="drive/">See the detour we drove</a> at your place, or <a href="cost/">put in your own numbers</a>.</li>
+          <li><b>Add the detour to your time.</b> At APHB Colony the legal way round took us 3&nbsp;minutes one way and 12 the other, on the same day.</li>
+          <li><b>Know the long ones.</b> The longest we have driven: 11.6&nbsp;km on the Outer Ring Road at Sultanpur, 2.3&nbsp;km at HITEC City, 1.95&nbsp;km on the Hafeezpet Flyover.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>On the road</h3>
+        <ul>
+          <li><b>Take the legal way round.</b> Driving against traffic is an offence under the Motor Vehicles Act, and dangerous driving carries a fine or jail.</li>
+          <li><b>Turn only where allowed.</b> No U-turn where a sign or signal forbids it.</li>
+          <li><b>Dip your headlights</b> in good time for oncoming traffic and when close behind someone, and keep high beam off on lit roads. <a href="roads/glare/">What glare does</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>In an emergency</h3>
+        <ul>
+          <li><b>Call 112.</b> Police, fire and ambulance in one number across Telangana; 108 still reaches an ambulance.</li>
+          <li><b>Pull to the side for a siren.</b> Blocking an ambulance or fire engine can mean a ₹10,000 fine or six months.</li>
+          <li><b>Plan the long crossings before you need to hurry.</b> A rush is when the shortcut against traffic looks tempting, and it puts everyone coming the other way at risk.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="two">
+      <div>
+        <span class="t">Short term · weeks, low cost</span>
+        <ul>
+          <li><b>A sign before each closed median</b> saying how far the next U-turn is.</li>
+          <li><b>Light and mark the U-turn bays</b> people are sent to.</li>
+          <li><b>Enforce where people ride against traffic</b>, so the legal way round is the normal one.</li>
+        </ul>
+      </div>
+      <div>
+        <span class="t">Long term · years, infrastructure</span>
+        <ul>
+          <li><b>A U-turn opening nearer</b>, a <b>signal-free U-turn with a bay</b>, a <b>signal-controlled crossing</b> or a <b>U-turn underpass</b>.</li>
+          <li>Each one drawn on a real road, with its trade-off. <a href="drive/3d/?fix=auto">See the fixes</a></li>
+        </ul>
+      </div>
+    </div>
+    <small>Rules: Motor Vehicles Act 1988 ss. 119, 177, 184 and 194E (as amended in 2019); Motor Vehicles (Driving) Regulations 2017, regs 8 and 31. Fines for driving against traffic differ by state. Emergency number: Telangana Police Dial-112. Detour times are from single arcroad drives on 1–4 Nov 2026. The short-term ideas are options for the road owner, not measured results; arcroad does not count wrong-way riding at any place or link a crash to a road feature.</small>
   </div>
 </section>
 
