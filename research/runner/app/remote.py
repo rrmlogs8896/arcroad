@@ -128,9 +128,11 @@ def run(log, earlier):
         r = row["routers"] or {}
         row["ready_for_review"] = bool(r.get("both_agree")) and row["map_edits_48h"] is False and any(
             p.get("ai", {}).get("gap") in ("no", "unclear") for p in row["photos"])
+        row["possible_dispute"] = any(p.get("ai", {}).get("gap") == "yes" for p in row["photos"])
         out["places"].append(row)
         log(f"remote {s['id']} photos={len(row['photos'])} ready={row['ready_for_review']}")
     out["sorted_photos"] = sorted_n
     out["review_list"] = [p["id"] for p in out["places"] if p["ready_for_review"]]
+    out["dispute_list"] = [p["id"] for p in out["places"] if p["possible_dispute"]]
     out["finished"] = datetime.now(UTC).isoformat()
     return json.dumps(out, indent=1).encode()

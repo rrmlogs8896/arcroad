@@ -29,3 +29,5 @@ A place is put on the review list when check 1 passes, check 2 shows no edits, a
 
 ## Changes
 (none yet)
+
+**Amendment, 5 Nov 2026, before any photo was sorted.** A place where any photo is sorted "gap visible" goes on a separate dispute list for a person, whatever the routers or map edits say: a photo that contradicts the model is exactly the case a person must see. Without this, the AI's "gap visible" label decided on its own that nothing needed looking at. The dispute list is never published; a place becomes "Disputed" only after a person has looked at the photo.

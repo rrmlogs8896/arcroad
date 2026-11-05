@@ -11,7 +11,9 @@ Rules, fixed before scoring (1 Nov 2026, from the field-day review):
   - The evidence level comes from evidence.grade with the drive as own_drive evidence.
   - Triangulation kinds (docs/ENGINE.md): S = a timed drive; P = at least one usable photo
     (edge score >= PHOTO_USABLE) within 150 m of the place during the pass; R = another pass at the
-    same place (either direction) on another day, or at least REPEAT_MIN_S apart on the same day.
+    same place in the same direction on another day, or at least REPEAT_MIN_S apart on the same day.
+    Amended 5 Nov 2026 (docs/PREREG-repeat-rule.md): until then R also counted the opposite
+    direction, which is a different route, so it over-stated a single measurement.
     The model (M) is what is tested, never evidence for itself.
     1 kind = candidate, 2 = corroborated, 3+ with P or O = triangulated.
 """
@@ -55,7 +57,7 @@ def triangulate(rows: list[dict], passes: list[dict]) -> None:
     by_place = {}
     for r, p in zip(rows, passes, strict=True):
         if r["verdict"] not in ("REJECTED", "POOR_TRACK"):
-            by_place.setdefault(p["id"], []).append(p)
+            by_place.setdefault((p["id"], p["dir"]), []).append(p)
     for r, p in zip(rows, passes, strict=True):
         if r["verdict"] in ("REJECTED", "POOR_TRACK"):
             r.update(kinds="", tri_level="none")
@@ -63,7 +65,7 @@ def triangulate(rows: list[dict], passes: list[dict]) -> None:
         kinds = ["S"]
         if (p.get("photos_usable") or 0) > 0:
             kinds.append("P")
-        others = [q for q in by_place.get(p["id"], []) if q is not p]
+        others = [q for q in by_place.get((p["id"], p["dir"]), []) if q is not p]
         if any(q["date"] != p["date"] or abs(q["start_s"] - p["start_s"]) >= REPEAT_MIN_S for q in others):
             kinds.append("R")
         n = len(kinds)
