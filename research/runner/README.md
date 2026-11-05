@@ -1,6 +1,6 @@
 # arcroad research runner (Cloudflare Containers)
 
-A Worker with no public route. At 22:00 IST every night, a cron trigger starts one container (standard-1: ½ vCPU, 4 GiB). The container runs its jobs one after another. A second cron polls every 10 minutes while a job is running and files each finished result in the private R2 bucket `arcroad-research` under `nights/<date>/`. When nothing is running, nothing polls, and the container sleeps after 30 minutes.
+A Worker with no public route. At 22:00 IST every night, a cron trigger starts one container (standard-1: ½ vCPU, 4 GiB). The container runs its jobs one after another. A second cron polls every 10 minutes, from 22:00 to 12:30 IST, while a job is running and files each finished result in the private R2 bucket `arcroad-research` under `nights/<date>/`. When nothing is running, nothing polls, and the container sleeps after 30 minutes.
 
 ## Jobs
 
