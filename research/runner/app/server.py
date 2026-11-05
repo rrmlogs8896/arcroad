@@ -16,6 +16,7 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+import filer
 import hotspots
 import mapwatch
 import openings
@@ -112,7 +113,8 @@ JOBS = [("routercheck", job_routercheck), ("mapwatch", job_mapwatch), ("remote",
 
 
 def run_all():
-    STATE.update(running=True, done=[], failed={})
+    # Same key as the Worker's R2 folder: the UTC date when the night starts (16:30 UTC = 22:00 IST).
+    STATE.update(running=True, done=[], failed={}, night=time.strftime("%Y-%m-%d", time.gmtime()))
     for name, fn in JOBS:
         log(f"start {name}")
         try:
@@ -122,7 +124,10 @@ def run_all():
         except Exception as e:
             STATE["failed"][name] = str(e)[:300]
             log(f"FAILED {name}: {e}")
+        filer.file_result(STATE["night"], name, FILES.get(name, ""), STATE, log)
     STATE["running"] = False
+    filer.put(f"nights/{STATE['night']}/status.json", json.dumps(STATE, indent=1).encode(),
+              f"night {STATE['night']}: finished", log)
 
 
 class H(BaseHTTPRequestHandler):
