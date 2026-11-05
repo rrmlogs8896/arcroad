@@ -13,6 +13,7 @@ from __future__ import annotations
 import itertools
 import json
 import math
+import os
 import sys
 import urllib.parse
 from datetime import UTC, datetime
@@ -177,20 +178,42 @@ def ghsl_array(bbox, repo: Path, log):
         return a, tuple(ds.transform)[:6]
 
 
-def worldpop_array(bbox, log):
-    """Windowed read over HTTP; the full India file is about 470 MB, the window a few MB."""
+def _wp_window(path, bbox):
     import rasterio
     from rasterio.windows import from_bounds
 
+    with rasterio.open(path) as ds:
+        w = from_bounds(*bbox, transform=ds.transform).round_offsets().round_lengths()
+        a = ds.read(1, window=w).astype("float64")
+        if ds.nodata is not None:
+            a[a == ds.nodata] = np.nan
+        return a, tuple(ds.window_transform(w))[:6]
+
+
+def worldpop_array(bbox, log, local="/tmp/worldpop_ind_2020.tif"):
+    """Windowed read over HTTP; the full India file is about 470 MB, the window a few MB.
+
+    4 Nov 2026: the WorldPop server refused range requests, so the cross-check did not run.
+    Now, if the windowed read fails, the whole file is downloaded once to local disk and read there.
+    """
+    import shutil
+    import urllib.request
+
     try:
+        import rasterio
+
         with rasterio.Env(GDAL_HTTP_USERAGENT="arcroad-research/1.0", GDAL_DISABLE_READDIR_ON_OPEN="EMPTY_DIR"):
-            with rasterio.open("/vsicurl/" + WORLDPOP) as ds:
-                w = from_bounds(*bbox, transform=ds.transform).round_offsets().round_lengths()
-                a = ds.read(1, window=w).astype("float64")
-                if ds.nodata is not None:
-                    a[a == ds.nodata] = np.nan
-                t = ds.window_transform(w)
-                return a, tuple(t)[:6]
+            return _wp_window("/vsicurl/" + WORLDPOP, bbox)
+    except Exception as e:
+        log(f"hotspots WorldPop windowed read failed ({str(e)[:80]}); downloading the whole file")
+    try:
+        if not os.path.exists(local):
+            req = urllib.request.Request(WORLDPOP, headers={"User-Agent": "arcroad-research/1.0"})
+            with urllib.request.urlopen(req, timeout=600) as r, open(local + ".part", "wb") as f:
+                shutil.copyfileobj(r, f, 1 << 20)
+            os.replace(local + ".part", local)
+        log(f"hotspots WorldPop downloaded ({os.path.getsize(local) // 1_000_000} MB)")
+        return _wp_window(local, bbox)
     except Exception as e:  # recorded; the job then says the cross-check did not run
         log(f"hotspots WorldPop unavailable: {e}")
         return None, None
