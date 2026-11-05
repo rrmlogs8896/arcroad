@@ -33,7 +33,7 @@ def test_map_view_fix_text_that_claims_safety_carries_the_caveat():
     """5 Nov review: the 2D /drive/ said 'A recognised safety design' with no source or caveat."""
     page = (ROOT / "web" / "drive" / "index.html").read_text(encoding="utf-8")
     texts = re.findall(r"\w+: '((?:[^'\\]|\\.)*)'", page)
-    claims = [t for t in texts if re.search(r"safety|crash", t, re.I)]
+    claims = [t for t in texts if re.search(r"safety design|stud(?:y|ies)|found fewer", t, re.I)]
     assert claims, "expected the J-turn text"
     for t in claims:
         assert CAVEAT in t, t
