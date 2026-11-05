@@ -8,6 +8,7 @@ interface Env {
   // Set with `npx wrangler secret put <NAME>` (hidden prompt); never in a file or the repo.
   MAPILLARY_TOKEN?: string;
   ANTHROPIC_API_KEY?: string;
+  GITHUB_TOKEN?: string; // fine-grained, arcroad-internal only, Contents read/write: files night results
 }
 
 export class ResearchRunner extends Container<Env> {
@@ -15,7 +16,7 @@ export class ResearchRunner extends Container<Env> {
   sleepAfter = "30m"; // the poll every 10 minutes keeps it awake only while a job runs
   constructor(ctx: DurableObjectState<{}>, env: Env) {
     super(ctx, env);
-    this.envVars = { MAPILLARY_TOKEN: env.MAPILLARY_TOKEN ?? "", ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY ?? "" };
+    this.envVars = { MAPILLARY_TOKEN: env.MAPILLARY_TOKEN ?? "", ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY ?? "", GITHUB_TOKEN: env.GITHUB_TOKEN ?? "" };
   }
 }
 
