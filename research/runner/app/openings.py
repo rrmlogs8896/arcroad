@@ -151,6 +151,15 @@ def run(log):
         out["places"].append(r)
         log(f"openings {i + 1}/{len(places)} {p['id']} {r.get('class', r['status'])}")
         time.sleep(6)
+    for k, r in enumerate(out["places"]):   # one more try at the end for places the server dropped
+        if r["status"] == "ERROR":
+            p = places[k]
+            time.sleep(60)
+            try:
+                out["places"][k] = analyse(p, overpass((p["a"][1] + p["b"][1]) / 2, (p["a"][0] + p["b"][0]) / 2))
+                log(f"openings retry {p['id']} {out['places'][k].get('class')}")
+            except Exception as e:
+                r["error"] = (r["error"] + " | retry: " + str(e))[:300]
     ok = [r for r in out["places"] if r["status"] == "OK"]
     ctl = [c for r in ok for c in r["controls"]]
     sp = sum(r["class"] == "AT_INTERSECTION" for r in ok) / len(ok) if ok else None

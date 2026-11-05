@@ -47,3 +47,22 @@ def test_kd_tree_matches_brute_force():
     for lon, lat in [(78.32, 17.47), (78.33, 17.48)]:
         assert n.count(lon, lat, 1000) == h.count_near(pts, lon, lat, 1000)
         assert abs(n.road_km(lon, lat, 1000) - h.line_km_near(lines, lon, lat, 1000)) < 0.05
+
+
+def test_worldpop_falls_back_to_a_full_download_when_ranges_are_refused(monkeypatch, tmp_path):
+    """4 Nov night: 'Range downloading not supported by this server!' stopped the pre-registered cross-check."""
+    import io
+
+    calls = []
+
+    def window(path, bbox):
+        calls.append(path)
+        if path.startswith("/vsicurl/"):
+            raise RuntimeError("Range downloading not supported by this server!")
+        return "array", (1, 0, 0, 0, 1, 0)
+
+    monkeypatch.setattr(h, "_wp_window", window)
+    monkeypatch.setattr("urllib.request.urlopen", lambda req, timeout=0: io.BytesIO(b"tif bytes"))
+    local = tmp_path / "wp.tif"
+    a, _t = h.worldpop_array((78.3, 17.3, 78.5, 17.5), lambda m: None, local=str(local))
+    assert a == "array" and local.read_bytes() == b"tif bytes" and calls[-1] == str(local)

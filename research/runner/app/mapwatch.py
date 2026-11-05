@@ -38,17 +38,27 @@ def run(log):
     out = {"job": "mapwatch-v1", "since": since, "radius_m": RADIUS_M,
            "data": "OpenStreetMap via Overpass (ODbL)", "status": "INTERNAL: re-check list, not published",
            "places": []}
-    for s in spots:
+    def one(s):
         lat, lon = (s["a"][1] + s["b"][1]) / 2, (s["a"][0] + s["b"][0]) / 2
         try:
             d = json.loads(get(OVERPASS, urllib.parse.urlencode({"data": query(lat, lon, since)}).encode()))
             edits = [summarise(e) for e in d.get("elements", [])]
-            row = {"id": s["id"], "edits": edits, "recheck": bool(edits)}
+            return {"id": s["id"], "edits": edits, "recheck": bool(edits)}
         except Exception as e:
-            row = {"id": s["id"], "error": str(e)[:200], "recheck": None}
+            return {"id": s["id"], "error": str(e)[:200], "recheck": None}
+
+    for s in spots:
+        row = one(s)
         out["places"].append(row)
         log(f"mapwatch {s['id']} {len(row.get('edits', []))} edits")
         time.sleep(5)
+    for k, s in enumerate(spots):   # one more try at the end for places the server dropped
+        if "error" in out["places"][k]:
+            time.sleep(60)
+            row = one(s)
+            if "error" not in row:
+                out["places"][k] = row
+                log(f"mapwatch retry {s['id']} {len(row['edits'])} edits")
     out["recheck"] = [p["id"] for p in out["places"] if p.get("recheck")]
     out["finished"] = datetime.now(UTC).isoformat()
     return json.dumps(out, indent=1).encode()
