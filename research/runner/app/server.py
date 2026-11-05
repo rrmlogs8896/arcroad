@@ -105,9 +105,10 @@ def job_bengaluru():
     return tgz
 
 
-JOBS = [("openings", job_openings), ("mapwatch", job_mapwatch), ("routercheck", job_routercheck),
-        ("structures", job_structures), ("remote", job_remote),
-        ("hotspots", job_hotspots), ("bengaluru", job_bengaluru)]
+# Quick jobs first; openings (about 4.5 h on 4 Nov) last. remote reads tonight's routercheck and mapwatch.
+JOBS = [("routercheck", job_routercheck), ("mapwatch", job_mapwatch), ("remote", job_remote),
+        ("structures", job_structures), ("bengaluru", job_bengaluru), ("hotspots", job_hotspots),
+        ("openings", job_openings)]
 
 
 def run_all():
