@@ -3,6 +3,7 @@
 Needs GITHUB_TOKEN: a fine-grained token limited to rrmlogs8896/arcroad-internal, Contents read and write.
 Without it, nothing is filed and the night runs exactly as before. A filing error never fails a job.
 Writes only nights/<date>/<job>.json and nights/<date>/status.json in arcroad-internal.
+get() reads a file from the same repo (the weekly viability job reads the agent brief and secret-sauce index).
 """
 from __future__ import annotations
 
@@ -50,6 +51,18 @@ def put(path: str, content: bytes, message: str, log) -> bool:
     except Exception as e:  # filing is a convenience; the night's results are already in R2
         log(f"filer: could not file {path}: {str(e)[:120]}")
         return False
+
+
+def get(path: str, log) -> str:
+    """A text file from arcroad-internal, or "" (no token, missing file or any error)."""
+    token = os.environ.get("GITHUB_TOKEN", "")
+    if not token:
+        return ""
+    try:
+        return base64.b64decode(_req("GET", API + path, token).get("content", "")).decode()
+    except Exception as e:
+        log(f"filer: could not read {path}: {str(e)[:120]}")
+        return ""
 
 
 def file_result(night: str, job: str, path, state: dict, log) -> None:

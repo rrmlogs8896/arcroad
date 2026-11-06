@@ -7,6 +7,7 @@ Only the Worker can reach this server; it has no public address.
 """
 from __future__ import annotations
 
+import datetime as dt
 import json
 import shutil
 import subprocess
@@ -23,6 +24,7 @@ import openings
 import remote
 import routercheck
 import structures
+import viability
 
 OUT = Path("/tmp/out")
 STATE = {"running": False, "done": [], "failed": {}, "log": []}
@@ -106,6 +108,20 @@ def job_bengaluru():
     return tgz
 
 
+def job_viability():
+    """Sunday nights only: the weekly viability brief, inside the constitution and secret sauce."""
+    OUT.mkdir(exist_ok=True)
+    p = OUT / "viability-v1.json"
+    rules = "\n\n".join(t for t in (filer.get("AGENT-BRIEF.md", log), filer.get("SECRET-SAUCE.md", log)) if t)
+    last = (dt.date.fromisoformat(STATE["night"]) - dt.timedelta(days=7)).isoformat()
+    try:
+        previous = json.loads(filer.get(f"nights/{last}/viability.json", log) or "{}").get("brief", "")
+    except ValueError:
+        previous = ""
+    p.write_bytes(viability.run(log, previous, rules))
+    return p
+
+
 # Quick jobs first; openings (about 4.5 h on 4 Nov) last. remote reads tonight's routercheck and mapwatch.
 # Bengaluru left the nightly queue on 6 Nov: the 5 Nov run was killed for memory (exit -9) on the 4 GB
 # container. It runs in the Multi-city collection GitHub workflow instead (monthly, or on demand), which
@@ -117,7 +133,8 @@ JOBS = [("routercheck", job_routercheck), ("mapwatch", job_mapwatch), ("remote",
 def run_all():
     # Same key as the Worker's R2 folder: the UTC date when the night starts (16:30 UTC = 22:00 IST).
     STATE.update(running=True, done=[], failed={}, night=time.strftime("%Y-%m-%d", time.gmtime()))
-    for name, fn in JOBS:
+    jobs = JOBS + ([("viability", job_viability)] if viability.is_run_day(dt.date.fromisoformat(STATE["night"])) else [])
+    for name, fn in jobs:
         log(f"start {name}")
         try:
             FILES[name] = fn()
