@@ -17,7 +17,7 @@ PLACES = {"status": "CANDIDATE", "selection": "declared", "cities": [{"id": "ben
 def test_queue_runs_bengaluru_first_only_on_its_night():
     names = [n for n, _ in server.tonight(server.BENGALURU_REMOTE_NIGHT)]
     assert names[0] == "bengaluru_remote" and names.count("bengaluru_remote") == 1
-    assert "bengaluru_remote" not in [n for n, _ in server.tonight("2026-11-07")]
+    assert "bengaluru_remote" not in [n for n, _ in server.tonight("2026-11-06")]
 
 
 def test_sunday_adds_the_viability_brief_last():

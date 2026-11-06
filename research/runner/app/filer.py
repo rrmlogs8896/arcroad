@@ -28,9 +28,15 @@ def _req(method, url, token, body=None):
         return json.loads(resp.read() or b"{}")
 
 
+_WARNED = []
+
+
 def put(path: str, content: bytes, message: str, log) -> bool:
     token = os.environ.get("GITHUB_TOKEN", "")
     if not token:
+        if not _WARNED:
+            _WARNED.append(1)
+            log("filer: no GITHUB_TOKEN in the container, night results stay in R2 only")
         return False
     if len(content) > MAX_BYTES:
         log(f"filer: {path} is {len(content)} bytes, too large to file; kept in R2 only")

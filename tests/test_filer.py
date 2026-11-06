@@ -51,3 +51,13 @@ def test_large_results_stay_in_r2(monkeypatch):
     monkeypatch.setenv("GITHUB_TOKEN", "t")
     monkeypatch.setattr(filer, "_req", lambda *a, **k: (_ for _ in ()).throw(AssertionError("called")))
     assert filer.put("nights/d/x.json", b"x" * (filer.MAX_BYTES + 1), "m", lambda m: None) is False
+
+
+def test_missing_token_is_logged_once(monkeypatch):
+    import filer
+    monkeypatch.delenv("GITHUB_TOKEN", raising=False)
+    monkeypatch.setattr(filer, "_WARNED", [])
+    logs = []
+    assert filer.put("nights/x/a.json", b"{}", "m", logs.append) is False
+    assert filer.put("nights/x/b.json", b"{}", "m", logs.append) is False
+    assert len([m for m in logs if "no GITHUB_TOKEN" in m]) == 1
