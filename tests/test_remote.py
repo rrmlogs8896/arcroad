@@ -1,6 +1,7 @@
 import json
 import pathlib
 import sys
+import typing
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "research" / "runner" / "app"))
 import remote
@@ -48,3 +49,31 @@ def test_a_photo_showing_a_gap_goes_to_a_person_even_when_routers_disagree(monke
     out = json.loads(remote.run(lambda m: None, {"routercheck": None, "mapwatch": None}))
     assert out["dispute_list"] == ["S1", "S2"]
     assert out["review_list"] == []
+
+
+def test_photos_are_sent_as_bytes_not_links(monkeypatch):
+    """5 Nov night: every photo failed with HTTP 400 when the API was asked to fetch the Mapillary link."""
+    import io
+
+    sent = {}
+
+    class Resp(io.BytesIO):
+        headers: typing.ClassVar[dict] = {"Content-Type": "image/jpeg"}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    def urlopen(req, timeout=0):
+        if req.full_url.startswith("https://api.anthropic.com"):
+            sent["body"] = json.loads(req.data)
+            return Resp(json.dumps({"content": [{"type": "text", "text": '{"median_visible": true, "gap": "no", "why": "x"}'}]}).encode())
+        return Resp(b"\xff\xd8jpegbytes")
+
+    monkeypatch.setattr(remote.urllib.request, "urlopen", urlopen)
+    out = remote.sort_photo("https://scontent.example/photo.jpg", "k")
+    src = sent["body"]["messages"][0]["content"][0]["source"]
+    assert src["type"] == "base64" and src["media_type"] == "image/jpeg" and "url" not in src
+    assert out["gap"] == "no"

@@ -12,9 +12,11 @@ photo ids, dates and links. The AI is told not to describe people or vehicles.
 """
 from __future__ import annotations
 
+import base64
 import json
 import math
 import os
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import UTC, datetime, timedelta
@@ -77,13 +79,29 @@ def photos(lat, lon, token, now):
     return out[:PER_PLACE]
 
 
+def fetch_image(url):
+    """5 Nov 2026: every photo failed with HTTP 400 when the API was asked to fetch the Mapillary link
+    itself (short-lived signed CDN links). The container now downloads the photo and sends its bytes."""
+    req = urllib.request.Request(url, headers={"User-Agent": "arcroad-research/1.0"})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        data, ctype = r.read(), (r.headers.get("Content-Type") or "image/jpeg").split(";")[0].strip()
+    if ctype not in ("image/jpeg", "image/png", "image/webp", "image/gif"):
+        ctype = "image/jpeg"
+    return base64.b64encode(data).decode(), ctype
+
+
 def sort_photo(url, key):
+    b64, ctype = fetch_image(url)
     body = json.dumps({"model": MODEL, "max_tokens": 120, "messages": [{"role": "user", "content": [
-        {"type": "image", "source": {"type": "url", "url": url}}, {"type": "text", "text": PROMPT}]}]}).encode()
+        {"type": "image", "source": {"type": "base64", "media_type": ctype, "data": b64}},
+        {"type": "text", "text": PROMPT}]}]}).encode()
     req = urllib.request.Request(ANTHROPIC, data=body, headers={
         "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        d = json.loads(r.read())
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            d = json.loads(r.read())
+    except urllib.error.HTTPError as e:   # keep the API's reason, so a failure can be diagnosed
+        raise RuntimeError(f"HTTP {e.code}: {e.read()[:160].decode('utf-8', 'replace')}") from None
     return parse_label("".join(c.get("text", "") for c in d.get("content", [])))
 
 
