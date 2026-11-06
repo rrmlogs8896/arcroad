@@ -109,11 +109,11 @@ def job_bengaluru():
 
 
 def job_viability():
-    """Sunday nights only: the weekly viability brief, inside the constitution and secret sauce."""
+    """Sunday, Tuesday and Thursday nights: the viability brief, inside the constitution and secret sauce."""
     OUT.mkdir(exist_ok=True)
     p = OUT / "viability-v1.json"
     rules = "\n\n".join(t for t in (filer.get("AGENT-BRIEF.md", log), filer.get("SECRET-SAUCE.md", log)) if t)
-    last = (dt.date.fromisoformat(STATE["night"]) - dt.timedelta(days=7)).isoformat()
+    last = viability.previous_run_day(dt.date.fromisoformat(STATE["night"])).isoformat()
     try:
         previous = json.loads(filer.get(f"nights/{last}/viability.json", log) or "{}").get("brief", "")
     except ValueError:

@@ -65,13 +65,27 @@ def test_a_run_stops_at_its_budget(monkeypatch):
 
 
 def test_a_month_fits_the_ten_dollar_cap():
-    assert viability.RUN_BUDGET_USD * 5 <= 10  # at most five Sundays in a month
+    worst = max(sum(viability.is_run_day(dt.date(2026, m, 1) + dt.timedelta(days=i)) for i in range(31))
+                for m in range(1, 13))
+    assert worst <= 14 and viability.RUN_BUDGET_USD * worst <= 10
 
 
-def test_sundays_only_and_themes_rotate():
-    assert viability.is_run_day(SUNDAY) and not viability.is_run_day(SUNDAY + dt.timedelta(days=1))
-    names = {viability.theme_for(SUNDAY + dt.timedelta(weeks=w))[0] for w in range(4)}
-    assert names == {"funding", "stakeholders", "revenue", "attention"}
+def test_three_nights_a_week_and_themes_rotate_run_by_run():
+    week = [SUNDAY + dt.timedelta(days=i) for i in range(7)]
+    runs = [d for d in week if viability.is_run_day(d)]
+    assert [d.strftime("%a") for d in runs] == ["Sun", "Tue", "Thu"]
+    seq = []
+    d = SUNDAY
+    while len(seq) < 8:
+        if viability.is_run_day(d):
+            seq.append(viability.theme_for(d)[0])
+        d += dt.timedelta(days=1)
+    assert all(seq[i] != seq[i + 1] for i in range(7)) and set(seq[:4]) == {"funding", "stakeholders", "revenue", "attention"}
+
+
+def test_previous_brief_is_the_last_run_night():
+    assert viability.previous_run_day(SUNDAY + dt.timedelta(days=2)) == SUNDAY
+    assert viability.previous_run_day(SUNDAY) == SUNDAY - dt.timedelta(days=3)
 
 
 def test_research_only_and_private_details_stay_out_of_searches():
