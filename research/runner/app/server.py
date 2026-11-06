@@ -122,6 +122,52 @@ def job_viability():
     return p
 
 
+def job_bengaluru_remote():
+    """One night only: the remote checks on 8 Bengaluru candidate places, approved by Rohit on 6 Nov.
+
+    The places file is private (arcroad-internal data/bengaluru/places-candidate.json) and names the night it
+    runs on ("run_on"). Same jobs and rules as Hyderabad's: mapwatch, openings, structures, then photos.
+    """
+    import tempfile
+    places = json.loads(filer.get("data/bengaluru/places-candidate.json", log) or "{}")
+    if not places.get("spots"):
+        raise RuntimeError("places file unavailable")
+    f = Path(tempfile.gettempdir()) / "bengaluru-places.json"
+    f.write_text(json.dumps(places))
+    url = f.as_uri()
+    mods = (openings, mapwatch, structures, remote)
+    saved = [m.PLACES_URL for m in mods]
+    try:
+        for m in mods:
+            m.PLACES_URL = url
+        out = {"city": "bengaluru", "status": places.get("status"), "selection": places.get("selection")}
+        for name, fn in (("mapwatch", lambda: mapwatch.run(log)), ("openings", lambda: openings.run(log)),
+                         ("structures", lambda: structures.run(log, "bengaluru"))):
+            try:
+                out[name] = json.loads(fn())
+            except Exception as e:
+                out[name] = {"error": str(e)[:300]}
+                log(f"bengaluru_remote {name} failed: {e}")
+        mw = json.dumps(out["mapwatch"]).encode() if "error" not in out["mapwatch"] else None
+        out["remote"] = json.loads(remote.run(log, {"routercheck": None, "mapwatch": mw}))
+    finally:
+        for m, u in zip(mods, saved, strict=True):
+            m.PLACES_URL = u
+    OUT.mkdir(exist_ok=True)
+    p = OUT / "bengaluru-remote-v1.json"
+    p.write_bytes(json.dumps(out, indent=1).encode())
+    return p
+
+
+def tonight(night):
+    """The night's queue: a one-off Bengaluru check first, the standing jobs, then the Sunday brief."""
+    first = [("bengaluru_remote", job_bengaluru_remote)] if night == BENGALURU_REMOTE_NIGHT else []
+    last = [("viability", job_viability)] if viability.is_run_day(dt.date.fromisoformat(night)) else []
+    return first + JOBS + last
+
+
+BENGALURU_REMOTE_NIGHT = "2026-11-06"  # matches run_on in the private places file
+
 # Quick jobs first; openings (about 4.5 h on 4 Nov) last. remote reads tonight's routercheck and mapwatch.
 # Bengaluru left the nightly queue on 6 Nov: the 5 Nov run was killed for memory (exit -9) on the 4 GB
 # container. It runs in the Multi-city collection GitHub workflow instead (monthly, or on demand), which
@@ -133,7 +179,7 @@ JOBS = [("routercheck", job_routercheck), ("mapwatch", job_mapwatch), ("remote",
 def run_all():
     # Same key as the Worker's R2 folder: the UTC date when the night starts (16:30 UTC = 22:00 IST).
     STATE.update(running=True, done=[], failed={}, night=time.strftime("%Y-%m-%d", time.gmtime()))
-    jobs = JOBS + ([("viability", job_viability)] if viability.is_run_day(dt.date.fromisoformat(STATE["night"])) else [])
+    jobs = tonight(STATE["night"])
     for name, fn in jobs:
         log(f"start {name}")
         try:
