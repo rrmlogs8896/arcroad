@@ -107,9 +107,11 @@ def job_bengaluru():
 
 
 # Quick jobs first; openings (about 4.5 h on 4 Nov) last. remote reads tonight's routercheck and mapwatch.
+# Bengaluru left the nightly queue on 6 Nov: the 5 Nov run was killed for memory (exit -9) on the 4 GB
+# container. It runs in the Multi-city collection GitHub workflow instead (monthly, or on demand), which
+# has 16 GB. job_bengaluru stays for a one-off run on a larger instance.
 JOBS = [("routercheck", job_routercheck), ("mapwatch", job_mapwatch), ("remote", job_remote),
-        ("structures", job_structures), ("bengaluru", job_bengaluru), ("hotspots", job_hotspots),
-        ("openings", job_openings)]
+        ("structures", job_structures), ("hotspots", job_hotspots), ("openings", job_openings)]
 
 
 def run_all():
