@@ -22,6 +22,7 @@ def test_queue_runs_bengaluru_first_only_on_its_night():
 
 def test_sunday_adds_the_viability_brief_last():
     assert server.tonight("2026-11-08")[-1][0] == "viability"
+    assert server.tonight("2026-11-10")[-1][0] == "viability"
     assert "viability" not in [n for n, _ in server.tonight("2026-11-07")]
 
 

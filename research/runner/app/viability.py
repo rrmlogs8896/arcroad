@@ -2,12 +2,12 @@
 
 Approved by Rohit on 6 Nov 2026, with a hard cap of USD 10 a month.
 
-Runs on Sunday nights only, one theme per week in rotation, as a single Claude request with web search.
+Runs three nights a week (Sunday, Tuesday, Thursday; 6 Nov 2026, "time is of the essence"), one theme per run in rotation, as a single Claude request with web search.
 The cap is held in two places:
   1. the API key: VIABILITY_API_KEY belongs to its own Claude Console workspace, whose monthly spend limit
      is set to USD 10. Anthropic refuses requests above it. This is the real cap.
-  2. this file: each run stops at RUN_BUDGET_USD (estimated from the usage the API reports), so four or five
-     Sundays stay under the cap before the workspace limit is ever reached.
+  2. this file: each run stops at RUN_BUDGET_USD (estimated from the usage the API reports), so the at most 14 run nights in a month
+     stay under the cap before the workspace limit is ever reached.
 It never falls back to the nightly ANTHROPIC_API_KEY: without its own key it does nothing.
 
 It is tied to the constitution and the secret sauce: each run reads AGENT-BRIEF.md (the condensed
@@ -29,9 +29,9 @@ import urllib.request
 
 ANTHROPIC = "https://api.anthropic.com/v1/messages"
 MODEL = "claude-sonnet-5-5"
-MAX_SEARCHES = 12
+MAX_SEARCHES = 8
 MAX_TOKENS = 4000
-RUN_BUDGET_USD = 1.80
+RUN_BUDGET_USD = 0.70
 MAX_TURNS = 3  # the API pauses long searches with stop_reason "pause_turn"; we continue at most this often
 # Conservative assumed prices, USD per million tokens and per search. The Console limit is the real cap; these
 # only stop a run early. If the actual price is lower, the run simply stops sooner than it needs to.
@@ -68,13 +68,28 @@ SYSTEM = (
 )
 
 
-def theme_for(day: dt.date):
-    return THEMES[day.isocalendar()[1] % len(THEMES)]
+RUN_DAYS = (6, 1, 3)  # Sunday, Tuesday, Thursday. The night starts at 16:30 UTC (22:00 IST), so the UTC
+# date is the IST date.
 
 
 def is_run_day(day: dt.date) -> bool:
-    # The night starts at 16:30 UTC (22:00 IST), so the UTC date is the IST date: Sunday is weekday 6.
-    return day.weekday() == 6
+    return day.weekday() in RUN_DAYS
+
+
+def _run_number(day: dt.date) -> int:
+    week = (day.toordinal() + 1) // 7  # weeks that start on Sunday
+    return week * len(RUN_DAYS) + RUN_DAYS.index(day.weekday())
+
+
+def theme_for(day: dt.date):
+    return THEMES[_run_number(day) % len(THEMES)]
+
+
+def previous_run_day(day: dt.date) -> dt.date:
+    d = day - dt.timedelta(days=1)
+    while not is_run_day(d):
+        d -= dt.timedelta(days=1)
+    return d
 
 
 def cost(usage: dict) -> float:
