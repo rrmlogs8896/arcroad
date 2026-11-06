@@ -2,6 +2,7 @@ import json
 import pathlib
 import sys
 import typing
+import urllib.parse
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "research" / "runner" / "app"))
 import remote
@@ -67,7 +68,7 @@ def test_photos_are_sent_as_bytes_not_links(monkeypatch):
             return False
 
     def urlopen(req, timeout=0):
-        if req.full_url.startswith("https://api.anthropic.com"):
+        if urllib.parse.urlsplit(req.full_url).hostname == "api.anthropic.com":
             sent["body"] = json.loads(req.data)
             return Resp(json.dumps({"content": [{"type": "text", "text": '{"median_visible": true, "gap": "no", "why": "x"}'}]}).encode())
         return Resp(b"\xff\xd8jpegbytes")
