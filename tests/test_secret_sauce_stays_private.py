@@ -12,7 +12,8 @@ ROOT = Path(__file__).resolve().parent.parent
 FORBIDDEN_PATHS = [
     r"(^|/)gpx_scan/", r"(^|/)maplag/", r"(^|/)pro/", r"data/verification/tracks/", r"(^|/)outreach/",
     r"private-names", r"places-candidate", r"\.gpx$", r"\.fit$", r"(^|/)drives?/raw", r"SECRET-SAUCE",
-    r"AGENT-BRIEF", r"(^|/)nights/",
+    r"AGENT-BRIEF", r"(^|/)nights/", r"drive-photos", r"baseline-v1", r"labels-v1", r"label_photos",
+    r"STREET-EVIDENCE", r"pick_bengaluru", r"scene-cards",
 ]
 FORBIDDEN_TEXT = ["NOT FOR PUBLICATION", "tomtom.com/routing"]
 TEXT_SUFFIXES = {".html", ".js", ".json", ".css", ".txt", ".md", ".csv", ".xml", ".svg"}
