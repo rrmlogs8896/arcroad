@@ -123,7 +123,7 @@ def job_viability():
 
 
 def job_bengaluru_remote():
-    """One night only: the remote checks on 8 Bengaluru candidate places, approved by Rohit on 6 Nov.
+    """One night only: the remote checks on 8 Bengaluru candidate places, approved by Rohit on 6 Nov (run 7 Nov).
 
     The places file is private (arcroad-internal data/bengaluru/places-candidate.json) and names the night it
     runs on ("run_on"). Same jobs and rules as Hyderabad's: mapwatch, openings, structures, then photos.
@@ -166,7 +166,7 @@ def tonight(night):
     return first + JOBS + last
 
 
-BENGALURU_REMOTE_NIGHT = "2026-11-06"  # matches run_on in the private places file
+BENGALURU_REMOTE_NIGHT = "2026-11-07"  # moved from 6 Nov: that night ran the earlier version  # matches run_on in the private places file
 
 # Quick jobs first; openings (about 4.5 h on 4 Nov) last. remote reads tonight's routercheck and mapwatch.
 # Bengaluru left the nightly queue on 6 Nov: the 5 Nov run was killed for memory (exit -9) on the 4 GB
