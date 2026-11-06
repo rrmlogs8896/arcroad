@@ -99,10 +99,10 @@ def kind_of(tags):
     return "power_equipment"
 
 
-def run(log):
+def run(log, city_id="hyderabad"):
     d = json.loads(get(PLACES_URL))
     spots = d["spots"]
-    city = next(c for c in d["cities"] if c["id"] == "hyderabad")
+    city = next(c for c in d["cities"] if c["id"] == city_id)
     lons = [s["a"][0] for s in spots] + [city["c"][0] - 0.22, city["c"][0] + 0.22]
     lats = [s["a"][1] for s in spots] + [city["c"][1] - 0.2, city["c"][1] + 0.2]
     bbox = (min(lons) - 0.03, min(lats) - 0.03, max(lons) + 0.03, max(lats) + 0.03)
