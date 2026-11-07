@@ -20,7 +20,7 @@
 
   // ---------------- measured data ----------------
   var PLACES = {
-    S18: { road: 'HITEC City–Kukatpally Main Road', area: 'APHB Colony', straight: 13.1, day: '1 Nov 2026', night: false,
+    S18: { road: 'HITEC City–Kukatpally Main Road', area: 'KPHB Colony', straight: 13.1, day: '1 Nov 2026', night: false,
       owner: 'The road owner is Cyberabad Municipal Corporation; signals are with the traffic police.',
       drives: {
         ab: { m: 1579.5, s: 193, model: 1571.7, from: 'west side', to: 'east side', ev: 'Driven by arcroad · 1 Nov 2026 · matched the model (1.57 km) · single pass, candidate until repeated',
