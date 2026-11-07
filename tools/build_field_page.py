@@ -75,9 +75,8 @@ def render(day: dict) -> str:
     n_match = sum(r["verdict"] == "MATCH" for r in day["passes"])
     n_graded = sum(r["verdict"] in ("MATCH", "SHORTER", "LONGER", "BETWEEN") for r in day["passes"])
     places = sorted({r["id"] for r in day["passes"] if r["level"] == 1})
-    later = {r["id"] for r in day["passes"] if not r.get("posthoc_rule") and r["verdict"] not in ("REJECTED", "POOR_TRACK")}
-    ph = sorted({r["id"] + (f" {DIRS.get(r['dir'], '')}" if r["id"] in later else "")
-                 for r in day["passes"] if r.get("posthoc_rule")})
+    # Always name the direction: "S08 B → A, S10 A → B" (7 Nov review: a shared "A → B" read as applying to all).
+    ph = sorted({f"{r['id']} {DIRS.get(r['dir'], '')}".strip() for r in day["passes"] if r.get("posthoc_rule")})
     if not ph:
         posthoc_note = ""
     elif len(ph) == 1:
@@ -173,7 +172,7 @@ img,svg,canvas,video{{max-width:100%}}
 <h3>Visited but not scored</h3><ul>{ns}</ul>
 <h3>Limits</h3><ul>{li(day["limitations"])}</ul>
 <h3>How this was scored</h3>
-<p>Thresholds were written before the first drive and not changed after seeing results. One pairing rule was changed on 2 Nov 2026 after that night's drive was seen; it is declared under Limits, was re-applied to every drive on file, and changed only S12. A drive matches when it is within the larger of 150 m or 25% of the model's distance. Raw recordings stay private; only these per-pass numbers are published.</p>
+<p>The match tolerance was written before the first drive and has never changed. Three counting rules were added or changed after a drive had been seen (pairing, 2 Nov; loops, 3 Nov; repeats, 5 Nov). Each is dated under Limits and was re-applied to every drive on file, and every pass that counts only because of one is marked. A drive matches when it is within the larger of 150 m or 25% of the model's distance. Raw recordings stay private; only these per-pass numbers are published.</p>
 </details>
 <footer>Map data © OpenStreetMap contributors (ODbL). Measurements by arcroad (ODbL). Model: {e(day["model"])}. No Google Maps data is used anywhere.{reuse("../")}</footer>
 </main>
