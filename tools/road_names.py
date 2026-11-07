@@ -40,6 +40,11 @@ def nominatim(lat, lon, zoom):
     raise RuntimeError(f"Nominatim unreachable: {last}")
 
 
+# Local names that differ from the OpenStreetMap address. Rohit, 7 Nov 2026: the area at S18 is known
+# locally as KPHB Colony (Kukatpally Housing Board); the address lookup returns "APHB Colony".
+AREA_LOCAL = {"APHB Colony": "KPHB Colony"}
+
+
 def lookup(s):
     """Road names from the road nearest each side of the crossing, area from the address."""
     roads, refs, area = [], [], None
@@ -54,7 +59,7 @@ def lookup(s):
                 refs.append(r.strip())
         area = area or next((ad[k] for k in ("neighbourhood", "suburb", "quarter", "village", "town", "city_district", "hamlet") if ad.get(k)), None)
         time.sleep(PAUSE_S)
-    return {"roads": roads[:4], "refs": refs[:3], "area": area}
+    return {"roads": roads[:4], "refs": refs[:3], "area": AREA_LOCAL.get(area, area)}
 
 
 def main():

@@ -1268,7 +1268,7 @@ window.ARCROAD_PAIRS = {
   "status": "modelled",
   "road": "Hitec - Kukatpally Main Road",
   "ref": "",
-  "area": "APHB Colony",
+  "area": "KPHB Colony",
   "lat": 17.471198,
   "lon": 78.387197,
   "a": [
@@ -1333,7 +1333,7 @@ window.ARCROAD_PAIRS = {
   "status": "driven",
   "road": "Hitec - Kukatpally Main Road",
   "ref": "",
-  "area": "APHB Colony",
+  "area": "KPHB Colony",
   "lat": 17.476908,
   "lon": 78.390026,
   "a": [
