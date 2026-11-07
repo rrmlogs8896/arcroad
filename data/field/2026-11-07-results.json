@@ -1,0 +1,52 @@
+{
+ "day": "2026-11-07",
+ "driver": "arcroad (one driver, one car, phone GPS at 1 Hz)",
+ "model": "OpenStreetMap extract 25 Oct 2026",
+ "method": "pipeline/groundtruth.py (pairing rule as amended 2 Nov 2026; loop rule, docs/PREREG-loop-rule.md), pipeline/fieldscore.py, pipeline/evidence.py",
+ "passes": [
+  {
+   "id": "S11",
+   "dir": "ab",
+   "driven_m": 2168.0,
+   "seconds": 488,
+   "date": "2026-11-07",
+   "photos_usable": 0,
+   "straight_m": 35.1,
+   "model_m": 1841.3,
+   "verdict": "MATCH",
+   "reason": "",
+   "level": 1,
+   "label": "Driven by arcroad",
+   "kinds": "S",
+   "tri_level": "candidate"
+  }
+ ],
+ "not_scored": [
+  {
+   "id": "S01",
+   "why": "U-turn made, but the phone logger disconnected several times around it (driver's report): no complete track to score"
+  },
+  {
+   "id": "S05",
+   "why": "not reached on this drive"
+  },
+  {
+   "id": "S07",
+   "why": "U-turn found closed on 7 Nov (driver's observation, not timed); the map still shows it open, so the modelled detour may be too short. Flagged for a map check"
+  },
+  {
+   "id": "S09",
+   "why": "U-turn found closed on 7 Nov (driver's observation, not timed); the map still shows it open, so the modelled detour may be too short. Flagged for a map check"
+  },
+  {
+   "id": "S13",
+   "why": "U-turn made, but the recording stopped before it (driver's report): no track to score"
+  }
+ ],
+ "limitations": [
+  "Daytime drive, 13:13-14:28 IST on a Saturday. The phone logger disconnected several times; nothing outside the recorded track is scored, even where the driver made the U-turn (S01, S13).",
+  "Scored under rules fixed before this drive was seen (the 2 Nov pairing rule and the 3 Nov loop rule); no rule was changed for it.",
+  "S11 has now been driven once, A to B. A second drive on another day in the same direction would make it a repeat (R).",
+  "S07 and S09: closed U-turns are reported by the driver, not measured. They are not counted as results; they are queued for a map check and a photo check."
+ ]
+}

@@ -35,7 +35,7 @@ def test_detour_figures_match_the_published_drives():
     assert f'{d[("S16", "ba")]["m"] / 1000:.1f} km' in ACT
     assert f'{d[("S12", "ab")]["m"] / 1000:.2f} km' in ACT
     longest = sorted(d.values(), key=lambda v: -v["m"])[:3]
-    assert [round(v["m"] / 100) for v in longest] == [116, 23, 20]
+    assert [round(v["m"] / 100) for v in longest] == [116, 23, 22]
 
 
 def test_findings_band_count_matches_the_field_results():
