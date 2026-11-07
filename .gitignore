@@ -12,3 +12,6 @@ __pycache__/
 
 # Generated from Natural Earth by tools/films/make_land.py; only the rendered film is published
 tools/films/land.js
+
+# Private files baked into the runner image (agent brief, secret-sauce index, candidate places): never committed
+research/runner/app/private/

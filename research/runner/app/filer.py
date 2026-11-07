@@ -59,16 +59,34 @@ def put(path: str, content: bytes, message: str, log) -> bool:
         return False
 
 
+PRIVATE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "private")
+
+
+def _local(path: str) -> str:
+    """The same file from app/private/ (copied in at build time, never committed), or ""."""
+    p = os.path.normpath(os.path.join(PRIVATE, path))
+    if not p.startswith(PRIVATE + os.sep) or not os.path.isfile(p):
+        return ""
+    with open(p, encoding="utf-8") as f:
+        return f.read()
+
+
 def get(path: str, log) -> str:
-    """A text file from arcroad-internal, or "" (no token, missing file or any error)."""
+    """A text file from arcroad-internal, or the copy in app/private/, or "".
+
+    7 Nov 2026: the GitHub account was suspended, so the runner must not depend on GitHub. It tries GitHub
+    first and falls back to the private copy baked into the image.
+    """
     token = os.environ.get("GITHUB_TOKEN", "")
-    if not token:
-        return ""
-    try:
-        return base64.b64decode(_req("GET", API + path, token).get("content", "")).decode()
-    except Exception as e:
-        log(f"filer: could not read {path}: {str(e)[:120]}")
-        return ""
+    if token:
+        try:
+            return base64.b64decode(_req("GET", API + path, token).get("content", "")).decode()
+        except Exception as e:
+            log(f"filer: could not read {path} from GitHub ({str(e)[:80]}); trying the private copy")
+    text = _local(path)
+    if not text:
+        log(f"filer: no copy of {path}")
+    return text
 
 
 def file_result(night: str, job: str, path, state: dict, log) -> None:
