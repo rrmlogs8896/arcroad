@@ -28,9 +28,19 @@ def short_date(d):
     return f"{int(dd)} {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][int(m) - 1]}"
 
 
+def day_list(isos: list) -> str:
+    """'1, 2, 3, 4 and 6 Nov 2026' when the days share a month, else each day with its month."""
+    parts = [short_date(x) for x in isos]
+    if len({x[:7] for x in isos}) == 1:
+        nums = [p.split()[0] for p in parts]
+        lead = ", ".join(nums[:-1]) + " and " + nums[-1] if len(nums) > 1 else nums[0]
+        return f"{lead} {parts[-1].split()[1]} {isos[-1][:4]}"
+    return (", ".join(parts[:-1]) + " and " + parts[-1] if len(parts) > 1 else parts[0]) + " " + isos[-1][:4]
+
+
 def combine(days: list) -> dict:
     """All field days on one page: every pass keeps its own date; limits are listed once."""
-    out = {"day": " and ".join(short_date(d["day"]) for d in days) + " " + days[-1]["day"][:4],
+    out = {"day": day_list([d["day"] for d in days]),
            "model": days[-1]["model"], "passes": [], "not_scored": [], "limitations": []}
     for d in days:
         out["passes"] += d["passes"]

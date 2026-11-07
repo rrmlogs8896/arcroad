@@ -1,0 +1,17 @@
+{
+ "day": "2026-11-06",
+ "driver": "arcroad (one driver, one car, phone GPS at 1 Hz)",
+ "model": "OpenStreetMap extract 25 Oct 2026",
+ "method": "pipeline/groundtruth.py (pairing rule as amended 2 Nov 2026; loop rule, docs/PREREG-loop-rule.md), pipeline/fieldscore.py, pipeline/evidence.py",
+ "passes": [],
+ "not_scored": [
+  {"id": "S06", "why": "passed along the road only; place held back for a geometry review"},
+  {"id": "S11", "why": "passed along the road only, no U-turn: no crossing to score"},
+  {"id": "S13", "why": "passed along the road only, no U-turn: no crossing to score"},
+  {"id": "S12", "why": "only side A visited"}
+ ],
+ "limitations": [
+  "Evening drive, 19:04-20:35 IST on a Friday, at peak traffic. It made no U-turn at any of the 24 sample places, so it adds no scored pass; the detour taken that evening was elsewhere.",
+  "Scored under rules fixed before this drive was seen (the 2 Nov pairing rule and the 3 Nov loop rule); no rule was changed for it."
+ ]
+}
