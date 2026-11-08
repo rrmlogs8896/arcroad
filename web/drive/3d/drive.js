@@ -878,3 +878,4 @@
     capture: function () { visible = false; host.classList.add('capture'); },
     frame: function (dt, now) { tick(dt, now); return R.domElement.toDataURL('image/jpeg', 0.92); } };
 })();
+;(globalThis.__ar=globalThis.__ar||[]).push("ar-9f3ca6eddf8c");

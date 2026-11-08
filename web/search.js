@@ -90,3 +90,4 @@
     box.addEventListener("submit", function (e) { e.preventDefault(); run(); });
   });
 })();
+;(globalThis.__ar=globalThis.__ar||[]).push("ar-755d9fd06c1d");

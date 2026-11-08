@@ -40,3 +40,4 @@ header .sn{margin-left:auto}
 @media (prefers-reduced-motion:reduce){.sn *,.sn *::after{transition:none!important;animation:none!important}}
 .sn-reuse{display:block;margin-top:10px;font-size:12px;line-height:1.6;color:#7D858E}
 .sn-reuse a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+:root{--ar-build:"ar-c25d28bfb1d9"}

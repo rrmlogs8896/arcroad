@@ -18,3 +18,4 @@
 .rs-k a:hover,.rs-n a:hover{text-decoration:underline}
 .rs-n{margin:14px 0 0;font-size:14px;line-height:1.6;color:#8B939C}
 @media (pointer:coarse){.rs-k a{padding:8px 0}}
+:root{--ar-build:"ar-403582b607c7"}

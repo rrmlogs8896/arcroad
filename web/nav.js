@@ -33,3 +33,4 @@
   function edge() { nav.classList.toggle('fade', nav.scrollWidth - nav.clientWidth - nav.scrollLeft > 4); }
   nav.addEventListener('scroll', edge, { passive: true }); window.addEventListener('resize', edge); edge();
 })();
+;(globalThis.__ar=globalThis.__ar||[]).push("ar-18d723157239");

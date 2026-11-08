@@ -156,3 +156,4 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(go); else go();
   });
 })();
+;(globalThis.__ar=globalThis.__ar||[]).push("ar-7cf0252eb6a4");

@@ -417,3 +417,4 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', () =
 map.on('load', layoutPhone);
 requestAnimationFrame(layoutPhone);
 setTimeout(layoutPhone, 600);
+;(globalThis.__ar=globalThis.__ar||[]).push("ar-f0a1f9d2ea8d");

@@ -29,3 +29,4 @@
   });
   draw();
 })();
+;(globalThis.__ar=globalThis.__ar||[]).push("ar-9292dad48bff");
