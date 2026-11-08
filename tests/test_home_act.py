@@ -31,14 +31,25 @@ def test_rules_and_numbers_name_their_source():
 def test_detour_figures_match_the_published_drives():
     d = driven()
     assert round(d[("S18", "ab")]["s"] / 60) == 3 and round(d[("S18", "ba")]["s"] / 60) == 12
-    assert f'{d[("S24", "ba")]["m"] / 1000:.1f} km' in ACT
+    assert ("S24", "ba") not in d  # left out by the 8 Nov road-class rule
     assert f'{d[("S16", "ba")]["m"] / 1000:.1f} km' in ACT
     assert f'{d[("S12", "ab")]["m"] / 1000:.2f} km' in ACT
     longest = sorted(d.values(), key=lambda v: -v["m"])[:3]
-    assert [round(v["m"] / 100) for v in longest] == [116, 23, 22]
+    assert [round(v["m"] / 100) for v in longest] == [23, 22, 20]
 
 
 def test_findings_band_count_matches_the_field_results():
+    places = json.loads((ROOT / "web" / "globe" / "data" / "places.json").read_text(encoding="utf-8"))
+    out = {p["id"] for p in places["out_of_scope"]["places"]}
     n = sum(1 for f in (ROOT / "data" / "field").glob("*-results.json")
-            for p in json.loads(f.read_text(encoding="utf-8"))["passes"] if p.get("verdict") == "MATCH")
+            for p in json.loads(f.read_text(encoding="utf-8"))["passes"] if p.get("verdict") == "MATCH" and p["id"] not in out)
     assert re.search(rf'<p class="v hot">{n} / {n}</p><p class="k">Driven directions', HOME), n
+
+
+def test_motorway_places_are_out_of_every_count():
+    """8 Nov 2026 road-class rule: S23 and S24 (Outer Ring Road) are kept for the record but never counted."""
+    places = json.loads((ROOT / "web" / "globe" / "data" / "places.json").read_text(encoding="utf-8"))
+    ids = {p["id"] for p in places["spots"]}
+    assert {"S23", "S24"} & ids == set()
+    assert {p["id"] for p in places["out_of_scope"]["places"]} == {"S23", "S24"}
+    assert "Outer Ring Road at Sultanpur" not in HOME

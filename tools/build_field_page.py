@@ -38,12 +38,21 @@ def day_list(isos: list) -> str:
     return (", ".join(parts[:-1]) + " and " + parts[-1] if len(parts) > 1 else parts[0]) + " " + isos[-1][:4]
 
 
+def out_of_scope() -> dict:
+    """Places left out by the 8 Nov 2026 road-class rule (docs/PREREG-road-class-rule.md), id -> reason."""
+    with open(os.path.join(ROOT, "web", "globe", "data", "places.json"), encoding="utf-8") as fh:
+        d = json.load(fh)
+    return {p["id"]: p.get("scope_reason", "out of scope") for p in (d.get("out_of_scope") or {}).get("places", [])}
+
+
 def combine(days: list) -> dict:
     """All field days on one page: every pass keeps its own date; limits are listed once."""
+    scope = out_of_scope()
     out = {"day": day_list([d["day"] for d in days]),
-           "model": days[-1]["model"], "passes": [], "not_scored": [], "limitations": []}
+           "model": days[-1]["model"], "passes": [], "not_scored": [], "limitations": [], "out_of_scope": []}
     for d in days:
-        out["passes"] += d["passes"]
+        out["passes"] += [r for r in d["passes"] if r["id"] not in scope]
+        out["out_of_scope"] += [dict(r, reason=scope[r["id"]]) for r in d["passes"] if r["id"] in scope]
         out["not_scored"] += [dict(x, date=d["day"]) for x in d["not_scored"]]
         out["limitations"] += [x for x in d["limitations"] if x not in out["limitations"]]
     return out
@@ -86,6 +95,9 @@ def render(day: dict) -> str:
                         " were seen; see the limits below.")
     li = lambda xs: "".join(f"<li>{e(x)}</li>" for x in xs)  # noqa: E731
     ns = "".join(f'<li><b>{e(x["id"])}</b> ({e(short_date(x.get("date")))}): {e(x["why"])}</li>' for x in day["not_scored"])
+    oos = "".join(f'<li><b>{e(r["id"])} {DIRS.get(r["dir"], "")}</b> ({e(short_date(r.get("date")))}): driven {km(r["driven_m"])}'
+                  f' against a model of {km(r.get("model_m"))}; {e(r["reason"])}, not counted.</li>'
+                  for r in day.get("out_of_scope", []))
     nr = "".join(f'<li><b>{e(r["id"])} {DIRS.get(r["dir"], "")}</b>: {e(r["reason"])}</li>' for r in rejected)
     return f"""<!doctype html>
 <html lang="en">
@@ -165,14 +177,15 @@ img,svg,canvas,video{{max-width:100%}}
 <thead><tr><th>Place</th><th>Date</th><th>Direction</th><th class="n">Straight across</th><th class="n">Model</th><th class="n">Driven</th><th class="n">Time</th><th>Verdict</th><th>Evidence level</th><th>Evidence kinds</th></tr></thead>
 <tbody>{"".join(rows)}</tbody></table></div>
 <p class="note">Times include waits at signals and U-turn queues. <a href="../cost/">What would this cost you?</a></p>
-<p class="note" id="codes">Place codes: S01 to S24 are the 24 places in arcroad&#39;s first field sample, drawn at random from the model before any drive (16 the model flagged as long detours, 8 ordinary controls, at least 500 m apart). T1 and T2 are two named stops on NH-65. A and B are the two sides of the median; A &rarr; B means driving from side A to the point straight across on side B.</p>
+<p class="note" id="codes">Place codes: S01 to S24 are the 24 places in arcroad&#39;s first field sample, drawn at random from the model before any drive (16 the model flagged as long detours, 8 ordinary controls, at least 500 m apart). S23 and S24 are on the Outer Ring Road and have been left out since 8 Nov 2026, because turning round on an expressway needs an interchange by design. T1 and T2 are two named stops on NH-65. A and B are the two sides of the median; A &rarr; B means driving from side A to the point straight across on side B.</p>
 <details class="more"><summary>Rejected passes, places not scored, limits and how this was scored</summary>
 <h3>Evidence kinds</h3><p>S a timed drive, P a usable photo at the place during the pass, R a repeat pass in the same direction. One kind is a candidate, two corroborated, three with a photo or an official record triangulated.</p>
+<h3>Outside scope since 8 Nov 2026</h3><ul>{oos or "<li>None.</li>"}</ul>
 <h3>Rejected passes</h3><ul>{nr or "<li>None.</li>"}</ul>
 <h3>Visited but not scored</h3><ul>{ns}</ul>
 <h3>Limits</h3><ul>{li(day["limitations"])}</ul>
 <h3>How this was scored</h3>
-<p>The match tolerance was written before the first drive and has never changed. Three counting rules were added or changed after a drive had been seen (pairing, 2 Nov; loops, 3 Nov; repeats, 5 Nov). Each is dated under Limits and was re-applied to every drive on file, and every pass that counts only because of one is marked. A drive matches when it is within the larger of 150 m or 25% of the model's distance. Raw recordings stay private; only these per-pass numbers are published.</p>
+<p>The match tolerance was written before the first drive and has never changed. Four rules were added or changed after a drive had been seen (pairing, 2 Nov; loops, 3 Nov; repeats, 5 Nov; road class, 8 Nov, which leaves motorways out). Each is dated under Limits and was re-applied to every drive on file, and every pass that counts only because of one is marked. A drive matches when it is within the larger of 150 m or 25% of the model's distance. Raw recordings stay private; only these per-pass numbers are published.</p>
 </details>
 <footer>Map data © OpenStreetMap contributors (ODbL). Measurements by arcroad (ODbL). Model: {e(day["model"])}. No Google Maps data is used anywhere.{reuse("../")}</footer>
 </main>

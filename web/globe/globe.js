@@ -233,15 +233,15 @@ $('tour').addEventListener('click', async () => {
   if (!DATA) return;
   hidePanel(); touring = true; userBusy = false;
   const s01 = DATA.spots.find((s) => s.id === 'S01');
-  const s24 = DATA.spots.find((s) => s.id === 'S24');
+  const s10 = DATA.spots.find((s) => s.id === 'S10');
   // The journey: each stop says one thing, in plain words. Any touch or drag ends it.
   const steps = [
     { view: { center: [78.9, 21], zoom: startZoom(), pitch: 0, bearing: 0 }, cap: ['1 of 6', 'Earth, from orbit', 'Every orange dot is an Indian city whose roads we measured from open map data.'] },
     { view: { center: [80, 22], zoom: 3.9, pitch: 10, bearing: 0 }, cap: ['2 of 6', '29 cities', 'The state and union territory capitals, plus the big metros. Hill capitals are left out: steep roads break the method.'] },
     { view: { center: [78.4, 17.45], zoom: 10.4, pitch: 40, bearing: -10 }, cap: ['3 of 6', 'Hyderabad, west corridor', 'Each ring is a place where the other side of the road is close, but getting there legally is not.'] },
     { spot: s01, view: { center: s01.a, zoom: 17.2, pitch: 62, bearing: 25 }, cap: ['4 of 6', 'Street level: 47 metres across', 'Here the far side is a short walk away. The map says a car needs 2.8 km to reach it.'] },
-    { spot: s24, view: { center: s24.a, zoom: 16.8, pitch: 60, bearing: -30 }, cap: ['5 of 6', 'One way: 1.6 km. The other: 10.5 km', 'Direction matters. Coming back can be a very different trip.'] },
-    { view: { center: [78.36, 17.5], zoom: 11.2, pitch: 35, bearing: 0 }, cap: ['10 of 10', 'Not yet confirmed', 'These are the map\'s numbers. Each place is being checked against a real drive before anything is called a finding. Tap any ring to explore.'] }
+    { spot: s10, view: { center: s10.a, zoom: 17, pitch: 60, bearing: -30 }, cap: ['5 of 6', 'One way: 1.1 km. The other: 180 m', 'Direction matters. Coming back can be a very different trip.'] },
+    { view: { center: [78.36, 17.5], zoom: 11.2, pitch: 35, bearing: 0 }, cap: ['6 of 6', 'Not yet confirmed', 'These are the map\'s numbers. Each place is being checked against a real drive before anything is called a finding. Tap any ring to explore.'] }
   ];
   for (const st of steps) {
     if (!touring) break;
@@ -286,7 +286,7 @@ async function selectCity(id) {
   await fly({ center: c.c, zoom: id === 'hyderabad' ? 10.4 : 10.8, pitch: 40, bearing: -10 });
   if (id === 'hyderabad') {
     showPanel({ eyebrow: 'City · measured', title: c.name, hook: '24 places on the west corridor where crossing the road takes a long way round.',
-      facts: [['Places checked', '24'], ['Confirmed by a drive so far', String(DATA.spots.filter((x) => x.driven).length)]],
+      facts: [['Places checked', String(DATA.spots.length)], ['Confirmed by a drive so far', String(DATA.spots.filter((x) => x.driven).length)]],
       caveat: 'Places marked driven were driven by arcroad on 1 Nov 2026 and matched the model. The rest are candidates: modelled from OpenStreetMap (extract of 25 Oct 2026). Tap a ring to see one.' });
   } else {
     showPanel({ eyebrow: 'City · measured', title: c.name, hook: 'Road network measured from the same open map data.',

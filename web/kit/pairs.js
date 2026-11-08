@@ -774,7 +774,7 @@ window.ARCROAD_PAIRS = {
  },
  "S11": {
   "id": "S11",
-  "status": "modelled",
+  "status": "driven",
   "road": "Gachibowli - Miyapur Road",
   "ref": "",
   "area": "Vinayak Nagar Colony",
@@ -792,7 +792,12 @@ window.ARCROAD_PAIRS = {
   "ab": 1841.3,
   "ba": 347.4,
   "network_m": 1841.3,
-  "driven": {},
+  "driven": {
+   "ab": {
+    "m": 2168.0,
+    "date": "2026-11-07"
+   }
+  },
   "extract_date": "2026-11-02",
   "commit": "v05.1",
   "evidence_url": "https://arcroad.org/field/",
@@ -1680,188 +1685,6 @@ window.ARCROAD_PAIRS = {
     {
      "designation": "Member of Parliament (Eatala Rajender)",
      "office": "Malkajgiri Parliamentary Constituency",
-     "mailbox": "",
-     "postal": "",
-     "source": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm"
-    }
-   ],
-   "portals": [
-    {
-     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
-     "url": "https://pgportal.gov.in/"
-    },
-    {
-     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
-     "url": "http://cpgrams.ts.nic.in"
-    }
-   ],
-   "rti": null,
-   "checked": "2026-11-02"
-  }
- },
- "S23": {
-  "id": "S23",
-  "status": "modelled",
-  "road": "Outer Ring Road",
-  "ref": "ORR",
-  "area": "Maheshwaram",
-  "lat": 17.564419,
-  "lon": 78.380126,
-  "a": [
-   78.380206,
-   17.564371
-  ],
-  "b": [
-   78.380046,
-   17.564467
-  ],
-  "straight_m": 20.0,
-  "ab": 3117.5,
-  "ba": null,
-  "network_m": 3117.5,
-  "driven": {},
-  "extract_date": "2026-11-02",
-  "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/",
-  "tw_note": "the model finds almost no detour for two-wheelers here while cars go the long way; not yet checked on the ground",
-  "recipients": {
-   "to": [
-    {
-     "designation": "Project Director & Special Collector, ORR",
-     "office": "Hyderabad Metropolitan Development Authority",
-     "mailbox": "pdorr@hmda.gov.in",
-     "postal": "HMDA, Swarna Jayanti Complex, Sanjeeva Reddy Nagar, Srinivasa Nagar, Ameerpet, Hyderabad - 500038",
-     "source": "https://www.hmda.gov.in/contact/"
-    },
-    {
-     "designation": "Chief General Manager, HGCL",
-     "office": "Hyderabad Growth Corridor Limited (HMDA)",
-     "mailbox": "",
-     "postal": "",
-     "source": "https://www.hmda.gov.in/contact/"
-    }
-   ],
-   "cc": [
-    {
-     "designation": "Metropolitan Commissioner (Sri Sarfaraz Ahmad, I.A.S)",
-     "office": "Hyderabad Metropolitan Development Authority",
-     "mailbox": "mc@hmda.gov.in",
-     "postal": "HMDA, Swarna Jayanti Complex, Sanjeeva Reddy Nagar, Srinivasa Nagar, Ameerpet, Hyderabad - 500038",
-     "source": "https://www.hmda.gov.in/contact/"
-    },
-    {
-     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
-     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
-     "mailbox": "secy-hma-maud@telangana.gov.in",
-     "postal": "",
-     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
-    },
-    {
-     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
-     "office": "Cyberabad Police - Traffic",
-     "mailbox": "",
-     "postal": "",
-     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
-    }
-   ],
-   "portals": [
-    {
-     "name": "Government of India, DARPG · CPGRAMS - Centralized Public Grievance Redress and Monitoring System",
-     "url": "https://pgportal.gov.in/"
-    },
-    {
-     "name": "Government of Telangana (district administration) · PRAJAVANI/CPGRAMS - online grievance redressal system",
-     "url": "http://cpgrams.ts.nic.in"
-    }
-   ],
-   "rti": null,
-   "checked": "2026-11-02"
-  }
- },
- "S24": {
-  "id": "S24",
-  "status": "driven",
-  "road": "Outer Ring Road",
-  "ref": "ORR",
-  "area": "Sultanpur",
-  "lat": 17.557133,
-  "lon": 78.319381,
-  "a": [
-   78.319377,
-   17.557041
-  ],
-  "b": [
-   78.319385,
-   17.557224
-  ],
-  "straight_m": 20.4,
-  "ab": 1554.3,
-  "ba": 10492.2,
-  "network_m": 10492.2,
-  "driven": {
-   "ab": {
-    "m": 1772.9,
-    "date": "2026-11-01"
-   },
-   "ba": {
-    "m": 11601.3,
-    "date": "2026-11-01"
-   }
-  },
-  "extract_date": "2026-11-02",
-  "commit": "v05.1",
-  "evidence_url": "https://arcroad.org/field/",
-  "tw_note": "the model finds almost no detour for two-wheelers here while cars go the long way; not yet checked on the ground",
-  "where": "Assembly: Patancheru; Lok Sabha: Medak; Cyberabad Municipal Corporation - Serilingampally zone",
-  "recipients": {
-   "to": [
-    {
-     "designation": "Project Director & Special Collector, ORR",
-     "office": "Hyderabad Metropolitan Development Authority",
-     "mailbox": "pdorr@hmda.gov.in",
-     "postal": "HMDA, Swarna Jayanti Complex, Sanjeeva Reddy Nagar, Srinivasa Nagar, Ameerpet, Hyderabad - 500038",
-     "source": "https://www.hmda.gov.in/contact/"
-    },
-    {
-     "designation": "Chief General Manager, HGCL",
-     "office": "Hyderabad Growth Corridor Limited (HMDA)",
-     "mailbox": "",
-     "postal": "",
-     "source": "https://www.hmda.gov.in/contact/"
-    }
-   ],
-   "cc": [
-    {
-     "designation": "Metropolitan Commissioner (Sri Sarfaraz Ahmad, I.A.S)",
-     "office": "Hyderabad Metropolitan Development Authority",
-     "mailbox": "mc@hmda.gov.in",
-     "postal": "HMDA, Swarna Jayanti Complex, Sanjeeva Reddy Nagar, Srinivasa Nagar, Ameerpet, Hyderabad - 500038",
-     "source": "https://www.hmda.gov.in/contact/"
-    },
-    {
-     "designation": "Secretary to Govt., MA&UD and Spl. Officer HMDA Limits (Sri Sarfaraz Ahmad, IAS)",
-     "office": "Government of Telangana, Municipal Administration & Urban Development Department",
-     "mailbox": "secy-hma-maud@telangana.gov.in",
-     "postal": "",
-     "source": "https://www.telangana.gov.in/departments/municipal-administration-urban-development/"
-    },
-    {
-     "designation": "Joint Commissioner of Police, Traffic, Cyberabad",
-     "office": "Cyberabad Police - Traffic",
-     "mailbox": "",
-     "postal": "",
-     "source": "https://www.cyberabadpolice.gov.in/Preview?page_id=57"
-    },
-    {
-     "designation": "Member of Legislative Assembly (Sri Gudem Mahipal Reddy)",
-     "office": "Patancheru Assembly Constituency",
-     "mailbox": "",
-     "postal": "",
-     "source": "https://www.telangana.gov.in/legislature/members-of-legislative-assembly/"
-    },
-    {
-     "designation": "Member of Parliament (Madhavaneni Raghunandan Rao)",
-     "office": "Medak Parliamentary Constituency",
      "mailbox": "",
      "postal": "",
      "source": "https://results.eci.gov.in/PcResultGenJune2024/partywisewinresult-369S29.htm"

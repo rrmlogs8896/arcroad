@@ -58,7 +58,7 @@ def map_places():
 def test_map_view_figures_match_the_field_results():
     """The /drive/ map view types its fallback figures in; each must equal the published pass."""
     fp, found = field_passes(), map_places()
-    assert len(found) == 7, sorted(found)
+    assert len(found) == 6, sorted(found)
     for pid, (straight, model, drives) in found.items():
         for d, (m, s) in drives.items():
             p = fp[(pid, d)]
