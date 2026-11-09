@@ -26,3 +26,8 @@ def test_data_files_carry_a_build_mark():
         d = json.loads(p.read_text())
         if isinstance(d, dict):
             assert re.fullmatch(TOKEN, d.get("_build", "")), p
+
+
+def test_site_has_a_root_favicon():
+    """9 Nov 2026: 13 pages had no icon link, so browsers asked for /favicon.ico and got a 404."""
+    assert (WEB / "favicon.ico").stat().st_size > 0
