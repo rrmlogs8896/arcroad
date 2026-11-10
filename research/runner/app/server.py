@@ -44,8 +44,14 @@ def job_openings():
     return p
 
 
+SNAPSHOT = Path(__file__).resolve().parent / "repo"  # tools, pipeline, data + COMMIT, copied in at deploy time
+
+
 def repo():
-    """A fresh shallow clone of the public repo, made once per night and shared by the jobs."""
+    """The code the jobs run: the snapshot baked into the image at deploy (tools/runner_snapshot.sh), so no
+    job depends on GitHub. Without a snapshot, falls back to a fresh shallow clone of the public repo."""
+    if (SNAPSHOT / "COMMIT").exists():
+        return SNAPSHOT
     work = Path("/tmp/arcroad")
     if not (work / ".git").exists():
         if work.exists():

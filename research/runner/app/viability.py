@@ -64,7 +64,10 @@ SYSTEM = (
     "Work inside the project's constitution and secret-sauce index given below. Never put anything from them, "
     "or any private detail (drives, routes, calibration, prices, people), into a search query; search public "
     "topics only. Where an idea touches the secret sauce, say which asset it relies on and keep it in this brief. "
-    "You may suggest a change to the constitution, marked PROPOSAL; only Rohit adopts one."
+    "You may suggest a change to the constitution, marked PROPOSAL; only Rohit adopts one. "
+    "A funder, grant or programme counts only if its own official website shows it open now, with the date you "
+    "checked; a listing on an aggregator or opportunities site alone is marked UNVERIFIED, and a funder that has "
+    "closed or stopped taking applications is left out."
 )
 
 

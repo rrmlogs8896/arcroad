@@ -185,6 +185,11 @@ def commit_sha(repo_dir="."):
             capture_output=True, text=True, check=True,
         ).stdout.strip()
     except (OSError, subprocess.CalledProcessError):
+        # A code snapshot without .git (the research runner's image) carries its commit in a COMMIT file.
+        stamp = os.path.join(str(repo_dir), "COMMIT")
+        if os.path.isfile(stamp):
+            with open(stamp, encoding="utf-8") as fh:
+                return fh.read().strip() or None
         return None
     return sha + ("+dirty" if dirty else "")
 
