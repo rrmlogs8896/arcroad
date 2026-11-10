@@ -38,6 +38,19 @@ def test_container_installs_every_module_the_jobs_import():
     assert not missing, missing
 
 
+def test_container_does_not_install_packages_no_job_imports():
+    """Image-size fix (backlog 2): pandas and tabulate were installed but nothing the runner runs imports them,
+    and they pushed the pip layer to about 138 MB, which made Cloudflare pushes time out."""
+    pip = re.search(r"RUN pip install[^\n]*", (ROOT / "research" / "runner" / "Dockerfile").read_text()).group(0)
+    installed = set(re.findall(r'"([A-Za-z0-9_.-]+)\s*[><=~!]', pip))
+    app = ROOT / "research" / "runner" / "app"
+    local = {p.stem for p in app.glob("*.py")} | {p.stem for p in (ROOT / "tools").glob("*.py")}
+    code = list(app.glob("*.py")) + list((ROOT / "pipeline").glob("*.py")) + [ROOT / "tools" / "multicity_collect.py"]
+    imported = third_party_imports(code) - local
+    unused = sorted(i for i in installed if i not in {PIP_NAME.get(m, m) for m in imported})
+    assert installed and not unused, unused
+
+
 def test_remote_runs_after_the_jobs_it_reads():
     src = (ROOT / "research" / "runner" / "app" / "server.py").read_text()
     order = re.findall(r'\("(\w+)", job_', src[src.index("JOBS = ["):])
