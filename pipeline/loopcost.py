@@ -160,6 +160,35 @@ def loop_network(nodes, adj, loop_edges, corridor_m=CORRIDOR_M, tol=ANTIPARALLEL
     return new, sorted(removed)
 
 
+def loop_doubles_back(nodes, loop_edges, corridor_m=CORRIDOR_M, tol=ANTIPARALLEL_TOL):
+    """Loop edges that have another loop edge running the opposite way beside them: a U-turn inside a leg.
+    The scenario is only sound when this is empty or explained, because such a leg would make the loop network
+    remove roads the loop itself uses."""
+    if not loop_edges:
+        return []
+    lat0 = sum(nodes[u][1] for u, _ in loop_edges) / len(loop_edges)
+    segs = [(e, nodes[e[0]], nodes[e[1]], bearing_deg(*nodes[e[0]], *nodes[e[1]])) for e in loop_edges]
+    out = []
+    for e, a, c, b in segs:
+        for f, a2, c2, b2 in segs:
+            if f != e and abs(angle_between(b, b2) - 180.0) <= tol and \
+                    _seg_dist_m(a, a2, c2, lat0) <= corridor_m and _seg_dist_m(c, a2, c2, lat0) <= corridor_m:
+                out.append(e)
+                break
+    return out
+
+
+def geojson(nodes, loop_edges, removed, gates):
+    """The scenario as a map: loop edges, removed segments and snapped gates (public OSM geometry only)."""
+    def line(e, kind):
+        return {"type": "Feature", "properties": {"kind": kind},
+                "geometry": {"type": "LineString", "coordinates": [list(nodes[e[0]]), list(nodes[e[1]])]}}
+    feats = [line(e, "loop") for e in loop_edges] + [line(e, "removed") for e in removed]
+    feats += [{"type": "Feature", "properties": {"kind": "gate", "name": g},
+               "geometry": {"type": "Point", "coordinates": list(nodes[n])}} for g, n in gates]
+    return {"type": "FeatureCollection", "features": feats}
+
+
 def is_longer(today_m, loop_m):
     if today_m is None or loop_m is None:
         return None

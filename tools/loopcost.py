@@ -28,6 +28,8 @@ from pipeline.loopcost import (  # noqa: E402
     DRIVABLE,
     build_graph,
     compare,
+    geojson,
+    loop_doubles_back,
     loop_network,
     loop_path,
     major_nodes,
@@ -150,6 +152,7 @@ def run(out_dir):
     order = [s["node"] for s in snapped]
     edges, missing = loop_path(adj, order)
     loop, removed = loop_network(nodes, adj, edges)
+    doubles = loop_doubles_back(nodes, edges)
     rows = compare(adj, loop, [(s["name"], s["node"]) for s in snapped])
     print(f"Routed {len(rows)} pairs on both networks. Cross-checking today's routes on public servers...")
     pos = {s["name"]: nodes[s["node"]] for s in snapped}
@@ -164,16 +167,21 @@ def run(out_dir):
            "commit": commit, "extract": {"source": "Overpass API (OpenStreetMap, ODbL)", "fetched": fetched,
                                          "query": query, "nodes": len(nodes), "edges": sum(map(len, adj.values()))},
            "gates": snapped, "gates_left_out": left_out, "loop": {"edges": len(edges), "missing_legs": missing,
-                                                                  "segments_removed": len(removed)},
+                                                                  "segments_removed": len(removed),
+                                                                  "edges_doubling_back": len(doubles)},
            "rows": rows, "summary": summarise(rows)}
     out_dir = pathlib.Path(out_dir).expanduser()
     out_dir.mkdir(parents=True, exist_ok=True)
     p = out_dir / f"loopcost-{datetime.now(UTC).strftime('%Y%m%dT%H%MZ')}.json"
     p.write_text(json.dumps(out, indent=1) + "\n")
+    (p.with_suffix(".geojson")).write_text(json.dumps(geojson(nodes, edges, removed,
+                                                              [(x["name"], x["node"]) for x in snapped])))
+    (p.with_name(p.stem + "-extract.json")).write_text(json.dumps(osm))
     s = out["summary"]
     print(f"\n{s['longer']} of {s['judged']} pairs longer on the loop network (share {s['share_longer']}); "
           f"hypothesis {s['hypothesis']}. Router flags: {sum(r['router_flag'] for r in rows)}. "
-          f"Snap flags: {sum(x['flag'] for x in snapped)}. Missing loop legs: {missing}.")
+          f"Snap flags: {sum(x['flag'] for x in snapped)}. Missing loop legs: {missing}. "
+          f"Loop edges doubling back: {len(doubles)}.")
     print(f"Wrote {p}")
 
 

@@ -5,6 +5,7 @@ from pipeline.loopcost import (
     build_graph,
     compare,
     is_longer,
+    loop_doubles_back,
     loop_network,
     loop_path,
     major_nodes,
@@ -121,3 +122,12 @@ def test_gate_does_not_snap_onto_a_flyover():
     nodes, adj = build_graph(els)
     n, _ = nearest_node(nodes, adj, 0, 0, allowed=major_nodes(els))
     assert n == 3
+
+
+def test_a_leg_that_u_turns_is_caught():
+    # Loop edges run east 1->2, then back west on the other carriageway 4->3, 15 m away: a U-turn in the leg.
+    e = 0.000135
+    els = [node(1, 0, 0), node(2, 2 * D, 0), node(3, 0, e), node(4, 2 * D, e)]
+    nodes, _ = build_graph(els)
+    assert set(loop_doubles_back(nodes, [(1, 2), (4, 3)])) == {(1, 2), (4, 3)}
+    assert loop_doubles_back(nodes, [(1, 2)]) == []
