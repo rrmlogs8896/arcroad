@@ -1,0 +1,126 @@
+{
+ "built_from": "data/field/*-results.json (passes that matched the model, road-class rule applied)",
+ "drives": "1 to 7 Nov 2026",
+ "drive_dates": [
+  "2026-11-01",
+  "2026-11-07"
+ ],
+ "passes": [
+  {
+   "place": "S16",
+   "dir": "ba",
+   "date": "2026-11-01",
+   "extra_km": 2.28,
+   "kmh": 15.3
+  },
+  {
+   "place": "S18",
+   "dir": "ab",
+   "date": "2026-11-01",
+   "extra_km": 1.57,
+   "kmh": 29.5
+  },
+  {
+   "place": "S18",
+   "dir": "ba",
+   "date": "2026-11-01",
+   "extra_km": 1.53,
+   "kmh": 8.0
+  },
+  {
+   "place": "S12",
+   "dir": "ab",
+   "date": "2026-11-02",
+   "extra_km": 1.93,
+   "kmh": 28.7
+  },
+  {
+   "place": "S10",
+   "dir": "ab",
+   "date": "2026-11-03",
+   "extra_km": 1.1,
+   "kmh": 21.1
+  },
+  {
+   "place": "S08",
+   "dir": "ba",
+   "date": "2026-11-03",
+   "extra_km": 0.39,
+   "kmh": 17.3
+  },
+  {
+   "place": "S12",
+   "dir": "ba",
+   "date": "2026-11-04",
+   "extra_km": 0.9,
+   "kmh": 9.8
+  },
+  {
+   "place": "S11",
+   "dir": "ab",
+   "date": "2026-11-07",
+   "extra_km": 2.13,
+   "kmh": 16.0
+  }
+ ],
+ "cards": [
+  {
+   "key": "median",
+   "title": "Typical crossing",
+   "line": "The middle of every crossing we have driven",
+   "set": {
+    "trips": 2,
+    "days": 300,
+    "occ": 1,
+    "veh": "tw",
+    "km": 1.55,
+    "spd": 17
+   },
+   "source": "Median of 8 driven passes at 6 places"
+  },
+  {
+   "key": "short",
+   "title": "Shortest we drove",
+   "line": "The least a crossing has cost on our drives",
+   "set": {
+    "trips": 2,
+    "days": 300,
+    "occ": 1,
+    "veh": "tw",
+    "km": 0.39,
+    "spd": 17
+   },
+   "source": "Place S08, driven 3 Nov 2026"
+  },
+  {
+   "key": "long",
+   "title": "Longest we drove",
+   "line": "The most a crossing has cost on our drives",
+   "set": {
+    "trips": 2,
+    "days": 300,
+    "occ": 1,
+    "veh": "tw",
+    "km": 2.28,
+    "spd": 15
+   },
+   "source": "Place S16, driven 1 Nov 2026"
+  },
+  {
+   "key": "slow",
+   "title": "Peak-hour crawl",
+   "line": "The slowest crossing we drove, same distance at its real speed",
+   "set": {
+    "trips": 2,
+    "days": 300,
+    "occ": 1,
+    "veh": "tw",
+    "km": 1.53,
+    "spd": 8
+   },
+   "source": "Place S18, driven 1 Nov 2026"
+  }
+ ],
+ "assumptions": "Two crossings a day, 300 days a year, one person on a petrol two-wheeler (about 73% of Telangana's vehicles). Every other setting is the calculator's default.",
+ "_build": "ar-4b13bb957444"
+}
