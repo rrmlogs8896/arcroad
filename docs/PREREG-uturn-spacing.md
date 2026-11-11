@@ -37,4 +37,8 @@ Per opening: position, road name, the two flags with their distances, and whethe
 
 ## Changes
 
-(none yet)
+**11 Nov 2026, 20:05 IST, declared after a sanity run (not the study run).** Testing the code on a small extract around the proposed Hi-Tech City loop (part of the study area, fetched earlier that day for the loop baseline) gave 40 of 55 openings worth a second look, 39 of them "next to a junction", many 4 to 20 m from it. Those openings are the junction itself: the crossing road passes through the median there, which is where guidance wants openings. The rule as written flagged the openings guidance supports. Fixed, before the study run:
+- An opening within **30 m** of a junction or signal is **at the junction**. It is guidance-consistent and carries no flag.
+- **Next to a junction** now means 30 to 100 m away: close enough to add a second crossing point to the junction's queue, not part of it.
+- **Close to another opening** applies only to openings not at a junction, measured to the nearest other opening that is also not at a junction (the two sides of one junction are not two openings).
+The sanity numbers are not published and are not the study's result.
