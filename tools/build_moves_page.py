@@ -26,11 +26,12 @@ def rows_html(rows):
     out = []
     for r in rows:
         flag = r["router_flag"]
-        note = "Routers differ by more than 10%: to be driven before any use" if flag else "Agree within 10%"
+        mark = '<span class="chk diff">Differs</span>' if flag else '<span class="chk">Agrees</span>'
         out.append(
-            f'<tr{" class=flag" if flag else ""}><td>{html.escape(r["from"])}</td><td>{html.escape(r["to"])}</td>'
+            f'<tr{" class=flag" if flag else ""}><td class="trip">{html.escape(r["from"])}'
+            f'<span class="to">→ {html.escape(r["to"])}</span></td>'
             f'<td class="n"><b>{km(r["today_m"])}</b></td><td class="n">{km(r.get("osrm_m"))}</td>'
-            f'<td class="n">{km(r.get("valhalla_m"))}</td><td>{note}</td></tr>')
+            f'<td class="n">{km(r.get("valhalla_m"))}</td><td class="c">{mark}</td></tr>')
     return "".join(out)
 
 
@@ -69,19 +70,24 @@ def build(res):
 *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-wrap:break-word}}
 html{{-webkit-text-size-adjust:100%;text-size-adjust:100%}}
 main{{max-width:980px;margin:0 auto;padding:48px 22px 80px}}a{{color:var(--accent)}}
-.eyebrow{{font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:28px 0 10px}}
+.eyebrow{{font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:32px 0 12px}}
 h1{{font-size:clamp(28px,5vw,44px);line-height:1.12;margin:0 0 14px;font-weight:600;letter-spacing:-.01em}}
 h2{{font-size:20px;margin:44px 0 10px;font-weight:600}}p.lead{{font-size:18px;color:#C9CDD2;max-width:720px}}
 p,li{{max-width:720px}}
-.stats{{display:flex;flex-wrap:wrap;gap:28px;margin:28px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0}}
-.stats b{{display:block;font:600 30px/1.1 ui-monospace,SFMono-Regular,monospace}}.stats span{{color:var(--mute);font-size:13px}}
+.stats{{display:grid;grid-template-columns:repeat(3,1fr);margin:32px 0 8px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}}
+.stats>div{{padding:20px 20px 20px 0}}.stats>div+div{{border-left:1px solid var(--line);padding-left:20px}}
+.stats b{{display:block;font:600 30px/1.1 ui-monospace,SFMono-Regular,monospace;margin-bottom:6px}}.stats span{{display:block;color:var(--mute);font-size:13px;line-height:1.45;max-width:220px}}
+@media (max-width:640px){{.stats{{grid-template-columns:1fr}}.stats>div{{padding:16px 0}}.stats>div+div{{border-left:0;border-top:1px solid var(--line);padding-left:0}}}}
 .wrap{{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px}}
-table{{border-collapse:collapse;width:100%;min-width:760px;font-size:14px;font-variant-numeric:tabular-nums}}
+table{{border-collapse:collapse;width:100%;min-width:600px;font-size:14px;font-variant-numeric:tabular-nums}}
+td.trip{{line-height:1.4}}td.trip .to{{display:block;color:var(--mute)}}tbody tr:last-child td{{border-bottom:0}}
+th.c,td.c{{text-align:right;width:1%;white-space:nowrap}}.chk{{font:500 12px/1 ui-monospace,SFMono-Regular,monospace;color:var(--ok)}}.chk.diff{{color:var(--accent)}}
+@media (max-width:640px){{table{{min-width:0}}th:nth-child(3),td:nth-child(3),th:nth-child(4),td:nth-child(4){{display:none}}th,td{{padding:10px}}}}
 th,td{{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}}th{{color:var(--mute);font-weight:500;font-size:12px}}
-td.n,th.n{{text-align:right;font-family:ui-monospace,SFMono-Regular,monospace;white-space:nowrap}}
+td.n,th.n{{text-align:right;white-space:nowrap}}td.n{{font-family:ui-monospace,SFMono-Regular,monospace}}
 tr.flag td:first-child{{box-shadow:inset 3px 0 0 var(--accent)}}
 ol,ul{{padding-left:20px}}li{{margin:6px 0}}.note{{color:var(--mute);font-size:13px}}
-.ask{{border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:28px 0}}.ask h2{{margin-top:0}}
+.ask{{border:1px solid var(--line);border-radius:10px;padding:24px;margin:44px 0 0}}.ask h2{{margin-top:0}}.ask p{{margin-bottom:0}}
 details.more{{margin-top:28px;border-top:1px solid var(--line)}}details.more summary{{cursor:pointer;padding:14px 0;color:var(--mute);font-size:14px;min-height:44px}}
 details.more p,details.more li{{font-size:14px;color:#C9CDD2}}
 footer{{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}}
@@ -93,7 +99,7 @@ footer{{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid va
 <body>
 <main>
 <!-- nav:start --><nav aria-label="arcroad"></nav><!-- nav:end -->
-<p class="eyebrow">arcroad · Cyberabad Moves 2026 · Citizens Innovation Challenge · Smart mobility and open data</p>
+<p class="eyebrow">Cyberabad Moves 2026 · Innovation Challenge entry</p>
 <h1>Measure the loop before it opens.</h1>
 <p class="lead">Cyberabad Police have proposed turning the roads between Biodiversity Junction, IKEA, Mindspace, Knowledge City and Dallas Center into a one-way loop, and plan to judge it by vehicle speed and traffic density. One thing is not on that list: how much further each journey becomes. arcroad brings a ready, tested and open way to measure it, before the trial, during it and after.</p>
 <div class="stats"><div><b>{len(rows)}</b><span>trips between five loop points, modelled on today's roads</span></div><div><b>{agree}/{len(rows)}</b><span>agree with two independent open routers within 10%</span></div><div><b>0</b><span>loop figures published until the route is confirmed</span></div></div>
@@ -113,9 +119,9 @@ footer{{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid va
 <h2>Today's roads: the baseline</h2>
 <p>Shortest legal driving route between the five loop points we could locate on OpenStreetMap, computed by arcroad's own code and checked against the public OSRM and Valhalla routers. These are modelled lengths, not yet driven.</p>
 <div class="wrap"><table>
-<thead><tr><th>From</th><th>To</th><th class="n">arcroad</th><th class="n">OSRM</th><th class="n">Valhalla</th><th>Check</th></tr></thead>
+<thead><tr><th>Trip</th><th class="n">arcroad</th><th class="n">OSRM</th><th class="n">Valhalla</th><th class="c">Routers</th></tr></thead>
 <tbody>{rows_html(rows)}</tbody></table></div>
-<p class="note">Points and their distance to the main road each was placed on: {gates}. My Home Bhooja could not be found on OpenStreetMap under that name and is left out rather than guessed. OpenStreetMap extract fetched {fetched}; code at commit {commit}.</p>
+<p class="note">"Differs" marks a trip where either public router is more than 10% from arcroad's figure. Those two trips are driven before their figures are used for anything. Points and their distance to the main road each was placed on: {gates}. My Home Bhooja could not be found on OpenStreetMap under that name and is left out rather than guessed. OpenStreetMap extract fetched {fetched}; code at commit {commit}.</p>
 
 <div class="ask">
 <h2>What we ask of the city</h2>
