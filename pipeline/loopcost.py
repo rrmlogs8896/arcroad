@@ -160,6 +160,39 @@ def loop_network(nodes, adj, loop_edges, corridor_m=CORRIDOR_M, tol=ANTIPARALLEL
     return new, sorted(removed)
 
 
+def route_edges(elements, route):
+    """The loop as directed edges from an official route: an ordered list of OpenStreetMap ways, each with the
+    direction of travel ("forward" along the way's node order, or "backward"). Returns (edges, gaps): a gap is
+    the index of a way whose first node is not the previous way's last node (the last way must close the ring)."""
+    ways = {e["id"]: e for e in elements if e.get("type") == "way"}
+    seqs, gaps = [], []
+    for item in route:
+        w = ways.get(item["way"])
+        if w is None:
+            raise ValueError(f"way {item['way']} is not in the extract")
+        ids = list(w["nodes"])
+        seqs.append(ids if item.get("direction", "forward") == "forward" else ids[::-1])
+    for i, seq in enumerate(seqs):
+        if seqs[i - 1][-1] != seq[0]:
+            gaps.append(i)
+    edges = [e for seq in seqs for e in itertools.pairwise(seq)]
+    return edges, gaps
+
+
+def one_way_loop(nodes, adj, loop_edges, corridor_m=CORRIDOR_M, tol=ANTIPARALLEL_TOL):
+    """Loop roads become one-way in the loop's direction across their full width (prereg change 11 Nov 14:20):
+    every segment against the loop is removed (loop_network), and each loop edge exists in the loop direction
+    even where the road today runs only the other way. Nothing is added off the route.
+    Returns (new_adj, removed, added)."""
+    new, removed = loop_network(nodes, adj, loop_edges, corridor_m, tol)
+    added = []
+    for u, v in loop_edges:
+        if v not in new.get(u, {}):
+            new.setdefault(u, {})[v] = haversine_m(*nodes[u], *nodes[v])
+            added.append((u, v))
+    return new, removed, added
+
+
 def loop_doubles_back(nodes, loop_edges, corridor_m=CORRIDOR_M, tol=ANTIPARALLEL_TOL):
     """Loop edges that have another loop edge running the opposite way beside them: a U-turn inside a leg.
     The scenario is only sound when this is empty or explained, because such a leg would make the loop network

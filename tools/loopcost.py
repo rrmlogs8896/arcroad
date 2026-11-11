@@ -30,10 +30,10 @@ from pipeline.loopcost import (  # noqa: E402
     compare,
     geojson,
     loop_doubles_back,
-    loop_network,
-    loop_path,
     major_nodes,
     nearest_node,
+    one_way_loop,
+    route_edges,
     summarise,
 )
 
@@ -43,6 +43,7 @@ OVERPASS = "https://overpass-api.de/api/interpreter"
 OSRM = "https://router.project-osrm.org/route/v1/driving/"
 VALHALLA = "https://valhalla1.openstreetmap.de/route"
 GATES = ROOT / "data/loop/gates.json"
+ROUTE = ROOT / "data/loop/route.json"  # the official route, when given: {"source", "date", "ways": [{"way", "direction"}]}
 VIEWBOX = "78.33,17.47,78.42,17.40"  # west, north, east, south: Gachibowli to Madhapur
 MARGIN_DEG = 0.015                    # about 1.6 km around the gates
 SNAP_FLAG_M = 60.0
@@ -149,11 +150,22 @@ def run(out_dir):
     for g in gates:
         n, d = nearest_node(nodes, adj, g["match"]["lon"], g["match"]["lat"], allowed=major)
         snapped.append({"name": g["name"], "node": n, "snap_m": round(d, 1), "flag": d > SNAP_FLAG_M})
-    order = [s["node"] for s in snapped]
-    edges, missing = loop_path(adj, order)
-    loop, removed = loop_network(nodes, adj, edges)
+    route = json.loads(ROUTE.read_text()) if ROUTE.exists() else None
+    if route:  # the official route: loop roads one-way in its direction across their full width
+        edges, gaps = route_edges(osm["elements"], route["ways"])
+        loop, removed, added = one_way_loop(nodes, adj, edges)
+        on_loop = {u for e in edges for u in e}
+        for x, g in zip(snapped, gates, strict=True):  # gates sit on the route itself
+            n, d = nearest_node(nodes, adj, g["match"]["lon"], g["match"]["lat"], allowed=on_loop)
+            x.update(node=n, snap_m=round(d, 1), flag=d > SNAP_FLAG_M)
+    else:  # no confirmed route: today's network only, no loop figure (prereg change 11 Nov 14:20)
+        edges, gaps, removed, added, loop = [], [], [], [], adj
     doubles = loop_doubles_back(nodes, edges)
+    sound = bool(route) and not gaps and not doubles
     rows = compare(adj, loop, [(s["name"], s["node"]) for s in snapped])
+    if not sound:  # an unsound or missing loop produces no loop figure at all
+        for r in rows:
+            r.update(loop_m=None, added_m=None, longer=None)
     print(f"Routed {len(rows)} pairs on both networks. Cross-checking today's routes on public servers...")
     pos = {s["name"]: nodes[s["node"]] for s in snapped}
     for r in rows:
@@ -166,9 +178,10 @@ def run(out_dir):
            "label": "Loop figures are scenario figures from OpenStreetMap, not measured effects.",
            "commit": commit, "extract": {"source": "Overpass API (OpenStreetMap, ODbL)", "fetched": fetched,
                                          "query": query, "nodes": len(nodes), "edges": sum(map(len, adj.values()))},
-           "gates": snapped, "gates_left_out": left_out, "loop": {"edges": len(edges), "missing_legs": missing,
-                                                                  "segments_removed": len(removed),
-                                                                  "edges_doubling_back": len(doubles)},
+           "gates": snapped, "gates_left_out": left_out,
+           "loop": {"route": route and {k: route.get(k) for k in ("source", "date", "direction_note")},
+                    "edges": len(edges), "gaps": gaps, "segments_removed": len(removed),
+                    "segments_added": len(added), "edges_doubling_back": len(doubles), "sound": sound},
            "rows": rows, "summary": summarise(rows)}
     out_dir = pathlib.Path(out_dir).expanduser()
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -178,10 +191,14 @@ def run(out_dir):
                                                               [(x["name"], x["node"]) for x in snapped])))
     (p.with_name(p.stem + "-extract.json")).write_text(json.dumps(osm))
     s = out["summary"]
-    print(f"\n{s['longer']} of {s['judged']} pairs longer on the loop network (share {s['share_longer']}); "
-          f"hypothesis {s['hypothesis']}. Router flags: {sum(r['router_flag'] for r in rows)}. "
-          f"Snap flags: {sum(x['flag'] for x in snapped)}. Missing loop legs: {missing}. "
-          f"Loop edges doubling back: {len(doubles)}.")
+    flags = f"Router flags: {sum(r['router_flag'] for r in rows)}. Snap flags: {sum(x['flag'] for x in snapped)}."
+    if sound:
+        print(f"\n{s['longer']} of {s['judged']} pairs longer on the loop network (share {s['share_longer']}); "
+              f"hypothesis {s['hypothesis']}. {flags}")
+    elif route:
+        print(f"\nRoute NOT sound (gaps {gaps}, edges doubling back {len(doubles)}): no loop figures. {flags}")
+    else:
+        print(f"\nNo confirmed route in data/loop/route.json: today's network only, no loop figures. {flags}")
     print(f"Wrote {p}")
 
 

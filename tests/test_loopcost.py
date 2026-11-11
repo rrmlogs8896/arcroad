@@ -10,6 +10,8 @@ from pipeline.loopcost import (
     loop_path,
     major_nodes,
     nearest_node,
+    one_way_loop,
+    route_edges,
     shortest,
     summarise,
 )
@@ -131,3 +133,23 @@ def test_a_leg_that_u_turns_is_caught():
     nodes, _ = build_graph(els)
     assert set(loop_doubles_back(nodes, [(1, 2), (4, 3)])) == {(1, 2), (4, 3)}
     assert loop_doubles_back(nodes, [(1, 2)]) == []
+
+
+def test_route_from_ways_follows_direction_and_reports_gaps():
+    els = [node(1, 0, 0), node(2, D, 0), node(3, D, D), node(4, 0, D),
+           way(10, [1, 2]), way(11, [3, 2]), way(12, [3, 4, 1])]
+    edges, gaps = route_edges(els, [{"way": 10}, {"way": 11, "direction": "backward"}, {"way": 12}])
+    assert edges == [(1, 2), (2, 3), (3, 4), (4, 1)] and gaps == []
+    _, gaps = route_edges(els, [{"way": 10}, {"way": 12}])
+    assert gaps == [1]
+
+
+def test_full_width_one_way_adds_the_loop_direction_where_the_road_ran_the_other_way():
+    # Side 2->3 is one-way 3->2 today. On the loop it runs 2->3, and 3->2 is gone.
+    els = [node(1, 0, 0), node(2, D, 0), node(3, D, D), node(4, 0, D),
+           way(10, [1, 2]), way(11, [3, 2], oneway="yes"), way(12, [3, 4]), way(13, [4, 1])]
+    nodes, adj = build_graph(els)
+    assert 3 not in adj.get(2, {})
+    loop, removed, added = one_way_loop(nodes, adj, [(1, 2), (2, 3), (3, 4), (4, 1)])
+    assert added == [(2, 3)] and (3, 2) in removed
+    assert 3 in loop[2] and 2 not in loop.get(3, {})
