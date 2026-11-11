@@ -112,3 +112,12 @@ def test_gate_snaps_to_a_main_road_not_a_campus_lane():
     nodes, adj = build_graph(els)
     n, _ = nearest_node(nodes, adj, 0, 0, allowed=major_nodes(els))
     assert n == 3
+
+
+def test_gate_does_not_snap_onto_a_flyover():
+    # A flyover passes right over the gate; the junction road below is 40 m away.
+    els = [node(1, 0, 0), node(2, D, 0), node(3, 0, 0.00036), node(4, D, 0.00036),
+           way(10, [1, 2], highway="primary", bridge="yes", layer="2"), way(11, [3, 4], highway="primary")]
+    nodes, adj = build_graph(els)
+    n, _ = nearest_node(nodes, adj, 0, 0, allowed=major_nodes(els))
+    assert n == 3

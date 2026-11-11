@@ -49,12 +49,18 @@ def build_graph(elements):
 
 
 def major_nodes(elements):
-    """Nodes on roads of class tertiary or above: the only places a gate may snap to (prereg, 11 Nov 14:40)."""
-    out = set()
+    """Nodes on roads of class tertiary or above, at ground level: the only places a gate may snap to
+    (prereg changes 11 Nov 14:40 and 14:55). A node on a flyover is not a junction anyone can turn at."""
+    ground = set()
     for e in elements:
-        if e.get("type") == "way" and e.get("tags", {}).get("highway") in MAJOR:
-            out.update(e.get("nodes", []))
-    return out
+        tags = e.get("tags", {})
+        if e.get("type") != "way" or tags.get("highway") not in MAJOR:
+            continue
+        layer = str(tags.get("layer", "0")).lstrip("+")
+        if tags.get("bridge") not in (None, "no") or (layer.isdigit() and int(layer) > 0):
+            continue
+        ground.update(e.get("nodes", []))
+    return ground
 
 
 def routable(adj):
