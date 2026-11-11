@@ -144,6 +144,8 @@ footer{{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid va
 <p>The competing explanation we test against: a loop can make trips longer but faster, by removing waiting at junctions. Distance alone does not settle that, so timed drives at the same hours before and during the trial are part of the plan.</p>
 </details>
 
+<p class="note" style="margin-top:36px">Also running: <a href="../uturns/">U-turns worth a second look</a>, a pre-registered study of median openings just before or after a junction across the IT corridor.</p>
+
 <footer>Team arcroad · <a href="mailto:hello@arcroad.org">hello@arcroad.org</a> · An independent, non-commercial civic project. Map data © OpenStreetMap contributors (ODbL). Measurements by arcroad (ODbL). No Google Maps data is used anywhere.</footer>
 </main>
 </body>
