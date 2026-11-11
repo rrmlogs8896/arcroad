@@ -3,7 +3,8 @@
 Run on the iMac with the project venv. Two steps, with a person's check in between:
 
     python3 tools/loopcost.py geocode   # finds the six gates on OpenStreetMap, writes data/loop/gates.json
-    (open data/loop/gates.json, check each match, set "checked": true on the ones that are right)
+    (open each printed OpenStreetMap link and look: is that the place?)
+    python3 tools/loopcost.py check "IKEA Rotary" ...   # marks those gates checked (or: check all)
     python3 tools/loopcost.py run OUT_DIR   # routes both networks, writes OUT_DIR/loopcost-<UTC time>.json
 
 Open data only: Nominatim and Overpass (OpenStreetMap, ODbL), public OSRM and Valhalla servers for the
@@ -29,6 +30,7 @@ from pipeline.loopcost import (  # noqa: E402
     compare,
     loop_network,
     loop_path,
+    major_nodes,
     nearest_node,
     summarise,
 )
@@ -46,12 +48,13 @@ CHECK_DIFF = 0.10                     # pre-registered: flag a pair where a publ
 
 # Loop order, as reported on 29 Oct 2026. Several searches per gate; the first match inside the viewbox is kept.
 LOOP = [
-    ("Biodiversity Junction", ["Biodiversity Junction", "Biodiversity Park, Gachibowli"]),
+    ("Biodiversity Junction", ["Biodiversity Junction", "Bio Diversity Junction", "Biodiversity Flyover",
+                               "Bio-Diversity Park", "Biodiversity Park", "Biodiversity"]),
     ("IKEA Rotary", ["IKEA Hyderabad", "IKEA"]),
     ("Mindspace C-Gate", ["Raheja Mindspace", "Mindspace"]),
     ("Knowledge City", ["Knowledge City", "Knowledge City Road"]),
     ("Dallas Center", ["Dallas Center", "Dallas Centre"]),
-    ("My Home Bhooja", ["My Home Bhooja", "Bhooja"]),
+    ("My Home Bhooja", ["My Home Bhooja", "Bhooja", "My Home Bhooja Raidurg", "My Home Twitza", "My Home"]),
 ]
 
 
@@ -62,12 +65,14 @@ def get(url, data=None, timeout=180):
 
 
 def geocode():
+    """Searches only gates without a match yet; matches already in gates.json, and their checks, are kept."""
+    old = {g["name"]: g for g in json.loads(GATES.read_text())["gates"]} if GATES.exists() else {}
     out = {"written": datetime.now(UTC).isoformat(), "source": "Nominatim (OpenStreetMap, ODbL)",
            "note": "Check each match against OpenStreetMap and set checked to true. Unmatched gates are left out.",
            "gates": []}
     for name, queries in LOOP:
-        g = {"name": name, "checked": False, "match": None}
-        for q in queries:
+        g = old.get(name) or {"name": name, "checked": False, "match": None}
+        for q in [] if g["match"] else queries:
             params = urllib.parse.urlencode({"q": q, "format": "jsonv2", "limit": 1, "viewbox": VIEWBOX,
                                              "bounded": 1})
             res = json.loads(get(f"{NOMINATIM}?{params}"))
@@ -79,10 +84,22 @@ def geocode():
                 break
         out["gates"].append(g)
         m = g["match"]
-        print(f"{name:24} {'NOT FOUND' if not m else m['osm'] + '  ' + m['display_name'][:70]}")
+        link = "" if not m else f"  open https://www.openstreetmap.org/{m['osm']}"
+        print(f"{name:24} {'NOT FOUND' if not m else m['display_name'][:60]}{link}")
     GATES.parent.mkdir(parents=True, exist_ok=True)
     GATES.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n")
-    print(f"\nWrote {GATES.relative_to(ROOT)}. Check each match, set checked to true, then run.")
+    print(f"\nWrote {GATES.relative_to(ROOT)}. Open each link, then mark the right ones: tools/loopcost.py check ...")
+
+
+def check(names):
+    d = json.loads(GATES.read_text())
+    for g in d["gates"]:
+        if g["match"] and ("all" in names or g["name"] in names):
+            g["checked"] = True
+            g["checked_at"] = datetime.now(UTC).isoformat()
+    GATES.write_text(json.dumps(d, indent=1, ensure_ascii=False) + "\n")
+    for g in d["gates"]:
+        print(f"{g['name']:24} {'checked' if g['checked'] else 'not checked'}")
 
 
 def overpass(bbox):
@@ -125,9 +142,10 @@ def run(out_dir):
     print("Fetching the OpenStreetMap extract from Overpass...")
     osm, query, fetched = overpass(bbox)
     nodes, adj = build_graph(osm["elements"])
+    major = major_nodes(osm["elements"])
     snapped = []
     for g in gates:
-        n, d = nearest_node(nodes, adj, g["match"]["lon"], g["match"]["lat"])
+        n, d = nearest_node(nodes, adj, g["match"]["lon"], g["match"]["lat"], allowed=major)
         snapped.append({"name": g["name"], "node": n, "snap_m": round(d, 1), "flag": d > SNAP_FLAG_M})
     order = [s["node"] for s in snapped]
     edges, missing = loop_path(adj, order)
@@ -162,6 +180,8 @@ def run(out_dir):
 if __name__ == "__main__":
     if len(sys.argv) >= 2 and sys.argv[1] == "geocode":
         geocode()
+    elif len(sys.argv) >= 3 and sys.argv[1] == "check":
+        check(sys.argv[2:])
     elif len(sys.argv) == 3 and sys.argv[1] == "run":
         run(sys.argv[2])
     else:

@@ -7,6 +7,7 @@ from pipeline.loopcost import (
     is_longer,
     loop_network,
     loop_path,
+    major_nodes,
     nearest_node,
     shortest,
     summarise,
@@ -102,3 +103,12 @@ def test_nearest_node_ignores_isolated_nodes():
     nodes, adj = build_graph(els)
     n, d = nearest_node(nodes, adj, 0.00001, 0)
     assert n == 1 and d < 2
+
+
+def test_gate_snaps_to_a_main_road_not_a_campus_lane():
+    # A campus lane (residential) passes 5 m from the building; the main road is 50 m away.
+    els = [node(1, 0, 0.00005), node(2, D, 0.00005), node(3, 0, 0.00045), node(4, D, 0.00045),
+           way(10, [1, 2], highway="residential"), way(11, [3, 4], highway="secondary")]
+    nodes, adj = build_graph(els)
+    n, _ = nearest_node(nodes, adj, 0, 0, allowed=major_nodes(els))
+    assert n == 3

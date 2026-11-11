@@ -18,6 +18,7 @@ DRIVABLE = {
     "motorway", "trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "living_street",
     "motorway_link", "trunk_link", "primary_link", "secondary_link", "tertiary_link",
 }
+MAJOR = {"motorway", "trunk", "primary", "secondary", "tertiary"}
 CORRIDOR_M = 30.0        # pre-registered: against-direction segments within this distance of the loop path go
 ANTIPARALLEL_TOL = 60.0  # pre-registered: "against" means a bearing within this many degrees of opposite
 LONGER_MIN_M = 100.0     # pre-registered: a pair counts as longer only if at least 100 m longer...
@@ -47,6 +48,15 @@ def build_graph(elements):
     return nodes, adj
 
 
+def major_nodes(elements):
+    """Nodes on roads of class tertiary or above: the only places a gate may snap to (prereg, 11 Nov 14:40)."""
+    out = set()
+    for e in elements:
+        if e.get("type") == "way" and e.get("tags", {}).get("highway") in MAJOR:
+            out.update(e.get("nodes", []))
+    return out
+
+
 def routable(adj):
     out = set(adj)
     for vs in adj.values():
@@ -54,10 +64,12 @@ def routable(adj):
     return out
 
 
-def nearest_node(nodes, adj, lon, lat):
-    """Nearest node that has at least one usable edge, with its distance in metres."""
+def nearest_node(nodes, adj, lon, lat, allowed=None):
+    """Nearest node that has at least one usable edge (and is in allowed, if given), with its distance in metres."""
     best, best_d = None, math.inf
     for n in routable(adj):
+        if allowed is not None and n not in allowed:
+            continue
         d = haversine_m(lon, lat, *nodes[n])
         if d < best_d:
             best, best_d = n, d
