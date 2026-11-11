@@ -21,7 +21,7 @@ from datetime import UTC, datetime
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from pipeline.medians import DRIVABLE, find_openings, flag, ground_sample, junctions, summarise  # noqa: E402
+from pipeline import medians as m  # noqa: E402
 
 AREA = (17.40, 78.33, 17.47, 78.42)  # south, west, north, east: pre-registered
 OVERPASS = "https://overpass-api.de/api/interpreter"
@@ -30,7 +30,7 @@ UA = {"User-Agent": "arcroad/1.0 (https://arcroad.org; hello@arcroad.org)"}
 
 def fetch():
     s, w, n, e = AREA
-    cls = "|".join(sorted(DRIVABLE))
+    cls = "|".join(sorted(m.DRIVABLE))
     q = (f'[out:json][timeout:180];(way["highway"~"^({cls})$"]({s},{w},{n},{e});'
          f'node["highway"="traffic_signals"]({s},{w},{n},{e}););(._;>;);out body;')
     for attempt in range(3):
@@ -46,15 +46,15 @@ def fetch():
 
 def main(out_dir):
     osm, query, fetched = fetch()
-    ops = find_openings(osm["elements"])
-    flag(ops, junctions(osm["elements"], ops))
+    ops = m.find_openings(osm["elements"])
+    m.flag(ops, m.junctions(osm["elements"], ops))
     seed = secrets.randbits(32)  # written to the results before the draw
-    sample = ground_sample(ops, seed)
+    sample = m.ground_sample(ops, seed)
     commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
     out = {"job": "uturn-spacing-v1", "prereg": "docs/PREREG-uturn-spacing.md", "status": "CANDIDATE, NOT PUBLISHED",
            "commit": commit, "area": AREA,
            "extract": {"source": "Overpass API (OpenStreetMap, ODbL)", "fetched": fetched, "query": query},
-           "summary": summarise(ops), "seed": seed,
+           "summary": m.summarise(ops), "seed": seed,
            "ground_check": [{"index": i, "lon": round(ops[i]["lon"], 6), "lat": round(ops[i]["lat"], 6),
                              "road": ops[i]["road"], "real": None} for i in sample],
            "openings": ops}
