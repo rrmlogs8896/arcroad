@@ -31,3 +31,11 @@ def test_data_files_carry_a_build_mark():
 def test_site_has_a_root_favicon():
     """9 Nov 2026: 13 pages had no icon link, so browsers asked for /favicon.ico and got a 404."""
     assert (WEB / "favicon.ico").stat().st_size > 0
+
+
+def test_unknown_addresses_get_a_real_not_found_page():
+    """11 Nov 2026: with no 404.html, Cloudflare Pages served the home page at any unknown address, and its
+    relative links (nav.js, fonts.css) resolved under that path and failed, so the page loaded broken."""
+    page = (WEB / "404.html").read_text()
+    assert 'name="robots" content="noindex"' in page
+    assert '<base href="/">' in page, "404.html is served at any path, so its links must resolve from the root"
