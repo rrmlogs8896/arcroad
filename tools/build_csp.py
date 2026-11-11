@@ -19,7 +19,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 WEB = ROOT / "web"
 HEADERS = WEB / "_headers"
-ENFORCE = False
+ENFORCE = True
 TILES = "https://tiles.openfreemap.org"
 INLINE = re.compile(r"<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>", re.S)
 
