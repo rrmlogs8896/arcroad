@@ -30,7 +30,7 @@ import urllib.request
 ANTHROPIC = "https://api.anthropic.com/v1/messages"
 MODEL = "claude-sonnet-5-5"
 MAX_SEARCHES = 8
-MAX_TOKENS = 4000
+MAX_TOKENS = 8000
 RUN_BUDGET_USD = 0.70
 MAX_TURNS = 3  # the API pauses long searches with stop_reason "pause_turn"; we continue at most this often
 # Conservative assumed prices, USD per million tokens and per search. The Console limit is the real cap; these
