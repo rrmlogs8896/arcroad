@@ -54,13 +54,13 @@ def test_deploy_falls_back_to_system_python_without_venv(tmp_path):
     r, calls = run(tmp_path, venv_exists=False)
     assert r.returncode == 1
     assert "system -m ruff --version" in calls
-    assert "Needs ruff and pytest" in r.stdout
+    assert "Needs the project venv" in r.stdout and "~/.venvs/arcroad" in r.stdout
 
 
 def test_deploy_still_explains_missing_tools_in_venv_and_never_deploys(tmp_path):
     r, calls = run(tmp_path, venv_exists=True, has_tools=False)
     assert r.returncode == 1
-    assert "Needs ruff and pytest" in r.stdout
+    assert "Needs the project venv" in r.stdout and "~/.venvs/arcroad" in r.stdout
     assert "npx" not in calls
 
 

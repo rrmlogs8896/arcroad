@@ -13,7 +13,7 @@ else
   PY=python3
 fi
 "$PY" -m ruff --version >/dev/null 2>&1 && "$PY" -m pytest --version >/dev/null 2>&1 || {
-  echo "Needs ruff and pytest once: python3 -m pip install --user ruff pytest"; exit 1; }
+  echo "Needs the project venv once: brew install python@3.11 && python3.11 -m venv ~/.venvs/arcroad && ~/.venvs/arcroad/bin/pip install ruff pytest"; exit 1; }
 "$PY" -m ruff check pipeline tests
 "$PY" -m pytest -q
 npx wrangler pages deploy web --project-name=arcroad-org
