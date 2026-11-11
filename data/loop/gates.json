@@ -1,0 +1,78 @@
+{
+ "written": "2026-11-11T08:19:58.810292+00:00",
+ "source": "Nominatim (OpenStreetMap, ODbL)",
+ "note": "Check each match against OpenStreetMap and set checked to true. Unmatched gates are left out.",
+ "gates": [
+  {
+   "name": "Biodiversity Junction",
+   "checked": true,
+   "match": {
+    "query": "Bio-Diversity Park",
+    "display_name": "Bio-Diversity Park Level 2 Flyover, Madhapur, Ward 104 Kondapur, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500104, India",
+    "osm": "way/761521221",
+    "lon": 78.3751509,
+    "lat": 17.4305633
+   },
+   "checked_at": "2026-11-11T08:21:48.567441+00:00"
+  },
+  {
+   "name": "IKEA Rotary",
+   "checked": true,
+   "match": {
+    "query": "IKEA Hyderabad",
+    "display_name": "IKEA, Madhapur, Ward 104 Kondapur, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, India",
+    "osm": "way/847994242",
+    "lon": 78.3751236,
+    "lat": 17.4387591
+   },
+   "checked_at": "2026-11-11T08:21:48.567633+00:00"
+  },
+  {
+   "name": "Mindspace C-Gate",
+   "checked": true,
+   "match": {
+    "query": "Raheja Mindspace",
+    "display_name": "Building 20, Mindspace Madhapur road, Mindspace Technology Park, Madhapur, Ward 104 Kondapur, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500081, India",
+    "osm": "way/292755261",
+    "lon": 78.3842052,
+    "lat": 17.4365338
+   },
+   "checked_at": "2026-11-11T08:21:48.567635+00:00"
+  },
+  {
+   "name": "Knowledge City",
+   "checked": true,
+   "match": {
+    "query": "Knowledge City",
+    "display_name": "Salapuria Sattva Knowledge City, Madhapur, Ward 104 Kondapur, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, India",
+    "osm": "way/551147907",
+    "lon": 78.3814049,
+    "lat": 17.4337929
+   },
+   "checked_at": "2026-11-11T08:21:48.567636+00:00"
+  },
+  {
+   "name": "Dallas Center",
+   "checked": true,
+   "match": {
+    "query": "Dallas Center",
+    "display_name": "Dallas Center, Dallas centre road, Madhapur, Ward 104 Kondapur, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500032, India",
+    "osm": "way/1122214740",
+    "lon": 78.3784781,
+    "lat": 17.4328129
+   },
+   "checked_at": "2026-11-11T08:21:48.567637+00:00"
+  },
+  {
+   "name": "My Home Bhooja",
+   "checked": false,
+   "match": {
+    "query": "My Home Twitza",
+    "display_name": "My Home Twitza, Hi Tech City Main Road, Madhapur, Ward 104 Kondapur, Greater Hyderabad Municipal Corporation West Zone, Hyderabad, Serilingampalle mandal, Ranga Reddy, Telangana, 500104, India",
+    "osm": "way/940530592",
+    "lon": 78.3754235,
+    "lat": 17.4341932
+   }
+  }
+ ]
+}
