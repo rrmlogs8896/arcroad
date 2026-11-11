@@ -29,7 +29,7 @@ def main():
         pg.goto((ROOT / "films.html").as_uri() + f"?film={film}")
         pg.wait_for_function("window.FILM && document.fonts.status === 'loaded'", timeout=120000)
         D, fps = pg.evaluate("[FILM.D, FILM.fps]")
-        n = int(round(D * fps))
+        n = round(D * fps)
         if stills is not None:
             for f in stills:
                 pg.evaluate(f"FILM.set({f / fps})")

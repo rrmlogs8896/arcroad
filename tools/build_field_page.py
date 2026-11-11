@@ -24,7 +24,7 @@ VERDICT = {"MATCH": "Matched the model", "SHORTER": "Much shorter than the model
 def short_date(d):
     if not d:
         return ""
-    y, m, dd = d.split("-")
+    _y, m, dd = d.split("-")
     return f"{int(dd)} {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][int(m) - 1]}"
 
 

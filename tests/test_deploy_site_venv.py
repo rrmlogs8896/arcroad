@@ -45,7 +45,7 @@ def test_deploy_uses_venv_python_when_it_exists(tmp_path):
     r, calls = run(tmp_path, venv_exists=True)
     assert r.returncode == 0, r.stderr
     assert "system" not in calls
-    assert "venv -m ruff check pipeline tests" in calls
+    assert "venv -m ruff check pipeline tests tools" in calls
     assert "venv -m pytest -q" in calls
     assert "npx wrangler pages deploy web" in calls
 

@@ -65,7 +65,7 @@ def lookup(s):
 def main():
     places = json.load(open(PLACES, encoding="utf-8"))
     out = {"generated": time.strftime("%Y-%m-%d"), "source": "© OpenStreetMap contributors, ODbL (via Nominatim reverse geocoding)", "spots": {}}
-    for i, s in enumerate(places["spots"]):
+    for s in places["spots"]:
         info = lookup(s)
         out["spots"][s["id"]] = info
         label = ", ".join(info["roads"] or info["refs"]) or "(no named road)"
