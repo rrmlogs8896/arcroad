@@ -107,6 +107,7 @@ PAGES = {
     "roads/glare/index.html": ("../../", "roads/glare/", True),
     "volunteer/index.html": ("../", "volunteer/", True),
     "reuse/index.html": ("../", "reuse/", True),
+    "moves/index.html": ("../", "moves/", True),
 }
 
 FIRST_NAV = re.compile(r'<nav class="top" aria-label="arcroad">.*?</nav>|<nav class="sitenav" aria-label="arcroad">.*?</nav>'
