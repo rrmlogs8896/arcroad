@@ -135,6 +135,8 @@ and copies no scene.
   "U-turn openings: where one may not be needed, and where one may be missing" below.
 - 12 Nov 2026, 19:40 IST, before any v3 label exists: added the two large-vehicle fields above and the section
   "Room to turn" below, after a public post by ITS India's president on U-turns too tight for trucks.
+- 12 Nov 2026, 20:15 IST, before any opening is scored: H3's bus requirement registered, and room to turn
+  redefined to match the source the requirement comes from (see "Room to turn: the registered values").
 
 ## U-turn openings: where one may not be needed, and where one may be missing
 
@@ -180,3 +182,30 @@ same pass bar as H1. The bus turning width used is taken from published Indian d
 amendment before the openings are scored. Until then H3 is not run.
 
 Openings with too little room are reported as places to check, not as design faults.
+
+### Room to turn: the registered values
+
+No Indian code found gives a U-turn width for a bus. IRC:86-2018 (cl. 5.6) says only that "even greater widths
+are required for U-turns". The registered requirement is therefore an international one, labelled as such
+wherever it is used:
+
+- **Source:** Michigan DOT minimum median widths for U-turns, Table 1 in FHWA-HRT-07-033 (US Federal Highway
+  Administration). Design vehicle: a 12.2 m bus.
+- **Measure:** M, the median width between the two carriageways' inner edges, as that source defines it. This
+  replaces the earlier "separation plus receiving carriageway" measure; the receiving carriageway's lane count
+  is used instead, as below.
+- **A bus can turn in one sweep** if M is at least 24.4 m (into the near lane), 20.7 m (into the second lane,
+  where the receiving carriageway has at least 2 lanes) or 17.7 m (into the third, where it has 3 or more).
+  An opening is "too little room for a bus" if M is below the value for the farthest lane its receiving
+  carriageway has.
+- **Indian cross-check, reported beside it, not used for H3:** IRC:SP:41-1994 Table 4.5 gives a 12.2 m minimum
+  turning radius for the WB-12 semi-trailer and single-unit bus. The printed table is to be checked before it is
+  quoted.
+- **Spacing benchmark, reported for every opening:** IRC:SP:84-2014 cl. 2.14 and IRC:SP:87-2019 cl. 2.14 (four-
+  and six-laning of national highways) place median openings at least 500 m apart in built-up areas. These codes
+  apply to national highways (such as NH65), so for other roads the distance is reported as context, not as a
+  breach.
+
+Where M is not mapped, it is taken from the distance between the two carriageway centrelines minus half of each
+carriageway's width (lanes × 3.5 m), and the opening is marked as estimated. H3 is run on mapped and estimated
+openings separately as well as together.
