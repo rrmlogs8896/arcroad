@@ -17,6 +17,7 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+import corridor3d
 import filer
 import hotspots
 import mapwatch
@@ -59,6 +60,11 @@ def repo():
         subprocess.run(["git", "clone", "--depth", "1", "https://github.com/rrmlogs8896/arcroad.git", str(work)],
                        check=True)
     return work
+
+
+def job_corridor3d():
+    """Open layers for the 3D corridor model: roads, buildings, points, ground height, bus stops."""
+    return corridor3d.run(log, OUT)
 
 
 def job_routercheck():
@@ -179,7 +185,7 @@ BENGALURU_REMOTE_NIGHT = "2026-11-07"  # moved from 6 Nov: that night ran the ea
 # container. It runs in the Multi-city collection GitHub workflow instead (monthly, or on demand), which
 # has 16 GB. job_bengaluru stays for a one-off run on a larger instance.
 JOBS = [("routercheck", job_routercheck), ("mapwatch", job_mapwatch), ("remote", job_remote),
-        ("structures", job_structures), ("hotspots", job_hotspots), ("openings", job_openings)]
+        ("corridor3d", job_corridor3d), ("structures", job_structures), ("hotspots", job_hotspots), ("openings", job_openings)]
 
 
 def run_all():
