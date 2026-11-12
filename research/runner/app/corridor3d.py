@@ -27,6 +27,7 @@ from pathlib import Path
 
 BOX = (17.40, 78.33, 17.47, 78.42)  # south, west, north, east: the pre-registered study area
 OVERPASS = "https://overpass-api.de/api/interpreter"
+MIRRORS = (OVERPASS, "https://overpass.kumi.systems/api/interpreter", "https://overpass.private.coffee/api/interpreter")
 DEM_URL = ("https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N17_00_E078_00_DEM/"
            "Copernicus_DSM_COG_10_N17_00_E078_00_DEM.tif")
 GTFS_URL = ("https://data.opencity.in/dataset/88e2d145-7ec6-4666-88dd-6cf18b18312e/resource/"
@@ -40,15 +41,16 @@ POINTS = ('node["highway"="traffic_signals"]', 'node["highway"="bus_stop"]', 'no
 
 
 def get(url, data=None, tries=4, timeout=600):
+    urls = MIRRORS if url == OVERPASS else (url,)
     for k in range(tries):
         try:
-            req = urllib.request.Request(url, data=data, headers={"User-Agent": UA})
+            req = urllib.request.Request(urls[k % len(urls)], data=data, headers={"User-Agent": UA})
             with urllib.request.urlopen(req, timeout=timeout) as r:
                 return r.read()
         except OSError:
             if k == tries - 1:
                 raise
-            time.sleep(30 * (k + 1))
+            time.sleep(10 if url == OVERPASS else 30 * (k + 1))
     raise RuntimeError("unreachable")
 
 
@@ -56,12 +58,20 @@ def bbox_str(box=BOX):
     return "{},{},{},{}".format(*box)
 
 
+def tiles(box=BOX, n=2):
+    s, w, nn, e = box
+    dy, dx = (nn - s) / n, (e - w) / n
+    return [(round(s + i * dy, 6), round(w + j * dx, 6), round(s + (i + 1) * dy, 6), round(w + (j + 1) * dx, 6))
+            for i in range(n) for j in range(n)]
+
+
 def queries(box=BOX):
+    """Layer name -> list of Overpass queries. Buildings come in four tiles so no single reply is too large."""
     b = bbox_str(box)
     return {
-        "roads": f'[out:json][timeout:600];way["highway"~"^({ROADS})$"]({b});out geom;',
-        "buildings": f'[out:json][timeout:900][maxsize:1073741824];way["building"]({b});out geom;',
-        "points": "[out:json][timeout:600];(" + "".join(f"{p}({b});" for p in POINTS) + ");out center;",
+        "roads": [f'[out:json][timeout:600];way["highway"~"^({ROADS})$"]({b});out geom;'],
+        "buildings": [f'[out:json][timeout:600];way["building"]({bbox_str(t)});out geom;' for t in tiles(box)],
+        "points": ["[out:json][timeout:600];(" + "".join(f"{p}({b});" for p in POINTS) + ");out center;"],
     }
 
 
@@ -105,11 +115,16 @@ def dem_clip(tif_path: Path, box=BOX):
 def run(log, out_dir: Path):
     started = dt.datetime.now(dt.UTC).isoformat()
     layers, sources = {}, []
-    for name, q in queries().items():
-        raw = json.loads(get(OVERPASS, urllib.parse.urlencode({"data": q}).encode()))
-        layers[name] = slim(raw)
-        log(f"corridor3d {name} {len(layers[name])}")
-    sources.append({"layers": list(layers), "source": "OpenStreetMap via Overpass API", "licence": "ODbL 1.0",
+    for name, qs in queries().items():
+        seen, items = set(), []
+        for q in qs:
+            for x in slim(json.loads(get(OVERPASS, urllib.parse.urlencode({"data": q}).encode()))):
+                if (x["type"], x["id"]) not in seen:
+                    seen.add((x["type"], x["id"]))
+                    items.append(x)
+        layers[name] = items
+        log(f"corridor3d {name} {len(items)}")
+    sources.append({"layers": list(layers), "source": "OpenStreetMap via the Overpass API (main instance, with public mirrors as fallback)", "licence": "ODbL 1.0",
                     "fetched": dt.datetime.now(dt.UTC).isoformat(), "queries": queries()})
     try:
         stops = stops_in_box(get(GTFS_URL, timeout=300))
