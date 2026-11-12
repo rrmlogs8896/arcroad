@@ -137,6 +137,10 @@ and copies no scene.
   "Room to turn" below, after a public post by ITS India's president on U-turns too tight for trucks.
 - 12 Nov 2026, 20:15 IST, before any opening is scored: H3's bus requirement registered, and room to turn
   redefined to match the source the requirement comes from (see "Room to turn: the registered values").
+- 12 Nov 2026, 23:40 IST, before any v3 label exists: which photos are labelled. From the Baseline v1 drives
+  (1–6 Nov), only the 1,188 photos marked for labelling in Baseline v1 are labelled; that thinning was made
+  before any label existed, so it cannot follow a result. The 7 Nov photos and every photo from later drives
+  are all labelled. The count from each drive day is published with every result.
 
 ## U-turn openings: where one may not be needed, and where one may be missing
 
