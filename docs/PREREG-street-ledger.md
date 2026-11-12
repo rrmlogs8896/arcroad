@@ -141,6 +141,11 @@ and copies no scene.
   (1–6 Nov), only the 1,188 photos marked for labelling in Baseline v1 are labelled; that thinning was made
   before any label existed, so it cannot follow a result. The 7 Nov photos and every photo from later drives
   are all labelled. The count from each drive day is published with every result.
+- 12 Nov 2026, 23:59 IST, before any v3 label exists: the 60-photo check was drawn (seed recorded) from the
+  1,620 photos of 1–7 Nov, before the 12 Nov photos were added; they are labelled but are not in the check. The
+  model labels before Rohit fills the check: he fills it without opening the label file or any result, and the
+  scoring tool alone reads both. Only photos taken during the drive and placed by their own GPS inside the study
+  corridors are labelled; no other photo is sent to the model.
 
 ## U-turn openings: where one may not be needed, and where one may be missing
 
