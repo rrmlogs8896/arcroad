@@ -49,6 +49,8 @@ New in v3:
 | `animal_on_carriageway` | none, live, carcass, unsure |
 | `oncoming_glare` | not_night, none, strong, unsure |
 | `street_lighting` | not_night, lit, partly_lit, dark, unsure |
+| `large_vehicle_turning` | none, bus, truck, other_large, unsure (a large vehicle making a U-turn or turn in view) |
+| `multi_point_turn` | yes, no, unsure (a vehicle visibly reversing or stopped across lanes to complete a turn) |
 | `surface` | adds `waterlogged` |
 
 Left out: people walking or crossing, and foot over-bridges. arcroad's standing rules say nothing about
@@ -131,6 +133,8 @@ and copies no scene.
 
 - 12 Nov 2026, 18:20 IST, before any v3 label exists and before any opening is scored: added the section
   "U-turn openings: where one may not be needed, and where one may be missing" below.
+- 12 Nov 2026, 19:40 IST, before any v3 label exists: added the two large-vehicle fields above and the section
+  "Room to turn" below, after a public post by ITS India's president on U-turns too tight for trucks.
 
 ## U-turn openings: where one may not be needed, and where one may be missing
 
@@ -160,3 +164,19 @@ the result says the photos cannot tell the two apart.
 
 Neither list says an opening causes a jam or that anyone should be blamed. Each is a list of places to
 check, with the measurement that would show whether a change helped.
+
+## Room to turn
+
+A U-turn a car makes in one sweep may need a bus or truck to stop across lanes and reverse. For every opening,
+the room to turn is measured from OpenStreetMap: the separation between the two carriageways plus the width of
+the carriageway being turned into (its mapped `width`, or its `lanes` at 3.5 m each where width is not mapped;
+which one was used is recorded per opening). Openings on TGSRTC bus routes are marked from the timetable.
+
+**H3.** Where the room to turn is less than a bus needs to turn in one sweep, photos show a multi-point turn or
+queue spill into through lanes more often than at openings with enough room. *Competing:* tight openings sit on
+busier stretches, so more blockage there comes from traffic, not geometry. *Test:* the comparison is made within
+road type and time band, and repeated with congestion (`congestion` slow or worse) as a further stratum; the
+same pass bar as H1. The bus turning width used is taken from published Indian design guidance, cited here by an
+amendment before the openings are scored. Until then H3 is not run.
+
+Openings with too little room are reported as places to check, not as design faults.
