@@ -69,3 +69,22 @@ def test_a_busy_main_server_falls_back_to_a_mirror(monkeypatch):
     monkeypatch.setattr(c.time, "sleep", lambda s: None)
     assert c.get(c.OVERPASS, b"x") == b'{"elements": []}'
     assert calls[0].startswith("https://overpass-api.de") and "kumi" in calls[1]
+
+
+def test_a_layer_the_servers_refuse_is_left_out_and_named_not_fatal(tmp_path, monkeypatch):
+    import tarfile
+
+    def fake_get(url, data=None, **k):
+        if url != c.OVERPASS:
+            raise OSError("offline")
+        if b"building" in data:
+            raise OSError("502")
+        return b'{"elements": [{"type": "way", "id": 1, "tags": {}, "geometry": [{"lat": 17.4, "lon": 78.4}]}]}'
+
+    monkeypatch.setattr(c, "get", fake_get)
+    out = c.run(lambda m: None, tmp_path)
+    with tarfile.open(out) as t:
+        names = t.getnames()
+        man = __import__("json").loads(t.extractfile("corridor3d/manifest.json").read())
+    assert "corridor3d/roads.json" in names and "corridor3d/buildings.json" not in names
+    assert man["layers_missing"] == ["buildings"]

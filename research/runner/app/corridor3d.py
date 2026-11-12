@@ -115,13 +115,19 @@ def dem_clip(tif_path: Path, box=BOX):
 def run(log, out_dir: Path):
     started = dt.datetime.now(dt.UTC).isoformat()
     layers, sources = {}, []
+    missing = []
     for name, qs in queries().items():
         seen, items = set(), []
-        for q in qs:
-            for x in slim(json.loads(get(OVERPASS, urllib.parse.urlencode({"data": q}).encode()))):
-                if (x["type"], x["id"]) not in seen:
-                    seen.add((x["type"], x["id"]))
-                    items.append(x)
+        try:
+            for q in qs:
+                for x in slim(json.loads(get(OVERPASS, urllib.parse.urlencode({"data": q}).encode()))):
+                    if (x["type"], x["id"]) not in seen:
+                        seen.add((x["type"], x["id"]))
+                        items.append(x)
+        except (OSError, ValueError) as e:
+            missing.append(name)
+            log(f"corridor3d {name} skipped, the map servers did not answer: {e}")
+            continue
         layers[name] = items
         log(f"corridor3d {name} {len(items)}")
     sources.append({"layers": list(layers), "source": "OpenStreetMap via the Overpass API (main instance, with public mirrors as fallback)", "licence": "ODbL 1.0",
@@ -146,7 +152,7 @@ def run(log, out_dir: Path):
     except (OSError, ImportError, ValueError) as e:
         log(f"corridor3d ground skipped: {e}")
     manifest = {"job": "corridor3d-v1", "prereg": "docs/PREREG-street-ledger.md", "status": "BASE DATA, NOT A FINDING",
-                "box_south_west_north_east": list(BOX), "started": started,
+                "box_south_west_north_east": list(BOX), "started": started, "layers_missing": missing,
                 "finished": dt.datetime.now(dt.UTC).isoformat(), "sources": sources,
                 "counts": {k: (len(v) if isinstance(v, list) else 1) for k, v in layers.items()}}
     out_dir.mkdir(exist_ok=True)
