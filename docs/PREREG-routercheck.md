@@ -23,4 +23,4 @@ arcroad's detour model routes on OpenStreetMap but does not obey OSM turn restri
 - Routers snap to the nearest road within 25 m; at complex junctions they can pick a service road. Such rows are kept and marked, not dropped.
 
 ## Changes
-(none yet)
+- 12 Nov 2026 (reporting only, no rule changed): a router 15% to 20% longer than the model has always been classed DIFFERS, but the summary table did not count that class, so its counts did not add up to the number of directions. The summary now counts all five classes. Every earlier night's rows are unaffected; their summaries were short by the DIFFERS rows (11 Nov: 2 for OSRM, 3 for Valhalla).

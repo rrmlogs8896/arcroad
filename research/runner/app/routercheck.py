@@ -19,6 +19,7 @@ VALHALLA = "https://valhalla1.openstreetmap.de/route"
 AGREE = 0.15          # pre-registered: within 15% of the model counts as agreement
 LONGER_FLAG = 0.20    # router at least 20% longer: possible banned U-turn used by the model
 SNAP_M = 25
+CLASSES = ("AGREES", "DIFFERS", "ROUTER_LONGER", "ROUTER_SHORTER", "NO_ROUTE")  # every class classify() returns
 
 
 def ratio(router_m, model_m):
@@ -54,7 +55,7 @@ def valhalla(a, b):
 def summarise(rows, key):
     cls = [r[key]["class"] for r in rows if key in r]
     n = len(cls)
-    return {k: cls.count(k) for k in ("AGREES", "ROUTER_LONGER", "ROUTER_SHORTER", "NO_ROUTE")} | {"n": n}
+    return {k: cls.count(k) for k in CLASSES} | {"n": n}
 
 
 def run(log):
