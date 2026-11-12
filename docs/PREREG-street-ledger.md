@@ -129,4 +129,34 @@ and copies no scene.
 
 ## Amendments
 
-(none yet)
+- 12 Nov 2026, 18:20 IST, before any v3 label exists and before any opening is scored: added the section
+  "U-turn openings: where one may not be needed, and where one may be missing" below.
+
+## U-turn openings: where one may not be needed, and where one may be missing
+
+Every median opening in the study area (`pipeline/medians.py`, as registered in
+`docs/PREREG-uturn-spacing.md`) gets one record, built from four sources:
+
+| Source | What it gives for each opening |
+|---|---|
+| OpenStreetMap road graph | **Detour saved:** the extra distance a U-turn movement would need if this opening were closed (shortest legal route with and without it) |
+| Drive recordings (GPS 1 per second, speed, heading) | **Time paid:** every U-turn made on a drive is found from the heading (a turn of 150° or more within 50 m), and the time from slowing below 10 km/h to leaving the turn is the wait at that opening. Also the within-pass speed ratio of H2 |
+| Photos (schema v3) | **Space taken:** queue spill into through lanes and lanes blocked within 150 m |
+| Open population and destination data | **Need:** residents (GHSL) and destinations (OpenStreetMap) within 500 m, used only as a ranking, since the population cross-check has not yet passed |
+
+**"Worth a second look: may not be needed."** An opening is listed only if all three hold: closing it adds
+less than 500 m to the U-turn movement (another opening or junction serves it); and it shows a cost, meaning
+a median wait of at least 60 seconds over at least 5 recorded U-turns, or queue spill in at least 20% of at
+least 10 photos; and a person checks it on the ground (the spacing study's ground check) before it is named.
+
+**"Worth a second look: a crossing may be missing."** A stretch of divided road is listed if crossing it
+needs at least 2 km of extra driving (model, and both public routers within 15% of the model), and at least
+2 photos within 300 m show a vehicle against the flow. *Competing explanation:* vehicles go against the flow
+to reach a gate or shop on the same side, not to cross. *Test:* the share of photos with a vehicle against
+the flow is compared between stretches with long crossings (2 km or more) and short ones (under 500 m) on the
+same road type and time band. The "missing crossing" reading is used only if it is at least 10 percentage
+points higher on the long stretches, with a 95% interval above zero. Otherwise the list is not published and
+the result says the photos cannot tell the two apart.
+
+Neither list says an opening causes a jam or that anyone should be blamed. Each is a list of places to
+check, with the measurement that would show whether a change helped.
