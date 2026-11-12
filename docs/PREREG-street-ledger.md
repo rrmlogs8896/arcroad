@@ -53,9 +53,12 @@ New in v3:
 | `multi_point_turn` | yes, no, unsure (a vehicle visibly reversing or stopped across lanes to complete a turn) |
 | `surface` | adds `waterlogged` |
 
-Left out: people walking or crossing, and foot over-bridges. arcroad's standing rules say nothing about
-walking. They change only if Rohit changes that rule, and then by a dated amendment here, before any label is
-counted.
+Added by amendment (13 Nov 2026), under the narrow exception now in AGENTS.md:
+
+| Field | Values |
+|---|---|
+| `people_on_carriageway` | none, crossing, along_the_edge, both, unsure |
+| `foot_over_bridge` | none, visible, unsure |
 
 ## The labels are checked before anything is counted
 
@@ -146,6 +149,10 @@ and copies no scene.
   model labels before Rohit fills the check: he fills it without opening the label file or any result, and the
   scoring tool alone reads both. Only photos taken during the drive and placed by their own GPS inside the study
   corridors are labelled; no other photo is sent to the model.
+- 13 Nov 2026, 00:35 IST, before any label is counted: Rohit lifted "nothing about walking" for two
+  photo-observed fields (people on the carriageway, a visible foot over-bridge), as a narrow exception written
+  into AGENTS.md. The schema becomes v3.1; about 180 photos labelled under v3 that night are labelled again so
+  every photo has the same fields. Glare is recorded as present or not; it is never linked to a crash.
 
 ## U-turn openings: where one may not be needed, and where one may be missing
 

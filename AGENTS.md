@@ -55,6 +55,13 @@ area of roughly ten million people, with zero recorded within 400 m of Abids or
 Secunderabad station. Absence in the map is not absence on the ground. Every
 published claim is about **driving**.
 
+*Narrow exception (13 Nov 2026, agreed with Rohit before any such label existed):* the street ledger's drive
+photos may record two things a camera sees directly: people on the carriageway (crossing, or along the edge)
+and a visible foot over-bridge. These come only from photos checked against a person's own labels, never from
+OpenStreetMap; they describe where people are on the road, never who they are or whether anyone did wrong; and
+they are reported as how often the road space was shared, never as a claim about pedestrian safety or walking
+in Hyderabad. Everything else in this section stands.
+
 **Nothing about intent.** We publish what an authority recorded and what we
 measured. Never what we think that means about anyone's motives, competence or
 honesty. A date eighteen months past its promise needs one document to prove
