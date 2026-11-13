@@ -153,6 +153,15 @@ and copies no scene.
   photo-observed fields (people on the carriageway, a visible foot over-bridge), as a narrow exception written
   into AGENTS.md. The schema becomes v3.1; about 180 photos labelled under v3 that night are labelled again so
   every photo has the same fields. Glare is recorded as present or not; it is never linked to a crash.
+- 13 Nov 2026, 17:15 IST, before any photo from the area below is labelled or any of its speeds is examined:
+  an exploratory area is added, the highway approach between the study corridors and the edge of the city,
+  first recorded on a 13 Nov trip by auto-rickshaw (a passenger trip counts as a drive). Photos and speeds from
+  it are labelled and reported separately, marked "exploratory, not tested", and never pooled into H1–H3 or
+  any registered result. The same privacy rules apply: nothing within 1 km of home, no people, no number
+  plates. Photos are chosen by trip time window, starting after the trip leaves the 1 km home zone.
+- 13 Nov 2026, 17:15 IST, correction of a citation, no change to any threshold: the 500 m spacing benchmark
+  for median openings is IRC:SP:84 cl. 2.14.1 (a highway concession manual, used here as a benchmark only);
+  IRC:SP:87 cl. 2.14 concerns emergency crossings and is no longer cited for it.
 
 ## U-turn openings: where one may not be needed, and where one may be missing
 
