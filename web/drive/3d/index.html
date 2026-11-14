@@ -128,6 +128,10 @@ footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var
   .solp h2{font-size:18px}.solp .nums b{font-size:21px}
   .stabs{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;padding:12px 10px}.stabs::-webkit-scrollbar{display:none}
   .stabs button{flex:none;padding:10px 14px}
+  .stabs{scroll-snap-type:x proximity;-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent);padding-right:44px}
+  .stabs button{scroll-snap-align:start}
+  .solp{padding-bottom:30px;-webkit-mask-image:linear-gradient(#000 calc(100% - 30px),transparent);mask-image:linear-gradient(#000 calc(100% - 30px),transparent)}
+  .pick select{flex-basis:100%}
 }
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 

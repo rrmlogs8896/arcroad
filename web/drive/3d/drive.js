@@ -636,7 +636,7 @@
     } else { nums.hidden = true; $('s-save').hidden = true; }
     $('s-range').hidden = SOL.k !== 'nearer';
     var rg = $('s-L'); rg.max = Math.max(150, nearDist() - 20); $('s-Lv').textContent = SOL.L + ' m';
-    Array.prototype.forEach.call(document.querySelectorAll('#s-tabs button'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-k') === SOL.k)); });
+    Array.prototype.forEach.call(document.querySelectorAll('#s-tabs button'), function (b) { var on = b.getAttribute('data-k') === SOL.k; b.setAttribute('aria-pressed', String(on)); if (on && b.parentNode && b.parentNode.scrollWidth > b.parentNode.clientWidth) { var pn = b.parentNode; pn.scrollTo({ left: Math.max(0, b.offsetLeft - 10), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); } });
   }
   function openSol(k) {
     if (S.mode === 'driving') { S.mode = 'paused'; playB.textContent = 'Resume'; }
