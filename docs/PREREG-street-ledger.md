@@ -162,6 +162,15 @@ and copies no scene.
 - 13 Nov 2026, 17:15 IST, correction of a citation, no change to any threshold: the 500 m spacing benchmark
   for median openings is IRC:SP:84 cl. 2.14.1 (a highway concession manual, used here as a benchmark only);
   IRC:SP:87 cl. 2.14 concerns emergency crossings and is no longer cited for it.
+- 14 Nov 2026, 13:30 IST, after the v3 label check and before any v3 result was computed: the v3 check failed.
+  Of 28 fields only light, view and animal on carriageway reached 80% agreement; the model mostly answered
+  "unsure" where Rohit was definite, and it had been given no definitions. No v3 field except those three is
+  used anywhere. Schema v4 keeps the same fields and adds a written definition for each, an instruction to
+  answer "unsure" only when the relevant part of the scene is not visible, and larger images (1,568 px). The
+  definitions were written after seeing where v3 disagreed with Rohit's 60 answers, so those 60 photos are no
+  longer a fair test: v4 is scored on a fresh draw of 40 photos (27 day, 13 night, seed recorded), excluding
+  the 60 and the exploratory trip, which Rohit labels without seeing any model label. The 80% threshold and
+  every other rule are unchanged. The v3 scores are kept and published with the result.
 
 ## U-turn openings: where one may not be needed, and where one may be missing
 
