@@ -17,6 +17,7 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+import adminmap
 import corridor3d
 import filer
 import hotspots
@@ -60,6 +61,11 @@ def repo():
         subprocess.run(["git", "clone", "--depth", "1", "https://github.com/rrmlogs8896/arcroad.git", str(work)],
                        check=True)
     return work
+
+
+def job_adminmap():
+    """One-off: open administrative map of Telangana (districts, mandals, places) for a district drill-down."""
+    return adminmap.run(log, OUT)
 
 
 def job_corridor3d():
@@ -175,9 +181,12 @@ def tonight(night):
     """The night's queue: a one-off Bengaluru check first, the standing jobs, then the Sunday brief."""
     first = [("bengaluru_remote", job_bengaluru_remote)] if night == BENGALURU_REMOTE_NIGHT else []
     last = [("viability", job_viability)] if viability.is_run_day(dt.date.fromisoformat(night)) else []
+    if night == ADMINMAP_NIGHT:
+        last = [*last, ("adminmap", job_adminmap)]  # after the standing jobs, so it cannot delay them
     return first + JOBS + last
 
 
+ADMINMAP_NIGHT = "2026-11-15"  # one night only: Sunday 15 Nov, 22:00 IST
 BENGALURU_REMOTE_NIGHT = "2026-11-07"  # moved from 6 Nov: that night ran the earlier version  # matches run_on in the private places file
 
 # Quick jobs first; openings (about 4.5 h on 4 Nov) last. remote reads tonight's routercheck and mapwatch.
