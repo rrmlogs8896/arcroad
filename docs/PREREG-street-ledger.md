@@ -171,6 +171,13 @@ and copies no scene.
   longer a fair test: v4 is scored on a fresh draw of 40 photos (27 day, 13 night, seed recorded), excluding
   the 60 and the exploratory trip, which Rohit labels without seeing any model label. The 80% threshold and
   every other rule are unchanged. The v3 scores are kept and published with the result.
+- 14 Nov 2026, 18:30 IST, after scoring v4 and before any v4 result is computed: v4 reached 80% overall agreement
+  on 16 of 28 fields, but on the photos where Rohit saw the item (U-turn queue 3, vehicle against flow 2,
+  stationary vehicle 2, large vehicle turning 1, multi-point turn 1) the model caught none, and parking 1 of 5.
+  Overall agreement is therefore not enough when an item is rare. Rule added for every future check: a field is
+  used only if it reaches 80% overall agreement AND the model finds at least 80% of the items the person saw,
+  with at least 10 such items in the check. No v4 field meets it, so no photo-derived rate is reported. Photos
+  are used only as person-verified evidence at named sites, chosen by GPS, never by model label.
 
 ## U-turn openings: where one may not be needed, and where one may be missing
 
