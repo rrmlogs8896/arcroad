@@ -156,8 +156,8 @@
   var SMALL = Math.min(screen.width, screen.height) < 700;
   var MEM = navigator.deviceMemory || 8, CORES = navigator.hardwareConcurrency || 8;
   var LOW = /[?&]q=low/.test(location.search) || MEM <= 2 || CORES <= 2;
-  var PR_MAX = Math.min(window.devicePixelRatio || 1, LOW ? 1.25 : (SMALL ? 1.75 : 2)), PR = PR_MAX;
-  var R = new T3.WebGLRenderer({ antialias: !LOW, powerPreference: LOW ? 'default' : 'high-performance' });
+  var PR_MAX = Math.min(window.devicePixelRatio || 1, LOW ? 1 : (SMALL ? 1.5 : 2)), PR = PR_MAX;
+  var R = new T3.WebGLRenderer({ antialias: !LOW && !(SMALL && (window.devicePixelRatio || 1) >= 2), powerPreference: LOW ? 'default' : 'high-performance' });
   R.setPixelRatio(PR);
   host.dataset.tier = LOW ? 'low' : (SMALL ? 'phone' : 'full');
   R.outputEncoding = T3.sRGBEncoding;
@@ -822,10 +822,16 @@
     running = false; if (!visible) return;
     var raw = last ? (now - last) / 1000 : 0.016, dt = Math.min(0.05, raw); last = now;
     if (raw < 0.25) { FT.n++; FT.s += raw; }
-    if (FT.n >= 90) {
+    if (FT.n >= 60) {
       var avg = FT.s / FT.n; FT.n = 0; FT.s = 0;
-      if (avg > 0.042 && PR > 1) { PR = Math.max(1, PR - 0.25); R.setPixelRatio(PR); size(); }
-      else if (avg < 0.02 && PR < PR_MAX) { PR = Math.min(PR_MAX, PR + 0.25); R.setPixelRatio(PR); size(); }
+      if (avg > 0.024) {
+        FT.good = 0;
+        if (PR > 1) { PR = Math.max(1, PR - 0.25); R.setPixelRatio(PR); size(); }
+        else if (!FT.lite) { FT.lite = []; scene.traverse(function (m) { if (m.userData && m.userData.night && m.isInstancedMesh) FT.lite.push(m); }); }
+      } else if (avg < 0.0175) {
+        FT.good = (FT.good || 0) + 1;
+        if (FT.good >= 3 && PR < PR_MAX) { FT.good = 0; PR = Math.min(PR_MAX, PR + 0.25); R.setPixelRatio(PR); size(); }
+      }
     }
     tick(dt, now); kick();
   }
@@ -867,6 +873,7 @@
     pins.forEach(function (g) { g.children[1].scale.setScalar(1 + 0.08 * Math.sin(now / 400)); });
     if (!SOL.on) { if (S.mode !== 'intro' || Math.abs(s - lastS) > 0.01 || !lastS) hud(s, kmh); lastS = s; drawStrip(S.dir, s); }
     if (LIGHT.glare && !SOL.on && !S.above && S.mode !== 'intro' && S.mode !== 'done') drawGlare(p); else clearGlare();
+    if (FT.lite) for (var li = 0; li < FT.lite.length; li++) FT.lite[li].visible = false;
     R.render(scene, cam);
   }
   function kick() { if (!running && visible) { running = true; requestAnimationFrame(frame); } }
