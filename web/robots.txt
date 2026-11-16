@@ -31,4 +31,5 @@ Allow: /
 Disallow: /globe/
 Disallow: /kit/
 Disallow: /m2/
+Disallow: /jury/
 Sitemap: https://arcroad.org/sitemap.xml
