@@ -82,17 +82,19 @@ def render(day: dict) -> str:
             f'<td>{e(r.get("kinds") or "")} · {e(r.get("tri_level") or "")}</td></tr>')
     rejected = [r for r in day["passes"] if r["verdict"] in ("REJECTED", "POOR_TRACK")]
     n_match = sum(r["verdict"] == "MATCH" for r in day["passes"])
+    # Headline uses the strict count: matches under rules fixed before the drive (18 Nov 2026 decision).
+    n_strict = sum(r["verdict"] == "MATCH" and not r.get("posthoc_rule") for r in day["passes"])
     n_graded = sum(r["verdict"] in ("MATCH", "SHORTER", "LONGER", "BETWEEN") for r in day["passes"])
     places = sorted({r["id"] for r in day["passes"] if r["level"] == 1})
     # Always name the direction: "S08 B → A, S10 A → B" (7 Nov review: a shared "A → B" read as applying to all).
     ph = sorted({f"{r['id']} {DIRS.get(r['dir'], '')}".strip() for r in day["passes"] if r.get("posthoc_rule")})
     if not ph:
         posthoc_note = ""
-    elif len(ph) == 1:
-        posthoc_note = f" {ph[0]} counts only under a rule changed after its drive was seen; see the limits below."
     else:
-        posthoc_note = (f" {', '.join(ph[:-1])} and {ph[-1]} count only under rules changed after their drives"
-                        " were seen; see the limits below.")
+        names = ph[0] if len(ph) == 1 else f"{', '.join(ph[:-1])} and {ph[-1]}"
+        judged = "was judged under a rule" if len(ph) == 1 else "were judged under rules"
+        posthoc_note = (f" Counting {names}, which {judged} changed after the drive was seen,"
+                        f" the figure is {n_match} of {n_graded}; see the limits below.")
     li = lambda xs: "".join(f"<li>{e(x)}</li>" for x in xs)  # noqa: E731
     ns = "".join(f'<li><b>{e(x["id"])}</b> ({e(short_date(x.get("date")))}): {e(x["why"])}</li>' for x in day["not_scored"])
     oos = "".join(f'<li><b>{e(r["id"])} {DIRS.get(r["dir"], "")}</b> ({e(short_date(r.get("date")))}): driven {km(r["driven_m"])}'
@@ -170,8 +172,8 @@ img,svg,canvas,video{{max-width:100%}}
 {NAV}
 <p class="eyebrow">arcroad · Hyderabad · driven {e(day["day"])}</p>
 <h1>We drove the detours the map predicted.</h1>
-<p class="lead">{n_match} of {n_graded} comparable directions matched the model, within a tolerance fixed before the drive.{posthoc_note}</p>
-<div class="stats"><div><b>{len(places)}</b><span>places now driven by arcroad</span></div><div><b>{n_match}/{n_graded}</b><span>directions matched the model</span></div><div><b>{len(rejected)}</b><span>passes rejected</span></div></div>
+<p class="lead">{n_strict} of {n_graded} comparable directions matched the model under the rules and tolerance fixed before the drive.{posthoc_note}</p>
+<div class="stats"><div><b>{len(places)}</b><span>places now driven by arcroad</span></div><div><b>{n_strict}/{n_graded}</b><span>matched under rules fixed before the drive</span></div><div><b>{len(rejected)}</b><span>passes rejected</span></div></div>
 <h2>Every pass</h2>
 <div class="wrap"><table>
 <thead><tr><th>Place</th><th>Date</th><th>Direction</th><th class="n">Straight across</th><th class="n">Model</th><th class="n">Driven</th><th class="n">Time</th><th>Verdict</th><th>Evidence level</th><th>Evidence kinds</th></tr></thead>

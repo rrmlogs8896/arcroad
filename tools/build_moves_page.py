@@ -48,7 +48,7 @@ def build(res):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>arcroad · Measure the loop before it opens · Cyberabad Moves 2026</title>
-<meta name="description" content="An open, pre-registered way to measure how much extra distance the proposed Hi-Tech City one-way loop adds, before it opens. arcroad's entry to the Cyberabad Moves 2026 Innovation Challenge.">
+<meta name="description" content="An open, pre-registered way to measure how much distance the proposed Hi-Tech City one-way loop adds, before it opens. Our Cyberabad Moves 2026 entry.">
 <link rel="canonical" href="https://arcroad.org/moves/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="arcroad">
@@ -135,7 +135,7 @@ footer{{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid va
 <ul>
 <li><b>Written before it was run.</b> The question, the threshold for "longer" (at least 100 m and 10%), the hypothesis and the competing explanation were fixed in a dated pre-registration before any distance was computed. Every later change is dated and applied to every result.</li>
 <li><b>Open.</b> OpenStreetMap data (ODbL), open routers, MIT-licensed code. Anyone can rerun it.</li>
-<li><b>Checked against the road.</b> arcroad has already driven its modelled detours at six Hyderabad places: 8 of 8 directions matched the model. <a href="../field/">See every pass</a>.</li>
+<li><b>Checked against the road.</b> arcroad has already driven its modelled detours at six Hyderabad places: 5 of 8 directions matched the model under rules fixed before driving (8 of 8 under later rules). <a href="../field/">See every pass</a>.</li>
 <li><b>Cheap to run.</b> A laptop, about three minutes, no paid data. The city could run it on any future change.</li>
 </ul>
 

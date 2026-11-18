@@ -68,7 +68,8 @@ def reuse(prefix: str) -> str:
     """One line in every footer: what is free to reuse (data, code) and what is not (name, logo, films, design)."""
     return ('<!-- reuse:start --><span class="sn-reuse">© 2026 arcroad. Data (ODbL) and code (MIT) are free to reuse with credit; '
             'the arcroad name, logo, films and design are not. '
-            f'<a href="{prefix}reuse/">What you may reuse</a></span><!-- reuse:end -->')
+            f'<a href="{prefix}reuse/">What you may reuse</a> · <a href="{prefix}terms/">Terms</a> · '
+            f'<a href="{prefix}privacy/">Privacy</a></span><!-- reuse:end -->')
 
 
 REUSE = re.compile(r"<!-- reuse:start -->.*?<!-- reuse:end -->", re.S)
@@ -109,6 +110,8 @@ PAGES = {
     "reuse/index.html": ("../", "reuse/", True),
     "moves/index.html": ("../", "moves/", True),
     "uturns/index.html": ("../", "uturns/", True),
+    "terms/index.html": ("../", "terms/", True),
+    "privacy/index.html": ("../", "privacy/", True),
 }
 
 FIRST_NAV = re.compile(r'<nav class="top" aria-label="arcroad">.*?</nav>|<nav class="sitenav" aria-label="arcroad">.*?</nav>'
