@@ -1,3 +1,4 @@
+import datetime as _dt
 import pathlib
 import re
 import struct
@@ -17,7 +18,13 @@ def jpeg_size(path):
     raise ValueError(path)
 
 
-PAGES = [p for p in WEB.rglob("index.html") if "media" not in p.parts] + [WEB / "act.html"]
+# The jury preview is private (passcode, noindex) until 6 Dec 2026, so it is held to the public-page
+# rules only from that date. The date check makes this exclusion expire on its own.
+def _public(p):
+    return "jury" not in p.parts or _dt.date.today() >= _dt.date(2026, 12, 6)
+
+
+PAGES = [p for p in WEB.rglob("index.html") if "media" not in p.parts and _public(p)] + [WEB / "act.html"]
 
 
 def test_every_page_has_a_share_card():

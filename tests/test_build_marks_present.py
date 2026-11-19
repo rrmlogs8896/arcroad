@@ -1,4 +1,5 @@
 """Every published page, script, stylesheet and data file carries its build mark (8 Nov 2026)."""
+import datetime as _dt
 import json
 import pathlib
 import re
@@ -6,9 +7,14 @@ import re
 WEB = pathlib.Path(__file__).resolve().parents[1] / "web"
 TOKEN = r"ar-[0-9a-f]{12}"
 
+# The jury preview is private (passcode, noindex) until 6 Dec 2026, so it is held to the public-page
+# rules only from that date. The date check makes this exclusion expire on its own.
+def _public(p):
+    return "jury" not in p.parts or _dt.date.today() >= _dt.date(2026, 12, 6)
+
 
 def _files(ext):
-    return [p for p in WEB.rglob(f"*.{ext}") if "vendor" not in p.parts]
+    return [p for p in WEB.rglob(f"*.{ext}") if "vendor" not in p.parts and _public(p)]
 
 
 def test_html_pages_carry_a_build_mark():

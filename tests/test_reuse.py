@@ -5,12 +5,19 @@ it (the page source is always readable), would break accessibility, and would co
 licences arcroad publishes under. Instead: a clear reuse notice on every page, a /reuse/ page, no framing,
 and AI-training crawlers asked not to collect the pages.
 """
+import datetime as _dt
 import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web"
-PUBLIC = [p for p in WEB.rglob("*.html") if "globe" not in p.parts and "kit" not in p.parts and "m2" not in p.parts]
+# The jury preview is private (passcode, noindex) until 6 Dec 2026, so it is held to the public-page
+# rules only from that date. The date check makes this exclusion expire on its own.
+def _public(p):
+    return "jury" not in p.parts or _dt.date.today() >= _dt.date(2026, 12, 6)
+
+
+PUBLIC = [p for p in WEB.rglob("*.html") if "globe" not in p.parts and "kit" not in p.parts and "m2" not in p.parts and _public(p)]
 
 
 def test_every_public_page_carries_the_reuse_line():
