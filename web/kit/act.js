@@ -67,6 +67,9 @@
   function today() { return new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }); }
   function lines(parent, arr) { arr.forEach(function (t, i) { if (i) parent.appendChild(document.createElement('br')); parent.appendChild(document.createTextNode(t)); }); }
   function say(t) { $('msg').textContent = t; }
+  // Language of parts (WCAG 3.1.2): translated lines carry their own lang so screen readers
+  // switch voice and print picks the right script; English labels and figures stay 'en'.
+  function inLang(e, code) { if (code && code !== 'en') e.setAttribute('lang', code); return e; }
 
   var current = null, lang = 'en';
   [].forEach.call(document.querySelectorAll('.langs button'), function (b) {
@@ -85,12 +88,12 @@
     var from = el('p', 'blk'); from.appendChild(el('span', 'lab', 'From')); from.appendChild(document.createElement('br')); lines(from, L.from); p.appendChild(from);
     p.appendChild(el('p', 'blk', 'Date: ' + L.date));
     var to = el('p', 'blk'); to.appendChild(el('span', 'lab', 'To')); to.appendChild(document.createElement('br')); lines(to, L.to); p.appendChild(to);
-    p.appendChild(el('p', 'blk subj', 'Subject: ' + L.subject));
+    var subj = el('p', 'blk subj', 'Subject: '); subj.appendChild(inLang(el('span', null, L.subject), L.lang)); p.appendChild(subj);
     var t = el('table'); L.glance.forEach(function (g) { var tr = el('tr'); tr.appendChild(el('td', null, g[0])); tr.appendChild(el('td', null, g[1])); t.appendChild(tr); }); p.appendChild(t);
-    L.body.forEach(function (b) { p.appendChild(el('p', 'blk', b)); });
-    var ol = el('ol'); ol.setAttribute('type', 'a'); L.options.forEach(function (o) { ol.appendChild(el('li', null, o)); }); p.appendChild(ol);
-    L.close.forEach(function (c) { p.appendChild(el('p', 'blk', c)); });
-    var so = el('p', 'blk'); lines(so, L.signoff); p.appendChild(so);
+    L.body.forEach(function (b) { p.appendChild(inLang(el('p', 'blk', b), L.lang)); });
+    var ol = inLang(el('ol'), L.lang); ol.setAttribute('type', 'a'); L.options.forEach(function (o) { ol.appendChild(el('li', null, o)); }); p.appendChild(ol);
+    L.close.forEach(function (c) { p.appendChild(inLang(el('p', 'blk', c), L.lang)); });
+    var so = inLang(el('p', 'blk'), L.lang); lines(so, L.signoff); p.appendChild(so);
     var cc = el('p', 'blk'); cc.appendChild(el('span', 'lab', 'Copy to')); var ccl = el('ol'); L.copyTo.forEach(function (c) { ccl.appendChild(el('li', null, c)); }); p.appendChild(cc); p.appendChild(ccl);
     p.appendChild(el('p', 'blk', 'Enclosure: ' + L.enclosure));
     p.appendChild(el('p', 'foot', L.footer));
