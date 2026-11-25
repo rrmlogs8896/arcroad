@@ -21,8 +21,8 @@
 <meta name="twitter:image" content="https://arcroad.org/og/drive.jpg">
 <meta name="theme-color" content="#05070B"><meta name="color-scheme" content="dark"><meta name="format-detection" content="telephone=no">
 <style>
-:root{--bg:#05070B;--fg:#E8EAED;--mute:#9AA0A6;--faint:#7D858E;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0;--warn:#E5C07B;--card:#0E1116}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+:root{--bg:#05070B;--fg:#E8EAED;--mute:#9AA0A6;--faint:#7D858E;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0;--warn:#E5C07B;--card:#0E1116}/* art1q-oklch */@supports (color:oklch(0% 0 0)){:root{--bg:oklch(12.77% 0.0108 259.64);--fg:oklch(93.64% 0.0046 258.33);--mute:oklch(70.28% 0.0111 247.99);--faint:oklch(61.30% 0.0166 251.25);--line:oklch(24.21% 0.0129 258.37);--accent:oklch(78.23% 0.0957 55.34);--ok:oklch(76.50% 0.0911 161.14);--warn:oklch(82.49% 0.0970 82.26)}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;}
 main{max-width:1180px;margin:0 auto;padding:40px 22px 80px}a{color:var(--accent)}
 .top{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-bottom:26px}.top a{color:var(--mute);text-decoration:none}.top a:hover{color:var(--fg)}
 .eyebrow{font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
@@ -31,16 +31,16 @@ p.lead{font-size:clamp(16px,2.2vw,19px);color:#C9CDD2;max-width:720px;margin:0}
 .stage{position:relative;margin:28px 0 0;border-radius:18px;overflow:hidden;background:#0B0E13;aspect-ratio:16/9;border:1px solid var(--line);outline:none;isolation:isolate}
 .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}.hud,.dash,.result,.strip,.intro{z-index:1}
 .hud{position:absolute;left:16px;right:76px;top:14px;display:flex;justify-content:space-between;gap:12px;pointer-events:none;font:500 11px/1.3 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,234,237,.8);text-shadow:0 1px 6px rgba(0,0,0,.8)}
-.hud b{display:block;font:600 24px/1.1 Inter,system-ui,sans-serif;letter-spacing:-.01em;text-transform:none;color:#fff;font-variant-numeric:tabular-nums}
+.hud b{display:block;font:600 24px/1.1 Inter,system-ui,sans-serif;letter-spacing:-.01em;text-transform:none;color:#F5F6F7;font-variant-numeric:tabular-nums}
 .hud .sub{display:block;margin-top:3px;color:rgba(232,234,237,.62)}
 .hud .r{text-align:right}
 .chip{display:inline-block;margin-top:6px;padding:2px 8px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(5,7,11,.45)}
 .strip{position:absolute;right:16px;top:16px;bottom:84px;width:44px;border-radius:12px;background:rgba(5,7,11,.55);border:1px solid rgba(255,255,255,.12);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .strip canvas{position:absolute;inset:0;width:100%;height:100%}
 .dash{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:linear-gradient(transparent,rgba(0,0,0,.7))}
-.spd{font:600 34px/1 Inter,system-ui,sans-serif;color:#fff;text-shadow:0 1px 8px #000;font-variant-numeric:tabular-nums}.spd small{font:500 11px ui-monospace,monospace;letter-spacing:.12em;color:rgba(232,234,237,.7);margin-left:6px}
+.spd{font:600 34px/1 Inter,system-ui,sans-serif;color:#F5F6F7;text-shadow:0 1px 8px #000;font-variant-numeric:tabular-nums}.spd small{font:500 11px ui-monospace,monospace;letter-spacing:.12em;color:rgba(232,234,237,.7);margin-left:6px}
 .btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-.b{appearance:none;border:1px solid rgba(255,255,255,.22);background:rgba(10,12,16,.6);color:#fff;border-radius:999px;padding:12px 18px;font:500 14.5px Inter,system-ui,sans-serif;cursor:pointer;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:transform .15s,border-color .2s,background .2s;text-decoration:none;display:inline-block}
+.b{appearance:none;border:1px solid rgba(255,255,255,.22);background:rgba(10,12,16,.6);color:#F5F6F7;border-radius:999px;padding:12px 18px;font:500 14.5px Inter,system-ui,sans-serif;cursor:pointer;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:transform .15s,border-color .2s,background .2s;text-decoration:none;display:inline-block}
 .b:hover{border-color:var(--accent)}.b:active{transform:scale(.97)}
 .b.p{background:var(--accent);color:#0B0D10;border-color:var(--accent)}
 .b:disabled{opacity:.45;cursor:default}
@@ -62,9 +62,9 @@ p.lead{font-size:clamp(16px,2.2vw,19px);color:#C9CDD2;max-width:720px;margin:0}
 .stage:fullscreen{width:100vw;height:100vh;border-radius:0;aspect-ratio:auto}
 body.diving{overflow:hidden}
 .stage.dive canvas{touch-action:none;cursor:grab}.stage.dive canvas:active{cursor:grabbing}
-.dive-x{display:none;position:absolute;top:max(14px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:6;appearance:none;border:1px solid rgba(255,255,255,.28);background:rgba(10,12,16,.62);color:#fff;border-radius:999px;padding:9px 16px;font:500 13.5px Inter,system-ui,sans-serif;cursor:pointer;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.dive-x{display:none;position:absolute;top:max(14px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:6;appearance:none;border:1px solid rgba(255,255,255,.28);background:rgba(10,12,16,.62);color:#F5F6F7;border-radius:999px;padding:9px 16px;font:500 13.5px Inter,system-ui,sans-serif;cursor:pointer;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .stage.dive .dive-x{display:block}
-.dhint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0;z-index:5;padding:10px 16px;border-radius:999px;background:rgba(10,12,16,.6);color:#fff;font:500 13.5px Inter,system-ui,sans-serif;opacity:0;transition:opacity .6s;pointer-events:none;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.dhint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0;z-index:5;padding:10px 16px;border-radius:999px;background:rgba(10,12,16,.6);color:#F5F6F7;font:500 13.5px Inter,system-ui,sans-serif;opacity:0;transition:opacity .6s;pointer-events:none;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .dhint.on{opacity:1}
 .b.dv{border-color:rgba(226,116,59,.7)}
 .b.dv.pulse{animation:dvp 1.6s ease-in-out 4}
@@ -72,7 +72,7 @@ body.diving{overflow:hidden}
 .stage.capture .dive-x,.stage.capture .dhint{display:none}
 .ctl .hint{margin:10px 0 0;font-size:12.5px;line-height:1.55;color:var(--faint)}.ctl .hint a{color:var(--accent)}
 .glare{position:absolute;inset:0;pointer-events:none;z-index:2;mix-blend-mode:screen}
-.seg button:hover{color:var(--fg)}.seg button[aria-pressed=true]{color:#fff;border-color:var(--accent);background:rgba(232,168,124,.1)}
+.seg button:hover{color:var(--fg)}.seg button[aria-pressed=true]{color:#F5F6F7;border-color:var(--accent);background:rgba(232,168,124,.1)}
 h2.sec{font-size:22px;margin:48px 0 10px;font-weight:600}
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:14px}
 .facts div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}.facts b{display:block;font-size:26px;letter-spacing:-.01em;margin-bottom:4px;font-variant-numeric:tabular-nums}.facts span{color:#C9CDD2;font-size:14.5px}
@@ -113,7 +113,7 @@ footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var
 .solp .more2{display:none;appearance:none;background:none;border:0;padding:6px 0;color:var(--accent);font:500 13.5px Inter,system-ui,sans-serif;cursor:pointer}
 .stabs{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;display:none;justify-content:center;gap:8px;flex-wrap:wrap;background:linear-gradient(transparent,rgba(0,0,0,.72));z-index:2}
 .stabs button{appearance:none;border:1px solid rgba(255,255,255,.18);background:rgba(10,12,16,.62);color:#C9CDD2;border-radius:999px;padding:10px 16px;font:500 13.5px Inter,system-ui,sans-serif;cursor:pointer;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:border-color .15s,color .15s,background .15s}
-.stabs button:hover{color:#fff;border-color:rgba(255,255,255,.35)}.stabs button[aria-pressed=true]{color:#0B0D10;background:var(--accent);border-color:var(--accent)}
+.stabs button:hover{color:#F5F6F7;border-color:rgba(255,255,255,.35)}.stabs button[aria-pressed=true]{color:#0B0D10;background:var(--accent);border-color:var(--accent)}
 .stabs .back{background:none;border-color:transparent;color:var(--mute)}
 .stage.sol .solp{display:block}.stage.sol .stabs{display:flex}
 .stage.sol .hud,.stage.sol .strip,.stage.sol .dash,.stage.sol .intro,.stage.sol .result{display:none!important}
@@ -167,10 +167,12 @@ img,svg,canvas,video{max-width:100%}
 </style>
 <link rel="stylesheet" href="../../nav.css" id="sn-css">
 <script src="../../nav.js" defer id="sn-js"></script>
+<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icon-180.png"><meta name="apple-mobile-web-app-title" content="arcroad">
 </head>
 <body>
+<!-- event:start --><div class="ev-banner" role="note" style="background:#0f1720;color:#e9eef2;font:500 13px/1.45 Inter,system-ui,sans-serif;text-align:center;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.08)"><a href="/moves/" style="color:inherit;text-decoration:none"><span style="display:inline-block;margin-right:8px;padding:1px 9px;border:1px solid #e8b86a;border-radius:999px;color:#e8b86a;font-weight:600;letter-spacing:.02em">Shortlisted</span>Cyberabad Moves 2026, Citizens Innovation Challenge. On display at T-Hub, Raidurg, 26 to 28 November <span style="text-decoration:underline;text-underline-offset:3px">See the entry</span></a></div><!-- event:end -->
 <main>
-<!-- nav:start --><nav class="sn inline" aria-label="arcroad"><a class="sn-home" href="../../">arcroad</a><a class="sn-i" href="../../drive/" aria-current="page">Drive it</a><div class="sn-g"><button class="sn-i" type="button" aria-expanded="false" aria-controls="sn-findings">Findings</button><div class="sn-p" id="sn-findings"><a href="../../field/"><b>Driven results</b><span>Every pass we drove, by direction</span></a><a href="../../evidence/"><b>Evidence</b><span>What studies show about roads and behaviour</span></a><a href="../../globe/"><b>Globe</b><span>29 cities, from orbit to your street</span></a><a href="../../data/"><b>Open data</b><span>Download the counts, free to use</span></a></div></div><div class="sn-g"><button class="sn-i" type="button" aria-expanded="false" aria-controls="sn-cost">Your cost</button><div class="sn-p" id="sn-cost"><a href="../../cost/"><b>Cost calculator</b><span>Your crossing in rupees and minutes</span></a><a href="../../roads/"><b>What else the road costs</b><span>Barricades, works, parking, surface</span></a><a href="../../roads/glare/"><b>Night glare</b><span>An oncoming high beam, from the driver's seat</span></a><a href="../../act.html"><b>Write to the people responsible</b><span>A ready letter for each place</span></a></div></div><div class="sn-g"><button class="sn-i" type="button" aria-expanded="false" aria-controls="sn-part">Take part</button><div class="sn-p" id="sn-part"><a href="../../volunteer/"><b>Volunteer</b><span>Measure your own city</span></a><a href="../../report/"><b>Report a change</b><span>A median opening opened or closed</span></a></div></div><a class="sn-i" href="../../help/">Help</a></nav><!-- nav:end -->
+<!-- nav:start --><nav class="sn inline" aria-label="arcroad"><a class="sn-home" href="../../">arcroad</a><a class="sn-i" href="../../drive/" aria-current="page">Drive it</a><div class="sn-g"><button class="sn-i" type="button" aria-expanded="false" aria-controls="sn-findings">Findings</button><div class="sn-p" id="sn-findings"><a href="../../field/"><b>Driven results</b><span>Every pass we drove, by direction</span></a><a href="../../evidence/"><b>Evidence</b><span>What studies show about roads and behaviour</span></a><a href="../../globe/"><b>Globe</b><span>29 cities, from orbit to your street</span></a><a href="../../data/"><b>Open data</b><span>Download the counts, free to use</span></a></div></div><div class="sn-g"><button class="sn-i" type="button" aria-expanded="false" aria-controls="sn-cost">Your cost</button><div class="sn-p" id="sn-cost"><a href="../../cost/"><b>Cost calculator</b><span>Your crossing in rupees and minutes</span></a><a href="../../roads/"><b>What else the road costs</b><span>Barricades, works, parking, surface</span></a><a href="../../roads/glare/"><b>Night glare</b><span>An oncoming high beam, from the driver's seat</span></a><a href="../../act.html"><b>Write to the people responsible</b><span>A ready letter for each place</span></a></div></div><div class="sn-g"><button class="sn-i" type="button" aria-expanded="false" aria-controls="sn-part">Take part</button><div class="sn-p" id="sn-part"><a href="../../volunteer/"><b>Volunteer</b><span>Measure your own city</span></a><a href="../../report/"><b>Report a change</b><span>A median opening opened or closed</span></a><a href="../../roadmap/"><b>What comes next</b><span>Plans for Hyderabad and other cities</span></a></div></div><a class="sn-i" href="../../help/">Help</a></nav><!-- nav:end -->
 <p class="eyebrow">arcroad · ride the detour in 3D · <a href="../" style="color:inherit">Map view</a></p>
 <h1 id="p-h1">13 metres across.</h1>
 <p class="lead" id="p-lead">HITEC City–Kukatpally Main Road, KPHB Colony. The other side is 13 m away, and there is no way across. Take the wheel for the detour we drove on 1 Nov 2026, on its real clock.</p>
@@ -245,9 +247,10 @@ img,svg,canvas,video{max-width:100%}
 <p class="note">The monthly figures assume one crossing each way on every working day (22 days) and use the cost calculator's own figures: petrol at ₹116.15/L (Hyderabad, 16 Oct 2026), 50 km/L for a two-wheeler and 16 km/L for a car. They count fuel only. This page says nothing about walking: arcroad measures driving.</p>
 </details>
 
-<footer>Map data © OpenStreetMap contributors (ODbL). Measurements by arcroad (ODbL). Three.js (MIT), self-hosted. Nothing is stored or sent. <a href="../../field/">See every pass we drove</a><!-- reuse:start --><span class="sn-reuse">© 2026 arcroad. Data (ODbL) and code (MIT) are free to reuse with credit; the arcroad name, logo, films and design are not. <a href="../../reuse/">What you may reuse</a> · <a href="../../terms/">Terms</a> · <a href="../../privacy/">Privacy</a></span><!-- reuse:end --></footer>
+<footer>Map data © OpenStreetMap contributors (ODbL). Measurements by arcroad (ODbL). Three.js (MIT), self-hosted. Nothing is stored or sent. <a href="../../field/">See every pass we drove</a><!-- reuse:start --><span class="sn-reuse">Made by Rohit and Team arcroad. © 2026 arcroad. Data (ODbL) and code (MIT) are free to reuse with credit; the arcroad name, logo, films and design are not. <a href="../../reuse/">What you may reuse</a> · <a href="../../terms/">Terms</a> · <a href="../../privacy/">Privacy</a></span><!-- reuse:end --><p class="fine-proof" style="font-size:.92em;margin-top:.6em">The original files are fingerprinted and independently timestamped by public timestamp authorities, so the original can always be told from a copy. Reuse is welcome under the licences above; passing this work off as someone else’s is not.</p></footer>
 </main>
 <script src="../vendor/three.min.js"></script>
 <script src="drive.js"></script>
+<script src="/ask.js" defer></script>
 </body>
 </html>

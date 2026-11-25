@@ -34,6 +34,7 @@ GROUPS = [
     ("part", "Take part", [
         ("volunteer/", "Volunteer", "Measure your own city"),
         ("report/", "Report a change", "A median opening opened or closed"),
+        ("roadmap/", "What comes next", "Plans for Hyderabad and other cities"),
     ]),
 ]
 
@@ -66,7 +67,7 @@ def nav(prefix: str, current: str, brand: bool = True) -> str:
 
 def reuse(prefix: str) -> str:
     """One line in every footer: what is free to reuse (data, code) and what is not (name, logo, films, design)."""
-    return ('<!-- reuse:start --><span class="sn-reuse">© 2026 arcroad. Data (ODbL) and code (MIT) are free to reuse with credit; '
+    return ('<!-- reuse:start --><span class="sn-reuse">Made by Rohit and Team arcroad. © 2026 arcroad. Data (ODbL) and code (MIT) are free to reuse with credit; '
             'the arcroad name, logo, films and design are not. '
             f'<a href="{prefix}reuse/">What you may reuse</a> · <a href="{prefix}terms/">Terms</a> · '
             f'<a href="{prefix}privacy/">Privacy</a></span><!-- reuse:end -->')
@@ -107,6 +108,7 @@ PAGES = {
     "roads/index.html": ("../", "roads/", True),
     "roads/glare/index.html": ("../../", "roads/glare/", True),
     "volunteer/index.html": ("../", "volunteer/", True),
+    "roadmap/index.html": ("../", "roadmap/", True),
     "reuse/index.html": ("../", "reuse/", True),
     "moves/index.html": ("../", "moves/", True),
     "uturns/index.html": ("../", "uturns/", True),

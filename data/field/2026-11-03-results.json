@@ -20,7 +20,7 @@
   {"id": "S04", "why": "passed along the road only, no U-turn: no crossing to score"}
  ],
  "limitations": [
-  "Night drive, 21:13-22:14 IST on a Tuesday; times at night are shorter than at peak hours.",
+  "Night drive on a Tuesday; times at night are shorter than at peak hours.",
   "S10 and S08 count only under the loop rule, written on 3 Nov 2026 after this drive was seen (docs/PREREG-loop-rule.md). At these places the two sides are 13-17 m apart, too close for phone GPS to tell them apart, so the side a loop started on is read from the direction of travel. Re-applied to the 2 Nov drive, it agreed with the published S12 result and changed nothing.",
   "Phone GPS at 1 Hz; distances carry roughly ±50 m of noise on a 1-3 km loop.",
   "Photos from this drive are private and were not used in scoring."

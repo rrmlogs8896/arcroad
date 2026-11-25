@@ -1,0 +1,79 @@
+{
+ "day": "2026-11-20",
+ "driver": "arcroad (one driver, one car, phone GPS at 1 Hz)",
+ "model": "OpenStreetMap extract 25 Oct 2026",
+ "method": "pipeline/groundtruth.py (pairing rule as amended 2 Nov 2026; loop rule, docs/PREREG-loop-rule.md), pipeline/fieldscore.py, pipeline/evidence.py",
+ "passes": [
+  {
+   "id": "S13",
+   "dir": "ab",
+   "driven_m": 939.9,
+   "seconds": 383,
+   "date": "2026-11-20",
+   "photos_usable": 0,
+   "straight_m": 12.5,
+   "model_m": 976.1,
+   "verdict": "MATCH",
+   "reason": "",
+   "level": 1,
+   "label": "Driven by arcroad",
+   "kinds": "S",
+   "tri_level": "candidate"
+  },
+  {
+   "id": "S11",
+   "dir": "ab",
+   "driven_m": 5158.8,
+   "seconds": 1265,
+   "date": "2026-11-20",
+   "photos_usable": 0,
+   "straight_m": 35.1,
+   "model_m": 1841.3,
+   "verdict": "POOR_TRACK",
+   "reason": "gaps in the recording",
+   "level": 3,
+   "label": "Modelled",
+   "kinds": "",
+   "tri_level": "none"
+  },
+  {
+   "id": "S12",
+   "dir": "ba",
+   "driven_m": 6634.0,
+   "seconds": 1513,
+   "date": "2026-11-20",
+   "photos_usable": 0,
+   "straight_m": 17.3,
+   "model_m": 981.3,
+   "verdict": "POOR_TRACK",
+   "reason": "gaps in the recording",
+   "level": 3,
+   "label": "Modelled",
+   "kinds": "",
+   "tri_level": "none"
+  }
+ ],
+ "not_scored": [],
+ "limitations": [
+  "Evening drive on a Friday. Phone GPS at 1 Hz; fixes worse than 20 m were dropped before scoring.",
+  "Scored under rules fixed before this drive was seen (the 2 Nov pairing rule and the 3 Nov loop rule); no rule was changed for it. S13 A to B is read by the loop rule, because its two points are 12.5 m apart.",
+  "S11 A to B and S12 B to A were driven but the recording has a 23 second gap inside each pass, over the 15 second limit, so neither is counted. S11 A to B is to be driven again.",
+  "Photos were taken on this drive but are not scored as evidence here: the photo rule (P) was not applied to them."
+ ],
+ "photos": [
+  {
+   "src": "photos/s13-red-light-queue.jpg",
+   "w": 1280,
+   "h": 735,
+   "alt": "Cars queue at a red signal beside a planted median, early evening.",
+   "caption": "S13, 20 Nov: waiting at the red light beside the place, just before the loop."
+  },
+  {
+   "src": "photos/s13-u-turn-opening.jpg",
+   "w": 1280,
+   "h": 735,
+   "alt": "Cars, autos and two-wheelers bunch at a single U-turn opening in the median.",
+   "caption": "S13, 20 Nov: the U-turn opening about 450 m from the place, which the A → B route has to use. Cars, autos, two-wheelers and trucks share one opening."
+  }
+ ]
+}

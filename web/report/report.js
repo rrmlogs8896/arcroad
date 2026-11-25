@@ -1,11 +1,13 @@
 /* Report a change: built in the browser, sent from the citizen's own email. No storage, no network. */
 (function () {
   'use strict';
-  var REPORT_TO = ''; // set to the project address once hello@arcroad.org is live
+  var REPORT_TO = 'hello@arcroad.org';
+  /* A reference made on this device so the sender and arcroad can refer to the same report. Not stored anywhere. */
+  var REF = 'AR-R-' + (function(){var d=new Date(),p=function(n){return (n<10?'0':'')+n};return String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate())})() + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
   var $ = function (id) { return document.getElementById(id); };
   var pos = null;
   function text() {
-    var lines = ['Report to arcroad', '', 'What changed: ' + ($('what').value || '(not chosen)'), 'Road and landmark: ' + ($('road').value || '(not given)'),
+    var lines = ['Report to arcroad · reference ' + REF, '', 'What changed: ' + ($('what').value || '(not chosen)'), 'Road and landmark: ' + ($('road').value || '(not given)'),
       'Noticed on: ' + ($('when').value || '(not given)')];
     if (pos) lines.push('Location: ' + pos.lat.toFixed(5) + ', ' + pos.lon.toFixed(5) + ' (accuracy about ' + Math.round(pos.acc) + ' m)',
       'Map: https://www.openstreetmap.org/?mlat=' + pos.lat.toFixed(6) + '&mlon=' + pos.lon.toFixed(6) + '#map=19/' + pos.lat.toFixed(6) + '/' + pos.lon.toFixed(6));
@@ -27,8 +29,8 @@
     e.preventDefault();
     if (!$('what').value) { $('msg').textContent = 'Choose what changed first.'; $('what').focus(); return; }
     render();
-    $('msg').textContent = REPORT_TO ? 'Your mail app should open. Attach a photo there if you have one.' : 'Your mail app should open. arcroad\'s address goes live very soon; until then, copy the report and keep it.';
-    location.href = 'mailto:' + REPORT_TO + '?subject=' + encodeURIComponent('arcroad report: ' + $('what').value) + '&body=' + encodeURIComponent(text());
+    $('msg').textContent = REPORT_TO ? 'Your mail app should open. Attach a photo there if you have one. Your reference is ' + REF + '.' : 'Your mail app should open. arcroad\'s address goes live very soon; until then, copy the report and keep it.';
+    location.href = 'mailto:' + REPORT_TO + '?subject=' + encodeURIComponent('[arcroad report] ' + REF + ' · ' + $('what').value) + '&body=' + encodeURIComponent(text());
   });
   $('copy').addEventListener('click', function () {
     render();

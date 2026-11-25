@@ -1,9 +1,9 @@
 {
  "built_from": "data/field/*-results.json (passes that matched the model, road-class rule applied)",
- "drives": "1 to 7 Nov 2026",
+ "drives": "1 to 21 Nov 2026",
  "drive_dates": [
   "2026-11-01",
-  "2026-11-07"
+  "2026-11-21"
  ],
  "passes": [
   {
@@ -61,6 +61,20 @@
    "date": "2026-11-07",
    "extra_km": 2.13,
    "kmh": 16.0
+  },
+  {
+   "place": "S13",
+   "dir": "ab",
+   "date": "2026-11-20",
+   "extra_km": 0.93,
+   "kmh": 8.8
+  },
+  {
+   "place": "S11",
+   "dir": "ba",
+   "date": "2026-11-21",
+   "extra_km": 0.29,
+   "kmh": 16.0
   }
  ],
  "cards": [
@@ -73,10 +87,10 @@
     "days": 300,
     "occ": 1,
     "veh": "tw",
-    "km": 1.55,
-    "spd": 17
+    "km": 1.31,
+    "spd": 16
    },
-   "source": "Median of 8 driven passes at 6 places"
+   "source": "Median of 10 driven passes at 7 places"
   },
   {
    "key": "short",
@@ -87,10 +101,10 @@
     "days": 300,
     "occ": 1,
     "veh": "tw",
-    "km": 0.39,
-    "spd": 17
+    "km": 0.29,
+    "spd": 16
    },
-   "source": "Place S08, driven 3 Nov 2026"
+   "source": "Place S11, driven 21 Nov 2026"
   },
   {
    "key": "long",

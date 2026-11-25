@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://arcroad.org/og/home.jpg">
 <style>
-:root{--bg:#0B0D10;--fg:#E8EAED;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0;--card:#11151A}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+:root{--bg:#0B0D10;--fg:#E8EAED;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0;--card:#11151A}/* art1q-oklch */@supports (color:oklch(0% 0 0)){:root{--bg:oklch(15.82% 0.0072 258.37);--fg:oklch(93.64% 0.0046 258.33);--mute:oklch(70.28% 0.0111 247.99);--line:oklch(24.21% 0.0129 258.37);--accent:oklch(78.23% 0.0957 55.34);--ok:oklch(76.50% 0.0911 161.14)}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;}
 main{max-width:980px;margin:0 auto;padding:48px 22px 80px}a{color:var(--accent)}
 .top{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-bottom:28px}.top a{color:var(--mute);text-decoration:none}.top a:hover{color:var(--fg)}
 .eyebrow{font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 10px}
@@ -74,10 +74,12 @@ select:focus,input:focus,textarea:focus{outline:2px solid var(--accent);outline-
 </style>
 <link rel="stylesheet" href="../nav.css" id="sn-css">
 <script src="../nav.js" defer id="sn-js"></script>
+<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icon-180.png"><meta name="apple-mobile-web-app-title" content="arcroad">
 </head>
 <body>
+<!-- event:start --><div class="ev-banner" role="note" style="background:#0f1720;color:#e9eef2;font:500 13px/1.45 Inter,system-ui,sans-serif;text-align:center;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.08)"><a href="/moves/" style="color:inherit;text-decoration:none"><span style="display:inline-block;margin-right:8px;padding:1px 9px;border:1px solid #e8b86a;border-radius:999px;color:#e8b86a;font-weight:600;letter-spacing:.02em">Shortlisted</span>Cyberabad Moves 2026, Citizens Innovation Challenge. On display at T-Hub, Raidurg, 26 to 28 November <span style="text-decoration:underline;text-underline-offset:3px">See the entry</span></a></div><!-- event:end -->
 <main>
-<!-- nav:start --><nav class="sn inline" aria-label="arcroad"><a class="sn-home" href="../">arcroad</a><a class="sn-i" href="../drive/">Drive it</a><div class="sn-g"><button class="sn-i" type="button" aria-expanded="false" aria-controls="sn-findings">Findings</button><div class="sn-p" id="sn-findings"><a href="../field/"><b>Driven results</b><span>Every pass we drove, by direction</span></a><a href="../evidence/"><b>Evidence</b><span>What studies show about roads and behaviour</span></a><a href="../globe/"><b>Globe</b><span>29 cities, from orbit to your street</span></a><a href="../data/"><b>Open data</b><span>Download the counts, free to use</span></a></div></div><div class="sn-g"><button class="sn-i" type="button" aria-expanded="false" aria-controls="sn-cost">Your cost</button><div class="sn-p" id="sn-cost"><a href="../cost/"><b>Cost calculator</b><span>Your crossing in rupees and minutes</span></a><a href="../roads/"><b>What else the road costs</b><span>Barricades, works, parking, surface</span></a><a href="../roads/glare/"><b>Night glare</b><span>An oncoming high beam, from the driver's seat</span></a><a href="../act.html"><b>Write to the people responsible</b><span>A ready letter for each place</span></a></div></div><div class="sn-g cur"><button class="sn-i" type="button" aria-expanded="false" aria-controls="sn-part">Take part</button><div class="sn-p" id="sn-part"><a href="../volunteer/"><b>Volunteer</b><span>Measure your own city</span></a><a href="../report/" aria-current="page"><b>Report a change</b><span>A median opening opened or closed</span></a></div></div><a class="sn-i" href="../help/">Help</a></nav><!-- nav:end -->
+<!-- nav:start --><nav class="sn inline" aria-label="arcroad"><a class="sn-home" href="../">arcroad</a><a class="sn-i" href="../drive/">Drive it</a><div class="sn-g"><button class="sn-i" type="button" aria-expanded="false" aria-controls="sn-findings">Findings</button><div class="sn-p" id="sn-findings"><a href="../field/"><b>Driven results</b><span>Every pass we drove, by direction</span></a><a href="../evidence/"><b>Evidence</b><span>What studies show about roads and behaviour</span></a><a href="../globe/"><b>Globe</b><span>29 cities, from orbit to your street</span></a><a href="../data/"><b>Open data</b><span>Download the counts, free to use</span></a></div></div><div class="sn-g"><button class="sn-i" type="button" aria-expanded="false" aria-controls="sn-cost">Your cost</button><div class="sn-p" id="sn-cost"><a href="../cost/"><b>Cost calculator</b><span>Your crossing in rupees and minutes</span></a><a href="../roads/"><b>What else the road costs</b><span>Barricades, works, parking, surface</span></a><a href="../roads/glare/"><b>Night glare</b><span>An oncoming high beam, from the driver's seat</span></a><a href="../act.html"><b>Write to the people responsible</b><span>A ready letter for each place</span></a></div></div><div class="sn-g cur"><button class="sn-i" type="button" aria-expanded="false" aria-controls="sn-part">Take part</button><div class="sn-p" id="sn-part"><a href="../volunteer/"><b>Volunteer</b><span>Measure your own city</span></a><a href="../report/" aria-current="page"><b>Report a change</b><span>A median opening opened or closed</span></a><a href="../roadmap/"><b>What comes next</b><span>Plans for Hyderabad and other cities</span></a></div></div><a class="sn-i" href="../help/">Help</a></nav><!-- nav:end -->
 <p class="eyebrow">arcroad · report a change</p>
 <h1>A median opening opened or closed?</h1>
 <p class="lead">Tell arcroad when a U-turn, median opening or crossing near you opens, closes or changes. Every report is checked against the open map and, where possible, a drive before any figure changes.</p>
@@ -89,6 +91,14 @@ select:focus,input:focus,textarea:focus{outline:2px solid var(--accent);outline-
 <option>A median opening or U-turn has been closed</option>
 <option>A barrier, divider or construction block has appeared</option>
 <option>A new crossing (signal, foot overbridge or underpass)</option>
+<option>People crossing on foot where there is no safe crossing</option>
+<option>A U-turn queue blocking a through lane</option>
+<option>Vendors, parked vehicles or debris narrowing the road</option>
+<option>Wrong-side driving seen regularly here</option>
+<option>A missing or misleading sign</option>
+<option>Dazzling headlights or a dark stretch at night</option>
+<option>A bus stop that blocks traffic or is hard to reach</option>
+<option>Road works or a diversion without signs or lights</option>
 <option>Something else</option>
 </select></label>
 <label>Road and nearest landmark<input id="road" maxlength="140" placeholder="e.g. Mumbai Highway, opposite the bus stand"></label>
@@ -107,8 +117,19 @@ select:focus,input:focus,textarea:focus{outline:2px solid var(--accent);outline-
 <li>Never use the phone while driving, and never stop on the carriageway to take a photo.</li>
 <li>Nothing you type here is stored by arcroad. It goes only to the address you send it to, from your own email.</li>
 </ul></details>
-<footer>Map links: © OpenStreetMap contributors (ODbL). arcroad is an independent citizen project, not linked to any government authority or political party.<!-- reuse:start --><span class="sn-reuse">© 2026 arcroad. Data (ODbL) and code (MIT) are free to reuse with credit; the arcroad name, logo, films and design are not. <a href="../reuse/">What you may reuse</a> · <a href="../terms/">Terms</a> · <a href="../privacy/">Privacy</a></span><!-- reuse:end --></footer>
+<footer>Map links: © OpenStreetMap contributors (ODbL). arcroad is an independent citizen project, not linked to any government authority or political party.<!-- reuse:start --><span class="sn-reuse">Made by Rohit and Team arcroad. © 2026 arcroad. Data (ODbL) and code (MIT) are free to reuse with credit; the arcroad name, logo, films and design are not. <a href="../reuse/">What you may reuse</a> · <a href="../terms/">Terms</a> · <a href="../privacy/">Privacy</a></span><!-- reuse:end --><p class="fine-proof" style="font-size:.92em;margin-top:.6em">The original files are fingerprinted and independently timestamped by public timestamp authorities, so the original can always be told from a copy. Reuse is welcome under the licences above; passing this work off as someone else’s is not.</p>
+<section id="blur" class="bl" style="margin:18px 0 8px;padding:16px;border:1px solid var(--line);border-radius:14px">
+<h2 style="margin:0 0 6px;font-size:18px">Blur a photo first, on this phone</h2>
+<p class="note" style="margin:0 0 12px">Pick a photo, drag a box over any face or number plate, then save or share the blurred copy and attach it to your email. The photo never leaves your device here.</p>
+<label class="btn ghost" style="display:inline-flex;align-items:center;min-height:44px;cursor:pointer">Choose a photo<input id="bl-file" type="file" accept="image/*" style="position:absolute;opacity:0;width:1px;height:1px"></label>
+<p class="note" id="bl-tip" role="status" aria-live="polite"></p>
+<canvas id="bl-cv" hidden style="max-width:100%;height:auto;border-radius:10px;touch-action:none;margin:8px 0"></canvas>
+<div class="row"><button class="btn ghost" type="button" id="bl-undo" disabled>Undo last box</button><button class="btn" type="button" id="bl-save" disabled>Save blurred copy</button></div>
+</section>
+<script src="blur.js" defer></script>
+</footer>
 </main>
 <script src="report.js"></script>
+<script src="/ask.js" defer></script>
 </body>
 </html>

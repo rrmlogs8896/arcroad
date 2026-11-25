@@ -66,8 +66,8 @@ def build(res):
 <meta name="color-scheme" content="dark">
 <meta name="format-detection" content="telephone=no">
 <style>
-:root{{--bg:#0B0D10;--fg:#E8EAED;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0}}
-*{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-wrap:break-word}}
+:root{{--bg:#0B0D10;--fg:#E8EAED;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0}}/* art1q-oklch */@supports (color:oklch(0% 0 0)){{:root{{--bg:oklch(15.82% 0.0072 258.37);--fg:oklch(93.64% 0.0046 258.33);--mute:oklch(70.28% 0.0111 247.99);--line:oklch(24.21% 0.0129 258.37);--accent:oklch(78.23% 0.0957 55.34)}}}}
+*{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;overflow-wrap:break-word}}
 html{{-webkit-text-size-adjust:100%;text-size-adjust:100%}}
 main{{max-width:980px;margin:0 auto;padding:48px 22px 80px}}a{{color:var(--accent)}}
 .eyebrow{{font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:32px 0 12px}}
@@ -125,7 +125,7 @@ footer{{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid va
 
 <div class="ask">
 <h2>What we ask of the city</h2>
-<p>The proposed route, as the roads and the direction of travel, and the trial dates. With those, the loop figures for every pair above are computed the same day and published here with the method, the code and the limits. We will share the results with Cyberabad Traffic Police, SCSC and CMC before anyone else.</p>
+<p>The proposed route, as the roads and the direction of travel, and the trial dates. With those, the loop figures for every pair above are computed promptly and published here with the method, the code and the limits. We will share the results with Cyberabad Traffic Police, SCSC and CMC before anyone else.</p>
 </div>
 
 <h2>Why the route has to come from the city</h2>
@@ -135,8 +135,8 @@ footer{{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid va
 <ul>
 <li><b>Written before it was run.</b> The question, the threshold for "longer" (at least 100 m and 10%), the hypothesis and the competing explanation were fixed in a dated pre-registration before any distance was computed. Every later change is dated and applied to every result.</li>
 <li><b>Open.</b> OpenStreetMap data (ODbL), open routers, MIT-licensed code. Anyone can rerun it.</li>
-<li><b>Checked against the road.</b> arcroad has already driven its modelled detours at six Hyderabad places: 5 of 8 directions matched the model under rules fixed before driving (8 of 8 under later rules). <a href="../field/">See every pass</a>.</li>
-<li><b>Cheap to run.</b> A laptop, about three minutes, no paid data. The city could run it on any future change.</li>
+<li><b>Checked against the road.</b> arcroad has already driven its modelled detours at seven Hyderabad places: all 10 directions matched the model and none failed, 7 of them under rules fixed before driving. <a href="../field/">See every pass</a>.</li>
+<li><b>Cheap to run.</b> A normal laptop, a quick run, no paid data. The city could run it on any future change.</li>
 </ul>
 
 <details class="more"><summary>Method in detail</summary>

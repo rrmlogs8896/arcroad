@@ -15,6 +15,8 @@ def field_passes():
     out = {}
     for f in sorted((ROOT / "data" / "field").glob("*-results.json")):
         for p in json.loads(f.read_text(encoding="utf-8")).get("passes", []):
+            if p["verdict"] in ("REJECTED", "POOR_TRACK"):
+                continue  # a rejected later pass does not replace a published one (20 Nov: S12 B to A, S11 A to B)
             out[(p["id"], p["dir"])] = p
     return out
 

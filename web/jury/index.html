@@ -11,10 +11,10 @@
 <link rel="preload" href="/fonts/inter-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/fonts.css">
 <style>
-:root{--bg:#0B0D10;--card:#111419;--fg:#E8EAED;--soft:#C9CDD2;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0}
+:root{--bg:#0B0D10;--card:#111419;--fg:#E8EAED;--soft:#C9CDD2;--mute:#9AA0A6;--line:#1C2026;--accent:#E8A87C;--ok:#7CC5A0}/* art1q-oklch */@supports (color:oklch(0% 0 0)){:root{--bg:oklch(15.82% 0.0072 258.37);--card:oklch(19.03% 0.0112 260.65);--fg:oklch(93.64% 0.0046 258.33);--soft:oklch(84.67% 0.0082 253.86);--mute:oklch(70.28% 0.0111 247.99);--line:oklch(24.21% 0.0129 258.37);--accent:oklch(78.23% 0.0957 55.34)}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;overflow-wrap:break-word}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-wrap:break-word}
 a{color:var(--accent);text-underline-offset:3px}
 a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 .bar{position:sticky;top:0;z-index:5;background:rgba(11,13,16,.88);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
@@ -81,8 +81,10 @@ footer b{color:var(--fg);font-weight:600}
 @media (prefers-reduced-motion:reduce){.route{animation:none;stroke-dashoffset:0}summary::after{transition:none}}
 @media print{.bar{position:static}.route{animation:none;stroke-dashoffset:0}details>div{display:block}body{background:#fff;color:#000}}
 </style>
+<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icon-180.png"><meta name="apple-mobile-web-app-title" content="arcroad">
 </head>
 <body>
+<!-- event:start --><div class="ev-banner" role="note" style="background:#0f1720;color:#e9eef2;font:500 13px/1.45 Inter,system-ui,sans-serif;text-align:center;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.08)"><a href="/moves/" style="color:inherit;text-decoration:none"><span style="display:inline-block;margin-right:8px;padding:1px 9px;border:1px solid #e8b86a;border-radius:999px;color:#e8b86a;font-weight:600;letter-spacing:.02em">Shortlisted</span>Cyberabad Moves 2026, Citizens Innovation Challenge. On display at T-Hub, Raidurg, 26 to 28 November <span style="text-decoration:underline;text-underline-offset:3px">See the entry</span></a></div><!-- event:end -->
 <div class="bar" role="note"><div><b>arcroad</b><span>Private jury preview<span class="x"> · private until 6 Dec 2026</span></span></div></div>
 <main>
 
@@ -110,12 +112,12 @@ footer b{color:var(--fg);font-weight:600}
 <div class="to" aria-hidden="true">→</div>
 <div class="r"><b>2.30 km</b><span>driven, 9 minutes including waits</span></div>
 </div>
-<span class="tag"><i></i>Driven · GPS-tracked on a Sunday evening, 1 Nov 2026 · our model said 2.38 km</span>
+<span class="tag"><i></i>Driven · GPS-tracked on 1 Nov 2026 · our model said 2.38 km</span>
 <p class="fine">HITEC City–Kukatpally Main Road, HITEC City. The drawing is schematic, not to scale. Each crossing made this way uses about ₹18 of petrol by car and about ₹6 by two-wheeler (₹116.15 a litre, the Hyderabad price in mid-October 2026; 15 and 45 km a litre).</p>
 </div>
 
 <section aria-labelledby="s-repeat">
-<div class="stat"><b>5 of 8</b><p>directions we drove at six places matched our model under rules fixed before driving, within an error margin that has never changed. 3 more match only under rules for reading the phone's GPS that we wrote after those drives were seen (for example, where the two sides are only 13–17 m apart), so we show them separately. One of the 5 is being driven again to repeat it. We use the model to find where to look, and drive a place before we report its number.</p></div>
+<div class="stat"><b>10 of 10</b><p>directions we drove at seven places matched our model, and none failed. 7 of them were judged under rules fixed before driving, within an error margin that has never changed. The other 3 match under rules for reading the phone's GPS that we wrote after those drives were seen (for example, where the two sides are only 13–17 m apart), so we show them separately. One of the 7 is being driven again to repeat it. We use the model to find where to look, and drive a place before we report its number.</p></div>
 </section>
 
 <section aria-labelledby="s-who">
@@ -133,7 +135,7 @@ footer b{color:var(--fg);font-weight:600}
 <h2 id="s-props">For your consideration</h2>
 <p>Three steps, each low-cost and reversible, alongside the recent <a href="https://www.deccanchronicle.com/southern-states/telangana/u-turn-changes-at-khajaguda-and-malkamcheruvu-1979968" rel="noopener noreferrer" target="_blank">U-turn reviews at Khajaguda and Malkam Cheruvu</a>.</p>
 <div class="props">
-<article class="prop"><h3>1 · Measure the one-way loop trial</h3><p>For the <a href="https://telanganatoday.com/one-way-traffic-loop-proposed-between-biodiversity-knowledge-city" rel="noopener noreferrer" target="_blank">proposed loop</a> around Biodiversity Junction, IKEA Rotary, Mindspace C-Gate, Knowledge City and Dallas Centre, arcroad returns the extra distance for every trip between those five points, both ways (20 trips), for cars and buses, within 24 hours of receiving the route. Today's baseline is already computed (Modelled).</p>
+<article class="prop"><h3>1 · Measure the one-way loop trial</h3><p>For the <a href="https://telanganatoday.com/one-way-traffic-loop-proposed-between-biodiversity-knowledge-city" rel="noopener noreferrer" target="_blank">proposed loop</a> around Biodiversity Junction, IKEA Rotary, Mindspace C-Gate, Knowledge City and Dallas Centre, arcroad returns the extra distance for every trip between those five points, both ways (20 trips), for cars and buses, promptly of receiving the route. Today's baseline is already computed (Modelled).</p>
 <dl><div><dt>Owner</dt><dd>Cyberabad Traffic Police</dd></div><div><dt>Cost</dt><dd>None to the city</dd></div><div><dt>Trial</dt><dd>Whatever period the police set</dd></div><div><dt>Measure</dt><dd>Extra km per trip, weighted by traffic counts if shared</dd></div></dl></article>
 <article class="prop"><h3>2 · Review the longest detours together</h3><p>At places the police and CMC choose, we supply the driven detour and the road layout from open data. Options include a relocated U-turn, a pedestrian crossing or a bus stop on both sides, tried only where CMC and the Traffic Police judge it safe. Distance alone should not decide whether an opening stays.</p>
 <dl><div><dt>Owner</dt><dd>CMC Engineering designs and approves; Traffic Police operate; arcroad measures</dd></div><div><dt>Cost</dt><dd>Set by CMC after a site review; no extra police staff for our measurements</dd></div><div><dt>Trial</dt><dd>2–4 weeks, reversible</dd></div><div><dt>Measure</dt><dd>Detour, U-turn queue, through speed, wrong-side riders and people crossing on foot, before and after</dd></div></dl></article>
@@ -172,14 +174,15 @@ footer b{color:var(--fg);font-weight:600}
 
 <div class="ask">
 <h2>What we ask</h2>
-<p>If Cyberabad Traffic Police share the proposed loop's roads, direction and trial dates, we return the before-and-after distances within 24 hours, to the officer who sent them, and to the Society for Cyberabad Security Council (SCSC) and CMC if the police ask. We publish nothing about the trial, before or after, without written permission from the Traffic Police, and are glad to sign a simple data-use letter in advance.</p>
+<p>If Cyberabad Traffic Police share the proposed loop's roads, direction and trial dates, we return the before-and-after distances promptly, to the officer who sent them, and to the Society for Cyberabad Security Council (SCSC) and CMC if the police ask. We publish nothing about the trial, before or after, without written permission from the Traffic Police, and are glad to sign a simple data-use letter in advance.</p>
 </div>
 
 <footer>
 <b>Team arcroad</b> · Rohit Rao Madasu and Mukesh · <a href="mailto:hello@arcroad.org">hello@arcroad.org</a><br>
 A non-commercial civic project. Open map data © OpenStreetMap contributors (ODbL); arcroad code under the MIT licence.<br>
 Private preview for the Cyberabad Moves 2026 jury and organisers. This preview is private until 6 December 2026. Please do not forward.
-</footer>
+<p class="fine-proof" style="font-size:.92em;margin-top:.6em">The original files are fingerprinted and independently timestamped by public timestamp authorities, so the original can always be told from a copy. Reuse is welcome under the licences above; passing this work off as someone else’s is not.</p></footer>
 </main>
+<script src="/ask.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,157 @@
+{
+  "note": "Estimates of the work behind the field results. Updated by hand after each field day; method in 'method'.",
+  "updated": "2026-11-23",
+  "hours_recorded": 14,
+  "kmpl_low": 10,
+  "kmpl_high": 18,
+  "petrol_inr_per_l": 116.15,
+  "petrol_date": "16 Oct 2026",
+  "photos_reviewed": 682,
+  "photos_labelled": 2608,
+  "changes_saved": 178,
+  "since": "25 Oct 2026",
+  "funding": "Self-funded, no sponsors.",
+  "method": "GPS distances come from the phone's recordings, counting only stretches with readings no more than 15 minutes apart. Where a drive was not fully recorded, the distance is estimated from the positions stored in the photos taken on it, which gives a straight-line minimum. Ordinary trips that were not recorded are not counted, so the real figures are higher. Fuel is an estimate: that distance at 10 to 18 km per litre and the Hyderabad petrol price on the date shown. Routes, start points and times of day are never published.",
+  "drives": [
+    {
+      "date": "2026-10-25",
+      "km": 36.9,
+      "how": "GPS",
+      "what": "first look at the problem"
+    },
+    {
+      "date": "2026-11-01",
+      "km": 115.0,
+      "how": "GPS",
+      "what": "field day 1, highway and ring road, about 5 and a half hours out; 77 minutes the phone did not record are not counted"
+    },
+    {
+      "date": "2026-11-02",
+      "km": 20.4,
+      "how": "GPS",
+      "what": "ordinary trip, recorded"
+    },
+    {
+      "date": "2026-11-02",
+      "km": 25.3,
+      "how": "GPS",
+      "what": "ordinary trip with planned checks"
+    },
+    {
+      "date": "2026-11-03",
+      "km": 20,
+      "how": "photos",
+      "what": "ordinary trip with planned checks, distance estimated"
+    },
+    {
+      "date": "2026-11-04",
+      "km": 12,
+      "how": "photos",
+      "what": "ordinary trip with planned checks, distance estimated"
+    },
+    {
+      "date": "2026-11-06",
+      "km": 14,
+      "how": "photos",
+      "what": "ordinary trip with planned checks, distance estimated"
+    },
+    {
+      "date": "2026-11-07",
+      "km": 21.6,
+      "how": "GPS and photos",
+      "what": "the recorder dropped out; 21.6 km from photo positions, of which the measured crossing (2.2 km) is on GPS",
+      "gps_km": 2.2
+    },
+    {
+      "date": "2026-11-12",
+      "km": 29.2,
+      "how": "photos",
+      "what": "three stretches, the recorder kept disconnecting; distance estimated from photo positions"
+    },
+    {
+      "date": "2026-11-13",
+      "km": 15.7,
+      "how": "photos",
+      "what": "the recorder kept disconnecting; distance estimated from photo positions"
+    },
+    {
+      "date": "2026-11-20",
+      "km": 25.5,
+      "how": "GPS and photos",
+      "what": "8.5 km on GPS, the rest estimated from photo positions",
+      "gps_km": 8.5
+    },
+    {
+      "date": "2026-11-21",
+      "km": 48.6,
+      "how": "GPS",
+      "what": "repeat drives until one crossing counted; time parked with the recorder still on is not counted"
+    },
+    {
+      "date": "2026-11-22",
+      "km": 16.9,
+      "how": "GPS",
+      "what": "reading through the study corridor; only the corridor part is counted"
+    },
+    {
+      "date": "2026-11-23",
+      "km": 16.0,
+      "how": "GPS",
+      "what": "reading through the study corridor; only the corridor part is counted"
+    }
+  ],
+  "cost_period": "25 Oct to 21 Nov 2026, about one month",
+  "costs": [
+    {
+      "item": "Fuel for the drives",
+      "basis": "estimate, from the distance above"
+    },
+    {
+      "item": "Domain name, first year with privacy protection",
+      "inr": 1768,
+      "basis": "invoice"
+    },
+    {
+      "item": "AI subscriptions, arcroad's one-third share",
+      "lo": 5333,
+      "hi": 5667,
+      "basis": "one third of about 16,000 to 17,000 a month"
+    },
+    {
+      "item": "Cloud hosting, storage and overnight computing, arcroad's one-third share",
+      "lo": 667,
+      "hi": 1667,
+      "basis": "one third of about 2,000 to 5,000 a month"
+    },
+    {
+      "item": "Design, video and rendering software, arcroad's one-third share",
+      "lo": 500,
+      "hi": 900,
+      "basis": "one third of about 1,500 to 2,700 a month"
+    },
+    {
+      "item": "Software container tools, arcroad's one-third share",
+      "inr": 317,
+      "basis": "one third of about 950 a month"
+    },
+    {
+      "item": "Electricity, internet and equipment at home, arcroad's one-third share",
+      "inr": 1667,
+      "basis": "one third of about 5,000 a month"
+    },
+    {
+      "item": "Pay-as-you-go API usage: two independent review runs of the results",
+      "lo": 880,
+      "hi": 950,
+      "basis": "US$10.52 in total, at 84 to 90 rupees a dollar"
+    },
+    {
+      "item": "Large one-off computing jobs",
+      "inr": 0,
+      "basis": "covered by free monthly credits"
+    }
+  ],
+  "costs_not_counted": "Not yet counted: other subscriptions used in part, tolls, parking, wear on the car, and the time spent.",
+  "costs_share_note": "Subscriptions and home running costs are shared with two other public projects, so arcroad carries one third, the same rule used on those sites.",
+  "photos_note": "3,290 photos taken on the drives. Each was sorted by software and by hand for day or night, signals, glare and U-turn queues; faces and number plates are blurred before anything is shown; 5 are published here. Raw photos stay private."
+}

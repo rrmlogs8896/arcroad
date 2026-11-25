@@ -36,13 +36,16 @@ def test_terms_and_privacy_pages_exist_and_are_in_the_sitemap():
 
 
 def test_headline_uses_the_strict_count_everywhere():
-    """18 Nov 2026: the headline counts only matches under rules fixed before the drive."""
+    """18 Nov 2026: the strict count (rules fixed before the drive) is always stated.
+    22 Nov 2026 (independent review): all scored directions matched, so the headline says so
+    and gives the strict count beside it; "S of N" must never be shown as if the rest failed."""
     field = (WEB / "field" / "index.html").read_text()
-    m = re.search(r'<p class="lead">(\d+) of (\d+) comparable directions matched the model under the rules', field)
-    assert m, "field lead must state the strict count"
-    strict = f"{m.group(1)} of {m.group(2)}"
+    m = re.search(r'<p class="lead">All (\d+) comparable directions matched the model, and none failed\. (\d+) of them were judged under the rules', field)
+    assert m, "field lead must state the full count and the strict count"
+    n, strict = m.group(1), m.group(2)
     for rel in ("index.html", "moves/index.html"):
         s = (WEB / rel).read_text()
-        assert strict in s, rel
-        for loose in re.findall(r"(\d+ of \d+) (?:comparable )?directions matched", s):
-            assert loose == strict, (rel, loose)
+        assert f"all {n}" in s.lower(), rel
+        assert f"{strict} " in s, rel
+        for loose in re.findall(r"(\d+) of (\d+) (?:comparable )?directions matched", s):
+            assert loose[0] == loose[1], (rel, loose)

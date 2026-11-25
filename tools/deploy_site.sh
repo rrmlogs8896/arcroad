@@ -14,6 +14,7 @@ else
 fi
 "$PY" -m ruff --version >/dev/null 2>&1 && "$PY" -m pytest --version >/dev/null 2>&1 || {
   echo "Needs the project venv once: brew install python@3.11 && python3.11 -m venv ~/.venvs/arcroad && ~/.venvs/arcroad/bin/pip install ruff pytest"; exit 1; }
+"$PY" tools/share_block.py
 "$PY" -m ruff check pipeline tests tools
 "$PY" -m pytest -q
 if [ -f "$HOME/Sites/_proof/finenote.py" ]; then "$PY" "$HOME/Sites/_proof/finenote.py" arcroad web; fi  # proof-of-authorship notice in the fine print

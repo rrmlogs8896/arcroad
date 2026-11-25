@@ -160,11 +160,11 @@
   },
   {
    "id": "S11",
-   "why": "visited (geotagged photos 18:37-18:39) while the GPS recording was stopped; no measured pass"
+   "why": "visited (geotagged photos) while the GPS recording was stopped; no measured pass"
   },
   {
    "id": "S14",
-   "why": "visited (geotagged photos 19:06-19:07) while the GPS recording was stopped; no measured pass"
+   "why": "visited (geotagged photos) while the GPS recording was stopped; no measured pass"
   },
   {
    "id": "S12",
@@ -175,7 +175,7 @@
   "One day, one driver, one car. A single pass per direction is a candidate under the triangulation rule until repeated or photographed.",
   "Phone GPS at 1 Hz; distances carry roughly ±50 m of noise on a 1-3 km loop.",
   "S23 and S24 lie on the Outer Ring Road, an access-controlled expressway: turning round there by design needs an interchange or service road. Since 8 Nov 2026 both are left out of every count under the road-class rule (docs/PREREG-road-class-rule.md); their passes are listed separately for the record.",
-  "Times include waits at signals and U-turn queues on a Sunday afternoon and evening; weekday peaks will differ.",
+  "Times include waits at signals and U-turn queues on a weekend; weekday peaks will differ.",
   "Raw tracks and photos are private; only these per-pass summaries are published."
  ]
 }

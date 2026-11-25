@@ -11,7 +11,7 @@
   {"id": "S12", "why": "only side A visited"}
  ],
  "limitations": [
-  "Evening drive, 19:04-20:35 IST on a Friday, at peak traffic. It made no U-turn at any of the 24 sample places, so it adds no scored pass; the detour taken that evening was elsewhere.",
+  "Evening drive on a Friday, at peak traffic. It made no U-turn at any of the 24 sample places, so it adds no scored pass; the detour taken that evening was elsewhere.",
   "Scored under rules fixed before this drive was seen (the 2 Nov pairing rule and the 3 Nov loop rule); no rule was changed for it."
  ]
 }
