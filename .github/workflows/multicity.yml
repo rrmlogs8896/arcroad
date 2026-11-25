@@ -57,7 +57,7 @@ jobs:
           pip install -r requirements.txt rasterio shapely
 
       - name: Restore GHSL tiles
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: cache/ghsl
           key: ghsl-pop-e2020-r2023a-3ss-${{ github.run_id }}
@@ -73,7 +73,7 @@ jobs:
 
       - name: Save GHSL tiles
         if: always()           # keep partial progress so a rerun resumes instead of starting over
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: cache/ghsl
           key: ghsl-pop-e2020-r2023a-3ss-${{ github.run_id }}
@@ -101,7 +101,7 @@ jobs:
           pip install -r requirements.txt rasterio shapely
 
       - name: Restore GHSL tiles from the prefetch job
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: cache/ghsl
           key: ghsl-pop-e2020-r2023a-3ss-${{ github.run_id }}
