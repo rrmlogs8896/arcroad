@@ -1,16 +1,10 @@
 {
- "date": "2026-11-21",
  "note": "One drive, so each figure is a single reading. Crawling means under about 9 km/h for 45 seconds or more. We do not yet say what causes these delays: our automatic photo checks were not reliable enough, so we will measure again on weekday peaks and with hand-checked photos first.",
  "hotspots": [
   {
    "place": "Muthangi, Mumbai Highway",
    "minutes": 17.0,
    "metres": 1360
-  },
-  {
-   "place": "Hafeezpet, Mythri Nagar",
-   "minutes": 3.4,
-   "metres": 276
   },
   {
    "place": "Madeenaguda, Mumbai Highway",

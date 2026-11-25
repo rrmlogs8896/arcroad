@@ -154,7 +154,7 @@ def render(day: dict) -> str:
             f'<li><b>{e(r["place"])}</b>: {r["minutes"]:g} min crawling over {r["metres"]:,} m,'
             f' about {r["metres"] / 1000 / (r["minutes"] / 60):.0f} km/h.</li>'
             for r in hj["hotspots"])
-        hot = (f'<h2>Where the {e(short_date(hj["date"]))} drive slowed down</h2><p>Measured on the drive.</p><ul>{rows}</ul><p class="note">{e(hj["note"])}</p>')
+        hot = (f'<h2>Where one drive slowed down</h2><p>Measured on the drive.</p><ul>{rows}</ul><p class="note">{e(hj["note"])}</p>')
     ns = "".join(f'<li><b>{e(x["id"])}</b> ({e(short_date(x.get("date")))}): {e(x["why"])}</li>' for x in day["not_scored"])
     oos = "".join(f'<li><b>{e(r["id"])} {DIRS.get(r["dir"], "")}</b> ({e(short_date(r.get("date")))}): driven {km(r["driven_m"])}'
                   f' against a model of {km(r.get("model_m"))}; {e(r["reason"])}, not counted.</li>'
