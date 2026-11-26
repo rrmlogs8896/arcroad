@@ -66,10 +66,11 @@ header .sn{margin-left:auto}
 .ar-share-app:hover{background:rgba(232,168,124,.08);border-color:rgba(232,168,124,.5)}
 @media (max-width:520px){.ar-share-apps{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}.ar-share-apps .ar-share-btn{flex:0 0 auto}}
 .ar-prog{position:fixed;top:0;left:0;right:0;height:2px;background:var(--sn-acc,#E8A87C);opacity:.8;transform:scaleX(0);transform-origin:0 50%;z-index:70;pointer-events:none}
-.ar-rv{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+.ar-rv{transform:translateY(10px);transition:transform .7s cubic-bezier(.2,.7,.2,1)}
 .ar-rv.ar-in{opacity:1;transform:none}
 .ar-share-btn,.ar-share-qr>summary{transition:border-color .2s,background-color .2s,transform .15s}
 .ar-share-btn:hover{background:rgba(230,232,235,.05)}
 .ar-share-btn:active{transform:scale(.97)}
-@media (prefers-reduced-motion:reduce){.ar-prog{display:none}.ar-rv{opacity:1;transform:none;transition:none}.ar-share-btn:active{transform:none}}
-@media print{.ar-prog{display:none}.ar-rv{opacity:1!important;transform:none!important}}
+@media (prefers-reduced-motion:reduce){.ar-prog{display:none}.ar-rv{transform:none;transition:none}.ar-share-btn:active{transform:none}}
+@media print{.ar-prog{display:none}.ar-rv{transform:none!important}}
+.green #clock{margin:14px 0 0;background:rgba(0,0,0,.18);border-color:rgba(124,197,160,.2)}

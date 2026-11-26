@@ -180,6 +180,7 @@
   fab.addEventListener("click", function () { open(panel.hidden || !panel.classList.contains("show")); });
   panel.querySelector(".ak-x").addEventListener("click", function () { open(false); });
   d.addEventListener("keydown", function (e) { if (e.key === "Escape" && !panel.hidden) open(false); });
+  d.addEventListener("click", function (e) { var t = e.target.closest && e.target.closest("[data-ak-ask]"); if (!t) return; e.preventDefault(); open(true); ask(t.getAttribute("data-ak-ask")); });
 
   /* ---------- soft sound: made in the browser, nothing fetched, off until tapped, never autoplays ---------- */
   var ac = null, master = null;

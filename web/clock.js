@@ -6,7 +6,7 @@
   var el = document.getElementById("clock");
   if (!el) return;
   var RS_PER_S = 635000000 / (365 * 86400), G_PER_S = 2426e6 / (365 * 86400);
-  el.innerHTML = '<span class="ck-dot" aria-hidden="true"></span><span><b>Live estimate.</b> Since you opened this page, a city group of 50,000 two-wheeler commuters has spent about <b class="ck-rs">₹0</b> and <b class="ck-co">0 kg</b> of CO₂ on detours like these. <a href="/cost/">How it is worked out</a></span>';
+  el.innerHTML = '<span class="ck-dot" aria-hidden="true"></span><span><b>Live estimate.</b> If 50,000 two-wheeler riders each made one such detour, then since you opened this page they have spent about <b class="ck-rs">₹0</b> and <b class="ck-co">0 kg</b> of CO₂ on detours like these. <a href="/cost/">How it is worked out</a></span>';
   var rs = el.querySelector(".ck-rs"), co = el.querySelector(".ck-co"), t0 = Date.now();
   function tick() {
     var s = (Date.now() - t0) / 1000;

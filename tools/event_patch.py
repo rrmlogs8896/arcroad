@@ -14,16 +14,7 @@ ROOT = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].star
 REMOVE = "--remove-banner" in sys.argv
 WEB = os.path.join(ROOT, "web")
 
-BANNER = (
-    '<!-- event:start --><div class="ev-banner" role="note" style="background:#0f1720;color:#e9eef2;'
-    'font:500 13px/1.45 Inter,system-ui,sans-serif;text-align:center;padding:9px 16px;'
-    'border-bottom:1px solid rgba(255,255,255,.08)">'
-    '<a href="/moves/" style="color:inherit;text-decoration:none">'
-    '<span style="display:inline-block;margin-right:8px;padding:1px 9px;border:1px solid #e8b86a;'
-    'border-radius:999px;color:#e8b86a;font-weight:600;letter-spacing:.02em">Shortlisted</span>'
-    'Cyberabad Moves 2026, Citizens Innovation Challenge. On display at T-Hub, Raidurg, 26 to 28 November '
-    '<span style="text-decoration:underline;text-underline-offset:3px">See the entry</span></a></div><!-- event:end -->'
-)
+BANNER = '<!-- event:start --><div class="ev-banner" role="note" style="background:#0f1720;color:#e9eef2;font:500 13px/1.45 Inter,system-ui,sans-serif;text-align:center;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.08)"><span style="display:inline-block;margin-right:8px;padding:1px 9px;border:1px solid #e8b86a;border-radius:999px;color:#e8b86a;font-weight:600;letter-spacing:.02em">Shortlisted</span><a href="https://cyberabadmoves.in/" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;text-decoration-color:rgba(233,238,242,.35);text-underline-offset:3px">Cyberabad Moves 2026</a>, Citizens Innovation Challenge. On display at T-Hub, Raidurg, 26 to 28 November · <a href="/moves/" style="color:#e8b86a;text-decoration:underline;text-underline-offset:3px">See our entry</a></div><!-- event:end -->'
 EVENT = re.compile(r"<!-- event:start -->.*?<!-- event:end -->\n?", re.S)
 
 TEXT_SWAPS = [
