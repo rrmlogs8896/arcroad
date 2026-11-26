@@ -3,7 +3,7 @@
   Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-2auDOyO+IOZbTxFaEKQKvjHrUV11Ko0v8K0ZVoQFHys=' 'sha256-LE6VT6BnCbOMVcw1gmKNxRoJ4SEFynz1fKqJYeYWbF4=' 'sha256-TiwGzLP5ahx381LZJDpuKM/txC5kEL1ZGC9UGzOKLV0=' 'sha256-cgXKZEVpQQ3lz9zSwYJTlBotO6gs8cYHH+4uqN9HEi8=' 'sha256-kEcEgnGA8ODyaSyCzpa+tkmeoi02fK02Lo6EbOqe5MU=' 'sha256-wmE60MMaYPGplAY7rxLeIeHoTzvYbVDgODIZM6eq8v4='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tiles.openfreemap.org; connect-src 'self' https://tiles.openfreemap.org; worker-src 'self' blob:; font-src 'self' data:; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Permissions-Policy: camera=(), microphone=(), geolocation=(self), payment=(), usb=(), interest-cohort=()
   Strict-Transport-Security: max-age=31536000
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin

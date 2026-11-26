@@ -59,7 +59,7 @@ def headers():
         f"  {csp_name}: {policy()}",
         "  X-Content-Type-Options: nosniff",
         "  Referrer-Policy: strict-origin-when-cross-origin",
-        "  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()",
+        "  Permissions-Policy: camera=(), microphone=(), geolocation=(self), payment=(), usb=(), interest-cohort=()",
         "  Strict-Transport-Security: max-age=31536000",
         "  Cross-Origin-Opener-Policy: same-origin",
         "  Cross-Origin-Resource-Policy: same-origin",
