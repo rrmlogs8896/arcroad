@@ -8,6 +8,7 @@ interface Env {
   // Set with `npx wrangler secret put <NAME>` (hidden prompt); never in a file or the repo.
   MAPILLARY_TOKEN?: string;
   ANTHROPIC_API_KEY?: string;
+  EYELAB_API_KEY?: string; // its own Console workspace, monthly spend limit USD 5: the Saturday 13point8 research scan
   VIABILITY_API_KEY?: string; // its own Console workspace, monthly spend limit USD 10: the weekly viability brief
   GITHUB_TOKEN?: string; // fine-grained, arcroad-internal only, Contents read/write: files night results
 }
@@ -17,7 +18,7 @@ export class ResearchRunner extends Container<Env> {
   sleepAfter = "30m"; // the poll every 10 minutes keeps it awake only while a job runs
   constructor(ctx: DurableObjectState<{}>, env: Env) {
     super(ctx, env);
-    this.envVars = { MAPILLARY_TOKEN: env.MAPILLARY_TOKEN ?? "", ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY ?? "", GITHUB_TOKEN: env.GITHUB_TOKEN ?? "", VIABILITY_API_KEY: env.VIABILITY_API_KEY ?? "" };
+    this.envVars = { MAPILLARY_TOKEN: env.MAPILLARY_TOKEN ?? "", ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY ?? "", GITHUB_TOKEN: env.GITHUB_TOKEN ?? "", VIABILITY_API_KEY: env.VIABILITY_API_KEY ?? "", EYELAB_API_KEY: env.EYELAB_API_KEY ?? "" };
   }
 }
 

@@ -18,15 +18,19 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 import adminmap
+import areascan
 import corridor3d
 import filer
 import hotspots
 import mapwatch
+import entryscan
 import openings
 import remote
 import routercheck
 import structures
 import viability
+import eyelab
+import socialreach
 
 OUT = Path("/tmp/out")
 STATE = {"running": False, "done": [], "failed": {}, "log": []}
@@ -140,6 +144,43 @@ def job_viability():
     return p
 
 
+def job_socialreach():
+    """One night only (17 Nov 2026): where to share 13point8 for the most reach, and each community's rules. USD 2 cap."""
+    OUT.mkdir(exist_ok=True)
+    p = OUT / "socialreach-v1.json"
+    p.write_bytes(socialreach.run(log))
+    return p
+
+
+def job_eyelab():
+    """Saturday nights: the 13point8 research scan (colour, speed, visual brain, return), USD 5 a month cap."""
+    OUT.mkdir(exist_ok=True)
+    p = OUT / "eyelab-v1.json"
+    last = eyelab.previous_run_day(dt.date.fromisoformat(STATE["night"])).isoformat()
+    try:
+        previous = json.loads(filer.get(f"nights/{last}/eyelab.json", log) or "{}").get("brief", "")
+    except ValueError:
+        previous = ""
+    p.write_bytes(eyelab.run(log, previous))
+    return p
+
+
+def job_entryscan():
+    """Pre-registered (docs/PREREG-entryscan.md): one-sided entries that make residents drive past their road."""
+    OUT.mkdir(exist_ok=True)
+    p = OUT / "entryscan-v1.json"
+    p.write_bytes(entryscan.run(log))
+    return p
+
+
+def job_areascan():
+    """Pre-registered (docs/PREREG-areascan.md): the area table on the latest map, checked on three routers."""
+    OUT.mkdir(exist_ok=True)
+    p = OUT / "areascan-v1.json"
+    p.write_bytes(areascan.run(log, repo()))
+    return p
+
+
 def job_bengaluru_remote():
     """One night only: the remote checks on 8 Bengaluru candidate places, approved by Rohit on 6 Nov (run 7 Nov).
 
@@ -180,12 +221,22 @@ def job_bengaluru_remote():
 def tonight(night):
     """The night's queue: a one-off Bengaluru check first, the standing jobs, then the Sunday brief."""
     first = [("bengaluru_remote", job_bengaluru_remote)] if night == BENGALURU_REMOTE_NIGHT else []
+    if socialreach.is_run_night(night):
+        first = [("socialreach", job_socialreach), *first]  # first, so the long jobs cannot delay it
     last = [("viability", job_viability)] if viability.is_run_day(dt.date.fromisoformat(night)) else []
+    if eyelab.is_run_day(dt.date.fromisoformat(night)):
+        last = [*last, ("eyelab", job_eyelab)]
     if night == ADMINMAP_NIGHT:
         last = [*last, ("adminmap", job_adminmap)]  # after the standing jobs, so it cannot delay them
+    if night in AREASCAN_NIGHTS:
+        first = [("areascan", job_areascan), *first]  # after entryscan: about 1.5 to 2.5 hours
+    if night in ENTRYSCAN_NIGHTS:
+        first = [("entryscan", job_entryscan), *first]  # first: a one-off, about an hour
     return first + JOBS + last
 
 
+AREASCAN_NIGHTS = {"2026-11-26", "2026-11-27"}  # second night repeats the first as a stability check
+ENTRYSCAN_NIGHTS = {"2026-11-26", "2026-11-27"}  # second night repeats the first as a stability check
 ADMINMAP_NIGHT = "2026-11-15"  # one night only: Sunday 15 Nov, 22:00 IST
 BENGALURU_REMOTE_NIGHT = "2026-11-07"  # moved from 6 Nov: that night ran the earlier version  # matches run_on in the private places file
 

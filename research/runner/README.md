@@ -12,6 +12,8 @@ A Worker with no public route. At 22:00 IST every night, a cron trigger starts o
 6. **bengaluru**: the same candidate collection as the monthly GitHub workflow (`tools/multicity_collect.py bengaluru --detour`). Its output is a candidate and is not published. (Out of the nightly queue since 6 Nov; runs in the GitHub workflow.)
 7. **viability** (Sunday, Tuesday and Thursday nights): a research brief on how arcroad can last, reach the people who can act on it and pay its way, one theme per run (funding, stakeholders, revenue, attention). It reads `AGENT-BRIEF.md` and `SECRET-SAUCE.md` from arcroad-internal and works inside them, researches only, and files its brief only to arcroad-internal. It uses its own key, `VIABILITY_API_KEY`, from a Claude Console workspace with a USD 10 monthly spend limit, and stops each run at about USD 0.70 (at most 14 runs a month). Without that key it does nothing.
 
+8. **eyelab** (Saturday nights): a research scan for 13point8 on colour, visual speed, the visual brain and why people return, one theme per run. Peer-reviewed sources first, every claim linked, no addictive-design advice. Own key `EYELAB_API_KEY` from a Claude Console workspace with a USD 5 monthly spend limit; each run stops at about USD 0.90. Without that key it does nothing.
+
 ## Deploy (iMac, Docker Desktop running)
 
 ```
