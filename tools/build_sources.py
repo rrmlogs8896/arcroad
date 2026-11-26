@@ -1,6 +1,11 @@
 """Build web/data/sources.csv: every outside source the public pages cite, one row per link.
 Run from the repo root: python3 tools/build_sources.py [--check]"""
-import csv, html, io, os, re, sys
+import csv
+import html
+import io
+import os
+import re
+import sys
 from urllib.parse import urlparse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,7 +36,7 @@ def collect():
                 for url in set(URL.findall(raw)):
                     url = url.rstrip(".,);'")
                     host = urlparse(url).netloc.lower()
-                    if host in SKIP_HOSTS or host in DATA_ONLY or "github.com/rrmlogs8896/arcroad" in url and "arcroad-open" not in url:
+                    if host in SKIP_HOSTS or host in DATA_ONLY or ("github.com/rrmlogs8896/arcroad" in url and "arcroad-open" not in url):
                         continue
                     r = rows.setdefault(url, {"title": host, "host": host, "pages": set()})
                     r["pages"].add("data file " + page_url(rel))
@@ -43,7 +48,7 @@ def collect():
             for url, text in A.findall(s):
                 url = html.unescape(url).strip()
                 host = urlparse(url).netloc.lower()
-                if host in SKIP_HOSTS or "github.com/rrmlogs8896/arcroad" in url and "arcroad-open" not in url:
+                if host in SKIP_HOSTS or ("github.com/rrmlogs8896/arcroad" in url and "arcroad-open" not in url):
                     continue
                 title = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "", text))).strip() or host
                 r = rows.setdefault(url, {"title": title, "host": host, "pages": set()})
