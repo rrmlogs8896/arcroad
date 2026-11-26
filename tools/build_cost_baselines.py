@@ -33,7 +33,7 @@ def passes():
             for p in json.load(fh)["passes"]:
                 if p["verdict"] != "MATCH" or p["id"] in scope or p.get("straight_m") is None or not p.get("seconds"):
                     continue
-                rows.append({"place": p["id"], "dir": p["dir"], "date": p["date"],
+                rows.append({"place": p["id"], "dir": p["dir"], "date": p["date"][:7],
                              "extra_km": round((p["driven_m"] - p["straight_m"]) / 1000, 2),
                              "kmh": round(p["driven_m"] / p["seconds"] * 3.6, 1)})
     return rows
@@ -52,8 +52,8 @@ def build():
         return {"key": key, "title": title, "line": line, "set": dict(base, km=k, spd=round(s)), "source": src}
 
     def one(r):
-        d = dt.date.fromisoformat(r["date"])
-        return f"Place {r['place']}, driven {d.day} {d:%b %Y}"
+        d = dt.date.fromisoformat(r["date"] + "-01")  # month only: drive days are never published
+        return f"Place {r['place']}, driven in {d:%B %Y}"
 
     cards = [
         card("median", "Typical crossing", "The middle of every crossing we have driven", round(statistics.median(km), 2),
@@ -66,9 +66,8 @@ def build():
              slowest["extra_km"], slowest["kmh"], one(slowest)),
     ]
     dates = sorted({r["date"] for r in rows})
-    first, last = (dt.date.fromisoformat(x) for x in (dates[0], dates[-1]))
-    when = (f"{first.day} to {last.day} {last:%b %Y}" if (first.year, first.month) == (last.year, last.month)
-            else f"{first.day} {first:%b} to {last.day} {last:%b %Y}")
+    first, last = (dt.date.fromisoformat(x + "-01") for x in (dates[0], dates[-1]))
+    when = f"{last:%B %Y}" if first == last else f"{first:%B} to {last:%B %Y}"
     return {"built_from": "data/field/*-results.json (passes that matched the model, road-class rule applied)",
             "drives": when, "drive_dates": [dates[0], dates[-1]], "passes": rows, "cards": cards,
             "assumptions": "Two crossings a day, 300 days a year, one person on a petrol two-wheeler "

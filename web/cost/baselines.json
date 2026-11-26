@@ -1,78 +1,78 @@
 {
  "built_from": "data/field/*-results.json (passes that matched the model, road-class rule applied)",
- "drives": "1 to 21 Nov 2026",
+ "drives": "November 2026",
  "drive_dates": [
-  "2026-11-01",
-  "2026-11-21"
+  "2026-11",
+  "2026-11"
  ],
  "passes": [
   {
    "place": "S16",
    "dir": "ba",
-   "date": "2026-11-01",
+   "date": "2026-11",
    "extra_km": 2.28,
    "kmh": 15.3
   },
   {
    "place": "S18",
    "dir": "ab",
-   "date": "2026-11-01",
+   "date": "2026-11",
    "extra_km": 1.57,
    "kmh": 29.5
   },
   {
    "place": "S18",
    "dir": "ba",
-   "date": "2026-11-01",
+   "date": "2026-11",
    "extra_km": 1.53,
    "kmh": 8.0
   },
   {
    "place": "S12",
    "dir": "ab",
-   "date": "2026-11-02",
+   "date": "2026-11",
    "extra_km": 1.93,
    "kmh": 28.7
   },
   {
    "place": "S10",
    "dir": "ab",
-   "date": "2026-11-03",
+   "date": "2026-11",
    "extra_km": 1.1,
    "kmh": 21.1
   },
   {
    "place": "S08",
    "dir": "ba",
-   "date": "2026-11-03",
+   "date": "2026-11",
    "extra_km": 0.39,
    "kmh": 17.3
   },
   {
    "place": "S12",
    "dir": "ba",
-   "date": "2026-11-04",
+   "date": "2026-11",
    "extra_km": 0.9,
    "kmh": 9.8
   },
   {
    "place": "S11",
    "dir": "ab",
-   "date": "2026-11-07",
+   "date": "2026-11",
    "extra_km": 2.13,
    "kmh": 16.0
   },
   {
    "place": "S13",
    "dir": "ab",
-   "date": "2026-11-20",
+   "date": "2026-11",
    "extra_km": 0.93,
    "kmh": 8.8
   },
   {
    "place": "S11",
    "dir": "ba",
-   "date": "2026-11-21",
+   "date": "2026-11",
    "extra_km": 0.29,
    "kmh": 16.0
   }
@@ -104,7 +104,7 @@
     "km": 0.29,
     "spd": 16
    },
-   "source": "Place S11, driven 21 Nov 2026"
+   "source": "Place S11, driven in November 2026"
   },
   {
    "key": "long",
@@ -118,7 +118,7 @@
     "km": 2.28,
     "spd": 15
    },
-   "source": "Place S16, driven 1 Nov 2026"
+   "source": "Place S16, driven in November 2026"
   },
   {
    "key": "slow",
@@ -132,7 +132,7 @@
     "km": 1.53,
     "spd": 8
    },
-   "source": "Place S18, driven 1 Nov 2026"
+   "source": "Place S18, driven in November 2026"
   }
  ],
  "assumptions": "Two crossings a day, 300 days a year, one person on a petrol two-wheeler (about 73% of Telangana's vehicles). Every other setting is the calculator's default.",

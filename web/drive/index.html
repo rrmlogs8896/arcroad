@@ -151,13 +151,13 @@ h2{margin:64px 0 6px;font-size:clamp(24px,3.4vw,32px);letter-spacing:-.02em;line
 (function () {
   var P = [
     { id: 'S18', road: 'HITEC City–Kukatpally Main Road', area: 'KPHB Colony', st: 13.1, ab: 1571.7, ba: 1378.3,
-      d: { ab: { m: 1579.5, s: 193, date: '1 Nov' }, ba: { m: 1546.0, s: 692, date: '1 Nov' } } },
+      d: { ab: { m: 1579.5, s: 193, date: 'Nov' }, ba: { m: 1546.0, s: 692, date: 'Nov' } } },
     { id: 'S12', road: 'Hafeezpet Flyover', area: 'Hafeezpet', st: 17.4, ab: 2028.9, ba: 981.3,
-      d: { ab: { m: 1951.2, s: 245, date: '2 Nov' }, ba: { m: 919.9, s: 338, date: '4 Nov' } } },
-    { id: 'S10', road: 'Nallagandla Road', area: 'Gachibowli', st: 16.8, ab: 1126.2, ba: 183.2, d: { ab: { m: 1120.9, s: 191, date: '3 Nov' } } },
-    { id: 'S11', road: 'Gachibowli–Miyapur Road', area: 'Vinayak Nagar Colony', st: 35.1, ab: 1841.3, ba: 347.4, d: { ab: { m: 2168.0, s: 488, date: '7 Nov' }, ba: { m: 325.2, s: 73, date: '21 Nov' } } },
-    { id: 'S08', road: 'Old Bombay Road', area: 'Adarsh Nagar', st: 13.3, ab: 800.2, ba: 431.8, d: { ba: { m: 403.7, s: 84, date: '3 Nov' } } },
-    { id: 'S16', road: 'HITEC City–Kukatpally Main Road', area: 'HITEC City', st: 19.1, ab: 1088.0, ba: 2381.8, d: { ba: { m: 2298.1, s: 539, date: '1 Nov' } } },
+      d: { ab: { m: 1951.2, s: 245, date: 'Nov' }, ba: { m: 919.9, s: 338, date: 'Nov' } } },
+    { id: 'S10', road: 'Nallagandla Road', area: 'Gachibowli', st: 16.8, ab: 1126.2, ba: 183.2, d: { ab: { m: 1120.9, s: 191, date: 'Nov' } } },
+    { id: 'S11', road: 'Gachibowli–Miyapur Road', area: 'Vinayak Nagar Colony', st: 35.1, ab: 1841.3, ba: 347.4, d: { ab: { m: 2168.0, s: 488, date: 'Nov' }, ba: { m: 325.2, s: 73, date: 'Nov' } } },
+    { id: 'S08', road: 'Old Bombay Road', area: 'Adarsh Nagar', st: 13.3, ab: 800.2, ba: 431.8, d: { ba: { m: 403.7, s: 84, date: 'Nov' } } },
+    { id: 'S16', road: 'HITEC City–Kukatpally Main Road', area: 'HITEC City', st: 19.1, ab: 1088.0, ba: 2381.8, d: { ba: { m: 2298.1, s: 539, date: 'Nov' } } },
   ];
   var THREE_D = { S18: 1, S12: 1 };  // places the 3D ride has been built for
   var RATE = 8, NS = 'http://www.w3.org/2000/svg';
@@ -317,7 +317,7 @@ h2{margin:64px 0 6px;font-size:clamp(24px,3.4vw,32px);letter-spacing:-.02em;line
     var p = S.p, dv = p.d[S.dir];
     $('h1').textContent = Math.round(p.st) + ' metres across.';
     $('lead').textContent = p.road + ', ' + p.area + '. The other side is ' + Math.round(p.st) + ' m away and there is no way across. ' +
-      (dv ? 'We drove the legal way round on ' + dv.date + ' 2026: ' + km(dv.m) + ' in ' + clock(dv.s) + '.' : 'Not driven in this direction yet; the drawing uses the map’s figure.');
+      (dv ? 'We drove the legal way round in November 2026: ' + km(dv.m) + ' in ' + clock(dv.s) + '.' : 'Not driven in this direction yet; the drawing uses the map’s figure.');
     $('hs').textContent = Math.round(p.st) + ' m';
     $('note').innerHTML = (dv ? '<span class="tag ok">Driven ' + dv.date + '</span>' : '<span class="tag">Modelled</span>') +
       'Model ' + km(p[S.dir]) + (dv ? ' · driven ' + km(dv.m) : '') + '. Replayed ' + RATE + '× faster.';

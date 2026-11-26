@@ -20,17 +20,17 @@
 
   // ---------------- measured data ----------------
   var PLACES = {
-    S18: { road: 'HITEC City–Kukatpally Main Road', area: 'KPHB Colony', straight: 13.1, day: '1 Nov 2026', night: false,
+    S18: { road: 'HITEC City–Kukatpally Main Road', area: 'KPHB Colony', straight: 13.1, day: 'November 2026', night: false,
       owner: 'The road owner is Cyberabad Municipal Corporation; signals are with the traffic police.',
       drives: {
-        ab: { m: 1579.5, s: 193, model: 1571.7, from: 'west side', to: 'east side', ev: 'Driven by arcroad · 1 Nov 2026 · matched the model (1.57 km) · single pass, candidate until repeated',
+        ab: { m: 1579.5, s: 193, model: 1571.7, from: 'west side', to: 'east side', ev: 'Driven by arcroad · November 2026 · matched the model (1.57 km) · single pass, candidate until repeated',
               cost: '../../cost/?place=S18%20west%20to%20east&veh=tw&km=1.57&min=3' },
-        ba: { m: 1546.0, s: 692, model: 1378.3, from: 'east side', to: 'west side', ev: 'Driven by arcroad · 1 Nov 2026 · matched the model (1.38 km) · backed by photos',
+        ba: { m: 1546.0, s: 692, model: 1378.3, from: 'east side', to: 'west side', ev: 'Driven by arcroad · November 2026 · matched the model (1.38 km) · backed by photos',
               cost: '../../cost/?place=S18%20east%20to%20west&veh=tw&km=1.53&min=12' } } },
-    S12: { road: 'Hafeezpet Flyover', area: 'Hafeezpet', straight: 17.4, day: '2 Nov 2026', night: true, flyover: true,
+    S12: { road: 'Hafeezpet Flyover', area: 'Hafeezpet', straight: 17.4, day: 'November 2026', night: true, flyover: true,
       owner: 'The road owner is Cyberabad Municipal Corporation (Serilingampally zone); signals are with the traffic police.',
       drives: {
-        ab: { m: 1951.2, s: 245, model: 2028.9, from: 'north side', to: 'south side', ev: 'Driven by arcroad · 2 Nov 2026, after dark · matched the model (2.03 km) · single pass, candidate until repeated · counted under a pairing rule changed on 2 Nov',
+        ab: { m: 1951.2, s: 245, model: 2028.9, from: 'north side', to: 'south side', ev: 'Driven by arcroad · November 2026 · matched the model (2.03 km) · single pass, candidate until repeated · counted under a pairing rule changed on 2 Nov',
               cost: '../../cost/?place=S12%20north%20to%20south&veh=tw&km=1.93&min=4' } } }
   };
   var PID = (location.search.match(/[?&]place=(S\d+)/) || [])[1]; if (!PLACES[PID]) PID = 'S18';
@@ -400,15 +400,15 @@
     var d = DRIVES.ab, set = function (id, t) { var e = $(id); if (e) e.textContent = t; };
     document.title = 'arcroad · ' + Math.round(STRAIGHT) + ' metres across at ' + PID;
     set('p-h1', Math.round(STRAIGHT) + ' metres across.');
-    set('p-lead', PL.road + ', ' + PL.area + '. The other side is ' + SM + ' away, and there is no way across. Take the wheel for the detour we drove on ' + PL.day + (PL.night ? ' after dark' : '') + ', on its real clock.');
+    set('p-lead', PL.road + ', ' + PL.area + '. The other side is ' + SM + ' away, and there is no way across. Take the wheel for the detour we drove in ' + PL.day + (PL.night ? ' after dark' : '') + ', on its real clock.');
     set('h-straight', SM); set('intro-h', 'The other side is ' + SM + ' away, across the median.');
     set('s-who', 'Illustration, not a design: distances are measured on this drawing. ' + PL.owner);
     var act = $('s-act'); if (act) act.href = '../../act.html?pair=' + PID;
     var f = $('facts'); if (f) f.innerHTML = '<div><b>' + SM + '</b><span>Straight across, on OpenStreetMap. The median has no gap at this point.</span></div>' +
-      '<div><b>' + (d.m / 1000).toFixed(2) + ' km · ' + fmtDur(d.s) + '</b><span>' + d.from.charAt(0).toUpperCase() + d.from.slice(1) + ' to ' + d.to + ', as we drove it on ' + PL.day + (PL.night ? ', after dark' : '') + '. The model said ' + (d.model / 1000).toFixed(2) + ' km.</span></div>' +
+      '<div><b>' + (d.m / 1000).toFixed(2) + ' km · ' + fmtDur(d.s) + '</b><span>' + d.from.charAt(0).toUpperCase() + d.from.slice(1) + ' to ' + d.to + ', as we drove it in ' + PL.day + (PL.night ? ', after dark' : '') + '. The model said ' + (d.model / 1000).toFixed(2) + ' km.</span></div>' +
       '<div><b>Not driven yet</b><span>' + d.to.charAt(0).toUpperCase() + d.to.slice(1) + ' to ' + d.from + '. We publish it once it has been driven.</span></div>' +
       '<div><b>Evidence level 1</b><span>Driven and matched the model, counted under a pairing rule changed on 2 Nov after this drive was seen. <a href="../../field/">Every pass we drove</a></span></div>';
-    var n1 = $('n-clock'); if (n1) n1.textContent = 'The distance and the clock are from our drive on ' + PL.day + ', after dark (22:55–23:49 IST, a Monday): one driver, one car, phone GPS once a second (about ±50 m). Night times are shorter than at peak hours. Where the car slows and stops is illustrated; the total time is what we measured.';
+    var n1 = $('n-clock'); if (n1) n1.textContent = 'The distance and the clock are from our drive in ' + PL.day + ', after dark: one driver, one car, phone GPS once a second (about ±50 m). Night times are shorter than at peak hours. Where the car slows and stops is illustrated; the total time is what we measured.';
     var n2 = $('n-road'); if (n2) n2.textContent = 'The road is drawn straight, level and to scale in length; the real road here is a flyover and bends, and its exact U-turn points may sit a little nearer or further. The vehicles, buildings and trees are made up for illustration. No photo, person or number plate from the drive appears anywhere.';
     Array.prototype.forEach.call($('c-dir').querySelectorAll('button'), function (b) { var k = b.getAttribute('data-v');
       if (!DRIVES[k]) b.hidden = true; else b.textContent = DRIVES[k].from.charAt(0).toUpperCase() + DRIVES[k].from.slice(1) + ' to ' + DRIVES[k].to; });
@@ -435,7 +435,7 @@
     S.mode = 'done'; S.t = PACE[S.dir].T; stage.classList.add('done'); playB.textContent = 'Drive again'; skipB.disabled = true;
     var d = DRIVES[S.dir], o = DRIVES[S.dir === 'ab' ? 'ba' : 'ab'];
     $('r-head').textContent = SM + ' across. ' + (d.m / 1000).toFixed(2) + ' km and ' + fmtDur(d.s) + ' to get there.';
-    $('r-body').textContent = 'That is the drive we made on ' + PL.day + (PL.night ? ', after dark,' : '') + ' from the ' + d.from + ' to the ' + d.to + '. ' +
+    $('r-body').textContent = 'That is the drive we made in ' + PL.day + (PL.night ? ', after dark,' : '') + ' from the ' + d.from + ' to the ' + d.to + '. ' +
       (o ? 'The other way, ' + o.from + ' to ' + o.to + ', took ' + fmtDur(o.s) + ' for ' + (o.m / 1000).toFixed(2) + ' km. One drive each way, at one time of day: another hour will differ.' : 'The other way has not been driven yet. One drive, at one time of day: another hour will differ.');
     var both = !!o, km = (d.m + (o ? o.m : 0) - (both ? 2 : 1) * STRAIGHT) / 1000 * COST.days, secs = (d.s + (o ? o.s : 0)) * COST.days;
     $('r-month').textContent = (both ? 'Crossing once each way every working day' : 'Crossing this way once every working day') + ': about ' + Math.round(km) + ' km and ' + fmtDur(secs) +

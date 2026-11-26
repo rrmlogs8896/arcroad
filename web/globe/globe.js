@@ -287,7 +287,7 @@ async function selectCity(id) {
   if (id === 'hyderabad') {
     showPanel({ eyebrow: 'City · measured', title: c.name, hook: '24 places on the west corridor where crossing the road takes a long way round.',
       facts: [['Places checked', String(DATA.spots.length)], ['Confirmed by a drive so far', String(DATA.spots.filter((x) => x.driven).length)]],
-      caveat: 'Places marked driven were driven by arcroad on 1 Nov 2026 and matched the model. The rest are candidates: modelled from OpenStreetMap (extract of 25 Oct 2026). Tap a ring to see one.' });
+      caveat: 'Places marked driven were driven by arcroad in November 2026 and matched the model. The rest are candidates: modelled from OpenStreetMap (extract of 25 Oct 2026). Tap a ring to see one.' });
   } else {
     showPanel({ eyebrow: 'City · measured', title: c.name, hook: 'Road network measured from the same open map data.',
       facts: [['Measured', '28 Oct 2026'], ['Places shown here', 'next']],
@@ -295,7 +295,7 @@ async function selectCity(id) {
   }
 }
 
-function drovenOn(s) { const ds = Object.values(s.driven || {}).map((d) => d.date).filter(Boolean).sort(); const f = (d) => { const [y, m, dd] = d.split('-'); return `${+dd} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m - 1]} ${y}`; }; return ds.length ? f(ds[0]) : ''; }
+function drovenOn(s) { const ds = Object.values(s.driven || {}).map((d) => d.date).filter(Boolean).sort(); const f = (d) => { const [y, m, dd] = d.split('-'); return `${['January','February','March','April','May','June','July','August','September','October','November','December'][+m - 1]} ${y}`; }; return ds.length ? f(ds[0]) : ''; }
 function spotHook(s) {
   const worst = (x) => Math.max(x.ab || 0, x.ba || 0);
   const ranked = [...DATA.spots].sort((p, q) => worst(q) - worst(p));

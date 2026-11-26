@@ -117,7 +117,7 @@
         ['Side B', Number(pair.b[1]).toFixed(5) + ', ' + Number(pair.b[0]).toFixed(5) + '  ' + osm(pair.b[1], pair.b[0])],
         ['Straight across', formatDistance(pair.straight_m)]];
       var dv = pair.driven || {};
-      var way = function (d) { return pair[d] == null ? 'no legal route found on the map' : (dv[d] ? formatDistance(dv[d].m) + ' driven on ' + dv[d].date + ' (model ' + formatDistance(pair[d]) + ')' : formatDistance(pair[d]) + ' on the mapped network'); };
+      var way = function (d) { return pair[d] == null ? 'no legal route found on the map' : (dv[d] ? formatDistance(dv[d].m) + ' driven (model ' + formatDistance(pair[d]) + ')' : formatDistance(pair[d]) + ' on the mapped network'); };
       rows.push(['By road, side A to B (cars)', way('ab')]);
       rows.push(['By road, side B to A (cars)', way('ba')]);
       if (pair.tw_note) rows.push(['Two-wheelers', pair.tw_note]);

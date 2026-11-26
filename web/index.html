@@ -231,7 +231,7 @@ img,svg,canvas,video{max-width:100%}
 
 <div class="staging">
   <div class="wrap">
-    <p><strong style="color:var(--soft);font-weight:500">v0 · first drive results.</strong> 1–21 Nov 2026: we drove the model's detours and all 10 comparable directions matched, none failed: 7 judged under rules fixed before driving, 3 under rules changed afterwards (see results). Area figures below are still model values. <a href="field/" style="color:var(--accent)">See every pass</a></p>
+    <p><strong style="color:var(--soft);font-weight:500">v0 · first drive results.</strong> November 2026: we drove the model's detours and all 10 comparable directions matched, none failed: 7 judged under rules fixed before driving, 3 under rules changed afterwards (see results). Area figures below are still model values. <a href="field/" style="color:var(--accent)">See every pass</a></p>
     <span class="m">7 places driven · 8 days</span>
   </div>
 </div>
@@ -257,12 +257,21 @@ img,svg,canvas,video{max-width:100%}
   <div class="wrap">
     <h1>A place you can see, 1.5 km away</h1>
     <p class="lede">Divided roads cut neighbours off. arcroad measures what crossing your own road costs, then drives the detour to check. <a href="#act" style="color:var(--accent);white-space:nowrap">What you can do ↓</a></p>
+<!-- green:start --><div class="green" role="note" aria-label="What one detour costs a year" style="margin:22px 0 6px;padding:18px 18px 14px;border:1px solid rgba(124,197,160,.28);border-radius:16px;background:linear-gradient(180deg,rgba(124,197,160,.09),rgba(124,197,160,.02))">
+<p style="margin:0 0 12px;font:500 12px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;text-transform:uppercase;color:#7CC5A0">Green check · one detour, one person, one year</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px">
+<div><b style="display:block;font-size:28px;line-height:1.15;font-weight:600;color:#E8EAED">₹12,699</b><span style="color:#9AA0A6;font-size:14px">fuel, wear and time on a 1.75 km detour, twice a day</span></div>
+<div><b style="display:block;font-size:28px;line-height:1.15;font-weight:600;color:#7CC5A0">49 kg</b><span style="color:#9AA0A6;font-size:14px">of CO₂, approximately, from one petrol two-wheeler</span></div>
+<div><b style="display:block;font-size:28px;line-height:1.15;font-weight:600;color:#7CC5A0">2,426 t</b><span style="color:#9AA0A6;font-size:14px">of CO₂ a year if 50,000 commuters do the same (an illustration)</span></div>
+</div>
+<p style="margin:12px 0 0;font-size:14px;color:#C9CDD2">A shorter legal crossing saves fuel and carbon for every rider, and for every bus that is sent round. <a href="cost/" style="color:var(--accent)">Work out yours →</a></p>
+</div><!-- green:end -->
     <div class="tw">
     <a class="teaser" href="drive/3d/?dive=1" aria-label="Ride the S18 detour in 3D: 13 metres across, 1.58 kilometres to get there">
       <video class="on" muted playsinline preload="none" poster="drive/media/films/drive.jpg" aria-hidden="true"></video>
       <video muted playsinline preload="none" aria-hidden="true"></video>
       <span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      <span class="tz"><span class="cap"><b>13 m across. 1.58 km to get there.</b><small>3D illustration of our 1 Nov drive at S18</small></span><span class="go">Dive into 3D →</span></span>
+      <span class="tz"><span class="cap"><b>13 m across. 1.58 km to get there.</b><small>3D illustration of our first drive at S18</small></span><span class="go">Dive into 3D →</span></span>
     </a>
     <button class="tp" type="button" aria-label="Pause the film" aria-pressed="false" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path class="ps" d="M5 3.5v9M11 3.5v9"/><path class="pl" d="M5.5 3.2v9.6L12.6 8z"/></svg></button>
     </div>
@@ -272,8 +281,8 @@ img,svg,canvas,video{max-width:100%}
       var V = box.querySelectorAll('video'), cap = box.querySelector('.cap'), dots = box.querySelectorAll('.dots i');
       // Six films, all built from measured drives (tools/films/). Played in random order; nothing is stored.
       var FILMS = [
-        ['drive', '13 m across. 1.58 km to get there.', '3D illustration of our 1 Nov drive at S18', 'drive/3d/?dive=1'],
-        ['night', '17 m across. 1.95 km after dark.', 'Illustration of our 2 Nov night drive at S12', 'drive/3d/?place=S12&dive=1'],
+        ['drive', '13 m across. 1.58 km to get there.', '3D illustration of our first drive at S18', 'drive/3d/?dive=1'],
+        ['night', '17 m across. 1.95 km after dark.', 'Illustration of a night drive at S12', 'drive/3d/?place=S12&dive=1'],
         ['orbit', 'From orbit to 13 metres.', '29 cities on the globe, down to one road in Hyderabad', 'globe/?spot=S18'],
         ['thread', '1,580 m to cross 13 m.', 'The S18 detour, traced from our drive', 'drive/3d/?dive=1'],
         ['blueprint', 'What could fix it.', 'Three options drawn on S18 · illustration, not a design', 'drive/3d/?fix=auto'],
@@ -339,7 +348,7 @@ img,svg,canvas,video{max-width:100%}
         <dt>Place</dt><dd>HITEC City–Kukatpally Main Road at KPHB Colony (arcroad place S18: S01 to S24 are the 24 places of our first field sample, drawn at random before any drive). <a href="drive/" style="color:var(--accent)">Ride the detour</a> · <a href="globe/?spot=S18" style="color:var(--accent)">See it on the globe</a></dd>
         <dt>Straight across</dt><dd>13 m, measured on OpenStreetMap (extract of 2 Nov 2026)</dd>
         <dt>Model said</dt><dd>1.57 km one way, 1.38 km the other</dd>
-        <dt>We drove</dt><dd>1.58 km and 1.55 km, on 1 Nov 2026, phone GPS once a second (about ±50 m)</dd>
+        <dt>We drove</dt><dd>1.58 km and 1.55 km, in November 2026, phone GPS once a second (about ±50 m)</dd>
         <dt>Your cost</dt><dd><a href="cost/?place=S18%20west%20to%20east&amp;veh=tw&amp;km=1.57&amp;min=3" style="color:var(--accent)">West to east, 1.57 km extra</a> · <a href="cost/?place=S18%20east%20to%20west&amp;veh=tw&amp;km=1.53&amp;min=12" style="color:var(--accent)">East to west, 1.53 km extra</a>. Opens the calculator with this crossing filled in; change anything.</dd>
         <dt>Evidence</dt><dd>Both directions driven and matched the model; one direction also photographed</dd>
       </dl>
@@ -360,7 +369,7 @@ img,svg,canvas,video{max-width:100%}
       <div class="cell"><p class="v">12,585</p><p class="k">Points measured</p></div>
       <div class="cell"><p class="v hot">2.2–3.8×</p><p class="k">Beyond the ring road vs the core city</p></div>
       <div class="cell"><p class="v">94</p><p class="k">Areas ranked</p></div>
-      <div class="cell"><p class="v hot">10 / 10</p><p class="k">Driven directions that matched the model (1–21 Nov 2026; all 10, 7 under rules fixed before driving)</p></div>
+      <div class="cell"><p class="v hot">10 / 10</p><p class="k">Driven directions that matched the model (November 2026; all 10, 7 under rules fixed before driving)</p></div>
     </div>
   </div>
 </section>
@@ -407,7 +416,7 @@ img,svg,canvas,video{max-width:100%}
         <li>Short term, weeks and low cost: a sign before each closed median saying how far the next U-turn is; lit, marked U-turn bays; enforcement where people ride against traffic, so the legal way round is the normal one.</li>
         <li>Long term, years and infrastructure: a U-turn opening nearer, a signal-free U-turn with a bay, a signal-controlled crossing or a U-turn underpass, each drawn on a real road with its trade-off.</li>
         <li>Rules: Motor Vehicles Act 1988 ss. 119, 177, 184 and 194E (as amended in 2019); Motor Vehicles (Driving) Regulations 2017, regs 8 and 31. Fines for driving against traffic differ by state. Emergency number: Telangana Police Dial-112.</li>
-        <li>Detour times are from single arcroad drives on 1–7 Nov 2026. The short-term ideas are options for the road owner, not measured results; arcroad does not count wrong-way riding at any place or link a crash to a road feature.</li>
+        <li>Detour times are from single arcroad drives in November 2026. The short-term ideas are options for the road owner, not measured results; arcroad does not count wrong-way riding at any place or link a crash to a road feature.</li>
       </ul>
     </details>
   </div>
@@ -425,7 +434,7 @@ img,svg,canvas,video{max-width:100%}
       </div>
       <div class="seg" role="group" aria-label="Vehicle"><button type="button" data-v="tw" aria-pressed="true">Two-wheeler</button><button type="button" data-v="car" aria-pressed="false">Car</button></div>
       <p>That is <span id="t-day">–</span> a working day, for a place 13 m away. <a href="cost/?place=S18%20both%20ways&amp;veh=tw&amp;km=3.10&amp;min=15" style="color:var(--accent)">Put in your own numbers</a></p>
-      <small>From one arcroad drive on 1 Nov 2026, a Sunday: 1.58 km and 1.55 km, 15 minutes both ways including waits. A year here is 22 working days a month. Fuel uses the cost calculator's figures: petrol ₹116.15 a litre (16 Oct 2026), 50 km a litre on a two-wheeler, 16 in a car. One person and one crossing, not a city total: how many people cross here has not been measured. The east-to-west time is a single pass and is being re-checked.</small>
+      <small>From one arcroad drive in November 2026: 1.58 km and 1.55 km, 15 minutes both ways including waits. A year here is 22 working days a month. Fuel uses the cost calculator's figures: petrol ₹116.15 a litre (16 Oct 2026), 50 km a litre on a two-wheeler, 16 in a car. One person and one crossing, not a city total: how many people cross here has not been measured. The east-to-west time is a single pass and is being re-checked.</small>
     </div>
   </div>
 </section>
@@ -623,7 +632,7 @@ img,svg,canvas,video{max-width:100%}
 
   var LIMS = [
     ["open", "s-open", "The open map under-records median openings and service roads, so absolute figures come out longer than the real drive. Ratios between areas hold; individual values do not."],
-    ["in progress", "s-prog", "Ground verification against routes people actually drive. First field day, 1 Nov 2026: 5 of 5 comparable directions at 3 places matched the model; one pass was rejected and five places could not be scored. The 2 Nov night drive added S12 (matched, under a pairing rule changed after that drive; declared on the results page). The 3 Nov night drive added S10 and S08 (both matched, under a loop rule written after that drive; declared on the results page). Repeat drives on other days are under way. Area figures remain model values until more places are driven."],
+    ["in progress", "s-prog", "Ground verification against routes people actually drive. First field day: 5 of 5 comparable directions at 3 places matched the model; one pass was rejected and five places could not be scored. A later night drive added S12 (matched, under a pairing rule changed after that drive; declared on the results page). Another night drive added S10 and S08 (both matched, under a loop rule written after that drive; declared on the results page). Repeat drives on other days are under way. Area figures remain model values until more places are driven."],
     ["open", "s-open", "Map lag. Openings in medians are built and closed faster than any map updates. Every figure is true for the map of its extract date, shown at the foot of this page. One driven crossing found a new opening the map did not yet have: there the real drive was a fraction of the modelled one."],
     ["corrected", "s-fix", "We assumed the third of points flagged as extreme were mostly bad data. They are not. Four in five are crossings under 25 m apart and the typical one needs 2.5 km of driving — the thing we set out to measure."],
     ["wrong", "s-fix", "We predicted the flagging was an artefact of the study area boundary. The data says otherwise: the points furthest from the boundary are the worst. The test could not answer its own question, and that is recorded rather than quietly dropped."],

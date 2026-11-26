@@ -548,7 +548,7 @@ window.ARCROAD_PAIRS = {
   "driven": {
    "ba": {
     "m": 403.7,
-    "date": "2026-11-03"
+    "date": "2026-11"
    }
   },
   "extract_date": "2026-11-02",
@@ -711,7 +711,7 @@ window.ARCROAD_PAIRS = {
   "driven": {
    "ab": {
     "m": 1120.9,
-    "date": "2026-11-03"
+    "date": "2026-11"
    }
   },
   "extract_date": "2026-11-02",
@@ -795,7 +795,7 @@ window.ARCROAD_PAIRS = {
   "driven": {
    "ab": {
     "m": 2168.0,
-    "date": "2026-11-07"
+    "date": "2026-11"
    }
   },
   "extract_date": "2026-11-02",
@@ -879,11 +879,11 @@ window.ARCROAD_PAIRS = {
   "driven": {
    "ab": {
     "m": 1951.2,
-    "date": "2026-11-02"
+    "date": "2026-11"
    },
    "ba": {
     "m": 919.9,
-    "date": "2026-11-04"
+    "date": "2026-11"
    }
   },
   "extract_date": "2026-11-02",
@@ -1207,7 +1207,7 @@ window.ARCROAD_PAIRS = {
   "driven": {
    "ba": {
     "m": 2298.1,
-    "date": "2026-11-01"
+    "date": "2026-11"
    }
   },
   "extract_date": "2026-11-02",
@@ -1356,11 +1356,11 @@ window.ARCROAD_PAIRS = {
   "driven": {
    "ab": {
     "m": 1579.5,
-    "date": "2026-11-01"
+    "date": "2026-11"
    },
    "ba": {
     "m": 1546.0,
-    "date": "2026-11-01"
+    "date": "2026-11"
    }
   },
   "extract_date": "2026-11-02",
