@@ -1,17 +1,10 @@
 /* Ask arcroad and the sound button. On-device; nothing typed leaves the device or is stored. */
 .ak-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.ak-fab,.ak-snd-fab{position:fixed;bottom:18px;z-index:60;min-height:44px;border:1px solid rgba(232,168,124,.45);background:rgba(11,13,16,.92);color:#E8EAED;cursor:pointer;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 8px 28px rgba(0,0,0,.35);transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),background-color .2s ease;-webkit-tap-highlight-color:transparent}
+.ak-fab{position:fixed;bottom:18px;z-index:60;min-height:44px;border:1px solid rgba(232,168,124,.45);background:rgba(11,13,16,.92);color:#E8EAED;cursor:pointer;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 8px 28px rgba(0,0,0,.35);transition:border-color .2s ease,transform .2s cubic-bezier(.2,.7,.2,1),background-color .2s ease;-webkit-tap-highlight-color:transparent}
 .ak-fab{right:18px;display:flex;align-items:center;gap:8px;padding:0 16px 0 14px;border-radius:999px;font:500 14px/1 Inter,system-ui,-apple-system,sans-serif}
-.ak-snd-fab{right:166px;width:44px;display:grid;place-items:center;border-radius:50%;color:#C9CDD2;position:fixed}
-.ak-fab:hover,.ak-snd-fab:hover{border-color:#E8A87C;transform:translateY(-1px)}
-.ak-fab:active,.ak-snd-fab:active{transform:translateY(0) scale(.98)}
-.ak-fab:focus-visible,.ak-snd-fab:focus-visible,.ak-chip:focus-visible,.ak-x:focus-visible{outline:2px solid #E8A87C;outline-offset:3px}
-.ak-snd-fab[aria-pressed=true]{color:#E8A87C;border-color:#E8A87C}
-.ak-snd-fab svg{grid-area:1/1}.ak-eq{grid-area:1/1;display:none;align-items:flex-end;gap:2px;height:14px}
-.ak-snd-fab[aria-pressed=true] svg{display:none}.ak-snd-fab[aria-pressed=true] .ak-eq{display:flex}
-.ak-eq i{width:3px;height:5px;border-radius:2px;background:#E8A87C;animation:ak-eq 1.4s ease-in-out infinite}
-.ak-eq i:nth-child(2){animation-delay:.25s}.ak-eq i:nth-child(3){animation-delay:.5s}
-@keyframes ak-eq{0%,100%{height:4px}50%{height:13px}}
+.ak-fab:hover{border-color:#E8A87C;transform:translateY(-1px)}
+.ak-fab:active{transform:translateY(0) scale(.98)}
+.ak-fab:focus-visible,.ak-chip:focus-visible,.ak-x:focus-visible{outline:2px solid #E8A87C;outline-offset:3px}
 .ak-dot{width:8px;height:8px;border-radius:50%;background:#E8A87C;animation:ak-breathe 2.8s ease-in-out infinite}
 @keyframes ak-breathe{0%,100%{box-shadow:0 0 0 0 rgba(232,168,124,.45)}50%{box-shadow:0 0 0 7px rgba(232,168,124,0)}}
 .ak-panel{position:fixed;right:18px;bottom:74px;z-index:61;width:min(410px,calc(100vw - 24px));height:min(600px,calc(100vh - 110px));display:flex;flex-direction:column;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:#0E1115;color:#E8EAED;font:15px/1.55 Inter,system-ui,-apple-system,sans-serif;box-shadow:0 24px 64px rgba(0,0,0,.5);overflow:hidden;opacity:0;transform:translateY(10px) scale(.985);transform-origin:bottom right;transition:opacity .2s ease,transform .22s cubic-bezier(.2,.7,.2,1);will-change:opacity,transform}
@@ -52,7 +45,7 @@
 #clock{display:flex;gap:12px;align-items:flex-start;margin:22px 0;padding:14px 16px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(232,168,124,.05);color:#C9CDD2;font:14px/1.55 Inter,system-ui,sans-serif;max-width:760px}
 #clock b{color:#E8EAED;font-variant-numeric:tabular-nums}#clock a{color:#E8A87C;white-space:nowrap}
 .ck-dot{flex:0 0 8px;width:8px;height:8px;margin-top:7px;border-radius:50%;background:#7CC5A0;animation:ak-breathe 2.8s ease-in-out infinite}
-@media (max-width:520px){.ak-panel{right:12px;left:12px;width:auto;bottom:70px;height:calc(100vh - 96px);height:calc(100dvh - 96px)}.ak-fab{right:12px;bottom:12px}.ak-snd-fab{right:160px;bottom:12px}.ak-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:12px}.ak-chip{flex:0 0 auto}}
-@media (prefers-reduced-motion:reduce){.ak-dot,.ck-dot,.ak-eq i,.ak-typing i{animation:none}.ak-panel,.ak-msg,.ak-fab,.ak-snd-fab{transition:none}}
-@media print{.ak-fab,.ak-snd-fab,.ak-panel{display:none}}
+@media (max-width:520px){.ak-panel{right:12px;left:12px;width:auto;bottom:70px;height:calc(100vh - 96px);height:calc(100dvh - 96px)}.ak-fab{right:12px;bottom:12px}.ak-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:12px}.ak-chip{flex:0 0 auto}}
+@media (prefers-reduced-motion:reduce){.ak-dot,.ck-dot,.ak-typing i{animation:none}.ak-panel,.ak-msg,.ak-fab{transition:none}}
+@media print{.ak-fab,.ak-panel{display:none}}
 /* ar-34dd56be9abe */

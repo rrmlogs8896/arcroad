@@ -44,7 +44,7 @@
   });
   form.addEventListener("submit", function (e) {
     e.preventDefault(); e.stopImmediatePropagation();
-    var v = { code: code(), area: (form.elements.area.value || "").trim().slice(0, 80), help: [], time: form.elements.time.value, tasks: {} };
+    var v = { code: code(), area: (form.elements.area.value || "").trim().slice(0, 80), help: [], time: form.elements.time.value, tasks: {}, src: "volunteer" };
     Array.prototype.forEach.call(form.querySelectorAll("input[type=checkbox]:checked"), function (c) { v.help.push(c.value); });
     keep(v); sync(v); box.scrollIntoView({ behavior: "smooth", block: "start" });
   }, true);

@@ -104,10 +104,6 @@
   var fab = d.createElement("button");
   fab.className = "ak-fab"; fab.type = "button"; fab.setAttribute("aria-expanded", "false"); fab.setAttribute("aria-controls", "ak-panel");
   fab.innerHTML = "<span class=\"ak-dot\" aria-hidden=\"true\"></span>Ask arcroad";
-  var snd = d.createElement("button");
-  snd.className = "ak-snd-fab"; snd.type = "button"; snd.setAttribute("aria-pressed", "false"); snd.setAttribute("aria-label", "Soft background sound, off");
-  snd.title = "Soft background sound (off until you tap)";
-  snd.innerHTML = "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 18V5l11-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"17\" cy=\"16\" r=\"3\"/></svg><span class=\"ak-eq\" aria-hidden=\"true\"><i></i><i></i><i></i></span>";
   var panel = d.createElement("section");
   panel.className = "ak-panel"; panel.id = "ak-panel"; panel.hidden = true; panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "Ask arcroad");
   panel.innerHTML = "<div class=\"ak-head\"><div><b>Ask arcroad</b><span>Answers from this site, worked out on your device</span></div><button class=\"ak-x\" type=\"button\" aria-label=\"Close\">×</button></div>"
@@ -117,6 +113,8 @@
   var log = panel.querySelector(".ak-log"), chips = panel.querySelector(".ak-chips"), input = panel.querySelector(".ak-in"), sug = panel.querySelector(".ak-sug");
   CHIPS.forEach(function (c) { var b = d.createElement("button"); b.type = "button"; b.className = "ak-chip"; b.textContent = c; b.addEventListener("click", function () { ask(c); }); chips.appendChild(b); });
 
+  var asked = 0;
+  function joined() { try { return !!localStorage.getItem("arcroad.volunteer.v1"); } catch (e) { return false; } }
   function say(html, me) {
     var m = d.createElement("div"); m.className = "ak-msg " + (me ? "ak-me" : "ak-bot");
     if (me) m.textContent = html; else m.innerHTML = html;
@@ -137,7 +135,7 @@
         if (/home ?screen|shortcut|save (it|this|arcroad)|bookmark|add to home/.test(q)) return say(pre + homeScreen());
         var f = faq(q), hits = search(raw), more = "";
         if (hits.length) more = (f ? "<p class=\"ak-sub\">Also on the site</p>" : "") + hits.slice(0, f ? 2 : 3).map(function (h) { return "<a class=\"ak-hit\" href=\"" + esc(h.u) + "\"><b>" + esc(h.title) + "</b><small>" + esc(h.snip) + "</small></a>"; }).join("");
-        if (f) return say(pre + f.a + links(f.l) + more);
+        if (f) { asked++; return say(pre + f.a + links(f.l) + more + (asked === 2 && !joined() ? "<p class=\"ak-join\">Want to help measure your own crossing? <a href=\"/volunteer/#signup\">Join in 10 seconds</a>. No name, phone or email.</p>" : "")); }
         if (more) return say(pre + "<p>Here is where the site covers that:</p>" + more);
         if (m === "upset") return say(pre + "<p>I could not find that exact thing on the site, but two things help most: tell us about the place, or send the people responsible a ready letter.</p>" + links([["/report/", "Report a change"], ["/act.html", "Write to the people responsible"]]));
         say(pre + "<p>I could not find that on this site. Try a road or area name, or one of the suggestions below. For anything else, write to hello@arcroad.org.</p>");
@@ -182,28 +180,7 @@
   d.addEventListener("keydown", function (e) { if (e.key === "Escape" && !panel.hidden) open(false); });
   d.addEventListener("click", function (e) { var t = e.target.closest && e.target.closest("[data-ak-ask]"); if (!t) return; e.preventDefault(); open(true); ask(t.getAttribute("data-ak-ask")); });
 
-  /* ---------- soft sound: made in the browser, nothing fetched, off until tapped, never autoplays ---------- */
-  var ac = null, master = null;
-  function soundOn() {
-    var C = window.AudioContext || window.webkitAudioContext; if (!C) return false;
-    ac = new C(); master = ac.createGain(); master.gain.value = 0;
-    var lp = ac.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 900; master.connect(lp); lp.connect(ac.destination);
-    [196, 246.94, 293.66, 392].forEach(function (f, i) {
-      var o = ac.createOscillator(), g = ac.createGain(), l = ac.createOscillator(), lg = ac.createGain();
-      o.type = i % 2 ? "triangle" : "sine"; o.frequency.value = f; o.detune.value = (i - 1.5) * 4;
-      g.gain.value = 0.045; l.frequency.value = 0.04 + i * 0.021; lg.gain.value = 0.03;
-      l.connect(lg); lg.connect(g.gain); o.connect(g); g.connect(master); o.start(); l.start();
-    });
-    master.gain.linearRampToValueAtTime(0.45, ac.currentTime + 3); return true;
-  }
-  function soundOff() { if (!ac) return; var a = ac; master.gain.cancelScheduledValues(a.currentTime); master.gain.setValueAtTime(master.gain.value, a.currentTime); master.gain.linearRampToValueAtTime(0, a.currentTime + 0.8); setTimeout(function () { a.close(); }, 900); ac = null; }
-  snd.addEventListener("click", function () {
-    var on = snd.getAttribute("aria-pressed") !== "true";
-    if (on && !soundOn()) return; if (!on) soundOff();
-    snd.setAttribute("aria-pressed", String(on)); snd.setAttribute("aria-label", "Soft background sound, " + (on ? "on" : "off"));
-  });
-  d.addEventListener("visibilitychange", function () { if (ac) { if (d.hidden) ac.suspend(); else ac.resume(); } });
 
-  d.body.appendChild(panel); d.body.appendChild(snd); d.body.appendChild(fab);
+  d.body.appendChild(panel); d.body.appendChild(fab);
 })();
 ;(globalThis.__ar=globalThis.__ar||[]).push("ar-17c4bccb827c");

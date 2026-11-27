@@ -237,8 +237,8 @@ def tonight(night):
     return first + JOBS + last
 
 
-AREASCAN_NIGHTS = {"2026-11-26", "2026-11-27"}  # second night repeats the first as a stability check
-ENTRYSCAN_NIGHTS = {"2026-11-26", "2026-11-27"}  # second night repeats the first as a stability check
+AREASCAN_NIGHTS = {"2026-11-26", "2026-11-27"}
+ENTRYSCAN_NIGHTS = {"2026-11-26"}  # 27 Nov dequeued: failed its benchmark (310 m off, 2.2 vs 3.4 km)
 ADMINMAP_NIGHT = "2026-11-15"  # one night only: Sunday 15 Nov, 22:00 IST
 BENGALURU_REMOTE_NIGHT = "2026-11-07"  # moved from 6 Nov: that night ran the earlier version  # matches run_on in the private places file
 

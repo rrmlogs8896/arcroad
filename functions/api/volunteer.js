@@ -5,6 +5,7 @@ const CODE = /^AR-V-\d{6}-[A-Z0-9]{4}$/;
 const HELP = ["Driving and timing a crossing near me", "Photographing a place (faces and plates blurred)", "Fixing roads on OpenStreetMap", "Telling my resident association or college", "Running arcroad for another city"];
 const TIME = ["An hour or two, once", "A few hours a month", "More, regularly"];
 const TASKS = ["check", "map", "report", "tell", "cost"];
+const SRC = ["volunteer", "home", "cost", "roads", "field", "moves", "uturns", "report", "globe"];
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json", "cache-control": "no-store" } });
 const clean = (s) => String(s || "").replace(/\S+@\S+/g, "").replace(/\+?\d[\d\s-]{7,}\d/g, "").replace(/[<>]/g, "").replace(/\s+/g, " ").trim().slice(0, 80);
 
@@ -22,6 +23,7 @@ export async function onRequestPost({ request, env }) {
     help: (Array.isArray(b.help) ? b.help : []).filter((h) => HELP.includes(h)),
     time: TIME.includes(b.time) ? b.time : "",
     tasks: Object.fromEntries(TASKS.map((t) => [t, !!(b.tasks && b.tasks[t])])),
+    src: old && old.src ? old.src : SRC.includes(b.src) ? b.src : "",
     created: old ? old.created : now,
     updated: now,
   };

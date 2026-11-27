@@ -58,6 +58,7 @@ async function dashboard(env) {
   const area = count((r) => [r.area ? r.area.replace(/\s+/g, " ").trim().replace(/\b\w/g, (c) => c.toUpperCase()) : "Not given"]);
   const help = count((r) => (r.help && r.help.length ? r.help : ["Not chosen"]));
   const time = count((r) => [r.time || "Not chosen"]);
+  const src = count((r) => [r.src ? "From the " + r.src + " page" : "Before 27 Nov (not recorded)"]);
   const tasks = Object.entries(TASKS).map(([k, label]) => [label, recs.filter((r) => r.tasks && r.tasks[k]).length]).sort((a, b) => b[1] - a[1]);
   const days = []; for (let i = 29; i >= 0; i--) { const d = new Date(now - i * day).toISOString().slice(0, 10); days.push([d.slice(5), recs.filter((r) => (r.created || "").slice(0, 10) === d).length]); }
   const maxDay = Math.max(1, ...days.map((d) => d[1]));
@@ -67,6 +68,7 @@ async function dashboard(env) {
 <div class="kpis"><div class="kpi"><b>${n}</b><span>sign-ups in total</span></div><div class="kpi"><b>${since(1)}</b><span>in the last 24 hours</span></div><div class="kpi"><b>${since(7)}</b><span>in the last 7 days</span></div><div class="kpi"><b>${since(30)}</b><span>in the last 30 days</span></div><div class="kpi"><b>${area.filter(([a]) => a !== "Not given").length}</b><span>different areas</span></div></div>
 <h2>Sign-ups a day, last 30 days</h2>${days.map(([d, v]) => `<div class="row"><span>${d}</span><span class="bar"><i style="width:${Math.round((v / maxDay) * 100)}%"></i></span><span class="n">${v}</span></div>`).join("")}
 <h2>By area</h2>${bars(area.slice(0, 40), n)}
+<h2>Where they joined</h2>${bars(src, n)}
 <h2>How they want to help</h2>${bars(help, n)}
 <h2>Time offered</h2>${bars(time, n)}
 <h2>Starter tasks ticked</h2>${bars(tasks, n)}
