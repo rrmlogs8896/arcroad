@@ -1,0 +1,14 @@
+{"source":"areascan-v1, night 2026-11-26, OpenStreetMap extract 2026-11-25T21:22Z, pipeline V10, HMDA box",
+ "routed_points":11155,"areas_with_30_points":83,
+ "rule":"top 10 by median Detour Index; three-router check on 10 sample points each; unconfirmed = OSRM or Valhalla median more than 25% from ours",
+ "rows":[
+  ["Pocharam",683.2,15166,50,true,false],
+  ["Padamati Sai Guda",432.9,8792,32,false,false],
+  ["Velankanni Nagar",222.7,3972,36,false,false],
+  ["S.LN Colony",193.4,3638,41,false,false],
+  ["Dundigal",152.6,3114,40,false,false],
+  ["Madhura Nagar",112.1,2153,114,false,false],
+  ["Narsingi",111.0,2007,77,false,true],
+  ["Kollur",107.4,2040,33,false,false],
+  ["Edulanagulapalle",105.3,1738,35,false,true],
+  ["Humayun Nagar",92.0,1692,34,false,false]]}

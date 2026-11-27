@@ -268,7 +268,27 @@ function hidePanel() { $('panel').hidden = true; stopPulse(); }
 $('close').addEventListener('click', hidePanel);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hidePanel(); });
 
+// Real photos from our drives (faces, number plates and phone numbers blurred; dashboard cropped).
+const PHOTOS = {
+  S11: { f: 's11-u-turn-sign', w: 1280, h: 700, alt: 'Traffic on a city road with a blue U-turn sign on the median.', cap: 'Photo from our drive: the signed U-turn a short way past this place, which one direction has to use.' },
+  S12: { f: 's12-median-closed-with-blocks', w: 1280, h: 700, alt: 'Two-wheelers beside a median lined with yellow and black concrete blocks.', cap: 'Photo from our drive: concrete blocks carry the median on past this place, with no gap to cross.' },
+  S13: { f: 's13-u-turn-opening', w: 1280, h: 735, alt: 'Cars, autos and two-wheelers bunched at a single U-turn opening in the median.', cap: 'Photo from our drive: the one U-turn opening, about 450 m away, shared by cars, autos, two-wheelers and trucks.' }
+};
+function showPhoto(id) {
+  const ph = id && PHOTOS[id], box = $('p-photo'); if (!box) return;
+  if (!ph) { box.hidden = true; return; }
+  const img = $('p-photo-img');
+  img.src = '../field/photos/' + ph.f + '-640.jpg';
+  img.srcset = '../field/photos/' + ph.f + '-640.jpg 640w, ../field/photos/' + ph.f + '.jpg 1280w';
+  img.sizes = '(max-width: 700px) 92vw, 360px';
+  img.width = ph.w; img.height = ph.h; img.alt = ph.alt;
+  $('p-photo-a').href = '../field/photos/' + ph.f + '.jpg'; $('p-photo-full').href = '../field/photos/' + ph.f + '.jpg';
+  $('p-photo-cap').textContent = ph.cap;
+  box.hidden = false;
+}
+
 function showPanel({ eyebrow, title, hook, facts, caveat, spot }) {
+  showPhoto(spot && spot.id);
   if (window.innerWidth < 700) document.querySelector('.list').open = false;
   costSpot = spot || null; renderCost();
   $('p-eyebrow').textContent = eyebrow; $('p-title').textContent = title; $('p-hook').textContent = hook || '';

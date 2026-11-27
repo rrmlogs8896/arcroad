@@ -162,7 +162,7 @@ def render(day: dict) -> str:
     figs = "".join(f'<figure><img src="{e(p["src"])}" srcset="{e(p["src"][:-4])}-640.jpg 640w, {e(p["src"])} 1280w" sizes="(max-width: 700px) 100vw, 470px"'
                    f' alt="{e(p["alt"])}" width="{p["w"]}" height="{p["h"]}" loading="lazy" decoding="async">'
                    f'<figcaption>{e(p["caption"])}</figcaption></figure>' for p in day.get("photos", []))
-    photos = (f'<h2>Photos from the drives</h2><div class="figs">{figs}</div>'
+    photos = (f'<h2 id="photos">Photos from the drives</h2><div class="figs">{figs}</div>'
               '<p class="note">Photos, not renders. Number plates, faces and phone numbers are blurred; the dashboard is cropped out.</p>') if figs else ""
     nr = "".join(f'<li><b>{e(r["id"])} {DIRS.get(r["dir"], "")}</b>: {e(r["reason"])}</li>' for r in rejected)
     return f"""<!doctype html>

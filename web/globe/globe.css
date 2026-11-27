@@ -83,4 +83,5 @@ button:focus-visible,summary:focus-visible{outline:2px solid var(--soft);outline
 @media (pointer:coarse){.top .home{display:inline-block;padding-block:8px}}
 
 @media (pointer:coarse){button.tap{min-height:40px;min-width:44px}}
+.panel .pph{margin:0 0 12px}.panel .pph img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line2)}.panel .pph figcaption{margin-top:6px;font-size:13px;line-height:1.45;color:var(--soft)}.panel .pph figcaption a{color:var(--accent);white-space:nowrap}
 :root{--ar-build:"ar-2fc0de3939ed"}

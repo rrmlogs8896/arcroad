@@ -8,6 +8,8 @@ Only the Worker can reach this server; it has no public address.
 from __future__ import annotations
 
 import datetime as dt
+import re
+import urllib.parse
 import json
 import shutil
 import subprocess
@@ -33,7 +35,7 @@ import eyelab
 import socialreach
 
 OUT = Path("/tmp/out")
-STATE = {"running": False, "done": [], "failed": {}, "log": []}
+STATE = {"running": False, "done": [], "failed": {}, "log": [], "boot": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}  # boot: a new value means the container restarted
 FILES = {}
 
 
@@ -248,10 +250,15 @@ JOBS = [("routercheck", job_routercheck), ("mapwatch", job_mapwatch), ("remote",
         ("corridor3d", job_corridor3d), ("structures", job_structures), ("hotspots", job_hotspots), ("openings", job_openings)]
 
 
-def run_all():
+def run_all(night=None, skip=()):
     # Same key as the Worker's R2 folder: the UTC date when the night starts (16:30 UTC = 22:00 IST).
-    STATE.update(running=True, done=[], failed={}, night=time.strftime("%Y-%m-%d", time.gmtime()))
-    jobs = tonight(STATE["night"])
+    # After a container restart the Worker calls /start again with the night and the jobs already
+    # filed (and any job that crashed the container twice), so the night resumes instead of ending.
+    STATE.update(running=True, done=[], failed={}, night=night or time.strftime("%Y-%m-%d", time.gmtime()),
+                 resumed=bool(skip), skipped=list(skip))
+    jobs = [(n, f) for n, f in tonight(STATE["night"]) if n not in set(skip)]
+    if skip:
+        log(f"resumed night {STATE['night']}, skipping {', '.join(skip)}")
     for name, fn in jobs:
         log(f"start {name}")
         try:
@@ -269,9 +276,14 @@ def run_all():
 
 class H(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path == "/start":
+        if self.path.startswith("/start"):
+            q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+            night = (q.get("night") or [None])[0]
+            skip = tuple(j for j in (q.get("skip") or [""])[0].split(",") if j)
+            if night and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", night):
+                night = None
             if not STATE["running"]:
-                threading.Thread(target=run_all, daemon=True).start()
+                threading.Thread(target=run_all, args=(night, skip), daemon=True).start()
             return self.send(202, b'{"started":true}', "application/json")
         if self.path == "/status":
             return self.send(200, json.dumps(STATE).encode(), "application/json")

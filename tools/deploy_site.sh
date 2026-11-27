@@ -18,4 +18,4 @@ fi
 "$PY" -m ruff check pipeline tests tools
 "$PY" -m pytest -q
 if [ -f "$HOME/Sites/_proof/finenote.py" ]; then "$PY" "$HOME/Sites/_proof/finenote.py" arcroad web; fi  # proof-of-authorship notice in the fine print
-npx wrangler pages deploy web --project-name=arcroad-org
+npx wrangler@4.156.2 pages deploy web --project-name=arcroad-org

@@ -1,0 +1,17 @@
+{
+  // arcroad.org on Workers static assets (backup host while Pages uploads are blocked, 26 Nov 2026).
+  // Same files (../web), same functions (compiled from ../functions into dist/index.js), same KV.
+  // Test address first (workers.dev). The arcroad.org route is added separately, by Rohit.
+  "name": "arcroad-site",
+  "main": "dist/index.js",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "assets": {
+    "directory": "../web",
+    "binding": "ASSETS",
+    "run_worker_first": ["/jury/*", "/api/volunteer"],
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "kv_namespaces": [{ "binding": "VOL", "id": "fcf4c3798e944500ac7c90d476f3ee54" }]
+}
