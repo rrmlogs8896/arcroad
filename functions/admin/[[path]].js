@@ -1,4 +1,4 @@
-// arcroad private admin (27 Nov 2026): volunteer ("citizen") sign-up breakdown for Rohit only.
+// arcroad private admin (27 Nov 2026): visitor totals from our host and volunteer ("citizen") sign-ups, for Rohit only.
 // Sign-in: Cloudflare Access ("arcroad admin" app on arcroad.org/admin), a one-time code to Rohit's email,
 // session 30 days. This function also checks the Access token itself (signature, audience, expiry, email),
 // so the page stays locked even on a preview address that Access does not cover.
@@ -49,10 +49,73 @@ button,.btn{min-height:44px;padding:0 18px;border:0;border-radius:12px;backgroun
 
 const bars = (pairs, total) => pairs.map(([k, v]) => `<div class="row"><span>${esc(k)}</span><span class="bar"><i style="width:${total ? Math.round((v / total) * 100) : 0}%"></i></span><span class="n">${v}</span></div>`).join("") || `<p class="mut">None yet.</p>`;
 
+// Visitors (27 Nov 2026): our host's own anonymous totals, read from Cloudflare's analytics API with a
+// read-only token (CF_STATS_TOKEN) for the arcroad.org zone (CF_ZONE). The site runs no script and sets
+// no cookie for this; nothing here identifies anyone. "Browser-like" = page loads whose browser Cloudflare
+// recognises, a rough way to set aside most bots. Groups under 3 fold into "Other".
+const SCAN = /(^\/\.|\.env|\.git|wp-|\.php|phpinfo|xmlrpc|\/cgi-bin|\/vendor\/|\.aspx?$|\.sql|\.bak|\.save|\/admin\.|\/config)/i;
+const IGNORE404 = /^\/cdn-cgi\/|^\/data:|^\/\.well-known\/|^\/humans\.txt$|^\/apple-touch-icon/;
+const PAGE_SRC = { "/": "home", "/cost/": "cost", "/roads/": "roads", "/field/": "field", "/moves/": "moves", "/uturns/": "uturns", "/report/": "report", "/globe/": "globe", "/volunteer/": "volunteer" };
+async function visitors(env) {
+  if (!env.CF_STATS_TOKEN || !env.CF_ZONE) return null;
+  const now = Date.now(), s7 = new Date(now - 7 * 864e5).toISOString(), d14 = new Date(now - 14 * 864e5).toISOString().slice(0, 10);
+  const B = 'requestSource:"eyeball",edgeResponseContentTypeName:"html",datetime_geq:$s';
+  const HU = B + ',userAgentBrowser_neq:"Unknown"';
+  const q = `query($z:String!,$s:Time!,$d:Date!){viewer{zones(filter:{zoneTag:$z}){
+    raw: httpRequests1dGroups(limit:20,filter:{date_geq:$d},orderBy:[date_ASC]){dimensions{date} uniq{uniques} sum{pageViews}}
+    hDay: httpRequestsAdaptiveGroups(limit:20,filter:{${HU}},orderBy:[date_ASC]){count dimensions{date}}
+    hPages: httpRequestsAdaptiveGroups(limit:25,filter:{${HU},edgeResponseStatus:200},orderBy:[count_DESC]){count dimensions{clientRequestPath}}
+    hCountry: httpRequestsAdaptiveGroups(limit:40,filter:{${HU}},orderBy:[count_DESC]){count dimensions{clientCountryName}}
+    hDev: httpRequestsAdaptiveGroups(limit:5,filter:{${HU}},orderBy:[count_DESC]){count dimensions{clientDeviceType}}
+    hOS: httpRequestsAdaptiveGroups(limit:8,filter:{${HU}},orderBy:[count_DESC]){count dimensions{userAgentOS}}
+    hHour: httpRequestsAdaptiveGroups(limit:200,filter:{${HU}},orderBy:[count_DESC]){count dimensions{datetimeHour}}
+    all: httpRequestsAdaptiveGroups(limit:1,filter:{${B}}){count}
+    nf: httpRequestsAdaptiveGroups(limit:60,filter:{requestSource:"eyeball",datetime_geq:$s,edgeResponseStatus:404},orderBy:[count_DESC]){count dimensions{clientRequestPath}}
+  }}}`;
+  const r = await fetch("https://api.cloudflare.com/client/v4/graphql", { method: "POST", headers: { authorization: "Bearer " + env.CF_STATS_TOKEN, "content-type": "application/json" }, body: JSON.stringify({ query: q, variables: { z: env.CF_ZONE, s: s7, d: d14 } }) });
+  const j = await r.json().catch(() => null);
+  if (!j || j.errors || !j.data) return { error: (j && j.errors && j.errors[0] && j.errors[0].message) || "Cloudflare did not answer" };
+  return j.data.viewer.zones[0];
+}
+function visitorsHtml(v, recs, bars) {
+  if (!v) return `<h2 id="visitors">Visitors</h2><p class="mut">Not connected yet: the read-only analytics token has not been added.</p>`;
+  if (v.error) return `<h2 id="visitors">Visitors</h2><p class="mut">Could not load visitor totals (${esc(v.error)}).</p>`;
+  const sum = (a) => a.reduce((t, x) => t + x.count, 0);
+  const pair = (a, k) => a.map((x) => [x.dimensions[k], x.count]);
+  const fold = (ps) => { const keep = ps.filter(([, c]) => c >= 3), o = ps.filter(([, c]) => c < 3).reduce((t, [, c]) => t + c, 0); return o ? [...keep, ["Other", o]] : keep; };
+  const human = sum(v.hDay), all = v.all[0] ? v.all[0].count : 0;
+  const pages = pair(v.hPages, "clientRequestPath").filter(([p]) => !p.startsWith("/cdn-cgi/"));
+  const home = (pages.find(([p]) => p === "/") || [, 0])[1], inner = pages.filter(([p]) => p !== "/").reduce((t, [, c]) => t + c, 0);
+  const dev = pair(v.hDev, "clientDeviceType"), phone = (dev.find(([d]) => d === "mobile") || [, 0])[1];
+  const hours = Array(24).fill(0); for (const h of v.hHour) { const d = new Date(new Date(h.dimensions.datetimeHour).getTime() + 330 * 60e3); hours[d.getUTCHours()] += h.count; }
+  const maxH = Math.max(1, ...hours), peak = hours.indexOf(Math.max(...hours));
+  const nf = pair(v.nf, "clientRequestPath"), probes = nf.filter(([p]) => SCAN.test(p)).reduce((t, [, c]) => t + c, 0);
+  const broken = nf.filter(([p]) => !SCAN.test(p) && !IGNORE404.test(p)).slice(0, 15);
+  const wk = Date.now() - 7 * 864e5, joins = {}; for (const x of recs) if (x.src && Date.parse(x.created) >= wk) joins[x.src] = (joins[x.src] || 0) + 1;
+  const conv = Object.entries(PAGE_SRC).map(([p, s]) => { const views = (pages.find(([q]) => q === p) || [, 0])[1], n = joins[s] || 0; return [p, views, n, views ? (n / views * 100) : 0]; }).filter(([, views, n]) => views || n);
+  const raw = v.raw.map((x) => [x.dimensions.date.slice(5), x.sum.pageViews, x.uniq.uniques]), maxR = Math.max(1, ...raw.map((x) => x[1]));
+  const hd = pair(v.hDay, "date").map(([d, c]) => [d.slice(5), c]), maxD = Math.max(1, ...hd.map((x) => x[1]));
+  const pct = (a, b) => (b ? Math.round(a / b * 100) : 0) + "%";
+  return `<h2 id="visitors">Visitors, last 7 days</h2>
+<p class="mut">Counted by our host from page loads; nothing is collected in visitors' browsers. Browser-like loads set most bots aside but not all.</p>
+<div class="kpis"><div class="kpi"><b>${human.toLocaleString("en-IN")}</b><span>browser-like page views</span></div><div class="kpi"><b>${pct(human, all)}</b><span>of all page loads look human</span></div><div class="kpi"><b>${pct(inner, home + inner)}</b><span>of views go past the home page</span></div><div class="kpi"><b>${pct(phone, human)}</b><span>on phones</span></div><div class="kpi"><b>${String(peak).padStart(2, "0")}:00</b><span>busiest hour (IST)</span></div><div class="kpi"><b>${broken.reduce((t, [, c]) => t + c, 0)}</b><span>visits to broken links</span></div></div>
+<h2>Browser-like views a day</h2>${hd.map(([d, c]) => `<div class="row"><span>${d}</span><span class="bar"><i style="width:${Math.round(c / maxD * 100)}%"></i></span><span class="n">${c}</span></div>`).join("")}
+<h2>Pages people read</h2>${bars(pages.slice(0, 20), pages.length ? pages[0][1] : 1)}
+<h2>Join card: views and sign-ups, last 7 days</h2><div class="scroll"><table><thead><tr><th>Page</th><th>Views</th><th>Joined there</th><th>Rate</th></tr></thead><tbody>${conv.map(([p, views, n, r]) => `<tr><td>${esc(p)}</td><td>${views}</td><td>${n}</td><td>${r.toFixed(1)}%</td></tr>`).join("")}</tbody></table></div>
+<h2>Countries</h2>${bars(fold(pair(v.hCountry, "clientCountryName")), v.hCountry.length ? v.hCountry[0].count : 1)}
+<h2>Devices and systems</h2>${bars(dev, human)}${bars(fold(pair(v.hOS, "userAgentOS")), human)}
+<h2>Hour of day (IST)</h2><div style="display:grid;grid-template-columns:repeat(24,1fr);gap:3px;align-items:end;height:120px;border-bottom:1px solid #1C2026">${hours.map((c, h) => `<i title="${String(h).padStart(2, "0")}:00 IST, ${c} views" style="display:block;height:${Math.max(2, Math.round(c / maxH * 100))}%;background:${h === peak ? "#E8A87C" : "#E2743B"};border-radius:3px 3px 0 0;opacity:${c ? 1 : .25}"></i>`).join("")}</div><div class="mut" style="display:grid;grid-template-columns:repeat(4,1fr);font-size:12px;margin-top:4px"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span></div>
+<h2>Broken links to fix</h2>${broken.length ? bars(broken, broken.reduce((t, [, c]) => t + c, 0)) : `<p class="mut">None this week.</p>`}
+<p class="mut">${probes} requests from scanners probing for files that do not exist (such as .env or wp-login) were turned away.</p>
+<h2>Raw host totals, last 14 days</h2><p class="mut">Every page load including bots, and unique addresses as the host counts them. For context only.</p><div class="scroll"><table><thead><tr><th>Day</th><th>Page views</th><th>Unique addresses</th></tr></thead><tbody>${raw.map(([d, p, u]) => `<tr><td>${d}</td><td>${p}</td><td>${u}</td></tr>`).join("")}</tbody></table></div>`;
+}
+
 async function dashboard(env) {
   const recs = []; let cursor;
   do { const r = await env.VOL.list({ prefix: "vol:", cursor }); for (const k of r.keys) { const v = await env.VOL.get(k.name, "json"); if (v) recs.push(v); } cursor = r.list_complete ? null : r.cursor; } while (cursor && recs.length < 5000);
   const now = Date.now(), day = 864e5, n = recs.length;
+  let vraw; try { vraw = await visitors(env); } catch (e) { vraw = { error: "Cloudflare did not answer" }; }
+  const vis = visitorsHtml(vraw, recs, bars);
   const since = (d) => recs.filter((r) => now - Date.parse(r.created) <= d * day).length;
   const count = (f) => { const m = new Map(); for (const r of recs) for (const k of f(r)) m.set(k, (m.get(k) || 0) + 1); return [...m.entries()].sort((a, b) => b[1] - a[1]); };
   const area = count((r) => [r.area ? r.area.replace(/\s+/g, " ").trim().replace(/\b\w/g, (c) => c.toUpperCase()) : "Not given"]);
@@ -64,7 +127,9 @@ async function dashboard(env) {
   const maxDay = Math.max(1, ...days.map((d) => d[1]));
   const recent = [...recs].sort((a, b) => (b.created || "").localeCompare(a.created || "")).slice(0, 50);
   const fmt = (s) => (s ? new Date(s).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "");
-  return shell("arcroad · admin", `<div class="top"><div><p class="mut">arcroad · private · updated ${esc(fmt(new Date().toISOString()))} IST</p><h1>Citizens who signed up</h1></div><a class="btn" href="/cdn-cgi/access/logout">Sign out</a></div>
+  return shell("arcroad · admin", `<div class="top"><div><p class="mut">arcroad · private · updated ${esc(fmt(new Date().toISOString()))} IST</p><h1>arcroad admin</h1><p class="mut"><a href="#visitors">Visitors</a> · <a href="#volunteers">Volunteers</a></p></div><a class="btn" href="/cdn-cgi/access/logout">Sign out</a></div>
+${vis}
+<h2 id="volunteers" style="margin-top:48px;font-size:24px">Citizens who signed up</h2>
 <div class="kpis"><div class="kpi"><b>${n}</b><span>sign-ups in total</span></div><div class="kpi"><b>${since(1)}</b><span>in the last 24 hours</span></div><div class="kpi"><b>${since(7)}</b><span>in the last 7 days</span></div><div class="kpi"><b>${since(30)}</b><span>in the last 30 days</span></div><div class="kpi"><b>${area.filter(([a]) => a !== "Not given").length}</b><span>different areas</span></div></div>
 <h2>Sign-ups a day, last 30 days</h2>${days.map(([d, v]) => `<div class="row"><span>${d}</span><span class="bar"><i style="width:${Math.round((v / maxDay) * 100)}%"></i></span><span class="n">${v}</span></div>`).join("")}
 <h2>By area</h2>${bars(area.slice(0, 40), n)}
