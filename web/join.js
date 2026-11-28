@@ -51,7 +51,7 @@
         + '<p class="jn-f">No name, phone or email. Remove it any time. <a href="/volunteer/">More ways to help</a></p>';
       return;
     }
-    var done = TASKS.filter(function (t) { return v.tasks && v.tasks[t[0]]; }).length, next = TASKS.filter(function (t) { return !(v.tasks && v.tasks[t[0]]); })[0];
+    var done = TASKS.filter(function (t) { return v.tasks && v.tasks[t[0]]; }).length, next = (!v.help || !v.help.length) ? ["card", "Finish your volunteer card: pick how you will help", "/volunteer/#signup"] : TASKS.filter(function (t) { return !(v.tasks && v.tasks[t[0]]); })[0];
     el.innerHTML = kicker() + '<h3>' + (el._fresh ? "You're in" : "Welcome back") + (v.area ? ", " + esc(v.area) : "") + '.</h3>'
       + '<p class="jn-s">' + (next ? 'Your next step: <b style="color:#F5F6F7">' + esc(next[1]) + '</b>' : "All five starter tasks done. Thank you.") + '</p>'
       + '<div class="jn-bar" role="progressbar" aria-valuemin="0" aria-valuemax="' + TASKS.length + '" aria-valuenow="' + done + '" aria-label="Starter tasks done"><i style="width:' + Math.round(done / TASKS.length * 100) + '%"></i></div>'

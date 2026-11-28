@@ -19,7 +19,12 @@
   }
   function paint(v) {
     if (!v) { box.hidden = true; form.hidden = false; return; }
-    form.hidden = true; box.hidden = false;
+    var needs = !v.help || !v.help.length; form.hidden = !needs; box.hidden = false;
+    var fin = document.getElementById("vfinish");
+    if (needs) { if (!fin) { fin = document.createElement("p"); fin.id = "vfinish"; fin.className = "note"; fin.style.color = "#7CC5A0"; form.parentNode.insertBefore(fin, form); }
+      fin.textContent = "Step 1: finish your card. Pick how you would like to help, then save. Your code and progress stay the same.";
+      if (form.elements.area && !form.elements.area.value && v.area) form.elements.area.value = v.area; }
+    else if (fin) fin.remove();
     var done = TASKS.filter(function (t) { return v.tasks && v.tasks[t[0]]; }).length;
     var st = state === "saving" ? "Saving to arcroad…" : (state === "saved" || v.synced) ? "Saved with arcroad" : "Saved on this device; arcroad could not be reached, it will retry";
     box.innerHTML = '<p class="note" style="margin:0 0 6px">Your volunteer card · <span style="color:' + ((state === "saved" || v.synced) ? "#7CC5A0" : "#9AA0A6") + '">' + st + '</span></p>'
@@ -44,7 +49,7 @@
   });
   form.addEventListener("submit", function (e) {
     e.preventDefault(); e.stopImmediatePropagation();
-    var v = { code: code(), area: (form.elements.area.value || "").trim().slice(0, 80), help: [], time: form.elements.time.value, tasks: {}, src: "volunteer" };
+    var old = load(); var v = { code: old && old.code ? old.code : code(), area: (form.elements.area.value || "").trim().slice(0, 80), help: [], time: form.elements.time.value, tasks: (old && old.tasks) || {}, src: (old && old.src) || "volunteer" };
     Array.prototype.forEach.call(form.querySelectorAll("input[type=checkbox]:checked"), function (c) { v.help.push(c.value); });
     keep(v); sync(v); box.scrollIntoView({ behavior: "smooth", block: "start" });
   }, true);

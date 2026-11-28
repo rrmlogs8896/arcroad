@@ -28,3 +28,12 @@ def test_strip_asks_for_nothing_personal():
 def test_music_button_is_gone():
     assert "ak-snd" not in (WEB / "ask.js").read_text(encoding="utf-8")
     assert "ak-snd" not in (WEB / "ask.css").read_text(encoding="utf-8")
+
+
+def test_quick_join_first_step_goes_to_signup_not_uturns():
+    """28 Nov 2026: after the 10-second join, step 1 sent people to /uturns/ and they never chose how to help."""
+    js = (WEB / "join.js").read_text()
+    assert '"/volunteer/#signup"] : TASKS.filter' in js
+    card = (WEB / "volunteer" / "card.js").read_text()
+    assert "old && old.code ? old.code : code()" in card
+    assert "form.hidden = !needs" in card
