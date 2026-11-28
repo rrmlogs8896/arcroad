@@ -71,7 +71,7 @@ def reuse(prefix: str) -> str:
     return ('<!-- reuse:start --><span class="sn-reuse">Made by Rohit and Team arcroad. © 2026 arcroad. Data (ODbL) and code (MIT) are free to reuse with credit; '
             'the arcroad name, logo, films and design are not. '
             f'<a href="{prefix}reuse/">What you may reuse</a> · <a href="{prefix}terms/">Terms</a> · '
-            f'<a href="{prefix}privacy/">Privacy</a></span><!-- reuse:end -->')
+            f'<a href="{prefix}privacy/">Privacy</a> · <a href="{prefix}changes/">What changed</a></span><!-- reuse:end -->')
 
 
 REUSE = re.compile(r"<!-- reuse:start -->.*?<!-- reuse:end -->", re.S)
@@ -116,6 +116,7 @@ PAGES = {
     "uturns/index.html": ("../", "uturns/", True),
     "terms/index.html": ("../", "terms/", True),
     "privacy/index.html": ("../", "privacy/", True),
+    "changes/index.html": ("../", "changes/", True),
 }
 
 FIRST_NAV = re.compile(r'<nav class="top" aria-label="arcroad">.*?</nav>|<nav class="sitenav" aria-label="arcroad">.*?</nav>'
