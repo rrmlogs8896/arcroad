@@ -29,6 +29,7 @@ import entryscan
 import openings
 import remote
 import routercheck
+import fueltest
 import structures
 import viability
 import eyelab
@@ -183,6 +184,14 @@ def job_areascan():
     return p
 
 
+def job_fueltest():
+    """Fetch test for the rider-fuel study (Rohit's go, 28 Nov 2026): inventory counts only."""
+    OUT.mkdir(exist_ok=True)
+    p = OUT / "fueltest-v1.json"
+    p.write_bytes(fueltest.run(log, repo()))
+    return p
+
+
 def job_bengaluru_remote():
     """One night only: the remote checks on 8 Bengaluru candidate places, approved by Rohit on 6 Nov (run 7 Nov).
 
@@ -232,12 +241,15 @@ def tonight(night):
         last = [*last, ("adminmap", job_adminmap)]  # after the standing jobs, so it cannot delay them
     if night in AREASCAN_NIGHTS:
         first = [("areascan", job_areascan), *first]  # after entryscan: about 1.5 to 2.5 hours
+    if night in FUELTEST_NIGHTS:
+        first = [("fueltest", job_fueltest), *first]  # first: a short fetch test, about 10 minutes
     if night in ENTRYSCAN_NIGHTS:
         first = [("entryscan", job_entryscan), *first]  # first: a one-off, about an hour
     return first + JOBS + last
 
 
 AREASCAN_NIGHTS = {"2026-11-26", "2026-11-27"}
+FUELTEST_NIGHTS = {"2026-11-28"}  # one night: Rohit's go, 28 Nov 2026
 ENTRYSCAN_NIGHTS = {"2026-11-26"}  # 27 Nov dequeued: failed its benchmark (310 m off, 2.2 vs 3.4 km)
 ADMINMAP_NIGHT = "2026-11-15"  # one night only: Sunday 15 Nov, 22:00 IST
 BENGALURU_REMOTE_NIGHT = "2026-11-07"  # moved from 6 Nov: that night ran the earlier version  # matches run_on in the private places file
