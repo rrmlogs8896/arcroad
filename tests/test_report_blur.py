@@ -27,3 +27,11 @@ def test_finger_input_uses_pointer_events_and_a_tap_blurs_a_spot():
     assert '"pointerdown"' in JS and "setPointerCapture" in JS
     assert "touchstart" not in JS
     assert "A tap blurs a square around the spot" in JS
+
+
+def test_copy_is_ready_before_the_tap_and_share_comes_first():
+    """28 Nov 2026: in a private tab on iPhone, Save did nothing. The copy is now prepared ahead,
+    the share sheet is opened first from the tap, and a refusal says how to save the copy instead."""
+    assert "ready = blobNow()" in JS
+    assert JS.index("navigator.share({ files: [f] })") < JS.index("showCopy(r);")
+    assert "Your phone did not open the share sheet" in JS

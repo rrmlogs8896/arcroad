@@ -21,7 +21,10 @@
     });
     undoB.disabled = !rects.length; saveB.disabled = !rects.length;
     if (out) { out.hidden = true; }
+    ready = null; clearTimeout(prep);
+    if (!drag && rects.length) prep = setTimeout(function () { ready = blobNow(); }, 250);
   }
+  var ready = null, prep = 0;
   function pos(e) {
     var b = cv.getBoundingClientRect();
     return { x: Math.max(0, Math.min(cv.width, (e.clientX - b.left) * cv.width / b.width)), y: Math.max(0, Math.min(cv.height, (e.clientY - b.top) * cv.height / b.height)) };
@@ -69,22 +72,29 @@
     for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i);
     return { url: u, blob: new Blob([a], { type: "image/jpeg" }) };
   }
-  function showCopy(u) {
+  function showCopy(r) {
     if (!out) {
-      out = document.createElement("figure"); out.style.margin = "10px 0 0";
-      out.innerHTML = '<img alt="Your blurred copy" style="max-width:100%;height:auto;border-radius:10px;border:1px solid var(--line);-webkit-touch-callout:default"><figcaption class="note" style="margin-top:6px">This is the blurred copy. On a phone, press and hold it, then choose Save to Photos.</figcaption>';
+      out = document.createElement("figure"); out.style.margin = "14px 0 0";
+      out.innerHTML = '<img alt="Your blurred copy" style="max-width:100%;height:auto;border-radius:10px;border:1px solid var(--line);-webkit-touch-callout:default">'
+        + '<figcaption class="note" style="margin-top:6px">Your blurred copy. On a phone, press and hold it, then choose Save to Photos (or Add to Photos).</figcaption>';
       saveB.parentNode.parentNode.appendChild(out);
     }
-    out.querySelector("img").src = u; out.hidden = false;
+    out.querySelector("img").src = r.url; out.hidden = false;
+    try { out.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (x) { out.scrollIntoView(); }
   }
   saveB.addEventListener("click", function () {
     if (!rects.length) { tip.textContent = "Tap each face and number plate first, or drag a box over it."; return; }
-    var r = blobNow(), f = new File([r.blob], "arcroad-report-blurred.jpg", { type: "image/jpeg" });
-    showCopy(r.url);
-    if (navigator.canShare && navigator.canShare({ files: [f] })) {
-      navigator.share({ files: [f], title: "arcroad report photo" }).catch(function () {});
+    var r = ready || blobNow(), f = new File([r.blob], "arcroad-report-blurred.jpg", { type: "image/jpeg" });
+    var canShare = false; try { canShare = !!(navigator.canShare && navigator.canShare({ files: [f] })); } catch (x) {}
+    if (canShare) {
+      // The share sheet opens first, straight from the tap; the copy is shown under it as a fallback.
+      navigator.share({ files: [f] }).catch(function (err) {
+        if (!err || err.name !== "AbortError") tip.textContent = "Your phone did not open the share sheet. Press and hold the blurred copy below to save it.";
+      });
+      showCopy(r);
       return;
     }
+    showCopy(r);
     var a = document.createElement("a"); a.href = URL.createObjectURL(r.blob); a.download = f.name; document.body.appendChild(a); a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
   });
