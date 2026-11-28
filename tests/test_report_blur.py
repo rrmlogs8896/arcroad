@@ -20,3 +20,10 @@ def test_copy_is_made_inside_the_tap():
 
 def test_blurred_copy_is_shown_for_press_and_hold():
     assert "press and hold it, then choose Save to Photos" in JS
+
+
+def test_finger_input_uses_pointer_events_and_a_tap_blurs_a_spot():
+    """28 Nov 2026: on an iPhone the drag landed in a corner, so the faces stayed sharp."""
+    assert '"pointerdown"' in JS and "setPointerCapture" in JS
+    assert "touchstart" not in JS
+    assert "A tap blurs a square around the spot" in JS

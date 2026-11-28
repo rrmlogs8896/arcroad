@@ -23,14 +23,32 @@
     if (out) { out.hidden = true; }
   }
   function pos(e) {
-    var b = cv.getBoundingClientRect(), t = e.touches ? e.touches[0] : e;
-    return { x: (t.clientX - b.left) * cv.width / b.width, y: (t.clientY - b.top) * cv.height / b.height };
+    var b = cv.getBoundingClientRect();
+    return { x: Math.max(0, Math.min(cv.width, (e.clientX - b.left) * cv.width / b.width)), y: Math.max(0, Math.min(cv.height, (e.clientY - b.top) * cv.height / b.height)) };
   }
-  function start(e) { if (!img) return; e.preventDefault(); var p = pos(e); drag = { x: p.x, y: p.y, x2: p.x, y2: p.y }; }
+  // Pointer events cover finger, pen and mouse alike; the canvas keeps the pointer until it lifts.
+  var downAt = null;
+  function start(e) {
+    if (!img || (e.pointerType === "mouse" && e.button !== 0)) return;
+    e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (x) {}
+    var p = pos(e); downAt = p; drag = { x: p.x, y: p.y, x2: p.x, y2: p.y };
+  }
   function move(e) { if (!drag) return; e.preventDefault(); var p = pos(e); drag.x2 = p.x; drag.y2 = p.y; draw(); }
-  function end() { if (!drag) return; if (Math.abs(drag.x2 - drag.x) > 6 && Math.abs(drag.y2 - drag.y) > 6) rects.push(drag); drag = null; draw(); }
-  cv.addEventListener("mousedown", start); window.addEventListener("mousemove", move); window.addEventListener("mouseup", end);
-  cv.addEventListener("touchstart", start, { passive: false }); cv.addEventListener("touchmove", move, { passive: false }); cv.addEventListener("touchend", end);
+  function end(e) {
+    if (!drag) return;
+    var w = Math.abs(drag.x2 - drag.x), h = Math.abs(drag.y2 - drag.y);
+    if (w > 12 && h > 12) rects.push(drag);
+    else if (downAt) {
+      // A tap blurs a square around the spot: quick for a face or a plate.
+      var side = Math.round(Math.min(cv.width, cv.height) * 0.14), c = downAt;
+      rects.push({ x: Math.max(0, c.x - side / 2), y: Math.max(0, c.y - side / 2), x2: Math.min(cv.width, c.x + side / 2), y2: Math.min(cv.height, c.y + side / 2) });
+    }
+    drag = null; downAt = null; draw();
+    if (e && e.pointerId != null) { try { cv.releasePointerCapture(e.pointerId); } catch (x) {} }
+  }
+  cv.style.touchAction = "none";
+  cv.addEventListener("pointerdown", start); cv.addEventListener("pointermove", move);
+  cv.addEventListener("pointerup", end); cv.addEventListener("pointercancel", function () { drag = null; downAt = null; draw(); });
   file.addEventListener("change", function () {
     var f = file.files && file.files[0]; if (!f) return;
     var url = URL.createObjectURL(f), im = new Image();
@@ -38,7 +56,7 @@
       var max = 1600, k = Math.min(1, max / Math.max(im.naturalWidth, im.naturalHeight));
       cv.width = Math.round(im.naturalWidth * k); cv.height = Math.round(im.naturalHeight * k);
       scale = cv.getBoundingClientRect().width / cv.width || 1;
-      img = im; rects = []; cv.hidden = false; cv.style.display = "block"; tip.textContent = "Drag a box over each face and number plate. Location data in the photo is removed when you save.";
+      img = im; rects = []; cv.hidden = false; cv.style.display = "block"; tip.textContent = "Tap each face and number plate, or drag a box over it. Location data in the photo is removed when you save.";
       draw(); URL.revokeObjectURL(url);
     };
     im.onerror = function () { tip.textContent = "This photo type could not be opened here. Try a JPEG or a screenshot of it."; };
@@ -60,7 +78,7 @@
     out.querySelector("img").src = u; out.hidden = false;
   }
   saveB.addEventListener("click", function () {
-    if (!rects.length) { tip.textContent = "Drag a box over each face and number plate first."; return; }
+    if (!rects.length) { tip.textContent = "Tap each face and number plate first, or drag a box over it."; return; }
     var r = blobNow(), f = new File([r.blob], "arcroad-report-blurred.jpg", { type: "image/jpeg" });
     showCopy(r.url);
     if (navigator.canShare && navigator.canShare({ files: [f] })) {
