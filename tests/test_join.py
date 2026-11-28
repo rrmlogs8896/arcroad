@@ -44,6 +44,9 @@ def test_long_reading_text_folds_under_the_sites_own_plus():
     """28 Nov 2026: text-heavy runs tuck under the same "+" (details.more) the pages already use; legal pages stay open."""
     nav = (WEB / "nav.js").read_text(encoding="utf-8")
     assert "d.className='more fd'" in nav and "privacy|terms" in nav
+    assert "function merge(root)" in nav, "two folds in a row become one +"
+    assert "function longs(root)" in nav, "single long paragraphs keep their first sentence and fold the rest"
+    assert "contributors|licen[cs]e" in nav, "map attribution and licence text is never folded away"
     css = (WEB / "nav.css").read_text(encoding="utf-8")
     assert 'main details:not([class])>summary::before{content:"+"' in css
     assert 'main details.more>summary::before,main details:not([class])>summary::before' in css
