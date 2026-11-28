@@ -33,7 +33,18 @@ def test_music_button_is_gone():
 def test_quick_join_first_step_goes_to_signup_not_uturns():
     """28 Nov 2026: after the 10-second join, step 1 sent people to /uturns/ and they never chose how to help."""
     js = (WEB / "join.js").read_text()
-    assert '"/volunteer/#signup"] : TASKS.filter' in js
+    assert '"/volunteer/#signup"] : TASKS.filter' not in js
+    assert 'data-a="done"' in js and 'data-a="skip"' in js and "helpSkipped" in js
     card = (WEB / "volunteer" / "card.js").read_text()
     assert "old && old.code ? old.code : code()" in card
     assert "form.hidden = !needs" in card
+
+
+def test_long_reading_text_folds_under_the_sites_own_plus():
+    """28 Nov 2026: text-heavy runs tuck under the same "+" (details.more) the pages already use; legal pages stay open."""
+    nav = (WEB / "nav.js").read_text(encoding="utf-8")
+    assert "d.className='more fd'" in nav and "privacy|terms" in nav
+    css = (WEB / "nav.css").read_text(encoding="utf-8")
+    assert 'main details:not([class])>summary::before{content:"+"' in css
+    assert 'main details.more>summary::before,main details:not([class])>summary::before' in css
+    assert "@media print{main details>*{display:block!important}" in css

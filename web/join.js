@@ -18,6 +18,7 @@
     globe: ["Know a crossing like this one?", "Add your area and help us measure it."]
   };
   var TASKS = [["check", "Check one crossing near you", "/uturns/"], ["map", "Fix one road on OpenStreetMap", "https://www.openstreetmap.org/"], ["report", "Report one opening that opened or closed", "/report/"], ["tell", "Tell your resident association or college", "/moves/"], ["cost", "Work out your own crossing's cost", "/cost/"]];
+  var HELP = [["Time a crossing", "Driving and timing a crossing near me"], ["Take photos", "Photographing a place (faces and plates blurred)"], ["Fix the map", "Fixing roads on OpenStreetMap"], ["Spread the word", "Telling my resident association or college"], ["Bring it to my city", "Running arcroad for another city"]];
   function load() { try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; } }
   function keep(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
@@ -39,6 +40,8 @@
     + ".jn-f{font-size:13px;color:#8B939C}.jn-f a{color:#8FB4D9}"
     + ".jn-bar{height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin:12px 0 14px}.jn-bar i{display:block;height:100%;background:#7CC5A0;transition:width .5s ease}"
     + ".jn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}"
+    + ".jn-c{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 12px}.jn .jn-chip{background:transparent;color:#E6E8EB;border-color:rgba(230,232,235,.18);font-weight:500}.jn .jn-chip[aria-pressed=true]{background:rgba(124,197,160,.16);border-color:#7CC5A0;color:#F5F6F7}.jn .jn-chip[aria-pressed=true]::before{content:'\\2713';font-size:13px;color:#7CC5A0}"
+    + ".jn button[disabled]{opacity:.38;cursor:default;transform:none}.jn .jn-q{border-color:transparent;color:#8B939C}"
     + "@media (prefers-reduced-motion:reduce){.jn-k i{animation:none}.jn button,.jn .jn-b,.jn-bar i{transition:none}}@media print{.jn{display:none}}";
   document.head.appendChild(css);
 
@@ -51,7 +54,15 @@
         + '<p class="jn-f">No name, phone or email. Remove it any time. <a href="/volunteer/">More ways to help</a></p>';
       return;
     }
-    var done = TASKS.filter(function (t) { return v.tasks && v.tasks[t[0]]; }).length, next = (!v.help || !v.help.length) ? ["card", "Finish your volunteer card: pick how you will help", "/volunteer/#signup"] : TASKS.filter(function (t) { return !(v.tasks && v.tasks[t[0]]); })[0];
+    if ((!v.help || !v.help.length) && !v.helpSkipped) {
+      el.innerHTML = kicker() + '<h3>' + (el._fresh ? "You're in" : "Welcome back") + (v.area ? ", " + esc(v.area) : "") + '.</h3>'
+        + '<p class="jn-s" id="jn-q-' + ctx + '">One more tap. How would you like to help?</p>'
+        + '<div class="jn-c" role="group" aria-labelledby="jn-q-' + ctx + '">' + HELP.map(function (h, i) { return '<button type="button" class="jn-chip" data-h="' + i + '" aria-pressed="false">' + esc(h[0]) + '</button>'; }).join("") + '</div>'
+        + '<div class="jn-row"><button type="button" data-a="done" disabled>Done</button><button type="button" class="jn-g jn-q" data-a="skip">Not now</button></div>'
+        + '<p class="jn-f">Pick as many as you like. You can change this any time.</p>';
+      return;
+    }
+    var done = TASKS.filter(function (t) { return v.tasks && v.tasks[t[0]]; }).length, next = TASKS.filter(function (t) { return !(v.tasks && v.tasks[t[0]]); })[0];
     el.innerHTML = kicker() + '<h3>' + (el._fresh ? "You're in" : "Welcome back") + (v.area ? ", " + esc(v.area) : "") + '.</h3>'
       + '<p class="jn-s">' + (next ? 'Your next step: <b style="color:#F5F6F7">' + esc(next[1]) + '</b>' : "All five starter tasks done. Thank you.") + '</p>'
       + '<div class="jn-bar" role="progressbar" aria-valuemin="0" aria-valuemax="' + TASKS.length + '" aria-valuenow="' + done + '" aria-label="Starter tasks done"><i style="width:' + Math.round(done / TASKS.length * 100) + '%"></i></div>'
@@ -70,6 +81,20 @@
       var h = el.querySelector("h3"); if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
     }, true);
     el.addEventListener("click", function (e) {
+      var t = e.target.closest && e.target.closest(".jn-chip,[data-a=done],[data-a=skip]");
+      if (t) {
+        if (t.classList.contains("jn-chip")) {
+          t.setAttribute("aria-pressed", t.getAttribute("aria-pressed") === "true" ? "false" : "true");
+          var d = el.querySelector("[data-a=done]"); if (d) d.disabled = !el.querySelector(".jn-chip[aria-pressed=true]");
+          return;
+        }
+        var v0 = load(); if (!v0) return;
+        if (t.getAttribute("data-a") === "done") v0.help = Array.prototype.map.call(el.querySelectorAll(".jn-chip[aria-pressed=true]"), function (c) { return HELP[+c.getAttribute("data-h")][1]; });
+        else v0.helpSkipped = true;
+        keep(v0); sync(v0); el._fresh = true; paintAll();
+        var h2 = el.querySelector("h3"); if (h2) { h2.setAttribute("tabindex", "-1"); h2.focus({ preventScroll: true }); }
+        return;
+      }
       var b = e.target.closest && e.target.closest("[data-a=share]"); if (!b) return;
       var url = "https://arcroad.org/volunteer/", text = "I'm helping measure the detours on Hyderabad's roads. Add your area in 10 seconds:";
       var mark = function () { var v = load(); if (!v) return; v.tasks = v.tasks || {}; if (!v.tasks.tell) { v.tasks.tell = true; keep(v); sync(v); paintAll(); } };

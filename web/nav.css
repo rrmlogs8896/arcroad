@@ -89,3 +89,12 @@ header .sn{margin-left:auto}
 .evp .evx{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;background:transparent;color:#E6E8EB;font-size:22px;cursor:pointer;border-radius:50%}
 .evp .evx:focus-visible{outline:2px solid #F0C2A0}
 @media (prefers-reduced-motion:no-preference){.evp{animation:evin .16s ease-out}@keyframes evin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}}
+/* Fold (28 Nov 2026): one quiet "+" for every expandable block, including pages that never styled theirs. */
+details.fd{margin:4px 0 12px;border-top:1px solid var(--line,rgba(230,232,235,.09))}
+main details.more>summary,main details:not([class])>summary{list-style:none;cursor:pointer;padding:12px 0;min-height:44px;box-sizing:border-box;font-size:14px;color:var(--mute,#8B939C);display:flex;gap:10px;align-items:center;touch-action:manipulation}
+main details.more>summary::-webkit-details-marker,main details:not([class])>summary::-webkit-details-marker{display:none}
+main details.more>summary::before,main details:not([class])>summary::before{content:"+";font-family:ui-monospace,monospace;color:var(--accent,#7CC5A0)}
+main details.more[open]>summary::before,main details:not([class])[open]>summary::before{content:"\2212"}
+main details.more>summary:hover,main details:not([class])>summary:hover{color:var(--fg,#E6E8EB)}
+main details.more>summary:focus-visible,main details:not([class])>summary:focus-visible{outline:2px solid var(--accent,#7CC5A0);outline-offset:2px;border-radius:6px}
+@media print{main details>*{display:block!important}main details::details-content{content-visibility:visible!important;display:block!important}}

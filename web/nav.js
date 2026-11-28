@@ -93,3 +93,50 @@
 
 // Moving pictures stay still for readers who ask for reduced motion.
 (function(){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)[].forEach.call(document.querySelectorAll('video[data-journey]'),function(v){v.removeAttribute('autoplay');v.pause();});}catch(e){}})();
+
+// Fold (28 Nov 2026): long runs of reading text keep their opening lines and tuck the rest under the site's
+// own "+" (the same details.more used across the pages). Text stays in the page for find, links and print.
+(function(){
+  if(/\/(privacy|terms)\//.test(location.pathname)) return;
+  var SKIP='nav,header,footer,form,details,figure,table,aside,[data-join],[data-nofold],.ar-share,.jn,.sn,#clock,.ev-banner';
+  var PROSE={P:1,UL:1,OL:1,BLOCKQUOTE:1}, MIN=70, n=0;
+  function words(el){return (el.textContent||'').trim().split(/\s+/).filter(Boolean).length;}
+  function ok(el){return PROSE[el.tagName]&&!el.closest(SKIP)&&!el.querySelector('input,button,select,textarea,canvas,video,iframe');}
+  function fold(run){
+    var keep=(words(run[0])<14&&run.length>2)?2:1, rest=run.slice(keep), w=0;
+    rest.forEach(function(e){w+=words(e);}); if(w<40) return;
+    var d=document.createElement('details'), s=document.createElement('summary');
+    d.className='more fd'; d.id='fd-'+(++n); s.textContent='More';
+    rest[0].parentNode.insertBefore(d,rest[0]); d.appendChild(s); rest.forEach(function(e){d.appendChild(e);});
+    d.addEventListener('toggle',function(){ s.textContent=d.open?'Less':'More'; });
+  }
+  function scan(root){
+    var seen=[];
+    [].forEach.call(root.querySelectorAll('p,ul,ol,blockquote'),function(el){
+      var par=el.parentNode; if(seen.indexOf(par)>-1||!ok(el)) return; seen.push(par);
+      var run=[],kids=[].slice.call(par.children);
+      for(var i=0;i<=kids.length;i++){
+        var k=kids[i]; if(k&&ok(k)){run.push(k);continue;}
+        if(run.length>=2){var w=0;run.forEach(function(e){w+=words(e);}); if(w>=MIN) fold(run);}
+        run=[];
+      }
+    });
+  }
+  function openTo(){ var h=location.hash.slice(1),t; if(!h) return; try{t=document.getElementById(decodeURIComponent(h));}catch(e){} if(!t) return;
+    for(var x=t;x;x=x.parentElement) if(x.tagName==='DETAILS') x.open=true; t.scrollIntoView(); }
+  function lists(root){
+    [].forEach.call(root.querySelectorAll('ul,ol'),function(l){
+      if(!ok(l)||l.closest('details')) return;
+      var li=[].filter.call(l.children,function(c){return c.tagName==='LI';});
+      if(li.length<4||words(l)<90) return;
+      var rest=li.slice(2), d=document.createElement('details'), s=document.createElement('summary'), l2=document.createElement(l.tagName);
+      d.className='more fd'; d.id='fd-'+(++n); s.textContent='More'; l2.className=l.className;
+      if(l.tagName==='OL') l2.setAttribute('start',String((+l.getAttribute('start')||1)+2));
+      rest.forEach(function(e){l2.appendChild(e);}); d.appendChild(s); d.appendChild(l2); l.parentNode.insertBefore(d,l.nextSibling);
+      d.addEventListener('toggle',function(){ s.textContent=d.open?'Less':'More'; });
+    });
+  }
+  function go(){ try{ var r=document.querySelector('main')||document.body; scan(r); lists(r); openTo(); }catch(e){} }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
+  addEventListener('hashchange',openTo);
+})();
